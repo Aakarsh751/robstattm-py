@@ -1,0 +1,20 @@
+{
+  "name": "flour",
+  "aliases": [
+    "flour"
+  ],
+  "title": "Flour data",
+  "description": "Determinations of the copper content in wholemeal flour\n(in parts per million), sorted in ascending order.\nFormat: numeric vector of size 24.",
+  "usage": "data(flour)",
+  "arguments": [],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(flour)",
+  "seealso": [],
+  "references": "References go here.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

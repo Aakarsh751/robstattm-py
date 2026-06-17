@@ -1,0 +1,20 @@
+{
+  "name": "image",
+  "aliases": [
+    "image"
+  ],
+  "title": "Image data",
+  "description": "These data are part of a synthetic aperture satellite radar image corresponding\nto a suburb of Munich, and  contain the values corresponding to three frequency\nbands for each of 1573 pixels of a radar image.",
+  "usage": "data(image)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: 1573 cases and 3 variables.",
+  "sections": {},
+  "examples_r": "data(image)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

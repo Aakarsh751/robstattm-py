@@ -1,0 +1,59 @@
+{
+  "name": "lmrobM.control",
+  "aliases": [
+    "lmrobM.control"
+  ],
+  "title": "Tuning parameters for lmrobM",
+  "description": "This function sets tuning parameters for the M estimators of regression implemented\nin ``lmrobM``.",
+  "usage": "lmrobM.control(\n  bb = 0.5,\n  efficiency = 0.99,\n  family = \"opt\",\n  tuning.chi,\n  tuning.psi,\n  max.it = 100,\n  rel.tol = 1e-07,\n  mscale_tol = 1e-06,\n  mscale_maxit = 50,\n  trace.lev = 0\n)",
+  "arguments": [
+    {
+      "r_name": "bb",
+      "description": "tuning constant (between 0 and 1/2) for the M-scale used to compute the residual\nscale estimator. Defaults to 0.5."
+    },
+    {
+      "r_name": "efficiency",
+      "description": "desired asymptotic efficiency of the final regression M-estimator. Defaults to 0.85."
+    },
+    {
+      "r_name": "family",
+      "description": "string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\"). Incomplete entries will be matched to\nthe current valid options."
+    },
+    {
+      "r_name": "tuning.chi",
+      "description": "tuning constant for the function used to compute the M-scale\nused for the residual scale estimator. If missing, it is computed inside `lmrobdet.control` to match\nthe value of `bb` according to the family of rho functions specified in `family`."
+    },
+    {
+      "r_name": "tuning.psi",
+      "description": "tuning parameters for the regression M-estimator computed with a rho function\nas specified with argument `family`. If missing, it is computed inside `lmrobdet.control` to match\nthe value of `efficiency` according to the family of rho functions specified in `family`.\nAppropriate values for `tuning.psi` for a given desired efficiency for Gaussian errors\ncan be constructed using the functions `bisquare`, `mopt` and `opt`."
+    },
+    {
+      "r_name": "max.it",
+      "description": "maximum number of IRWLS iterations for the M-estimator"
+    },
+    {
+      "r_name": "rel.tol",
+      "description": "relative covergence tolerance for the IRWLS iterations for the M-estimator"
+    },
+    {
+      "r_name": "mscale_tol",
+      "description": "Convergence tolerance for the M-scale algorithm. See ``scaleM``."
+    },
+    {
+      "r_name": "mscale_maxit",
+      "description": "Maximum number of iterations for the M-scale algorithm. See ``scaleM``."
+    },
+    {
+      "r_name": "trace.lev",
+      "description": "positive values (increasingly) provide details on the progress of the M-algorithm"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(coleman, package='robustbase')\nm2 <- lmrobM(Y ~ ., data=coleman, control=lmrobM.control())\nm2\nsummary(m2)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

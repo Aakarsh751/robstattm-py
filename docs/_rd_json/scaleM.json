@@ -1,0 +1,47 @@
+{
+  "name": "scaleM",
+  "aliases": [
+    "scaleM"
+  ],
+  "title": "M-scale estimator",
+  "description": "This function computes an M-scale, which is a robust\nscale (spread) estimator.\nM-estimators of scale are a robust alternative to\nthe sample standard deviation. Given a vector of\nresiduals `r`, the M-scale estimator `s`\nsolves the non-linear equation `mean(rho(r/s, cc))=delta`,\nwhere `delta` determines the breakdown point of the \nestimator, and `cc` is a tuning parameter \ncalculated to obtain consistency under a Gaussian model. \nThe breakdown point of the estimator is `min(delta, 1-delta)`,\nso the optimal choice for `delta` is 0.5. To obtain a\nconsistent estimator the constant\n`cc` is chosen such that E(rho(Z, cc)) = delta, where\nZ is a standard normal random variable.",
+  "usage": "scaleM(\n  u,\n  delta = 0.5,\n  family = \"bisquare\",\n  max.it = 100,\n  tol = 1e-06,\n  tolerancezero = .Machine$double.eps,\n  tuning.chi = lmrobdet.control(family = family, bb = delta)$tuning.chi\n)",
+  "arguments": [
+    {
+      "r_name": "u",
+      "description": "vector of residuals"
+    },
+    {
+      "r_name": "delta",
+      "description": "the right hand side of the M-scale equation"
+    },
+    {
+      "r_name": "family",
+      "description": "string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\")."
+    },
+    {
+      "r_name": "max.it",
+      "description": "maximum number of iterations allowed"
+    },
+    {
+      "r_name": "tol",
+      "description": "relative tolerance for convergence"
+    },
+    {
+      "r_name": "tolerancezero",
+      "description": "smallest (in absolute value) non-zero value accepted as a scale. Defaults to `.Machine$double.eps`"
+    },
+    {
+      "r_name": "tuning.chi",
+      "description": "the tuning object as returned\nby ``lmrobdet.control``, ``bisquare``, ``mopt``,\nor ``opt``. It defaults to the value that results\nin a consistent scale estimator for the specified `family` \nof loss functions and breakdown point as set by `delta`."
+    }
+  ],
+  "value": [],
+  "details": "The iterative algorithm starts from the scaled median of\nthe absolute values of the input vector, and then\ncycles through the equation \\code{s_{k+1}^2 = s_k^2 * mean(rho(r/s_k, cc)) / delta}.",
+  "sections": {},
+  "examples_r": "set.seed(123)\nr <- rnorm(150, sd=1.5)\nscaleM(r)\nsd(r)\n# 10\\% of outliers, sd of good points is 1.5\nset.seed(123)\nr2 <- c(rnorm(135, sd=1.5), rnorm(15, mean=-5, sd=.5))\nscaleM(r2, family='opt')\nsd(r2)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

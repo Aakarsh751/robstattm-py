@@ -1,0 +1,57 @@
+{
+  "name": "locScaleM",
+  "aliases": [
+    "locScaleM",
+    "MLocDis"
+  ],
+  "title": "Robust univariate location and scale M-estimators",
+  "description": "This function computes M-estimators for location and scale.",
+  "usage": "locScaleM(x, psi = \"mopt\", eff = 0.95, maxit = 50, tol = 1e-04, na.rm = FALSE)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "a vector of univariate observations"
+    },
+    {
+      "r_name": "psi",
+      "description": "a string indicating which score function to use. Valid options are \"bisquare\", \"huber\",\n\"opt\" and \"mopt\"."
+    },
+    {
+      "r_name": "eff",
+      "description": "desired asymptotic efficiency. Valid options are 0.85, 0.9 and 0.95 (default) when\n`psi` = \"bisquare\" or \"huber\", and 0.85, 0.9, 0.95 (default) and 0.99 when\n`psi` = \"opt\" or \"mopt\"."
+    },
+    {
+      "r_name": "maxit",
+      "description": "maximum number of iterations allowed."
+    },
+    {
+      "r_name": "tol",
+      "description": "tolerance to decide convergence of the iterative algorithm."
+    },
+    {
+      "r_name": "na.rm",
+      "description": "a logical value indicating whether `NA` values should be stripped before\nthe computation proceeds. Defaults to `FALSE`"
+    }
+  ],
+  "value": [
+    {
+      "r_name": "mu",
+      "description": "The location estimate"
+    },
+    {
+      "r_name": "std.mu",
+      "description": "Estimated standard deviation of the location estimator `mu`"
+    },
+    {
+      "r_name": "disper",
+      "description": "M-scale/dispersion estimate"
+    }
+  ],
+  "details": "This function computes M-estimators for location and scale.",
+  "sections": {},
+  "examples_r": "set.seed(123)\nr <- rnorm(150, sd=1.5)\nlocScaleM(r)\n# 10\\% of outliers, sd of good points is 1.5\nset.seed(123)\nr2 <- c(rnorm(135, sd=1.5), rnorm(15, mean=-10, sd=.5))\nlocScaleM(r2)",
+  "seealso": [],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Ricardo Maronna, <rmaronna@retina.ar>"
+}

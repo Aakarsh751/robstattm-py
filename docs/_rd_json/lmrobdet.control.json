@@ -1,0 +1,124 @@
+{
+  "name": "lmrobdet.control",
+  "aliases": [
+    "lmrobdet.control"
+  ],
+  "title": "Tuning parameters for lmrobdetMM and lmrobdetDCML",
+  "description": "This function sets tuning parameters for the MM estimator implemented in `lmrobdetMM` and\nthe Distance Constrained Maximum Likelihood regression estimators\ncomputed by `lmrobdetDCML`.",
+  "usage": "lmrobdet.control(\n  bb = 0.5,\n  efficiency = 0.95,\n  family = \"mopt\",\n  tuning.psi,\n  tuning.chi,\n  compute.rd = FALSE,\n  corr.b = TRUE,\n  split.type = \"f\",\n  initial = \"S\",\n  max.it = 100,\n  refine.tol = 1e-07,\n  rel.tol = 1e-07,\n  refine.S.py = 1e-07,\n  refine.PY = 10,\n  solve.tol = 1e-07,\n  trace.lev = 0,\n  psc_keep = 0.5,\n  resid_keep_method = \"threshold\",\n  resid_keep_thresh = 2,\n  resid_keep_prop = 0.2,\n  py_maxit = 20,\n  py_eps = 1e-05,\n  mscale_maxit = 50,\n  mscale_tol = 1e-06,\n  mscale_rho_fun = \"bisquare\"\n)",
+  "arguments": [
+    {
+      "r_name": "bb",
+      "description": "tuning constant (between 0 and 1/2) for the M-scale used to compute the initial S-estimator. It\ndetermines the robusness (breakdown point) of the resulting MM-estimator, which is\n`bb`. Defaults to 0.5."
+    },
+    {
+      "r_name": "efficiency",
+      "description": "desired asymptotic efficiency of the final regression M-estimator. Defaults to 0.95."
+    },
+    {
+      "r_name": "family",
+      "description": "string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\"). Incomplete entries will be matched to the current valid options. Defaults to \"mopt\"."
+    },
+    {
+      "r_name": "tuning.psi",
+      "description": "tuning parameters for the regression M-estimator computed with a rho function\nas specified with argument `family`. If missing, it is computed inside `lmrobdet.control` to match\nthe value of `efficiency` according to the family of rho functions specified in `family`.\nAppropriate values for `tuning.psi` for a given desired efficiency for Gaussian errors\ncan be constructed using the functions `bisquare`, `mopt` and `opt`."
+    },
+    {
+      "r_name": "tuning.chi",
+      "description": "tuning constant for the function used to compute the M-scale\nused for the initial S-estimator. If missing, it is computed inside `lmrobdet.control` to match\nthe value of `bb` according to the family of rho functions specified in `family`."
+    },
+    {
+      "r_name": "compute.rd",
+      "description": "logical value indicating whether robust leverage distances need to be computed."
+    },
+    {
+      "r_name": "corr.b",
+      "description": "logical value indicating whether a finite-sample correction should be applied\nto the M-scale parameter `bb`."
+    },
+    {
+      "r_name": "split.type",
+      "description": "determines how categorical and continuous variables are split. See\n``splitFrame``."
+    },
+    {
+      "r_name": "initial",
+      "description": "string specifying the initial value for the M-step of the MM-estimator. Valid\noptions are `'S'`, for an S-estimator and `'MS'` for an M-S estimator which is\nappropriate when there are categorical explanatory variables in the model."
+    },
+    {
+      "r_name": "max.it",
+      "description": "maximum number of IRWLS iterations for the MM-estimator"
+    },
+    {
+      "r_name": "refine.tol",
+      "description": "relative convergence tolerance for the S-estimator"
+    },
+    {
+      "r_name": "rel.tol",
+      "description": "relative convergence tolerance for the IRWLS iterations for the MM-estimator"
+    },
+    {
+      "r_name": "refine.S.py",
+      "description": "relative convergence tolerance for the local improvements of the Pena-Yohai candidates for the S-estimator"
+    },
+    {
+      "r_name": "refine.PY",
+      "description": "number of refinement steps for the Pen~a-Yohai candidates"
+    },
+    {
+      "r_name": "solve.tol",
+      "description": "(for the S algorithm): relative tolerance for matrix inversion. Hence, this corresponds to ``solve.default``'s tol."
+    },
+    {
+      "r_name": "trace.lev",
+      "description": "positive values (increasingly) provide details on the progress of the MM-algorithm"
+    },
+    {
+      "r_name": "psc_keep",
+      "description": "For `pyinit`, proportion of observations to remove based on PSCs. The effective proportion of removed\nobservations is adjusted according to the sample size to be `prosac*(1-p/n)`. See `pyinit`."
+    },
+    {
+      "r_name": "resid_keep_method",
+      "description": "For `pyinit`, how to clean the data based on large residuals. If\n`\"threshold\"`, all observations with scaled residuals larger than `C.res` will\nbe removed, if `\"proportion\"`, observations with the largest `prop` residuals will\nbe removed. See `pyinit`."
+    },
+    {
+      "r_name": "resid_keep_thresh",
+      "description": "See parameter `resid_keep_method` above. See `pyinit`."
+    },
+    {
+      "r_name": "resid_keep_prop",
+      "description": "See parameter `resid_keep_method` above. See `pyinit`."
+    },
+    {
+      "r_name": "py_maxit",
+      "description": "Maximum number of iterations. See `pyinit`."
+    },
+    {
+      "r_name": "py_eps",
+      "description": "Relative tolerance for convergence.  See `pyinit`."
+    },
+    {
+      "r_name": "mscale_maxit",
+      "description": "Maximum number of iterations for the M-scale algorithm. See `pyinit` and ``scaleM``."
+    },
+    {
+      "r_name": "mscale_tol",
+      "description": "Convergence tolerance for the M-scale algorithm. See ``scaleM``."
+    },
+    {
+      "r_name": "mscale_rho_fun",
+      "description": "String indicating the loss function used for the M-scale. See `pyinit`."
+    }
+  ],
+  "value": [],
+  "details": "The argument `family` specifies the name of the family of loss\nfunction to be used. Current valid options are \"bisquare\", \"opt\", \"mopt\", \n\"optV0\" and \"moptV0\". \"mopt\" is a modified  version of the optimal psi \nfunction to make it strictly increasing close to 0, and to make the\ncorresponding weight function non-increasing.",
+  "sections": {
+    "Choice of Rho Loss Function": "As of RobStatTM Versopm 1.0.7, the opt and mopt rhos functions are\ncalculated using polynomials, rather than using the standard normal error\nfunction (erf) as in versions of RobStatTM prior to 1.0.7. The numerical\nresults one now gets with the opt or mopt choices will differ by small\namounts from those in earlier RobStatTM versions. Users who wish to replicate\nresults from releases prior to 1.0.7 may do so using the family arguments\nfamily = \"optV0\" or family = \"moptV0\". Note that the derivative of the rho\nloss function, known as the \"psi\" function, is not the derivative of the rho\npolynomial,instead it is still the analytic optimal psi function whose formula\nis given in the second of the Vignettes referenced just below.",
+    "Related Vignettes": "For further details, see the Vignettes \"Polynomial Opt and mOpt Rho Functions\",\nand \"Optimal Bias Robust Regression Psi and Rho\"."
+  },
+  "examples_r": "data(coleman, package='robustbase')\nm2 <- lmrobdetMM(Y ~ ., data=coleman, control=lmrobdet.control(refine.PY=50))\nm2\nsummary(m2)",
+  "seealso": [
+    "scaleM"
+  ],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "oats",
+  "aliases": [
+    "oats"
+  ],
+  "title": "Oats data",
+  "description": "Yield of grain for eight varieties of oats in five replications of a randomized-block experiment",
+  "usage": "data(oats)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Two-way ANOVA table with 8 rows and 5 columns.",
+  "sections": {},
+  "examples_r": "data(oats)",
+  "seealso": [],
+  "references": "References go here.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

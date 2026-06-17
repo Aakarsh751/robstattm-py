@@ -1,0 +1,23 @@
+{
+  "name": "mopt",
+  "aliases": [
+    "mopt"
+  ],
+  "title": "Tuning parameter for a rho function in the modified (asymptotic bias-) optimal family",
+  "description": "This function computes the tuning constant that yields an MM-regression\nestimator with a desired asymptotic efficiency when computed with a\nrho function in the corresponding family. The output of this\nfunction can be passed to the functions `lmrobdet.control`,\n`scaleM` and `rho`.",
+  "usage": "mopt(e)",
+  "arguments": [
+    {
+      "r_name": "e",
+      "description": "the desired efficiency of the corresponding regression\nestimator for Gaussian errors"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "# Tuning parameters for an 85\\%-efficient M-estimator at a Gaussian model\nmopt(.85)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Kjell Konis"
+}

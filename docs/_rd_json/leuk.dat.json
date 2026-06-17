@@ -1,0 +1,20 @@
+{
+  "name": "leuk.dat",
+  "aliases": [
+    "leuk.dat"
+  ],
+  "title": "Leukemia Data",
+  "description": "Records for 33 leukemia patients.",
+  "usage": "data(leuk.dat)",
+  "arguments": [],
+  "value": [],
+  "details": "Description: The following features are present:\n`wbc`: white blood cell count;\n`ag`: presence or absence of a certain\nmorphological characteristic in the white cells; and\n`y`: binary response\nvariable, equals `1` if the patient survives more than 52 weeks, `0` otherwise.\n\nFormat: Numeric, 33 rows and 3 columns.",
+  "sections": {},
+  "examples_r": "data(leuk.dat)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

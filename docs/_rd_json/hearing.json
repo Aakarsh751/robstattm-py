@@ -1,0 +1,20 @@
+{
+  "name": "hearing",
+  "aliases": [
+    "hearing"
+  ],
+  "title": "Hearing data",
+  "description": "Prevalence rates in percent for men aged 55\u201364 with hearing levels\n16 decibels or more above the audiometric zero.",
+  "usage": "data(hearing)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Two-way ANOVA.\nDescription: The rows correspond to different frequencies and to normal speech.\n1. 500 hertz\n2. 1000 hertz\n3. 2000 hertz\n4. 3000 hertz\n5. 4000 hertz\n6. 6000 hertz\n7. Normal speech\nThe columns classify the data in seven occupational groups:\n1. professional\u2013managerial\n2. farm\n3. clerical sales\n4. craftsmen\n5. operatives\n6. service\n7. laborers",
+  "sections": {},
+  "examples_r": "data(hearing)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

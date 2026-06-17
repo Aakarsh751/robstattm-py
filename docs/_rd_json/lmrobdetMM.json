@@ -1,0 +1,179 @@
+{
+  "name": "lmrobdetMM",
+  "aliases": [
+    "lmrobdetMM"
+  ],
+  "title": "Robust Linear Regression Estimators",
+  "description": "This function computes an MM-regression estimators for linear models\nusing deterministic starting points.",
+  "usage": "lmrobdetMM(\n  formula,\n  data,\n  subset,\n  weights,\n  na.action,\n  model = TRUE,\n  x = !control$compute.rd,\n  y = FALSE,\n  singular.ok = TRUE,\n  contrasts = NULL,\n  offset = NULL,\n  control = lmrobdet.control()\n)",
+  "arguments": [
+    {
+      "r_name": "formula",
+      "description": "a symbolic description of the model to be fit."
+    },
+    {
+      "r_name": "data",
+      "description": "an optional data frame, list or environment containing\nthe variables in the model. If not found in `data`, model variables\nare taken from `environment(formula)`, which usually is the\nroot environment of the current R session."
+    },
+    {
+      "r_name": "subset",
+      "description": "an optional vector specifying a subset of observations to be used."
+    },
+    {
+      "r_name": "weights",
+      "description": "an optional vector of weights to be used in the fitting process."
+    },
+    {
+      "r_name": "na.action",
+      "description": "a function to indicates what should happen when the data contain NAs.\nThe default is set by the `na.action` setting of ``options``, and is\n`na.fail` if that is unset."
+    },
+    {
+      "r_name": "model",
+      "description": "logical value indicating whether to return the model frame"
+    },
+    {
+      "r_name": "x",
+      "description": "logical value indicating whether to return the model matrix"
+    },
+    {
+      "r_name": "y",
+      "description": "logical value indicating whether to return the vector of responses"
+    },
+    {
+      "r_name": "singular.ok",
+      "description": "logical value. If `FALSE` a singular fit produces an error."
+    },
+    {
+      "r_name": "contrasts",
+      "description": "an optional list. See the `contrasts.arg` of `model.matrix.default`."
+    },
+    {
+      "r_name": "offset",
+      "description": "this can be used to specify an a priori known component to be included\nin the linear predictor during fitting. An offset term can be included in the formula\ninstead or as well, and if both are specified their sum is used."
+    },
+    {
+      "r_name": "control",
+      "description": "a list specifying control parameters as returned by the function\n`lmrobdet.control`."
+    }
+  ],
+  "value": [
+    {
+      "r_name": "coefficients",
+      "description": "The estimated vector of regression coefficients"
+    },
+    {
+      "r_name": "scale",
+      "description": "The robust residual M-scale estimate using the final residuals from the converged iterated weighted least square (IRWLS) algorithm final estimate"
+    },
+    {
+      "r_name": "residuals",
+      "description": "The vector of residuals associated with the robust fit"
+    },
+    {
+      "r_name": "loss",
+      "description": "Value of the objective function at the final MM-estimator"
+    },
+    {
+      "r_name": "converged",
+      "description": "Logical value indicating whether IRWLS iterations for the MM-estimator have converged"
+    },
+    {
+      "r_name": "iter",
+      "description": "Number of IRWLS iterations for the MM-estimator"
+    },
+    {
+      "r_name": "rweights",
+      "description": "Robustness weights for the MM-estimator"
+    },
+    {
+      "r_name": "fitted.values",
+      "description": "Fitted values associated with the robust fit"
+    },
+    {
+      "r_name": "rank",
+      "description": "Numeric rank of the fitted linear model"
+    },
+    {
+      "r_name": "cov",
+      "description": "The estimated covariance matrix of the regression estimates"
+    },
+    {
+      "r_name": "df.residual",
+      "description": "The residual degrees of freedom"
+    },
+    {
+      "r_name": "degree.freedom",
+      "description": "The residual degrees of freedom"
+    },
+    {
+      "r_name": "scale.S",
+      "description": "Minimum robust scale associated with the preliminary highly robust but inefficient S-estimator."
+    },
+    {
+      "r_name": "r.squared",
+      "description": "The robust multiple correlation coefficient"
+    },
+    {
+      "r_name": "adj.r.squared",
+      "description": "The adjusted robust multiple correlation coefficient taking into account the degrees of freedom of each term"
+    },
+    {
+      "r_name": "contrasts",
+      "description": "(only where relevant) the contrasts used"
+    },
+    {
+      "r_name": "xlevels",
+      "description": "(only where relevant) a record of the levels of the factors used in fitting"
+    },
+    {
+      "r_name": "call",
+      "description": "the matched call"
+    },
+    {
+      "r_name": "model",
+      "description": "if requested, the model frame used"
+    },
+    {
+      "r_name": "x",
+      "description": "if requested, the model matrix used"
+    },
+    {
+      "r_name": "y",
+      "description": "if requested, the response vector used"
+    },
+    {
+      "r_name": "terms",
+      "description": "The `terms` object used."
+    },
+    {
+      "r_name": "iters.py",
+      "description": "The number of refinement iterations for each Pena-Yohai candidate for the S-estimator."
+    },
+    {
+      "r_name": "iters.const",
+      "description": "The number of refinement iterations used to compute the estimator without covariates (to calculate the robust R^2)."
+    },
+    {
+      "r_name": "assign",
+      "description": "Used to separate continuous from categorical columns in the design matrix"
+    },
+    {
+      "r_name": "na.action",
+      "description": "(where relevant) information returned by model.frame on the special handling of NAs"
+    }
+  ],
+  "details": "This function computes MM-regression estimators\ncomputed using Pen~a-Yohai candidates (instead of subsampling ones).\nThis function makes use of the functions `lmrob.fit`,\n`lmrob..M..fit`, `.vcov.avar1`, `lmrob.S` and\n`lmrob.lar`, from robustbase,\nalong with utility functions used by these functions,\nmodified so as to include use of the analytic form of the\noptimal psi and rho functions (for the optimal psi function , see\nSection 5.8.1 of Maronna, Martin, Yohai and Salibian Barrera, 2019).",
+  "sections": {
+    "Choice of Rho Loss Function": "This is done by the user choice of family = \"opt\" or family = \"mopt\"\nin the function lmrobdet.control. As of RobStatTM Versopm 1.0.7, the\nopt and mopt rhos functions are calculated using polynomials, rather\nthan using the standard normal error function (erf) as in versions of\nRobStatTM prior to 1.0.7. The numerical results one now gets with the\nopt or mopt choices will differ by small amounts from those in earlier\nRobStatTM versions. Users who wish to replicate results from releases\nprior to 1.0.7 may do so using the family arguments family = \"optV0\" \nor family = \"moptV0\". Note that the derivative of the rho loss function,\nknown as the \"psi\" function, is not the derivative of the rho polynomial,\ninstead it is still the optimal psi function referred to above.",
+    "Related Vignettes": "For further details, see the Vignettes \"Polynomial Opt and mOpt Rho Functions\",\nand \"Optimal Bias Robust Regression Psi and Rho\"."
+  },
+  "examples_r": "data(coleman, package='robustbase')\nm2 <- lmrobdetMM(Y ~ ., data=coleman)\nm2\nsummary(m2)",
+  "seealso": [
+    "DCML",
+    "MMPY",
+    "SMPY"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>, based on `lmrob` from package `robustbase`"
+}

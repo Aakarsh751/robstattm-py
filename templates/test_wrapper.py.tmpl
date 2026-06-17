@@ -1,0 +1,73 @@
+"""Tests for robstatm_py.<module>.<python_name>."""
+from __future__ import annotations
+
+import numpy as np
+import pytest
+
+import robstatm_py as rpm
+from robstatm_py import set_seed
+from tests.conftest import assert_r_equal, R  # R() helper for direct R calls
+
+
+@pytest.fixture
+def golden_inputs():
+    set_seed(20260601)
+    # build a deterministic small input
+    return ...
+
+
+# --- Case 1: textbook example ---------------------------------------------
+def test_textbook_<example_name>(textbook_fixture):
+    py = rpm.<python_name>(...)
+    assert_r_equal(py, R("<rfun>(...)"), tier="strict")
+
+
+# --- Case 2-4: synthetic clean / small contaminated / medium contaminated -
+@pytest.mark.parametrize("n,p,contam", [
+    (50, 3, 0.0),
+    (50, 3, 0.05),
+    (1000, 20, 0.05),
+])
+def test_synthetic(n, p, contam):
+    set_seed(20260601 + n + p)
+    X, y = _make_data(n, p, contam)
+    py = rpm.<python_name>(X, y)
+    r = R(f"<rfun>(matrix(..., nrow={n}), ...)")
+    assert_r_equal(py, r, tier="strict")
+
+
+# --- Case 7: invalid input -------------------------------------------------
+def test_invalid_input_raises():
+    with pytest.raises(TypeError):
+        rpm.<python_name>("not-an-array")
+    with pytest.raises(ValueError):
+        rpm.<python_name>(np.empty((0, 3)))
+
+
+# --- Case 9: parameter sweep ----------------------------------------------
+@pytest.mark.parametrize("family", ["bisquare", "huber", "mopt"])
+@pytest.mark.parametrize("eff", [0.85, 0.90, 0.95])
+def test_param_sweep(family, eff, golden_inputs):
+    py = rpm.<python_name>(*golden_inputs, family=family, efficiency=eff)
+    r = R(f"<rfun>(..., family='{family}', efficiency={eff})")
+    assert_r_equal(py, r, tier="strict")
+
+
+# --- Case 10: determinism --------------------------------------------------
+def test_determinism(golden_inputs):
+    set_seed(42)
+    a = rpm.<python_name>(*golden_inputs)
+    set_seed(42)
+    b = rpm.<python_name>(*golden_inputs)
+    assert_r_equal(a, b, tier="strict")
+
+
+def _make_data(n, p, contam):
+    X = np.random.randn(n, p)
+    eps = np.random.randn(n)
+    y = X @ np.arange(1, p + 1) + eps
+    k = int(contam * n)
+    if k > 0:
+        idx = np.random.choice(n, size=k, replace=False)
+        y[idx] += 10
+    return X, y

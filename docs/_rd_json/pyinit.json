@@ -1,0 +1,27 @@
+{
+  "name": "pyinit",
+  "aliases": ["pyinit"],
+  "title": "Pena-Yohai initial estimator for robust regression",
+  "description": "Computes the Pena-Yohai (PY) deterministic initial estimator for MM-regression. Instead of random subsampling, it builds a small set of robust candidate coefficient vectors by iteratively removing observations with high 'principal sensitivity'. RobStatTM uses these candidates as the deterministic starting points for `lmrobdetMM`. This wrapper exposes the `pyinit` routine from the companion `pyinit` package.",
+  "usage": "",
+  "arguments": [
+    {"r_name": "x", "description": "design matrix of predictors with shape (n, p); the wrapper accepts this as the keyword `X`."},
+    {"r_name": "y", "description": "response vector of length n."},
+    {"r_name": "intercept", "description": "whether to add an intercept column to the design matrix (default True)."},
+    {"r_name": "psc_keep", "description": "proportion of candidates to keep at each principal-sensitivity-component step."},
+    {"r_name": "resid_keep_method", "description": "method for keeping observations by residual size: 'threshold' or 'proportion'."},
+    {"r_name": "resid_keep_prop", "description": "proportion of observations to keep when `resid_keep_method='proportion'`."},
+    {"r_name": "maxit", "description": "maximum number of refinement iterations per candidate."}
+  ],
+  "value": [
+    {"r_name": "coefficients", "description": "matrix whose columns are the candidate coefficient vectors (one robust starting point per column)."},
+    {"r_name": "objective", "description": "value of the robust objective for each candidate."}
+  ],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": ["lmrobdetMM"],
+  "references": "Pena, D. and Yohai, V. (1999). A fast procedure for outlier diagnostics in large regression problems. JASA 94(446), 434-445.",
+  "keywords": ["robust", "regression"],
+  "author": "the pyinit package authors"
+}

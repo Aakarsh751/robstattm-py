@@ -1,0 +1,20 @@
+{
+  "name": "wine",
+  "aliases": [
+    "wine"
+  ],
+  "title": "Wine data",
+  "description": "It contains, for each of 59 wines grown in the same region in Italy, the quantities of 13\nconstituents. The original purpose of the analysis was to classify wines from different\ncultivars by means of these measurements. In this example we treat cultivar one.",
+  "usage": "data(wine)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Numeric, 59 rows and 13 columns. Description: The attributes are:\n1. Alcohol\n2. Malic acid\n3. Ash\n4. Alcalinity of ash\n5. Magnesium\n6. Total phenols\n7. Flavanoids\n8. Nonflavanoid phenols\n9. Proanthocyanins\n10. Color intensity\n11. Hue\n12. OD280/OD315 of diluted wines\n13. Proline",
+  "sections": {},
+  "examples_r": "data(wine)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

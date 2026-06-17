@@ -1,0 +1,20 @@
+{
+  "name": "vehicle",
+  "aliases": [
+    "vehicle"
+  ],
+  "title": "Vehicle data",
+  "description": "The original data set contains an ensemble of shape feature extractors to the\n2D silhouettes of different vehicles. The purpose is to classify a given\nsilhouette as one of four types of vehicle, using a set of 18 features extracted\nfrom the silhouette. Here we deal with the \"van\" type, which has 217 cases.\nDescription; The following features were extracted from the silhouettes.\n1. compactness\n2. circularity\n3. distance circularity\n4. radius ratio\n5. principal axis aspect ratio\n6. maximum length aspect ratio\n7. scatter ratio\n8. elongatedness\n9. principal axis rectangularity\n10. maximum length rectangularity\n11. scaled variance along major axis\n12. scaled variance along minor axis\n13. scaled radius of gyration\n14. skewness about major axis\n15. skewness about minor axis\n16. kurtosis about minor axis\n17. kurtosis about major axis\n18. hollows ratio",
+  "usage": "data(vehicle)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Numeric, 217 rows and 18 columns.",
+  "sections": {},
+  "examples_r": "data(vehicle)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

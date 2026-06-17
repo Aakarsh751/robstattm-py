@@ -1,0 +1,20 @@
+{
+  "name": "waste",
+  "aliases": [
+    "waste"
+  ],
+  "title": "Waste data",
+  "description": "Waste data. The original data are the result of a study on production\nwaste and land use by Golueke and McGauhey (1970), and contain nine variables,\nof which we consider six.",
+  "usage": "data(waste)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: 40 cases and 6 continuous variables.\nDescription: The columns are\n1. industrial land (acres)\n2. fabricated metals (acres)\n3. trucking and wholesale trade (acres)\n4. retail trade (acres)\n5. restaurants and hotels (acres)\n6. solid waste (millions of tons), response",
+  "sections": {},
+  "examples_r": "data(waste)",
+  "seealso": [],
+  "references": "Golueke, C.G. and McGauhey, P.H. (1970), Comprehensive Studies of\nSolid Waste Management, US Department of Health, Education and Welfare, Public\nHealth Services Publication No. 2039.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

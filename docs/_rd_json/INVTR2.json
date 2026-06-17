@@ -1,0 +1,31 @@
+{
+  "name": "INVTR2",
+  "aliases": [
+    "INVTR2"
+  ],
+  "title": "Robust R^2 coefficient of determination",
+  "description": "This function computes a robust version of the R^2 coefficient of determination.\nIt is used internally by ``lmrobdetMM``,\nand not meant to be used directly.",
+  "usage": "INVTR2(RR2, family, cc)",
+  "arguments": [
+    {
+      "r_name": "RR2",
+      "description": "the proportional difference in loss functions (a naive robust R^2 coefficient)."
+    },
+    {
+      "r_name": "family",
+      "description": "family string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\")."
+    },
+    {
+      "r_name": "cc",
+      "description": "tuning parameters to be computed according to efficiency and / or breakdown\nconsiderations. See `lmrobdet.control`, `bisquare`, `mopt`\nand `opt`."
+    }
+  ],
+  "value": [],
+  "details": "This function computes a robust version of the R^2 coefficient.\nIt is used internally by ``lmrobdetMM``,\nand not meant to be used directly.",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>"
+}

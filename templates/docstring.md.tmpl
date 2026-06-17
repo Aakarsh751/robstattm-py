@@ -1,0 +1,46 @@
+# Docstring fill-in template
+
+Copy this when writing a new wrapper docstring. Fill every placeholder.
+
+```
+<one-line summary ending in a period>.
+
+<paragraph: statistical purpose, relationship to R, book section reference>.
+
+Parameters
+----------
+<arg> : <type>, shape (...)
+    <description>.
+
+Returns
+-------
+<DataclassName>
+    <one-line summary>; see class docstring for fields.
+
+Raises
+------
+TypeError
+    When ...
+ValueError
+    When ...
+RobStatTMRError
+    When the underlying R call fails. The R traceback is attached as
+    ``.r_traceback`` on the exception.
+
+Notes
+-----
+Thin rpy2 wrapper around ``RobStatTM::<RFUN>``. Outputs match R
+field-by-field to machine precision (see ``tests/<module>/test_<file>.py``).
+The R name ``<r.name>`` is exposed in Python as ``<py_name>`` (R
+dot-to-Python underscore convention).
+
+References
+----------
+.. [1] Maronna et al. (2019), §<CHAPTER>.
+.. [2] RobStatTM R man page: ``?<RFUN>``.
+
+Examples
+--------
+>>> import robstatm_py as rpm
+>>> # deterministic small example
+```

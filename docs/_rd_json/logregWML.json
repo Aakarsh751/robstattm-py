@@ -1,0 +1,61 @@
+{
+  "name": "logregWML",
+  "aliases": [
+    "logregWML",
+    "WMLlogreg"
+  ],
+  "title": "Weighted likelihood estimator for the logistic model",
+  "description": "This function computes a weighted likelihood estimator for the logistic model, where\nthe weights penalize high leverage observations. In this version the weights are zero or one.",
+  "usage": "logregWML(x0, y, intercept = 1)",
+  "arguments": [
+    {
+      "r_name": "x0",
+      "description": "p x n matrix of explanatory variables, p is the number of explanatory variables, n is the number of observations"
+    },
+    {
+      "r_name": "y",
+      "description": "response vector"
+    },
+    {
+      "r_name": "intercept",
+      "description": "1 or 0 indicating if an intercept is included or or not"
+    }
+  ],
+  "value": [
+    {
+      "r_name": "coefficients",
+      "description": "vector of regression coefficients"
+    },
+    {
+      "r_name": "standard.deviation",
+      "description": "standard deviations of the regression coefficient estimators"
+    },
+    {
+      "r_name": "fitted.values",
+      "description": "vector with the probabilities of success"
+    },
+    {
+      "r_name": "residual.deviances",
+      "description": "residual deviances"
+    },
+    {
+      "r_name": "cov",
+      "description": "covariance matrix of the regression estimates"
+    },
+    {
+      "r_name": "objective",
+      "description": "value of the objective function at the minimum"
+    },
+    {
+      "r_name": "xweights",
+      "description": "vector of zeros and ones used to compute the weighted maimum likelihood estimator"
+    }
+  ],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(skin)\nXskin <- as.matrix( skin[, 1:2] )\nyskin <- skin$vasoconst\nskinWML <- logregWML(Xskin, yskin, intercept=1)\nskinWML$coeff\nskinWML$standard.deviation",
+  "seealso": [],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai"
+}

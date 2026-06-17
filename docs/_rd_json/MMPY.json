@@ -1,0 +1,39 @@
+{
+  "name": "MMPY",
+  "aliases": [
+    "MMPY"
+  ],
+  "title": "MM regression estimator using Pen~a-Yohai candidates",
+  "description": "This function computes MM-regression estimator using Pen~a-Yohai\ncandidates for the initial S-estimator. This function is used\ninternally by ``lmrobdetMM``, and not meant to be used\ndirectly.",
+  "usage": "MMPY(X, y, control, mf)",
+  "arguments": [
+    {
+      "r_name": "X",
+      "description": "design matrix"
+    },
+    {
+      "r_name": "y",
+      "description": "response vector"
+    },
+    {
+      "r_name": "control",
+      "description": "a list of control parameters as returned by ``lmrobdet.control``"
+    },
+    {
+      "r_name": "mf",
+      "description": "model frame"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [
+    "DCML",
+    "MMPY",
+    "SMPY"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>, Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "glass",
+  "aliases": [
+    "glass"
+  ],
+  "title": "Glass data",
+  "description": "Measurements of the presence of seven chemical constituents in\n76 pieces of glass from nonfloat car windows.",
+  "usage": "data(glass)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: 76 cases and 7 continuous variables.\nDescription: The columns are:\n1. RI refractive index\n2. Na2O sodium oxide (unit measurement: weight percent in\ncorresponding oxide, as are the rest of attributes)\n3. MgO magnesium oxide\n4. Al2O3 aluminum oxide\n5. SiO2 silcon oxide\n6. K2O potassium oxide\n7. CaO calcium oxide",
+  "sections": {},
+  "examples_r": "data(glass)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

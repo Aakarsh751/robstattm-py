@@ -1,0 +1,31 @@
+{
+  "name": "lsRobTestMM",
+  "aliases": [
+    "lsRobTestMM"
+  ],
+  "title": "Test for Least Squares Bias Using Robust MM Regressions",
+  "description": "Test for Least Squares Bias Using Robust MM Regressions",
+  "usage": "lsRobTestMM(object, test = c(\"T\", \"T0\"), ...)",
+  "arguments": [
+    {
+      "r_name": "object",
+      "description": "An MM regression fitted model whose class is *lmrobdetMM*."
+    },
+    {
+      "r_name": "test",
+      "description": "A character vector indicating which of two type of tests \"T\" or \n\"T0: are used, with type \"T\" the default."
+    },
+    {
+      "r_name": "...",
+      "description": "Pass through parameters"
+    }
+  ],
+  "value": [],
+  "details": "The original version of `lsRobTestMM` is the `lsRobTest`\nin the package *robust*. The function `lsRobTest` had options *T1* and\n*T2*. However, we only recommend *T2*, and deprecate *T1*. Accordingly we\nuse *T* for the former *T2*, and use *T0* for the former *T1*, and we\ndeprecate *T0*.\n\nThe *coefs* component of the list is a matrix whose row names are\nthe names of the regression predictor variables, and whose columns *LS*, \n*Robust*, *Delta*, *Std.error*, *t-stat*, *p-value* contain respectively,\nthe least squares and robust coefficient estimates, the differences in the\ncoefficient estimates, the standard errors of the differences, the resulting\nt-statistic values, and the resulting z-test p-values.\n\nThe *full* component of the list is itself a list with components the full\nmodel quadratic form chi-squared statistic value (*stat*), the degrees of \nfreedom (*df*), and the full model p value (*p.value*).\n\nThe *test* component of the list is a character value indicating which of the \ntests *T* and *T0* has been computed.\n\nThe *efficiency* component of the list is *NULL* when test *T* has been used,\nand is equal to the normal distribution efficiency of the *lmrobdetMM*\nestimate when test *T0* has been used.",
+  "sections": {},
+  "examples_r": "args(lsRobTestMM)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Kjell Konis"
+}

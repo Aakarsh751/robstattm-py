@@ -1,0 +1,20 @@
+{
+  "name": "alcohol",
+  "aliases": [
+    "alcohol"
+  ],
+  "title": "Alcohol data",
+  "description": "This data set  contains physicochemical characteristics of 44 aliphatic alcohols.\nThe aim of the experiment was the prediction of the solubility on the basis of\nmolecular descriptors.",
+  "usage": "data(alcohol)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: 44 cases and 7 continuous variables.\nThe columns are:\n1. SAG=solvent accessible surface-bounded molecular volume\n2. V=volume\n3. log PC (PC=octanol\u2013water partitions coefficient)\n4. P=polarizability\n5. RM=molar refractivity\n6. Mass\n7. log(Solubility) (response)",
+  "sections": {},
+  "examples_r": "data(alcohol)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

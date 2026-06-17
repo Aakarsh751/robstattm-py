@@ -1,0 +1,39 @@
+{
+  "name": "SMPY",
+  "aliases": [
+    "SMPY"
+  ],
+  "title": "SM regression estimator using Pen~a-Yohai candidates",
+  "description": "This function computes a robust regression estimator when there\nare categorical / dummy explanatory variables. It uses Pen~a-Yohai\ncandidates for the S-estimator. This function is used\ninternally by ``lmrobdetMM``, and not meant to be used\ndirectly.",
+  "usage": "SMPY(mf, y, control, split)",
+  "arguments": [
+    {
+      "r_name": "mf",
+      "description": "model frame"
+    },
+    {
+      "r_name": "y",
+      "description": "response vector"
+    },
+    {
+      "r_name": "control",
+      "description": "a list of control parameters as returned by ``lmrobdet.control``"
+    },
+    {
+      "r_name": "split",
+      "description": "a list as returned by `splitFrame` containing the continuous and\ndummy components of the design matrix"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [
+    "DCML",
+    "MMPY",
+    "SMPY"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>, Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

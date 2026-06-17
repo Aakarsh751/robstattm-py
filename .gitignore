@@ -1,0 +1,30 @@
+# Python build / cache artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Sphinx build output
+docs/_build/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Generated notebook/verify figures (regenerated on run)
+verify_smoke_plot.png
+
+# Virtual envs
+.venv/
+env/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

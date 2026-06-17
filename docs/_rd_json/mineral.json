@@ -1,0 +1,20 @@
+{
+  "name": "mineral",
+  "aliases": [
+    "mineral"
+  ],
+  "title": "Mineral data",
+  "description": "Contents (in parts per million) of 22 chemical elements in\n53 samples of rocks in Western Australia.\nTwo columns (8 and 9) were selected for use in this book.",
+  "usage": "data(mineral)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Numeric with 53 rows and 2 columns:",
+  "sections": {},
+  "examples_r": "data(mineral)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

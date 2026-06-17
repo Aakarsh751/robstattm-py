@@ -1,0 +1,52 @@
+{
+  "name": "prcompRob",
+  "aliases": [
+    "prcompRob"
+  ],
+  "title": "Robust Principal Components Cont'd",
+  "description": "This function uses the pcaRobS function to compute all principal components while\nbehaving similarly to the prcomp function",
+  "usage": "prcompRob(x, rank. = NULL, delta.scale = 0.5, max.iter = 100L)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "data matrix with observations in rows"
+    },
+    {
+      "r_name": "rank.",
+      "description": "Maximal number of principal components to be used (optional)"
+    },
+    {
+      "r_name": "delta.scale",
+      "description": "\"delta\" parametor of the scale M-estimator (default = 0.5)"
+    },
+    {
+      "r_name": "max.iter",
+      "description": "maximum number of iterations (default = 100)"
+    }
+  ],
+  "value": [
+    {
+      "r_name": "sdev",
+      "description": "the standard deviation of the principal components"
+    },
+    {
+      "r_name": "rotation",
+      "description": "matrix containing the factor loadings"
+    },
+    {
+      "r_name": "x",
+      "description": "matrix containing the rotated data"
+    },
+    {
+      "r_name": "center",
+      "description": "the centering used"
+    }
+  ],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(wine)\n\np.wine <- prcompRob(wine)\nsummary(p.wine)\n\n## Choose only 5\np5.wine <- prcompRob(wine, rank. = 5)\nsummary(p5.wine)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Gregory Brownson, <gregory.brownson@gmail.com>"
+}

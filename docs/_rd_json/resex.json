@@ -1,0 +1,20 @@
+{
+  "name": "resex",
+  "aliases": [
+    "resex"
+  ],
+  "title": "Resex data",
+  "description": "A monthly series of inward movement of residential telephone extensions in a\nfixed geographic area from January 1966 to May 1973.",
+  "usage": "data(resex)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: numeric vector of size 89.",
+  "sections": {},
+  "examples_r": "data(resex)",
+  "seealso": [],
+  "references": "Brubacher. S.R. (1974), Time series outlier detection and modeling\nwith interpolation, Bell Laboratories Technical Memo.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

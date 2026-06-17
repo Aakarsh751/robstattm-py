@@ -1,0 +1,100 @@
+# `{{ py_name }}`
+
+> **R original:** `{{ r_name }}` &nbsp;·&nbsp; **Python module:** `robstatm_py.{{ py_module }}`{% if title %} &nbsp;·&nbsp; {{ title }}{% endif %}
+
+{{ description }}
+{% if details %}
+{{ details }}
+{% endif %}
+## Usage
+
+```python
+from robstatm_py import {{ py_name }}
+
+{{ py_signature }}
+```
+{% if parameters %}
+## Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+{% for p in parameters -%}
+| `{{ p.name }}` | {{ p.type }} | {{ p.default }} | {{ p.description }} |
+{% endfor %}
+{% if internal_args %}
+> **Note** — handled internally, not exposed in Python: {% for a in internal_args %}`{{ a.r_name }}`{% if not loop.last %}, {% endif %}{% endfor %}. These are constructed for you from the inputs above.
+{% endif %}
+{% endif %}
+## Returns
+{% if py_fields %}
+A `{{ py_result_class }}` object. Its attributes mirror the fields of the R
+`{{ r_name }}` result, converted to NumPy / pandas / native Python types:
+
+| Attribute | R name | Description |
+|---|---|---|
+{% for v in py_fields -%}
+| `{{ v.py_name }}` | {{ v.r_name }} | {{ v.description }} |
+{% endfor %}
+{% if omitted_r_fields %}
+> **R fields not surfaced in Python** — the R `{{ r_name }}` list also contains
+> {% for v in omitted_r_fields %}`{{ v.r_name }}`{% if not loop.last %}, {% endif %}{% endfor %}.
+> These echo the inputs or are R-internal scaffolding; reach them via
+> `result._r_fit` for an `rpy2` round-trip if you need them.
+{% endif %}
+{% else %}
+{{ py_return_desc }}
+{% endif %}
+{% if methods %}
+## Methods
+
+The `{{ py_result_class }}` object also provides these methods:
+
+| Method | Description |
+|---|---|
+{% for m in methods -%}
+| `{{ m.signature }}` | {{ m.summary }} |
+{% endfor %}
+{% endif %}
+{% for sec_name, sec_body in sections.items() %}
+## {{ sec_name }}
+
+{{ sec_body }}
+{% endfor %}
+## Example
+
+```python
+{{ py_example }}
+```
+{% if examples_r %}
+<details>
+<summary>Equivalent R code</summary>
+
+```r
+{{ examples_r }}
+```
+</details>
+{% endif %}
+{% if seealso %}
+## See also
+
+{% for ref in seealso -%}
+- {% if ref in r_to_py %}[`{{ r_to_py[ref] }}`]({{ r_to_py[ref] }}.md) — Python wrapper for R `{{ ref }}`{% else %}`{{ ref }}` (R-side helper; not a separate Python wrapper){% endif %}
+{% endfor %}
+{% endif %}
+{% if references %}
+## References
+
+{{ references }}
+{% endif %}
+{% if author %}
+## Credits
+
+R implementation by {{ author }}. Python wrapper: RobStatTM-Py.
+{% endif %}
+
+---
+
+> **Bit-for-bit equivalence.** This wrapper calls the original R `{{ r_name }}`
+> through `rpy2`, so every returned value is validated against R at the strict
+> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> See `tests/` for the strict-tier suite.

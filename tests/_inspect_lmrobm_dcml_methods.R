@@ -1,0 +1,25 @@
+library(RobStatTM)
+data(mineral)
+
+cat("===== lmrobM summary =====\n")
+fit_m <- lmrobM(zinc ~ copper, data = mineral)
+s_m <- summary(fit_m)
+cat("class:\n"); print(class(s_m))
+cat("names:\n"); print(names(s_m))
+
+cat("\n===== lmrobdetDCML summary =====\n")
+fit_dcml <- lmrobdetDCML(zinc ~ copper, data = mineral)
+s_dcml <- summary(fit_dcml)
+cat("class:\n"); print(class(s_dcml))
+cat("names:\n"); print(names(s_dcml))
+
+cat("\n===== predict / hatvalues availability =====\n")
+cat("predict(lmrobM):\n"); print(head(predict(fit_m)))
+cat("predict(lmrobdetDCML):\n"); print(head(predict(fit_dcml)))
+cat("hatvalues(lmrobM):\n"); print(head(hatvalues(fit_m)))
+cat("hatvalues(lmrobdetDCML):\n"); print(head(hatvalues(fit_dcml)))
+
+cat("\n===== lmrobM summary coefficients shape =====\n")
+print(s_m$coefficients)
+cat("\n===== lmrobdetDCML summary coefficients shape =====\n")
+print(s_dcml$coefficients)

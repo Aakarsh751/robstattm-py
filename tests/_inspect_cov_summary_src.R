@@ -1,0 +1,7 @@
+library(RobStatTM)
+cat("===== summary.covRob source =====\n")
+print(getFromNamespace("summary.covRob", "RobStatTM"))
+cat("\n===== summary.covClassic source =====\n")
+print(getFromNamespace("summary.covClassic", "RobStatTM"))
+cat("\n===== summary.prcompRob source =====\n")
+print(getFromNamespace("summary.prcompRob", "RobStatTM"))

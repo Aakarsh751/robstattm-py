@@ -1,0 +1,76 @@
+{
+  "name": "refine.sm",
+  "aliases": [
+    "refine.sm"
+  ],
+  "title": "IRWLS iterations for S- or M-estimators",
+  "description": "This function performs iterative improvements for S- or\nM-estimators.",
+  "usage": "refine.sm(\n  x,\n  y,\n  initial.beta,\n  initial.scale,\n  k = 50,\n  conv = 1,\n  b,\n  cc,\n  family,\n  step = \"M\",\n  tol\n)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "design matrix"
+    },
+    {
+      "r_name": "y",
+      "description": "vector of responses"
+    },
+    {
+      "r_name": "initial.beta",
+      "description": "vector of initial regression estimates"
+    },
+    {
+      "r_name": "initial.scale",
+      "description": "initial residual scale estimate. If missing the (scaled) median of\nthe absolute residuals is used."
+    },
+    {
+      "r_name": "k",
+      "description": "maximum number of refining steps to be performed"
+    },
+    {
+      "r_name": "conv",
+      "description": "an integer indicating whether to check for convergence (1) at each step,\nor to force running k steps (0)"
+    },
+    {
+      "r_name": "b",
+      "description": "tuning constant for the M-scale estimator, used if iterations are for an S-estimator."
+    },
+    {
+      "r_name": "cc",
+      "description": "tuning constant for the rho function."
+    },
+    {
+      "r_name": "family",
+      "description": "string specifying the name of the family of loss function to be used (current\nvalid options are \"bisquare\", \"opt\" and \"mopt\")"
+    },
+    {
+      "r_name": "step",
+      "description": "a string indicating whether the iterations are to compute an S-estimator\n('S') or an M-estimator ('M')"
+    },
+    {
+      "r_name": "tol",
+      "description": "tolerance to detect convergence (relative difference of consecutive vectors of parameters)"
+    }
+  ],
+  "value": [
+    {
+      "r_name": "beta.rw",
+      "description": "The updated vector of regression coefficients"
+    },
+    {
+      "r_name": "scale.rw",
+      "description": "The corresponding estimated residual scale"
+    },
+    {
+      "r_name": "converged",
+      "description": "A logical value indicating whether the algorithm\nconverged"
+    }
+  ],
+  "details": "This function performs iterative improvements for S- or\nM-estimators. Both iterations are formally the same, the\nonly difference is that for M-iterations the residual\nscale estimate remains fixed, while for S-iterations\nit is updated at each step. In this case, we follow\nthe Fast-S algorithm of Salibian-Barrera and Yohai\nan use one step updates for the M-scale, as opposed\nto a full computation. This as internal function.",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>."
+}

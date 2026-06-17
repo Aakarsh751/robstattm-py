@@ -1,0 +1,20 @@
+{
+  "name": "bus",
+  "aliases": [
+    "bus"
+  ],
+  "title": "Bus data",
+  "description": "This data set corresponds to a study in automatic vehicle recognition.\nEach of the 218 rows corresponds to a view of a bus silhouette, and contains\n18 attributes of the image. It was decided to exclude variable 9 and divide the\nremaining variables by their MADN\u2019s.",
+  "usage": "data(bus)",
+  "arguments": [],
+  "value": [],
+  "details": "Description: The following features were extracted from the silhouettes.\n1. compactness\n2. circularity\n3. distance circularity\n4. radius ratio\n5. principal axis aspect ratio\n6. maximum length aspect ratio\n7. scatter ratio\n8. elongatedness\n9. principal axis rectangularity\n10. maximum length rectangularity\n11. scaled variance along major axis\n12. scaled variance along minor axis\n13. scaled radius of gyration\n14. skewness about major axis\n15. skewness about minor axis\n16. kurtosis about minor axis\n17. kurtosis about major axis\n18. hollows ratio\n\nFormat: Numeric, 218 rows and 18 columns.",
+  "sections": {},
+  "examples_r": "data(bus)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

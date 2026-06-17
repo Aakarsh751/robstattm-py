@@ -1,0 +1,35 @@
+{
+  "name": "rhoprime2",
+  "aliases": [
+    "rhoprime2"
+  ],
+  "title": "The second derivative of the rho function",
+  "description": "The second derivative of the rho function",
+  "usage": "rhoprime2(u, family, cc, standardize = FALSE)",
+  "arguments": [
+    {
+      "r_name": "u",
+      "description": "point or vector at which rho is to be evaluated"
+    },
+    {
+      "r_name": "family",
+      "description": "family string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\")."
+    },
+    {
+      "r_name": "cc",
+      "description": "tuning parameters to be computed according to efficiency and / or breakdown\nconsiderations. See `lmrobdet.control`, `bisquare`, `mopt`\nand `opt`."
+    },
+    {
+      "r_name": "standardize",
+      "description": "logical value determining whether the rho function is to be\nstandardized so that its maximum value is 1. See `Mpsi`."
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "# Evaluate the 2nd derivative of a rho function tuned for 85\\% efficiency\nrhoprime2(u=1.1, family='bisquare', cc=bisquare(.85))\n# Evaluate the 2nd derivative of a rho function tuned for 50\\% breakdown\nrhoprime2(u=1.1, family='opt', cc=lmrobdet.control(bb=.5, family='opt')$tuning.chi)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

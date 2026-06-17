@@ -1,0 +1,20 @@
+{
+  "name": "breslow.dat",
+  "aliases": [
+    "breslow.dat"
+  ],
+  "title": "Breslow Data",
+  "description": "Patients suffering from simple or complex partial seizures \nwere randomized to receive either the antiepileptic drug \nprogabide or a placebo. At each of four successive post\nrandomization clinic visits, the number of seizures occuring \nover the previous two weeks was reported.",
+  "usage": "data(breslow.dat)",
+  "arguments": [],
+  "value": [],
+  "details": "Description: A data frame with 59 observations on the \nfollowing 12 variables: `ID`: an integer value \nspecifying the patient identification number; `Y1`:\nan integer value, the number of seizures during the first \ntwo week period; `Y2`: an integer value, the number of \nseizures during the second two week period; `Y3`: an integer \nvalue, the number of seizures during the third two week period.\n`Y4`: an integer value, the number of seizures during the \nfourth two week period; `Base`: an integer value giving \nthe eight-week baseline seizure count; `Age`: an integer \nvalue giving the age of the parient in years; `Trt`:\nthe treatment: a factor with levels placebo and progabide; \n`Ysum`: an integer value, the sum of Y1, Y2, Y3 and Y4;\n`sumY`: an integer value, the sum of Y1, Y2, Y3 and Y4;\n`Age10`: a numeric value, Age divided by 10; `Base4`:\na numeric value, Base divided by 4. \n\nFormat: Numeric, 59 rows and 12 columns.",
+  "sections": {},
+  "examples_r": "data(breslow.dat)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

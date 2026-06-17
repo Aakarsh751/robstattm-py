@@ -1,0 +1,47 @@
+{
+  "name": "cov.dcml",
+  "aliases": [
+    "cov.dcml"
+  ],
+  "title": "Approximate covariance matrix of the DCML regression estimator.",
+  "description": "The estimated covariance matrix of the DCML regression estimator.\nThis function is used internally and not meant to be used\ndirectly.",
+  "usage": "cov.dcml(res.LS, res.R, CC, sig.R, t0, p, n, control)",
+  "arguments": [
+    {
+      "r_name": "res.LS",
+      "description": "vector of residuals from the least squares fit"
+    },
+    {
+      "r_name": "res.R",
+      "description": "vector of residuals from the robust regression fit"
+    },
+    {
+      "r_name": "CC",
+      "description": "estimated covariance matrix of the robust regression estimator"
+    },
+    {
+      "r_name": "sig.R",
+      "description": "robust estimate of the scale of the residuals"
+    },
+    {
+      "r_name": "t0",
+      "description": "mixing parameter"
+    },
+    {
+      "r_name": "p, n",
+      "description": "the dimensions of the problem, needed for the finite\nsample correction of the tuning constant of the M-scale"
+    },
+    {
+      "r_name": "control",
+      "description": "a list of control parameters as returned by ``lmrobdet.control``"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>"
+}

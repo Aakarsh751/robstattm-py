@@ -1,0 +1,20 @@
+{
+  "name": "algae",
+  "aliases": [
+    "algae"
+  ],
+  "title": "Algae data",
+  "description": "Each row of the data set is a set of 90 measurements at a river in some place in Europe.\nThere are 11 predictors. The response is the logarithm of the abundance of a certain\nclass of algae. Description: The columns are:\n1. season, categorical  (1,2,3,4 for winter, spring, summer and autumn)\n2. river size (categorical) (1,2,3 for small, medium and large)\n3. fluid velocity (categorical) (1,2,3 for low, medium and high)\n4-11 (numerci): content of nitrogen in the form of nitrates, nitrites and ammonia, and other\nchemical compounds.\nCol. 12 ia the response:  abundance of a type of algae (type 6 in the complete file). For\nsimplicity we deleted the rows with missing values and took the logarithm of the response.",
+  "usage": "data(algae)",
+  "arguments": [],
+  "value": [],
+  "details": "Format 90 rows, 12 columns (3 categorical, 9 numeric)",
+  "sections": {},
+  "examples_r": "data(algae)",
+  "seealso": [],
+  "references": "References go here.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

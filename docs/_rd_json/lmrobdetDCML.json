@@ -1,0 +1,140 @@
+{
+  "name": "lmrobdetDCML",
+  "aliases": [
+    "lmrobdetDCML"
+  ],
+  "title": "Robust Distance Constrained Maximum Likelihood estimators for linear regression",
+  "description": "This function computes robust Distance Constrained Maximum Likelihood\nestimators for linear models.",
+  "usage": "lmrobdetDCML(\n  formula,\n  data,\n  subset,\n  weights,\n  na.action,\n  model = TRUE,\n  x = !control$compute.rd,\n  y = FALSE,\n  singular.ok = TRUE,\n  contrasts = NULL,\n  offset = NULL,\n  control = lmrobdet.control()\n)",
+  "arguments": [
+    {
+      "r_name": "formula",
+      "description": "a symbolic description of the model to be fit."
+    },
+    {
+      "r_name": "data",
+      "description": "an optional data frame, list or environment containing\nthe variables in the model. If not found in `data`, model variables\nare taken from `environment(formula)`, which usually is the\nroot environment of the current R session."
+    },
+    {
+      "r_name": "subset",
+      "description": "an optional vector specifying a subset of observations to be used."
+    },
+    {
+      "r_name": "weights",
+      "description": "an optional vector of weights to be used in the fitting process."
+    },
+    {
+      "r_name": "na.action",
+      "description": "a function to indicates what should happen when the data contain NAs.\nThe default is set by the `na.action` setting of ``options``, and is\n`na.fail` if that is unset."
+    },
+    {
+      "r_name": "model",
+      "description": "logical value indicating whether to return the model frame"
+    },
+    {
+      "r_name": "x",
+      "description": "logical value indicating whether to return the model matrix"
+    },
+    {
+      "r_name": "y",
+      "description": "logical value indicating whether to return the vector of responses"
+    },
+    {
+      "r_name": "singular.ok",
+      "description": "logical value. If `FALSE` a singular fit produces an error."
+    },
+    {
+      "r_name": "contrasts",
+      "description": "an optional list. See the `contrasts.arg` of `model.matrix.default`."
+    },
+    {
+      "r_name": "offset",
+      "description": "this can be used to specify an a priori known component to be included\nin the linear predictor during fitting. An offset term can be included in the formula\ninstead or as well, and if both are specified their sum is used."
+    },
+    {
+      "r_name": "control",
+      "description": "a list specifying control parameters as returned by the function\n`lmrobdet.control`."
+    }
+  ],
+  "value": [
+    {
+      "r_name": "coefficients",
+      "description": "The estimated vector of regression coefficients"
+    },
+    {
+      "r_name": "scale",
+      "description": "The estimated scale of the residuals"
+    },
+    {
+      "r_name": "residuals",
+      "description": "The vector of residuals associated with the robust fit"
+    },
+    {
+      "r_name": "converged",
+      "description": "Logical value indicating whether IRWLS iterations for the MM-estimator have converged"
+    },
+    {
+      "r_name": "iter",
+      "description": "Number of IRWLS iterations for the MM-estimator"
+    },
+    {
+      "r_name": "rweightsMM",
+      "description": "Robustness weights for the MM-estimator"
+    },
+    {
+      "r_name": "fitted.values",
+      "description": "Fitted values associated with the robust fit"
+    },
+    {
+      "r_name": "rank",
+      "description": "Numeric rank of the fitted linear model"
+    },
+    {
+      "r_name": "cov",
+      "description": "The estimated covariance matrix of the regression estimates"
+    },
+    {
+      "r_name": "df.residual",
+      "description": "The residual degrees of freedom"
+    },
+    {
+      "r_name": "contrasts",
+      "description": "(only where relevant) the contrasts used"
+    },
+    {
+      "r_name": "xlevels",
+      "description": "(only where relevant) a record of the levels of the factors used in fitting"
+    },
+    {
+      "r_name": "call",
+      "description": "the matched call"
+    },
+    {
+      "r_name": "model",
+      "description": "if requested, the model frame used"
+    },
+    {
+      "r_name": "x",
+      "description": "if requested, the model matrix used"
+    },
+    {
+      "r_name": "y",
+      "description": "if requested, the response vector used"
+    },
+    {
+      "r_name": "na.action",
+      "description": "(where relevant) information returned by model.frame on the special handling of NAs"
+    }
+  ],
+  "details": "This function computes Distance Constrained Maximum Likelihood regression estimators\ncomputed using an MM-regression estimator based on Pen~a-Yohai\ncandidates (instead of subsampling ones).\nThis function makes use of the functions `lmrob.fit`,\n`lmrob..M..fit`, `.vcov.avar1`, `lmrob.S` and\n`lmrob.lar`, from robustbase,\nalong with utility functions used by these functions,\nmodified so as to include use of the analytic form of the\noptimal psi and rho functions (for the optimal psi function , see\nSection 5.8.1 of Maronna, Martin, Yohai and Salibian Barrera, 2019)",
+  "sections": {},
+  "examples_r": "data(coleman, package='robustbase')\nm1 <- lmrobdetDCML(Y ~ ., data=coleman)\nm1\nsummary(m1)",
+  "seealso": [
+    "DCML",
+    "MMPY",
+    "SMPY"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>, based on `lmrob`"
+}

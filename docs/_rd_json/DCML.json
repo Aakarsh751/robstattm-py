@@ -1,0 +1,64 @@
+{
+  "name": "DCML",
+  "aliases": [
+    "DCML"
+  ],
+  "title": "DCML regression estimator",
+  "description": "This function computes the DCML regression estimator. This function is used\ninternally by ``lmrobdetDCML``, and not meant to be used\ndirectly.",
+  "usage": "DCML(x, y, z, z0, control)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "design matrix"
+    },
+    {
+      "r_name": "y",
+      "description": "response vector"
+    },
+    {
+      "r_name": "z",
+      "description": "robust fit as returned by ``MMPY`` or ``SMPY``"
+    },
+    {
+      "r_name": "z0",
+      "description": "least squares fit as returned by ``lm.fit``"
+    },
+    {
+      "r_name": "control",
+      "description": "a list of control parameters as returned by ``lmrobdet.control``"
+    }
+  ],
+  "value": [
+    {
+      "r_name": "coefficients",
+      "description": "the vector of regression coefficients"
+    },
+    {
+      "r_name": "cov",
+      "description": "the estimated covariance matrix of the DCML regression estimator"
+    },
+    {
+      "r_name": "residuals",
+      "description": "the vector of regression residuals from the DCML fit"
+    },
+    {
+      "r_name": "scale",
+      "description": "a robust residual (M-)scale estimate"
+    },
+    {
+      "r_name": "t0",
+      "description": "the mixing proportion between the least squares and robust regression estimators"
+    }
+  ],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [
+    "DCML",
+    "MMPY",
+    "SMPY"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>, Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

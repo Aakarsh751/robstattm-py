@@ -1,0 +1,35 @@
+{
+  "name": "rho",
+  "aliases": [
+    "rho"
+  ],
+  "title": "Rho functions",
+  "description": "This function returns the value of the \"rho\" loss function used\nto compute either an M-scale estimator or a robust regression\nestimator. It currently can be used to compute the bisquare, optimal\nand modified optimal loss functions.",
+  "usage": "rho(u, family = \" bisquare\", cc, standardize = TRUE)",
+  "arguments": [
+    {
+      "r_name": "u",
+      "description": "point or vector at which rho is to be evaluated"
+    },
+    {
+      "r_name": "family",
+      "description": "family string specifying the name of the family of loss function to be used (current valid\noptions are \"bisquare\", \"opt\" and \"mopt\")."
+    },
+    {
+      "r_name": "cc",
+      "description": "tuning parameters to be computed according to efficiency and / or breakdown\nconsiderations. See `lmrobdet.control`, `bisquare`, `mopt`\nand `opt`."
+    },
+    {
+      "r_name": "standardize",
+      "description": "logical value determining whether the rho function is to be\nstandardized so that its maximum value is 1. See `Mpsi`."
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "# Evaluate rho tuned for 85\\% efficiency\nrho(u=1.1, family='bisquare', cc=bisquare(.85))\n# Evaluate rho tuned for 50\\% breakdown\nrho(u=1.1, family='opt', cc=lmrobdet.control(bb=.5, family='opt')$tuning.chi)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

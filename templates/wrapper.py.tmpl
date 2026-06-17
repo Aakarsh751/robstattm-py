@@ -1,0 +1,74 @@
+"""<one-line module summary, e.g. "Robust MM-regression wrapper.">.
+
+Wraps ``RobStatTM::<RFUN>`` (Maronna et al. 2019, §<CHAPTER>). Depends on the
+R packages <PACKAGES>.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+import numpy as np
+
+from robstatm_py._r import _rcall, _get_pkg
+from robstatm_py._converters import r_list_to_kwargs
+from robstatm_py._errors import RobStatTMRError
+
+
+@dataclass(frozen=True, slots=True)
+class <ResultName>:
+    """<short summary>
+
+    Attributes
+    ----------
+    <field> : <type>
+        <description, including R-source field name if different>.
+    """
+    # <field>: <type>
+    pass
+
+
+def <python_name>(
+    # <arg>: <type>,
+    # ...
+) -> <ResultName>:
+    """<one-line summary ending in a period>.
+
+    <longer description>
+
+    Parameters
+    ----------
+    <name> : <type>
+        <description>.
+
+    Returns
+    -------
+    <ResultName>
+        See class docstring for field list.
+
+    Raises
+    ------
+    TypeError, ValueError, RobStatTMRError, RobStatTMSetupError
+
+    Notes
+    -----
+    Thin rpy2 wrapper around ``RobStatTM::<RFUN>``. Outputs match R
+    field-by-field to machine precision; see
+    ``tests/<module>/test_<file>.py``.
+
+    Examples
+    --------
+    >>> # short, deterministic example
+    """
+    # 1. argument validation
+    # ...
+
+    # 2. R call
+    pkg = _get_pkg("RobStatTM")
+    r_result = _rcall(pkg.<RFUN>, ...)
+
+    # 3. extract + return
+    fields = r_list_to_kwargs(r_result, mapping={
+        # "r.field.name": "py_field_name",
+    })
+    return <ResultName>(**fields)

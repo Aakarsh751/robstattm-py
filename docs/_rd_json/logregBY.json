@@ -1,0 +1,69 @@
+{
+  "name": "logregBY",
+  "aliases": [
+    "logregBY",
+    "BYlogreg"
+  ],
+  "title": "Bianco and Yohai estimator for logistic regression",
+  "description": "This function computes the M-estimator proposed by Bianco and Yohai for\nlogistic regression. By default, an intercept term is included and p\nparameters are estimated. Modified by Yohai (2018) to take as initial estimator\na weighted ML estimator with weights derived from the MCD estimator.\nFor more details we refer to Croux, C., and Haesbroeck, G. (2002),\n\"Implementing the Bianco and Yohai estimator for Logistic Regression\"",
+  "usage": "logregBY(x0, y, intercept = 1, const = 0.5, kmax = 1000, maxhalf = 10)",
+  "arguments": [
+    {
+      "r_name": "x0",
+      "description": "matrix of explanatory variables;"
+    },
+    {
+      "r_name": "y",
+      "description": "vector of binomial responses (0 or 1);"
+    },
+    {
+      "r_name": "intercept",
+      "description": "1 or 0 indicating if an intercept is included or or not"
+    },
+    {
+      "r_name": "const",
+      "description": "tuning constant used in the computation of the estimator (default=0.5);"
+    },
+    {
+      "r_name": "kmax",
+      "description": "maximum number of iterations before convergence (default=1000);"
+    },
+    {
+      "r_name": "maxhalf",
+      "description": "max number of step-halving (default=10)."
+    }
+  ],
+  "value": [
+    {
+      "r_name": "coefficients",
+      "description": "estimates for the regression coefficients"
+    },
+    {
+      "r_name": "standard.deviation",
+      "description": "standard deviations of the coefficients"
+    },
+    {
+      "r_name": "fitted.values",
+      "description": "fitted values"
+    },
+    {
+      "r_name": "residual.deviances",
+      "description": "residual deviances"
+    },
+    {
+      "r_name": "components",
+      "description": "logical value indicating whether convergence was achieved"
+    },
+    {
+      "r_name": "objective",
+      "description": "value of the objective function at the minimum"
+    }
+  ],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(skin)\nXskin <- as.matrix( skin[, 1:2] )\nyskin <- skin$vasoconst\nskinBY <- logregBY(Xskin, yskin, intercept=1)\nskinBY$coeff\nskinBY$standard.deviation",
+  "seealso": [],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Christophe Croux, Gentiane Haesbroeck, Victor Yohai"
+}

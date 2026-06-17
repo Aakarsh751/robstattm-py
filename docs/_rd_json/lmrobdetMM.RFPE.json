@@ -1,0 +1,33 @@
+{
+  "name": "lmrobdetMM.RFPE",
+  "aliases": [
+    "lmrobdetMM.RFPE"
+  ],
+  "title": "Robust Final Prediction Error",
+  "description": "This function computes the robust Final Prediction Errors (RFPE) for a robust regression fit using M-estimates.",
+  "usage": "lmrobdetMM.RFPE(object, scale = NULL, bothVals = FALSE)",
+  "arguments": [
+    {
+      "r_name": "object",
+      "description": "an object of class `lmrobdetMM` or `lmrobM`."
+    },
+    {
+      "r_name": "scale",
+      "description": "a numeric value specifying the scale estimate used to compute the RFPE. Usually this \nshould be the scale estimate from an encompassing model. If `NULL`, the scale estimate in \n`object` is used."
+    },
+    {
+      "r_name": "bothVals",
+      "description": "a logical value: if `TRUE` the function returns the two terms of the RFPE expression separately (equation \n(5.39) in the reference book); otherwise, the value of RFPE is returned."
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(coleman, package='robustbase')\nm2 <- lmrobdetMM(Y ~ ., data=coleman)\nlmrobdetMM.RFPE(m2)",
+  "seealso": [
+    "lmrobdetMM"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>, Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

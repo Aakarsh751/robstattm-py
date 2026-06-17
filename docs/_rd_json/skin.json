@@ -1,0 +1,20 @@
+{
+  "name": "skin",
+  "aliases": [
+    "skin"
+  ],
+  "title": "Skin data",
+  "description": "These data correspond to a study of the relationship between air inspiration and\nblood circulation in the skin.",
+  "usage": "data(skin)",
+  "arguments": [],
+  "value": [],
+  "details": "Description: The covariates are the logarithms of the volume of air inspired (log VOL)\nand of the inspiration rate (log RATE). The response (column 3) is the presence or\nabsence of vasoconstriction of the skin of the digits after air inspiration. Format\nNumeric, 23 rows and 3 columns.",
+  "sections": {},
+  "examples_r": "data(skin)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

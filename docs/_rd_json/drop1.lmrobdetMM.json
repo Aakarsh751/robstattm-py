@@ -1,0 +1,41 @@
+{
+  "name": "drop1.lmrobdetMM",
+  "aliases": [
+    "drop1.lmrobdetMM"
+  ],
+  "title": "RFPE of submodels of an ``lmrobdetMM`` fit",
+  "description": "This function computes the RFPE for the MM-estimators obtained with ``lmrobdetMM`` by\nrecomputing it, successively removing each of a number of specified terms. \nIt is used internally by ``step.lmrobdetMM`` and not meant to be used\ndirectly.",
+  "usage": "\\method{drop1}{lmrobdetMM}(object, scope, scale, keep, ...)",
+  "arguments": [
+    {
+      "r_name": "object",
+      "description": "the `MM` element (of class `lmrob`) in an object of class ``lmrobdetMM``."
+    },
+    {
+      "r_name": "scope",
+      "description": "an optional `formula` giving the terms to be considered for dropping. Typically \nthis argument is omitted, in which case all possible terms are dropped (without breaking hierarchy \nrules). The `scope` can also be a character vector of term labels. If the argument is supplied as a \nformula, any `.` is interpreted relative to the formula implied by the `object` argument."
+    },
+    {
+      "r_name": "scale",
+      "description": "an optional residual scale estimate. If missing the residual\nscale estimate in `object` is used."
+    },
+    {
+      "r_name": "keep",
+      "description": "a character vector of names of components that should be saved for each subset model. \nOnly names from the set `\"coefficients\"`, `\"fitted\"` and `\"residuals\"`\nare allowed. If `keep == TRUE`, the complete set is saved. The default behavior is \nnot to keep anything."
+    },
+    {
+      "r_name": "\\dots",
+      "description": "additional parameters to match generic method `drop1`"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [
+    "lmrobdetMM"
+  ],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Victor Yohai, <victoryohai@gmail.com>,  Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "stackloss",
+  "aliases": [
+    "stackloss"
+  ],
+  "title": "Stackloss data",
+  "description": "Observations from 21 days operation of a plant for the oxidation\nof ammonia as a stage in the production of nitric acid.",
+  "usage": "data(stackloss)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: 21 cases and 4 continuous variables.\nDescription: The columns are:\n1. air flow\n2. cooling water inlet temperature (C)\n3. acid concentration (%)\n4. Stack loss, defined as the percentage of ingoing ammonia\nthat escapes unabsorbed (response)",
+  "sections": {},
+  "examples_r": "data(stackloss)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

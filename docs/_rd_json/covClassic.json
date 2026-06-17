@@ -1,0 +1,64 @@
+{
+  "name": "covClassic",
+  "aliases": [
+    "covClassic"
+  ],
+  "title": "Classical Covariance Estimation",
+  "description": "Compute an estimate of the covariance/correlation matrix and location\nvector using classical methods.",
+  "usage": "covClassic(\n  data,\n  corr = FALSE,\n  center = TRUE,\n  distance = TRUE,\n  na.action = na.fail,\n  unbiased = TRUE\n)",
+  "arguments": [
+    {
+      "r_name": "data",
+      "description": "a numeric matrix or data frame containing the data."
+    },
+    {
+      "r_name": "corr",
+      "description": "a logical flag.  If `corr = TRUE` then the estimated correlation matrix is computed."
+    },
+    {
+      "r_name": "center",
+      "description": "a logical flag or a numeric vector of length `p` (where `p` is the number of columns of `x`) specifying the center.  If `center = TRUE` then the center is estimated.  Otherwise the center is taken to be 0."
+    },
+    {
+      "r_name": "distance",
+      "description": "a logical flag.  If `distance = TRUE` the Mahalanobis distances are computed."
+    },
+    {
+      "r_name": "na.action",
+      "description": "a function to filter missing data.  The default `na.fail` produces an error if missing values are present.  An alternative is `na.omit` which deletes observations that contain one or more missing values."
+    },
+    {
+      "r_name": "unbiased",
+      "description": "a logical flag. If `TRUE` the unbiased estimator is returned (computed with denominator equal to `n-1`), else the MLE (computed with denominator equal to `n`) is returned."
+    }
+  ],
+  "value": [
+    {
+      "r_name": "center",
+      "description": "a numeric vector containing the estimate of the location vector."
+    },
+    {
+      "r_name": "cov",
+      "description": "a numeric matrix containing the estimate of the covariance matrix."
+    },
+    {
+      "r_name": "cor",
+      "description": "a numeric matrix containing the estimate of the correlation matrix if the argument `corr = TRUE`. Otherwise it is set to `NULL`."
+    },
+    {
+      "r_name": "dist",
+      "description": "a numeric vector containing the squared Mahalanobis distances. Only present if `distance = TRUE` in the `call`."
+    },
+    {
+      "r_name": "call",
+      "description": "an image of the call that produced the object with all the arguments named. The matched call."
+    }
+  ],
+  "details": "Its main intention is to return an object compatible to that\nproduced by ``covRob``, but fit using classical methods.",
+  "sections": {},
+  "examples_r": "data(wine)\nround( covClassic(wine)$cov, 2)",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": ""
+}

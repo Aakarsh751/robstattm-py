@@ -1,0 +1,20 @@
+{
+  "name": "neuralgia",
+  "aliases": [
+    "neuralgia"
+  ],
+  "title": "Neuralgia data",
+  "description": "Neuralgia data. More details here.",
+  "usage": "data(neuralgia)",
+  "arguments": [],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "data(neuralgia)",
+  "seealso": [],
+  "references": "References go here.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

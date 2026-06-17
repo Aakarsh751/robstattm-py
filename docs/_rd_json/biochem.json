@@ -1,0 +1,20 @@
+{
+  "name": "biochem",
+  "aliases": [
+    "biochem"
+  ],
+  "title": "Biochem data",
+  "description": "Two biochemical measurements on 12 men with similar weights.",
+  "usage": "data(biochem)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Numeric, 12 rows, two columns",
+  "sections": {},
+  "examples_r": "data(biochem)",
+  "seealso": [],
+  "references": "",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

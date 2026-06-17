@@ -1,0 +1,31 @@
+{
+  "name": "print.lsRobTest",
+  "aliases": [
+    "print.lsRobTest"
+  ],
+  "title": "Print an lsRobTest Object",
+  "description": "Print an lsRobTest Object",
+  "usage": "\\method{print}{lsRobTest}(x, digits = 4, ...)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "lmrobdetMM fitted model object"
+    },
+    {
+      "r_name": "digits",
+      "description": "significant digits printed, default digits = 4"
+    },
+    {
+      "r_name": "...",
+      "description": "pass through parameters"
+    }
+  ],
+  "value": [],
+  "details": "",
+  "sections": {},
+  "examples_r": "",
+  "seealso": [],
+  "references": "",
+  "keywords": [],
+  "author": ""
+}

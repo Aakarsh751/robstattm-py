@@ -1,0 +1,20 @@
+{
+  "name": "shock",
+  "aliases": [
+    "shock"
+  ],
+  "title": "Shock data",
+  "description": "Times recorded for a rat to go through a shuttlebox in successive attempts. If the\ntime exceeded 5 seconds, the rat received an electric shock for the duration of the\nnext attempt. The data are the number of shocks received and the average time for\nall attempts between shocks.",
+  "usage": "data(shock)",
+  "arguments": [],
+  "value": [],
+  "details": "Format: Numeric matrix with 16 rows and 2 columns",
+  "sections": {},
+  "examples_r": "data(shock)",
+  "seealso": [],
+  "references": "References go here.",
+  "keywords": [
+    "datasets"
+  ],
+  "author": ""
+}

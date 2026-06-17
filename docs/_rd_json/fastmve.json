@@ -1,0 +1,52 @@
+{
+  "name": "fastmve",
+  "aliases": [
+    "fastmve"
+  ],
+  "title": "Minimum Volume Ellipsoid covariance estimator",
+  "description": "This function uses a fast algorithm to compute the Minimum Volume\nEllipsoid (MVE) for multivariate location and scatter.",
+  "usage": "fastmve(x, nsamp = 500)",
+  "arguments": [
+    {
+      "r_name": "x",
+      "description": "data matrix (n x p) with cases stored in rows."
+    },
+    {
+      "r_name": "nsamp",
+      "description": "number of random starts for the iterative algorithm, these\nare constructed using subsamples of the data."
+    }
+  ],
+  "value": [
+    {
+      "r_name": "center",
+      "description": "a vector with the robust multivariate location estimate"
+    },
+    {
+      "r_name": "cov",
+      "description": "a matrix with the robust covariance / scatter matrix estimate"
+    },
+    {
+      "r_name": "scale",
+      "description": "A scalar that equals the median of the mahalanobis distances of the\ndata to the `center`, multiplied by the determinant of the covariance matrix\nto the power 1/p"
+    },
+    {
+      "r_name": "best",
+      "description": "Indices of the observations that correspond to the MVE estimator"
+    },
+    {
+      "r_name": "nsamp",
+      "description": "Number of random starts used for the iterative algorithm"
+    },
+    {
+      "r_name": "nsing",
+      "description": "Number of random subsamples (among the `nsamp` attempted)\nthat failed (resulting in singular initial values)"
+    }
+  ],
+  "details": "This function computes the Minimum Volume\nEllipsoid (MVE) for multivariate location and scatter, using a\nfast algorithm related to the fast algorithm for S-regression\nestimators (see ``lmrob``).",
+  "sections": {},
+  "examples_r": "data(bus)\nX0 <- as.matrix(bus)\nX1 <- X0[,-9]\ntmp <- fastmve(X1)\nround(tmp$cov[1:10, 1:10], 3)\ntmp$center",
+  "seealso": [],
+  "references": "<http://www.wiley.com/go/maronna/robust>",
+  "keywords": [],
+  "author": "Matias Salibian-Barrera, <matias@stat.ubc.ca>"
+}

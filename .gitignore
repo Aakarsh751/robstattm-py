@@ -17,8 +17,11 @@ htmlcov/
 # Jupyter
 .ipynb_checkpoints/
 
-# Generated notebook/verify figures (regenerated on run)
+# Generated notebook/verify/doc-example figures (regenerated on run)
 verify_smoke_plot.png
+# Doc-example plot outputs written to CWD by guides/result-methods.md & utilities.md
+/diagnostics.png
+/scatter.png
 
 # Virtual envs
 .venv/

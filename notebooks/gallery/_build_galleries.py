@@ -104,7 +104,6 @@ ch4 = [
         "# robust M fit (bisquare, eff 0.85, bb 0.5 as in shock.R's control)\n"
         "# The data frame is pushed to R with its original names (n.shocks), so\n"
         "# the formula uses the R name; pandas column access uses n_shocks.\n"
-        "set_seed(1)\n"
         "mfit = rpm.lmrob_m('time ~ n.shocks', shock, bb=0.5, efficiency=0.85, family='bisquare')\n"
         "print('robust M coefficients:', np.round(mfit.coefficients, 4))\n"
         "print('robust scale         :', round(float(mfit.scale), 4))\n"
@@ -136,12 +135,10 @@ ch4 = [
     ),
     new_markdown_cell("### Strict-tier cross-check vs direct R `lmrobM`"),
     new_code_cell(
-        "# lmrobM is stochastic, so seed Python and R identically before each fit.\n"
-        "# lmrob_m(bb=..) builds an lmrobM.control internally, so match that here.\n"
-        "set_seed(1)\n"
+        "# lmrobM is deterministic, so no seeding is needed on either side.\n"
         "mfit_chk = rpm.lmrob_m('time ~ n.shocks', shock, bb=0.5, efficiency=0.85, family='bisquare')\n"
         "ro.r('data(shock); cont <- lmrobM.control(bb=0.5, efficiency=0.85, family=\"bisquare\")')\n"
-        "ro.r('set.seed(1L); rm_fit <- lmrobM(time ~ n.shocks, data=shock, control=cont)')\n"
+        "ro.r('rm_fit <- lmrobM(time ~ n.shocks, data=shock, control=cont)')\n"
         "r_coef = np.asarray(ro.r('as.numeric(rm_fit$coefficients)'), dtype=float)\n"
         "print('coefficients bit-equal to R:', np.array_equal(mfit_chk.coefficients, r_coef))"
     ),
@@ -157,7 +154,6 @@ ch4 = [
         "oats = rpm.datasets.oats()\n"
         "print('columns:', list(oats.columns))\n"
         "# robust M fits (matching oats.R)\n"
-        "set_seed(1)\n"
         "o2M = rpm.lmrob_m('response2 ~ variety + block', oats, bb=0.5, efficiency=0.85, family='bisquare')\n"
         "print('response2 robust M scale:', round(float(o2M.scale), 4))\n"
         "print('coefficients:', np.round(o2M.coefficients, 3))"
@@ -165,7 +161,6 @@ ch4 = [
     new_code_cell(
         "# Robust nested-model test (variety effect) via MM fits, which our\n"
         "# rob_linear_test supports. Full = variety+block, reduced = block only.\n"
-        "set_seed(1)\n"
         "full = rpm.lmrobdet_mm('response2 ~ variety + block', oats)\n"
         "reduced = rpm.lmrobdet_mm('response2 ~ block', oats)\n"
         "test = rpm.rob_linear_test(full, reduced)\n"
@@ -188,7 +183,6 @@ ch5 = [
     new_code_cell(
         "algae = rpm.datasets.algae()\n"
         "ctrl = rpm.lmrobdet_control(bb=0.5, efficiency=0.85, family='bisquare')\n"
-        "set_seed(7)  # lmrobdetMM is stochastic (random S-subsampling)\n"
         "rob = rpm.lmrobdet_mm('V12 ~ .', algae, control=ctrl)\n"
         "print('robust scale:', round(float(rob.scale), 4))\n"
         "print('n coefficients:', len(rob.coefficients))\n"
@@ -209,11 +203,10 @@ ch5 = [
     ),
     new_markdown_cell("### Strict-tier cross-check vs direct R `lmrobdetMM`"),
     new_code_cell(
-        "# Seed Python and R identically (lmrobdetMM is stochastic).\n"
-        "set_seed(7)\n"
+        "# lmrobdetMM is deterministic (Peña–Yohai initial), so no seeding is needed.\n"
         "rob_chk = rpm.lmrobdet_mm('V12 ~ .', algae, control=ctrl)\n"
         "ro.r('data(algae); cont <- lmrobdet.control(bb=0.5, efficiency=0.85, family=\"bisquare\")')\n"
-        "ro.r('set.seed(7L); ra <- lmrobdetMM(V12 ~ ., data=algae, control=cont)')\n"
+        "ro.r('ra <- lmrobdetMM(V12 ~ ., data=algae, control=cont)')\n"
         "r_coef = np.asarray(ro.r('as.numeric(ra$coefficients)'), dtype=float)\n"
         "print('coefficients bit-equal to R:', np.array_equal(rob_chk.coefficients, r_coef))"
     ),
@@ -231,7 +224,6 @@ ch5 = [
         "y1<-x1+sig*rnorm(n); y2<- -x2+sig*rnorm(m)\n"
         "xe<-c(x1,x2); ye<-c(y1,y2)''')\n"
         "xe = np.asarray(ro.r('xe'), dtype=float); ye = np.asarray(ro.r('ye'), dtype=float)\n"
-        "set_seed(5)\n"
         "mm = rpm.lmrobdet_mm('y ~ x', pd.DataFrame({'x': xe, 'y': ye}))\n"
         "Xe = np.c_[np.ones(len(xe)), xe]\n"
         "ls = np.linalg.lstsq(Xe, ye, rcond=None)[0]\n"
@@ -280,7 +272,6 @@ ch5 = [
         "Z = pd.DataFrame(np.asarray(ro.r('as.matrix(Z)'), dtype=float),\n"
         "                 columns=['y','V2','V3','V4','V5','V6','V7'])\n"
         "ctrl = rpm.lmrobdet_control(bb=0.5, efficiency=0.85, family='bisquare')\n"
-        "set_seed(11)\n"
         "obj = rpm.lmrobdet_mm('y ~ .', Z, control=ctrl)\n"
         "sel = rpm.step_lmrobdet(obj)\n"
         "print('final model:', sel.final_formula)\n"
@@ -499,7 +490,6 @@ vignette = [
     new_code_cell(
         "mineral = rpm.datasets.mineral()\n"
         "control = rpm.lmrobdet_control(family='mopt', efficiency=0.95)\n"
-        "set_seed(1)\n"
         "robfit = rpm.lmrobdet_mm('zinc ~ copper', mineral, control=control)\n"
         "import numpy as np\n"
         "Xm = np.c_[np.ones(len(mineral)), mineral['copper'].to_numpy(float)]\n"
@@ -512,10 +502,10 @@ vignette = [
     ),
     new_markdown_cell("Strict-tier cross-check vs direct R `lmrobdetMM`:"),
     new_code_cell(
-        "set_seed(1)  # lmrobdetMM is stochastic; match Python and R seeds\n"
+        "# lmrobdetMM is deterministic (Peña–Yohai initial), so no seeding is needed.\n"
         "robfit_chk = rpm.lmrobdet_mm('zinc ~ copper', mineral, control=control)\n"
         "ro.r('data(mineral); ctrl <- lmrobdet.control(family=\"mopt\", efficiency=0.95)')\n"
-        "ro.r('set.seed(1L); rfit <- lmrobdetMM(zinc ~ copper, control=ctrl, data=mineral)')\n"
+        "ro.r('rfit <- lmrobdetMM(zinc ~ copper, control=ctrl, data=mineral)')\n"
         "r_coef = np.asarray(ro.r('as.numeric(rfit$coefficients)'), dtype=float)\n"
         "print('coefficients bit-equal to R:', np.array_equal(robfit_chk.coefficients, r_coef))"
     ),

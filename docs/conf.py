@@ -69,9 +69,9 @@ exclude_patterns = [
 html_theme = "furo"
 html_title = "RobStatTM-Py"
 html_theme_options = {
-    "source_repository": "https://github.com/Aakarsh751/robstattm-pyport-AG-prop",
+    "source_repository": "https://github.com/Aakarsh751/robstatm-py",
     "source_branch": "main",
-    "source_directory": "robstatm-py/docs/",
+    "source_directory": "docs/",
     "navigation_with_keys": True,
 }
 # Pygments styles for light/dark code blocks.

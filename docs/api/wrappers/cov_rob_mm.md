@@ -72,7 +72,8 @@ import robstatm_py as rpm
 wine = rpm.datasets.wine()
 X = wine.to_numpy()
 
-# Robust MM-covariance estimator.
+# Robust MM-covariance estimator (stochastic initial subsampling -> set_seed).
+rpm.set_seed(42)
 fit = rpm.cov_rob_mm(X)
 
 print(f"robust center (first 5 vars):  {fit.center[:5].round(3)}")
@@ -84,12 +85,15 @@ print(f"# obs flagged as outliers:     {int((fit.dist > np.quantile(fit.dist, 0.
 <summary>Equivalent R code</summary>
 
 ```r
-data(bus)
-X0 <- as.matrix(bus)
-X1 <- X0[,-9]
-tmp <- covRobMM(X1)
-round(tmp$cov[1:10, 1:10], 3)
-tmp$mu
+data(wine)                  # 59 obs of 13 chemical measurements
+X <- as.matrix(wine)
+
+# Robust MM-covariance estimator (stochastic initial subsampling -> set.seed).
+set.seed(42)
+fit <- covRobMM(X)
+
+print(round(fit$center[1:5], 3))
+print(round(diag(fit$cov)[1:5], 2))
 ```
 </details>
 

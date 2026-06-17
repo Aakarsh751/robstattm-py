@@ -76,12 +76,14 @@ print(res)
 <summary>Equivalent R code</summary>
 
 ```r
-data(bus)
-X0 <- as.matrix(bus)
-X1 <- X0[,-9]
-tmp <- fastmve(X1)
-round(tmp$cov[1:10, 1:10], 3)
-tmp$center
+data(wine)
+
+# fastmve computes the Minimum Volume Ellipsoid (MVE) estimator of location
+# and scatter — a fast resampling-based robust starting point.
+set.seed(11)
+res <- fastmve(as.matrix(wine))
+
+print(round(res$center, 2))
 ```
 </details>
 

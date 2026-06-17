@@ -73,12 +73,14 @@ print(res)
 <summary>Equivalent R code</summary>
 
 ```r
-data(bus)
-X0 <- as.matrix(bus)
-X1 <- X0[,-9]
-tmp <- initPP(X1)
-round(tmp$cov[1:10, 1:10], 3)
-tmp$center
+data(wine)
+
+# KurtSDNew computes the kurtosis-based projection directions used internally
+# to initialise robust covariance and PCA estimators.
+set.seed(42)
+res <- KurtSDNew(as.matrix(wine))
+
+str(res)
 ```
 </details>
 

@@ -59,10 +59,13 @@ print("coefficients:", fit.coefficients.round(4))
 <summary>Equivalent R code</summary>
 
 ```r
-data(coleman, package='robustbase')
-m2 <- lmrobM(Y ~ ., data=coleman, control=lmrobM.control())
-m2
-summary(m2)
+data(mineral)
+
+# Control object for the M-estimator lmrobM: choose the loss family,
+# efficiency, and the breakdown tuning constant `bb`.
+ctrl <- lmrobM.control(efficiency = 0.85, family = "bisquare", bb = 0.5)
+fit  <- lmrobM(zinc ~ copper, data = mineral, control = ctrl)
+coef(fit)
 ```
 </details>
 

@@ -347,6 +347,22 @@ def _py_return_desc(fn, rec: dict) -> str:
     return "See the description above for what this function returns."
 
 
+def _r_example(rec: dict, py_name: str) -> str:
+    """Return the 'Equivalent R code' block for ``py_name``.
+
+    Preference order:
+      1. ``docs/examples/<py_name>.R`` (hand-authored) — used verbatim. Provide
+         this when the hand-authored Python example uses a different dataset or
+         workflow than the R man page, so the two blocks are genuinely
+         equivalent (same data, same calls).
+      2. The R man page's ``\examples{}`` (Rd ``\%`` unescaped to ``%``).
+    """
+    override = EXAMPLES_DIR / f"{py_name}.R"
+    if override.exists():
+        return override.read_text(encoding="utf-8").replace("\\%", "%").strip()
+    return (rec.get("examples_r", "") or "").replace("\\%", "%").strip()
+
+
 def _python_example(rec: dict, py_name: str) -> str:
     """Return a working Python example for ``py_name``.
 
@@ -494,7 +510,10 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
         "methods": _methods(result_cls),
         "details": rec.get("details", "").strip(),
         "sections": rec.get("sections", {}),
-        "examples_r": (rec.get("examples_r", "") or "").strip(),
+        # Equivalent R code: a hand-authored docs/examples/<py>.R override when
+        # present (so it matches the Python example's data/workflow), else the
+        # R man page's \examples{} with Rd ``\%`` unescaped to ``%``.
+        "examples_r": _r_example(rec, py_name),
         "py_example": _python_example(rec, py_name),
         "seealso": rec.get("seealso", []),
         "references": rec.get("references", "").strip(),

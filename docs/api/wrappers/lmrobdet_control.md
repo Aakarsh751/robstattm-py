@@ -97,10 +97,13 @@ print("coefficients:", fit.coefficients.round(4))
 <summary>Equivalent R code</summary>
 
 ```r
-data(coleman, package='robustbase')
-m2 <- lmrobdetMM(Y ~ ., data=coleman, control=lmrobdet.control(refine.PY=50))
-m2
-summary(m2)
+data(mineral)
+
+# A control object bundles the tuning knobs for lmrobdetMM / lmrobdetDCML.
+# Here: switch the loss family and lower the target efficiency.
+ctrl <- lmrobdet.control(family = "bisquare", efficiency = 0.85)
+fit  <- lmrobdetMM(zinc ~ copper, data = mineral, control = ctrl)
+coef(fit)
 ```
 </details>
 

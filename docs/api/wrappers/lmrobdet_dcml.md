@@ -116,10 +116,14 @@ print("classical R²:", round(fit.r_squared_classic(), 4))
 <summary>Equivalent R code</summary>
 
 ```r
-data(coleman, package='robustbase')
-m1 <- lmrobdetDCML(Y ~ ., data=coleman)
-m1
-summary(m1)
+data(mineral)
+
+# DCML ("Distance Constrained Maximum Likelihood") blends a robust and a
+# classical fit, giving high efficiency while staying robust to outliers.
+fit <- lmrobdetDCML(zinc ~ copper, data = mineral)
+
+print(round(coef(fit), 4))
+print(round(fit$scale, 4))
 ```
 </details>
 

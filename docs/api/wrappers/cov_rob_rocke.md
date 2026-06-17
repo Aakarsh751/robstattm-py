@@ -99,12 +99,15 @@ print("largest distances:", fit.dist.round(1)[fit.dist.argsort()[-5:]])
 <summary>Equivalent R code</summary>
 
 ```r
-data(bus)
-X0 <- as.matrix(bus)
-X1 <- X0[,-9]
-tmp <- covRobRocke(X1)
-round(tmp$cov[1:10, 1:10], 3)
-tmp$mu
+data(wine)
+
+# Rocke's S-estimator of multivariate location and scatter — designed to stay
+# efficient in higher dimensions where other robust estimators lose power.
+set.seed(42)
+fit <- covRobRocke(wine)
+
+print(dim(fit$cov))
+print(round(fit$center, 2))
 ```
 </details>
 

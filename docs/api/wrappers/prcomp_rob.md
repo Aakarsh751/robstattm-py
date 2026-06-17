@@ -70,7 +70,7 @@ The `PrcompRobResult` object also provides these methods:
 ```python
 import robstatm_py as rpm
 
-# Bus silhouettes — 218 obs, 17 image-shape features (after drop var 9).
+# Bus silhouettes — 218 obs, 18 image-shape features.
 bus = rpm.datasets.bus()
 
 # Robust principal-components decomposition.
@@ -86,14 +86,13 @@ print(f"rotation shape: {pc.rotation.shape}   scores shape: {pc.scores.shape}")
 <summary>Equivalent R code</summary>
 
 ```r
-data(wine)
+data(bus)                    # 218 obs, 18 image-shape features
+X <- as.matrix(bus)
 
-p.wine <- prcompRob(wine)
-summary(p.wine)
+# Robust principal-components decomposition.
+pc <- prcompRob(X)
 
-## Choose only 5
-p5.wine <- prcompRob(wine, rank. = 5)
-summary(p5.wine)
+print(round(pc$sdev[1:5], 3))
 ```
 </details>
 

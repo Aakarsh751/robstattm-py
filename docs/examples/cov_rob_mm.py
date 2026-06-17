@@ -5,7 +5,8 @@ import robstatm_py as rpm
 wine = rpm.datasets.wine()
 X = wine.to_numpy()
 
-# Robust MM-covariance estimator.
+# Robust MM-covariance estimator (stochastic initial subsampling -> set_seed).
+rpm.set_seed(42)
 fit = rpm.cov_rob_mm(X)
 
 print(f"robust center (first 5 vars):  {fit.center[:5].round(3)}")

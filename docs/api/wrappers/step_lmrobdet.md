@@ -80,7 +80,8 @@ df = rpm.datasets.stackloss()
 
 # Fit the full model, then let step_lmrobdet drop terms to minimise the
 # robust final prediction error (RFPE) — robust stepwise model selection.
-rpm.set_seed(42)
+# lmrobdet_mm / step_lmrobdet use the deterministic Peña–Yohai initial
+# estimator, so results are reproducible without set_seed.
 full = rpm.lmrobdet_mm(
     "stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.", data=df
 )

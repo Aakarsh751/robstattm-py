@@ -40,9 +40,9 @@ from robstatm_py import psi
 r = np.linspace(-6, 6, 13)
 cc = psi.bisquare(0.95)
 
-loss     = psi.rho(r, "bisquare", cc)        # the bounded loss values
-influence = psi.rhoprime(r, "bisquare", cc)  # the ψ (influence) function
-curvature = psi.rhoprime2(r, "bisquare", cc) # ψ′
+loss      = psi.rho(r, family="bisquare", cc=cc)        # the bounded loss values
+influence = psi.rhoprime(r, family="bisquare", cc=cc)   # the ψ (influence) function
+curvature = psi.rhoprime2(r, family="bisquare", cc=cc)  # ψ′
 ```
 
 ## Choosing a family

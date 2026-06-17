@@ -82,11 +82,11 @@ df = rpm.datasets.stackloss()
 
 # Robust analogue of the classical F-test for nested linear models:
 # is the extra term `Acid.Conc.` worth keeping?
-rpm.set_seed(42)
+# lmrobdet_mm uses the deterministic Peña–Yohai initial estimator, so both
+# fits are reproducible without set_seed.
 full = rpm.lmrobdet_mm(
     "stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.", data=df
 )
-rpm.set_seed(42)
 reduced = rpm.lmrobdet_mm("stack.loss ~ Air.Flow + Water.Temp", data=df)
 
 res = rpm.rob_linear_test(full, reduced)

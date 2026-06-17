@@ -54,10 +54,10 @@ A `RobLinearTestResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `test` | — | (Python-side convenience field) |
-| `chisq_pvalue` | — | (Python-side convenience field) |
-| `f_pvalue` | — | (Python-side convenience field) |
-| `df` | — | (Python-side convenience field) |
+| `test` | — | Test statistic. |
+| `chisq_pvalue` | — | χ² approximation p-value. |
+| `f_pvalue` | — | F approximation p-value. |
+| `df` | — | (numerator, denominator) degrees of freedom. |
 
 
 

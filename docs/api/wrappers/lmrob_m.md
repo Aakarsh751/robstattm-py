@@ -62,10 +62,10 @@ A `LmrobMResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | (Python-side convenience field) |
+| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `scale` | scale | The estimated scale of the residuals |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
-| `loss` | — | (Python-side convenience field) |
+| `loss` | — | Value of the objective function at the final M-estimator. |
 | `converged` | converged | Logical value indicating whether IRWLS iterations for the MM-estimator have converged |
 | `iter` | iter | Number of IRWLS iterations for the MM-estimator |
 | `fitted_values` | fitted.values | Fitted values associated with the robust fit |
@@ -73,9 +73,9 @@ A `LmrobMResult` object. Its attributes mirror the fields of the R
 | `rank` | rank | Numeric rank of the fitted linear model |
 | `cov` | cov | The estimated covariance matrix of the regression estimates |
 | `df_residual` | df.residual | The residual degrees of freedom |
-| `degree_freedom` | — | (Python-side convenience field) |
-| `r_squared` | — | (Python-side convenience field) |
-| `formula` | — | (Python-side convenience field) |
+| `degree_freedom` | — | The residual degrees of freedom. |
+| `r_squared` | — | The robust multiple correlation coefficient (robust R²). |
+| `formula` | — | The model formula used for the fit (echoes the input). |
 
 
 > **R fields not surfaced in Python** — the R `lmrobM` list also contains
@@ -91,6 +91,7 @@ The `LmrobMResult` object also provides these methods:
 
 | Method | Description |
 |---|---|
+| `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
 | `hatvalues()` | Hat-matrix diagonal computed via QR of ``sqrt(rweights) * X``. |
 | `predict(newdata)` | Predictions on ``data`` (or ``newdata`` if given). |

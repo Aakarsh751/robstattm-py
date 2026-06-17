@@ -42,10 +42,10 @@ A `PcaRobSResult` object. Its attributes mirror the fields of the R
 | `fit` | fit | an `n x p` matrix with the rank-q approximation to `X` |
 | `repre` | repre | An `n x q` matrix with representation of data in R^q (scores) |
 | `propex` | propex | The actual proportion of unexplained variability |
-| `prop_spc` | — | (Python-side convenience field) |
-| `mu` | — | (Python-side convenience field) |
+| `prop_spc` | — | Per-direction proportions of robust scale (R: `propSPC`). |
+| `mu` | — | Robust center. |
 | `q` | q | The actual number of principal components |
-| `column_names` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
 > **R fields not surfaced in Python** — the R `pcaRobS` list also contains

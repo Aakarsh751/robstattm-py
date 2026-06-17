@@ -39,7 +39,7 @@ A `KurtSDResult` object. Its attributes mirror the fields of the R
 | `center` | center | Robust mean estimate |
 | `cova` | cova | Robust covariance matrix estimate |
 | `t` | t | Outlyingness of data points |
-| `column_names` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
 

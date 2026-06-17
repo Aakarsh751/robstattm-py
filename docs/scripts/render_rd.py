@@ -44,6 +44,12 @@ from robstatm_py._help import _R_TO_PY  # noqa: E402
 
 PILOT = ["lmrobdetMM", "covRobMM", "prcompRob", "BYlogreg", "locScaleM"]
 
+# Pages whose Returns table is hand-authored (control objects: the table needs a
+# per-field Default column the auto-generator can't produce, and the descriptions
+# are curated against the R source). `--all` skips these so it never clobbers
+# them; regenerate one explicitly with `--name <RName>` if you really mean to.
+HAND_AUTHORED_PY = {"lmrobdet_control", "lmrobm_control"}
+
 
 # ---------------------------------------------------------------- helpers
 
@@ -152,6 +158,30 @@ _PY_PARAM_DESC: dict[str, str] = {
 }
 
 
+# Curated descriptions for result fields that are NOT in the R man page's
+# \value{} block AND not described in the dataclass docstring's Attributes
+# section.  These are mostly (a) input-echo / naming metadata the Python wrappers
+# attach for downstream convenience, and (b) statistics that one wrapper's Rd
+# documents but a sibling wrapper's sparser Rd omits (the meaning is identical).
+# Wording matches the R man-page semantics where an equivalent field exists.
+_WRAPPER_FIELD_DESC: dict[str, str] = {
+    "formula": "The model formula used for the fit (echoes the input).",
+    "control": "The control object used for the fit (echoes the input).",
+    "coef_names": "Names of the estimated coefficients, aligned positionally "
+                  "with `coefficients`.",
+    "column_names": "Names of the input variables (columns of the input data), "
+                    "aligned with the rows/columns of the estimates.",
+    "component_names": "Names of the principal components (`PC1`, `PC2`, …).",
+    "loss": "Value of the objective function at the final M-estimator.",
+    "r_squared": "The robust multiple correlation coefficient (robust R²).",
+    "degree_freedom": "The residual degrees of freedom.",
+    "rweights_mm": "Robustness weights from the MM step (R `rweightsMM`), used "
+                   "by the DCML estimator.",
+    "t0": "The mixing proportion between the least-squares and robust regression "
+          "estimators (DCML combines them as `t0·β_LS + (1−t0)·β_robust`).",
+}
+
+
 def _parameters(r_args: list[dict], fn) -> tuple[list[dict], list[dict]]:
     """Merge the Python signature with R argument descriptions.
 
@@ -200,6 +230,63 @@ def _parameters(r_args: list[dict], fn) -> tuple[list[dict], list[dict]]:
         if a["r_name"].replace(".", "_") not in exposed
     ]
     return params, internal
+
+
+def _attr_descriptions(cls) -> dict[str, str]:
+    r"""Parse the numpydoc ``Attributes`` section of a result dataclass docstring.
+
+    Returns ``{field_name: one_line_description}``.  This is the fallback
+    source for result fields that the R man page's ``\value{}`` block does
+    not document — RobStatTM's Rd files frequently list only a subset of the
+    returned list, so without this the Returns table degrades to a generic
+    placeholder.  The dataclass docstrings encode the real R-list semantics
+    (e.g. which fields are ``None`` for which estimator), so they are the
+    correct authority when the man page is silent.
+    """
+    if cls is None:
+        return {}
+    doc = inspect.getdoc(cls)
+    if not doc:
+        return {}
+    lines = doc.splitlines()
+    # Locate the numpydoc "Attributes" header (a line "Attributes" underlined
+    # by dashes).  inspect.getdoc has already dedented, so it sits at column 0.
+    start = None
+    for i in range(len(lines) - 1):
+        if lines[i].strip() == "Attributes" and set(lines[i + 1].strip()) == {"-"}:
+            start = i + 2
+            break
+    if start is None:
+        return {}
+
+    out: dict[str, str] = {}
+    cur: str | None = None
+    buf: list[str] = []
+
+    def _flush() -> None:
+        if cur is not None:
+            text = re.sub(r"\s+", " ", " ".join(buf)).strip()
+            out[cur] = text.replace("``", "`")  # RST inline code -> Markdown
+
+    n = len(lines)
+    i = start
+    while i < n:
+        line = lines[i]
+        stripped = line.strip()
+        if stripped and not line[0].isspace():
+            # A following dashes line means a new numpydoc section begins.
+            nxt = lines[i + 1].strip() if i + 1 < n else ""
+            if nxt and set(nxt) == {"-"}:
+                break
+            # Otherwise this is a field entry: "name : type" or a bare "name".
+            _flush()
+            m = re.match(r"([A-Za-z_]\w*)", stripped)
+            cur, buf = (m.group(1) if m else None), []
+        elif stripped:
+            buf.append(stripped)
+        i += 1
+    _flush()
+    return out
 
 
 def _method_summary(doc: str | None) -> str:
@@ -355,15 +442,27 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
             py_key = v["r_name"].replace(".", "_")
             rd_by_pyname.setdefault(py_key, v)
             rd_by_pyname.setdefault(py_key.lower(), v)
+        # Fallback descriptions from the dataclass docstring for fields the
+        # R man page's \value{} does not document (see _attr_descriptions).
+        attr_desc = _attr_descriptions(result_cls)
         for f in dataclasses.fields(result_cls):
             if f.name.startswith("_"):
                 continue
             rd = rd_by_pyname.get(f.name) or rd_by_pyname.get(f.name.lower())
+            if rd:
+                field_r_name = rd["r_name"]
+                description = rd["description"].replace("\n", " ").replace("|", r"\|")
+            else:
+                field_r_name = "—"
+                fallback = attr_desc.get(f.name) or _WRAPPER_FIELD_DESC.get(f.name, "")
+                description = (
+                    fallback.replace("|", r"\|") if fallback
+                    else "Python wrapper field — see the result class docstring."
+                )
             py_fields.append({
                 "py_name": f.name,
-                "r_name": rd["r_name"] if rd else "—",
-                "description": (rd["description"].replace("\n", " ").replace("|", r"\|")
-                                if rd else "(Python-side convenience field)"),
+                "r_name": field_r_name,
+                "description": description,
             })
         # R fields in the Rd that don't appear on the Python dataclass.
         for v in rd_value:
@@ -451,6 +550,10 @@ def main() -> None:
             if py_name not in seen:
                 targets.append(r_name)
                 seen.add(py_name)
+
+    # `--all` must not overwrite hand-authored control pages; `--name` may.
+    if args.all:
+        targets = [r for r in targets if _R_TO_PY.get(r) not in HAND_AUTHORED_PY]
 
     for r_name in targets:
         try:

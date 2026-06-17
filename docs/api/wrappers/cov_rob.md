@@ -50,8 +50,8 @@ A `CovRobResult` object. Its attributes mirror the fields of the R
 | `wts` | wts | weights |
 | `mu` | mu | The location estimate. Same as `center` above. |
 | `v` | V | The scatter matrix estimate, scaled for consistency at the normal distribution. Same as `cov` above. |
-| `estimator_type` | — | (Python-side convenience field) |
-| `column_names` | — | (Python-side convenience field) |
+| `estimator_type` | — | `"MM"` or `"Rocke"` — which sub-estimator R chose / was forced. |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
 > **R fields not surfaced in Python** — the R `covRob` list also contains

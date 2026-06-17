@@ -51,11 +51,11 @@ A `StepResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `final_formula` | — | (Python-side convenience field) |
-| `anova_rfpe` | — | (Python-side convenience field) |
-| `coefficients` | — | (Python-side convenience field) |
-| `coef_names` | — | (Python-side convenience field) |
-| `scale` | — | (Python-side convenience field) |
+| `final_formula` | — | Formula of the selected model. |
+| `anova_rfpe` | — | RFPE trace across steps (column of the R `anova` table). |
+| `coefficients` | — | Coefficients of the selected fit. |
+| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
+| `scale` | — | Robust scale of the selected fit. |
 
 
 

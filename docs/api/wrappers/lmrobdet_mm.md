@@ -55,7 +55,7 @@ A `LmrobdetMMResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | (Python-side convenience field) |
+| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `scale` | scale | The robust residual M-scale estimate using the final residuals from the converged iterated weighted least square (IRWLS) algorithm final estimate |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
 | `loss` | loss | Value of the objective function at the final MM-estimator |
@@ -71,8 +71,8 @@ A `LmrobdetMMResult` object. Its attributes mirror the fields of the R
 | `iters_const` | iters.const | The number of refinement iterations used to compute the estimator without covariates (to calculate the robust R^2). |
 | `r_squared` | r.squared | The robust multiple correlation coefficient |
 | `adj_r_squared` | adj.r.squared | The adjusted robust multiple correlation coefficient taking into account the degrees of freedom of each term |
-| `formula` | — | (Python-side convenience field) |
-| `control` | — | (Python-side convenience field) |
+| `formula` | — | The model formula used for the fit (echoes the input). |
+| `control` | — | The control object used for the fit (echoes the input). |
 
 
 > **R fields not surfaced in Python** — the R `lmrobdetMM` list also contains

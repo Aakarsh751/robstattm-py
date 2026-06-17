@@ -31,7 +31,7 @@ def cov_classic(
 | `corr` | bool | `False` | a logical flag.  If `corr = TRUE` then the estimated correlation matrix is computed. |
 | `center` | bool | `True` | a logical flag or a numeric vector of length `p` (where `p` is the number of columns of `x`) specifying the center.  If `center = TRUE` then the center is estimated.  Otherwise the center is taken to be 0. |
 | `distance` | bool | `True` | a logical flag.  If `distance = TRUE` the Mahalanobis distances are computed. |
-| `na_action` | str or None | `None` | how to handle missing (NaN) data — one of `"fail"`, `"omit"`, `"pass"` (mapped to R's `na.fail` / `na.omit` / `na.pass`). The default (`None`) uses R's `na.fail`, which errors if NaN is present. Pass `"omit"` to drop rows containing NaN before estimation. |
+| `na_action` | str \| None | `None` | a function to filter missing data.  The default `na.fail` produces an error if missing values are present.  An alternative is `na.omit` which deletes observations that contain one or more missing values. |
 | `unbiased` | bool | `True` | a logical flag. If `TRUE` the unbiased estimator is returned (computed with denominator equal to `n-1`), else the MLE (computed with denominator equal to `n`) is returned. |
 
 
@@ -49,8 +49,8 @@ A `CovClassicResult` object. Its attributes mirror the fields of the R
 | `cov` | cov | a numeric matrix containing the estimate of the covariance matrix. |
 | `cor` | cor | a numeric matrix containing the estimate of the correlation matrix if the argument `corr = TRUE`. Otherwise it is set to `NULL`. |
 | `dist` | dist | a numeric vector containing the squared Mahalanobis distances. Only present if `distance = TRUE` in the `call`. |
-| `column_names` | — | (Python-side convenience field) |
-| `classical` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `classical` | — | Always True; lets generic helpers tell us apart from robust results. |
 
 
 > **R fields not surfaced in Python** — the R `covClassic` list also contains

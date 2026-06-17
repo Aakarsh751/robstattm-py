@@ -59,7 +59,7 @@ A `PyinitResult` object. Its attributes mirror the fields of the R
 |---|---|---|
 | `coefficients` | coefficients | matrix whose columns are the candidate coefficient vectors (one robust starting point per column). |
 | `objective` | objective | value of the robust objective for each candidate. |
-| `best` | — | (Python-side convenience field) |
+| `best` | — | Column of `coefficients` with the smallest objective. Convenience. |
 
 
 

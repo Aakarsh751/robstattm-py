@@ -51,11 +51,11 @@ A `LogregResult` object. Its attributes mirror the fields of the R
 | `standard_deviation` | standard.deviation | standard deviations of the coefficients |
 | `fitted_values` | fitted.values | fitted values |
 | `residual_deviances` | residual.deviances | residual deviances |
-| `method` | — | (Python-side convenience field) |
+| `method` | — | Which estimator produced this (e.g. `"BYlogreg"`). |
 | `objective` | objective | value of the objective function at the minimum |
-| `converged` | — | (Python-side convenience field) |
-| `xweights` | — | (Python-side convenience field) |
-| `cov` | — | (Python-side convenience field) |
+| `converged` | — | Convergence flag. `None` for `WMLlogreg`. |
+| `xweights` | — | Subsample weights used by WML. `None` for BY/WBY. |
+| `cov` | — | Coefficient covariance matrix returned by WML. `None` for BY/WBY. |
 
 
 > **R fields not surfaced in Python** — the R `logregWBY` list also contains

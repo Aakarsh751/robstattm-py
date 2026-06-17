@@ -18,18 +18,22 @@ def lmrobm_control(**kwargs: 'Any'):
 A `LmrobMControl` object. Its attributes mirror the fields of the R
 `lmrobM.control` result, converted to NumPy / pandas / native Python types:
 
-| Attribute | R name | Description |
-|---|---|---|
-| `bb` | — | (Python-side convenience field) |
-| `efficiency` | — | (Python-side convenience field) |
-| `family` | — | (Python-side convenience field) |
-| `tuning_psi` | — | (Python-side convenience field) |
-| `tuning_chi` | — | (Python-side convenience field) |
-| `max_it` | — | (Python-side convenience field) |
-| `rel_tol` | — | (Python-side convenience field) |
-| `mscale_tol` | — | (Python-side convenience field) |
-| `mscale_maxit` | — | (Python-side convenience field) |
-| `trace_lev` | — | (Python-side convenience field) |
+Defaults below mirror R's `lmrobM.control` (RobStatTM 1.0.11) field-for-field.
+Note `lmrobM` uses a smaller control surface than `lmrobdet_control` — it does
+not run the deterministic-initial / Peña–Yohai / pyinit cascade.
+
+| Attribute | R name | Default | Notes |
+|---|---|---|---|
+| `bb` | `bb` | `0.5` | breakdown-point parameter of the M-scale |
+| `efficiency` | `efficiency` | `0.99` | target Gaussian efficiency of the M step |
+| `family` | `family` | `"opt"` | ρ-loss family |
+| `tuning_psi` | `tuning.psi` | `None` | derived from `efficiency`/`family` when `None` |
+| `tuning_chi` | `tuning.chi` | `None` | derived from `bb`/`family` when `None` |
+| `max_it` | `max.it` | `100` | max IRWLS iterations |
+| `rel_tol` | `rel.tol` | `1e-7` | relative convergence tolerance |
+| `mscale_tol` | `mscale_tol` | `1e-6` | M-scale convergence tolerance |
+| `mscale_maxit` | `mscale_maxit` | `50` | max M-scale iterations |
+| `trace_lev` | `trace.lev` | `0` | verbosity |
 
 
 

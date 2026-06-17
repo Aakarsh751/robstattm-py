@@ -42,7 +42,7 @@ A `FastMVEResult` object. Its attributes mirror the fields of the R
 | `best` | best | Indices of the observations that correspond to the MVE estimator |
 | `nsamp` | nsamp | Number of random starts used for the iterative algorithm |
 | `nsing` | nsing | Number of random subsamples (among the `nsamp` attempted) that failed (resulting in singular initial values) |
-| `column_names` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
 

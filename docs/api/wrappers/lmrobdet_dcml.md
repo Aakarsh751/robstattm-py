@@ -56,19 +56,19 @@ A `LmrobdetDCMLResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | (Python-side convenience field) |
+| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `cov` | cov | The estimated covariance matrix of the regression estimates |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
 | `fitted_values` | fitted.values | Fitted values associated with the robust fit |
 | `scale` | scale | The estimated scale of the residuals |
-| `t0` | — | (Python-side convenience field) |
+| `t0` | — | The mixing proportion between the least-squares and robust regression estimators (DCML combines them as `t0·β_LS + (1−t0)·β_robust`). |
 | `rank` | rank | Numeric rank of the fitted linear model |
 | `converged` | converged | Logical value indicating whether IRWLS iterations for the MM-estimator have converged |
 | `df_residual` | df.residual | The residual degrees of freedom |
 | `iter` | iter | Number of IRWLS iterations for the MM-estimator |
-| `rweights_mm` | — | (Python-side convenience field) |
-| `formula` | — | (Python-side convenience field) |
-| `control` | — | (Python-side convenience field) |
+| `rweights_mm` | — | Robustness weights from the MM step (R `rweightsMM`), used by the DCML estimator. |
+| `formula` | — | The model formula used for the fit (echoes the input). |
+| `control` | — | The control object used for the fit (echoes the input). |
 
 
 > **R fields not surfaced in Python** — the R `lmrobdetDCML` list also contains
@@ -84,6 +84,7 @@ The `LmrobdetDCMLResult` object also provides these methods:
 
 | Method | Description |
 |---|---|
+| `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
 | `hatvalues()` | Port of R's ``hatvalues.lmrob`` on an ``lmrobdetDCML`` fit. |
 | `predict(newdata, se_fit)` | Port of R's ``predict.lmrob`` on an ``lmrobdetDCML`` fit. |

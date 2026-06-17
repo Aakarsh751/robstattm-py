@@ -54,8 +54,8 @@ A `CovRobRockeResult` object. Its attributes mirror the fields of the R
 | `v` | V | The scatter (or correlation) matrix estimate, scaled for consistency at the normal distribution.  Same as `cov` above. |
 | `sig` | sig | sig |
 | `gamma` | gamma | Final value of the constant gamma that regulates the efficiency. |
-| `column_names` | — | (Python-side convenience field) |
-| `classical` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `classical` | — | Always False. |
 
 
 > **R fields not surfaced in Python** — the R `covRobRocke` list also contains

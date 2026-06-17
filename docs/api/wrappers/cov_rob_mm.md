@@ -39,8 +39,8 @@ A `CovRobMMResult` object. Its attributes mirror the fields of the R
 | `wts` | wts | weights |
 | `mu` | mu | The location estimate. Same as `center` above. |
 | `v` | V | The scatter or correlation matrix estimate, scaled for consistency at the normal distribution |
-| `column_names` | — | (Python-side convenience field) |
-| `classical` | — | (Python-side convenience field) |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `classical` | — | Always False; helpers use this to distinguish from CovClassicResult. |
 
 
 > **R fields not surfaced in Python** — the R `covRobMM` list also contains

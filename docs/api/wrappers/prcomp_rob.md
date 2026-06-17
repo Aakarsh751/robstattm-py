@@ -41,9 +41,9 @@ A `PrcompRobResult` object. Its attributes mirror the fields of the R
 | `sdev` | sdev | the standard deviation of the principal components |
 | `rotation` | rotation | matrix containing the factor loadings |
 | `center` | center | the centering used |
-| `scores` | — | (Python-side convenience field) |
-| `column_names` | — | (Python-side convenience field) |
-| `component_names` | — | (Python-side convenience field) |
+| `scores` | — | Component scores (R: `x` — renamed for clarity). |
+| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `component_names` | — | Names of the principal components (`PC1`, `PC2`, …). |
 
 
 > **R fields not surfaced in Python** — the R `prcompRob` list also contains

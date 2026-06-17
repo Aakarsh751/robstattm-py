@@ -36,9 +36,9 @@ A `LogregResult` object. Its attributes mirror the fields of the R
 | `standard_deviation` | standard.deviation | standard deviations of the regression coefficient estimators |
 | `fitted_values` | fitted.values | vector with the probabilities of success |
 | `residual_deviances` | residual.deviances | residual deviances |
-| `method` | — | (Python-side convenience field) |
+| `method` | — | Which estimator produced this (e.g. `"BYlogreg"`). |
 | `objective` | objective | value of the objective function at the minimum |
-| `converged` | — | (Python-side convenience field) |
+| `converged` | — | Convergence flag. `None` for `WMLlogreg`. |
 | `xweights` | xweights | vector of zeros and ones used to compute the weighted maimum likelihood estimator |
 | `cov` | cov | covariance matrix of the regression estimates |
 

@@ -61,10 +61,10 @@ A `RefineSMResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `beta` | — | (Python-side convenience field) |
-| `scale` | — | (Python-side convenience field) |
+| `beta` | — | Refined regression coefficients (R: `beta.rw`). |
+| `scale` | — | Refined scale estimate (R: `scale.rw`). |
 | `converged` | converged | A logical value indicating whether the algorithm converged |
-| `iterations` | — | (Python-side convenience field) |
+| `iterations` | — | Number of iterations actually used. |
 
 
 > **R fields not surfaced in Python** — the R `refine.sm` list also contains

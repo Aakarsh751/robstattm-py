@@ -78,3 +78,10 @@ jobs:
         env:
           RPM_SKIP_NOTEBOOKS: "1"
         run: python -m pytest tests/ -q
+
+      # Validate the docs examples are honest: every wrapper page's Python
+      # example runs against R, and every docs/examples/*.R override runs under
+      # RobStatTM. OS-independent, so run once (cheapest runner / one version).
+      - name: Validate doc examples (Python + R)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: python docs/scripts/validate_docs.py

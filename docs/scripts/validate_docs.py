@@ -10,13 +10,22 @@ For each MyST page in ``docs/api/wrappers/``, check three claims:
    convention (dots → underscores, snake_case).  We also detect Python
    fields that are *not* documented (under-documented surface).
 
-Exit code is non-zero if any page fails any check.
+Then, for the "Equivalent R code" overrides:
+
+4. **R examples** — every ``docs/examples/*.R`` file (the R block paired with a
+   page's Python example) is executed under RobStatTM via ``Rscript`` and must
+   run without error, so the published R code is genuinely runnable.
+
+Exit code is non-zero if any page or R example fails any check.
 """
 from __future__ import annotations
 
 import dataclasses
 import io
+import os
 import re
+import shutil
+import subprocess
 import sys
 import traceback
 from contextlib import redirect_stdout
@@ -25,6 +34,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 WRAPPERS_DIR = ROOT / "docs" / "api" / "wrappers"
 RD_JSON_DIR = ROOT / "docs" / "_rd_json"
+EXAMPLES_DIR = ROOT / "docs" / "examples"
 
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -192,6 +202,59 @@ def _validate_page(md_path: Path) -> dict:
     return result
 
 
+def _find_rscript() -> str | None:
+    """Locate the Rscript executable (PATH, then $R_HOME/bin[/x64])."""
+    exe = shutil.which("Rscript") or shutil.which("Rscript.exe")
+    if exe:
+        return exe
+    r_home = os.environ.get("R_HOME")
+    if r_home:
+        for cand in (
+            Path(r_home) / "bin" / "Rscript.exe",
+            Path(r_home) / "bin" / "Rscript",
+            Path(r_home) / "bin" / "x64" / "Rscript.exe",
+        ):
+            if cand.exists():
+                return str(cand)
+    return None
+
+
+def validate_r_examples() -> int:
+    """Run every ``docs/examples/*.R`` override under RobStatTM.
+
+    These ``.R`` files are the "Equivalent R code" blocks shown on the wrapper
+    pages (paired with the Python ``.py`` examples). Each must execute cleanly
+    so the published R code is genuinely runnable and equivalent. Returns a
+    non-zero code if any ``.R`` file errors.
+    """
+    r_files = sorted(EXAMPLES_DIR.glob("*.R"))
+    if not r_files:
+        return 0
+    print(f"\nvalidating {len(r_files)} R example override(s)...\n")
+    rscript = _find_rscript()
+    if rscript is None:
+        print("[WARN] Rscript not found (set R_HOME) — skipping .R validation")
+        return 0
+    rc = 0
+    for rf in r_files:
+        expr = (
+            "suppressMessages(library(RobStatTM)); "
+            f"suppressWarnings(source('{rf.as_posix()}'))"
+        )
+        proc = subprocess.run(
+            [rscript, "-e", expr], capture_output=True, text=True
+        )
+        if proc.returncode == 0:
+            print(f"[OK  ] {rf.name}")
+        else:
+            rc = 1
+            tail = (proc.stderr or proc.stdout).strip().splitlines()[-3:]
+            print(f"[FAIL] {rf.name}")
+            for line in tail:
+                print(f"        {line}")
+    return rc
+
+
 def main() -> int:
     pages = sorted(WRAPPERS_DIR.glob("*.md"))
     if not pages:
@@ -226,6 +289,7 @@ def main() -> int:
         if r["extra_attrs"]:
             print(f"        · rendered table mentions non-existent field: "
                   f"{r['extra_attrs']}")
+    rc |= validate_r_examples()
     print()
     print("FAIL" if rc else "ALL OK")
     return rc

@@ -57,7 +57,7 @@ from robstatm_py.external.pense import (
     pense_cv,
 )
 from robstatm_py.external.gse import GSEResult, TSGSResult, gse, tsgs
-from robstatm_py import datasets, plotting, psi, bench, external
+from robstatm_py import datasets, plot, plotting, psi, bench, external
 
 # Attach to_dict / to_r / _repr_html_ / coef_df to every result dataclass
 # (see docs/user_interface.md §6 and src/robstatm_py/_result_mixins.py).
@@ -142,6 +142,7 @@ __all__ = [
     "tsgs",
     # submodules
     "datasets",
+    "plot",
     "plotting",
     "psi",
     "external",

@@ -202,7 +202,12 @@ class TestBenchAndPerf:
 
 @needs_r
 class TestDiagnosticPlots:
-    """plot_residuals / plot_qq / plot_diagnostics return PNG paths."""
+    """plot_residuals / plot_qq / plot_diagnostics.
+
+    Per D-023 the shortcuts now default to the native suite and return a
+    matplotlib ``Axes`` (single panel) / ``Figure`` (diagnostics); the Path-A
+    PNG is still reachable via ``backend="r"``.
+    """
 
     @pytest.fixture(scope="class")
     def fit(self):
@@ -216,14 +221,38 @@ class TestDiagnosticPlots:
         with open(path, "rb") as f:
             assert f.read(4) == b"\x89PNG"
 
-    def test_plot_residuals(self, fit, tmp_path):
-        p = fit.plot_residuals(path=tmp_path / "res.png", dpi=72, width=4, height=3)
+    # ----- native default (returns Axes / Figure) -----
+
+    def test_plot_residuals_native_returns_axes(self, fit):
+        pytest.importorskip("matplotlib")
+        from matplotlib.axes import Axes
+
+        assert isinstance(fit.plot_residuals(), Axes)
+
+    def test_plot_qq_native_returns_axes(self, fit):
+        pytest.importorskip("matplotlib")
+        from matplotlib.axes import Axes
+
+        assert isinstance(fit.plot_qq(), Axes)
+
+    def test_plot_diagnostics_native_returns_figure(self, fit):
+        pytest.importorskip("matplotlib")
+        from matplotlib.figure import Figure
+
+        assert isinstance(fit.plot_diagnostics(), Figure)
+
+    # ----- Path A (backend="r") still returns a PNG path -----
+
+    def test_plot_residuals_r_png(self, fit, tmp_path):
+        p = fit.plot_residuals(backend="r", path=tmp_path / "res.png",
+                               dpi=72, width=4, height=3)
         self._check_png(p)
 
-    def test_plot_qq(self, fit, tmp_path):
-        p = fit.plot_qq(path=tmp_path / "qq.png", dpi=72, width=4, height=3)
+    def test_plot_qq_r_png(self, fit, tmp_path):
+        p = fit.plot_qq(backend="r", path=tmp_path / "qq.png",
+                        dpi=72, width=4, height=3)
         self._check_png(p)
 
-    def test_plot_diagnostics(self, fit, tmp_path):
-        p = fit.plot_diagnostics(path=tmp_path / "diag.png", dpi=72)
+    def test_plot_diagnostics_r_png(self, fit, tmp_path):
+        p = fit.plot_diagnostics(backend="r", path=tmp_path / "diag.png", dpi=72)
         self._check_png(p)

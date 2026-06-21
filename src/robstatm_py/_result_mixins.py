@@ -115,19 +115,23 @@ def _render_value_html(v: Any) -> str | None:
 
 # ---------- regression-specific helper -----------------------------------
 
+# Plotting shortcuts delegate to the native suite ``robstatm_py.plot`` (D-023).
+# Default backend is native matplotlib (returns an Axes/Figure, per
+# docs/user_interface.md §6); pass ``backend="r"`` for the Path-A PNG.
+
 def _plot_residuals(self: Any, **kw):
-    from robstatm_py.plotting import residuals as _r
-    return _r(self, **kw)
+    from robstatm_py import plot
+    return plot.residuals(self, **kw)
 
 
 def _plot_qq(self: Any, **kw):
-    from robstatm_py.plotting import qq as _q
-    return _q(self, **kw)
+    from robstatm_py import plot
+    return plot.qq(self, **kw)
 
 
 def _plot_diagnostics(self: Any, **kw):
-    from robstatm_py.plotting import diagnostics as _d
-    return _d(self, **kw)
+    from robstatm_py import plot
+    return plot.diagnostics(self, **kw)
 
 
 def _coef_df(self: Any) -> pd.Series:

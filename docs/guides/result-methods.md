@@ -60,17 +60,27 @@ cov = rpm.cov_classic(rpm.datasets.wine())
 print(cov.summary())          # eigenvalues
 ```
 
-## Diagnostic plots (Path A R-graphics)
+## Diagnostic plots
 
-Regression results expose diagnostic plots drawn by R's own graphics device:
+Regression results expose diagnostic-plot shortcuts. By default they return a
+**matplotlib `Axes`/`Figure`** from the native plotting suite
+([`robstatm_py.plot`](plotting.md)); pass `backend="r"` for the pixel-faithful
+PNG drawn by R's own graphics device.
 
-| Method | Plot |
-|---|---|
-| `plot_residuals(path=...)` | Residuals vs. fitted. |
-| `plot_qq(path=...)` | Normal Q-Q plot of residuals. |
-| `plot_diagnostics(path=...)` | The standard 2×2 diagnostic panel. |
+| Method | Plot | Native return |
+|---|---|---|
+| `plot_residuals()` | Residuals vs. fitted (coloured by robust weight). | `Axes` |
+| `plot_qq()` | Normal Q-Q plot of standardized residuals. | `Axes` |
+| `plot_diagnostics()` | The 2×2 diagnostic panel. | `Figure` |
 
 ```python
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
-fit.plot_diagnostics(path="diagnostics.png")
+
+ax  = fit.plot_residuals()                 # native matplotlib Axes
+fig = fit.plot_diagnostics()               # native 2×2 Figure
+png = fit.plot_residuals(backend="r",      # Path-A PNG (pathlib.Path)
+                         path="resid.png")
 ```
+
+See the **[Plotting guide](plotting.md)** for the full native suite (themes,
+multivariate/univariate plots, customization, and the R/native gallery).

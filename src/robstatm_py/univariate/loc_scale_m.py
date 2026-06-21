@@ -48,6 +48,22 @@ class LocScaleMResult:
     _r_fit: Any = field(default=None, repr=False, compare=False)
 
 
+# Allowed efficiencies per psi family, taken verbatim from R/MLocDis.R:
+# the bisquare/huber branch tabulates eff in {0.85, 0.90, 0.95} (line ~58),
+# while the opt/mopt branch uses {0.85, 0.90, 0.95, 0.99} (line ~92). R requires
+# exact membership (``is.element`` / ``match``); an out-of-set eff yields an
+# opaque error ("object 'resi' not found") or a silent NA fit, so we reject it
+# in Python before the rpy2 boundary (implementation_rules: validate first).
+_EFF_BY_FAMILY: dict[str, tuple[float, ...]] = {
+    "bisquare": (0.85, 0.90, 0.95),
+    "huber": (0.85, 0.90, 0.95),
+    "opt": (0.85, 0.90, 0.95, 0.99),
+    "mopt": (0.85, 0.90, 0.95, 0.99),
+    "optv0": (0.85, 0.90, 0.95, 0.99),
+    "moptv0": (0.85, 0.90, 0.95, 0.99),
+}
+
+
 def loc_scale_m(
     x,
     *,
@@ -124,6 +140,16 @@ def loc_scale_m(
     if has_nan and not na_rm:
         raise ValueError(
             "x contains NaN; pass na_rm=True to drop missing values"
+        )
+    # R's locScaleM only accepts a discrete set of efficiencies per family
+    # (R/MLocDis.R). An out-of-set eff makes R fail with an opaque
+    # "object 'resi' not found" error (bisquare/huber) or return a silent NA
+    # (opt/mopt). Reject it here with a clear message instead.
+    allowed_eff = _EFF_BY_FAMILY.get(psi)
+    if allowed_eff is not None and float(eff) not in allowed_eff:
+        raise ValueError(
+            f"eff={eff} is not supported for psi={psi!r}; "
+            f"allowed efficiencies are {allowed_eff}"
         )
 
     pkg = r_pkg("RobStatTM")

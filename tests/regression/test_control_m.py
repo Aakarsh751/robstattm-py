@@ -1,11 +1,14 @@
 """Tests for ``lmrobm_control`` + integration with ``lmrob_m(control=...)``."""
 from __future__ import annotations
 
+from dataclasses import fields
+
 import numpy as np
 import pytest
 
 import robstatm_py as rpm
 from robstatm_py._r import r as _r
+from robstatm_py.regression.control_m import _R_KEY_MAP, _control_m_to_r
 
 try:
     _r()
@@ -14,6 +17,10 @@ except Exception:
     HAS_R = False
 
 needs_r = pytest.mark.skipif(not HAS_R, reason="rpy2/R not available")
+
+
+def _public_fields_m():
+    return [f for f in fields(rpm.LmrobMControl) if not f.name.startswith("_")]
 
 
 class TestLmrobMControl:
@@ -40,6 +47,61 @@ class TestLmrobMControl:
         c = rpm.lmrobm_control()
         with pytest.raises(Exception):
             c.bb = 0.7  # frozen dataclass
+
+
+@needs_r
+class TestLmrobMControlVsRFormals:
+    """Guard the control *surface* against drift from R's ``lmrobM.control``.
+
+    Parallels ``tests/regression/test_control.py`` for ``lmrobdet.control`` — it
+    is the D-022-class safety net: it would flag a Python default or argument
+    name that silently diverged from R (which ``_control_m_to_r``'s
+    skip-when-equal-default logic relies on being correct).
+    """
+
+    def test_field_count_matches_r_formals(self):
+        py_fields = _public_fields_m()
+        ro = _r()
+        r_formals = list(ro.r("names(formals(RobStatTM::lmrobM.control))"))
+        assert len(py_fields) == len(r_formals), (
+            f"field-count drift: python={len(py_fields)} "
+            f"({[f.name for f in py_fields]}) r={len(r_formals)} ({r_formals})"
+        )
+
+    def test_defaults_match_r(self):
+        default = rpm.lmrobm_control()
+        ro = _r()
+        r_names = set(ro.r("names(RobStatTM::lmrobM.control())"))
+        for f in _public_fields_m():
+            py_val = getattr(default, f.name)
+            if py_val is None:
+                continue  # tuning.psi/chi derived by R; efficiency is input-only
+            r_name = _R_KEY_MAP.get(f.name, f.name)
+            if r_name not in r_names:
+                continue
+            r_raw = ro.r(f'RobStatTM::lmrobM.control()[["{r_name}"]]')
+            if isinstance(py_val, bool):
+                assert bool(r_raw[0]) == py_val, f"{f.name}: py={py_val} r={bool(r_raw[0])}"
+            elif isinstance(py_val, (int, float)):
+                assert float(r_raw[0]) == float(py_val), (
+                    f"{f.name} ({r_name}): py={py_val} r={float(r_raw[0])}"
+                )
+            else:
+                assert str(r_raw[0]) == str(py_val), f"{f.name}: py={py_val} r={r_raw[0]}"
+
+    def test_nondefault_keys_roundtrip_into_r(self):
+        """Non-headline keys must reach R under the right argument names."""
+        from robstatm_py._r import rx2
+
+        ctrl = rpm.lmrobm_control(
+            efficiency=0.85, max_it=42, rel_tol=1e-8,
+            mscale_tol=1e-8, mscale_maxit=33,
+        )
+        r_list = _control_m_to_r(ctrl)  # must not raise
+        assert int(rx2(r_list, "max.it")[0]) == 42
+        assert float(rx2(r_list, "rel.tol")[0]) == 1e-8
+        assert float(rx2(r_list, "mscale_tol")[0]) == 1e-8
+        assert int(rx2(r_list, "mscale_maxit")[0]) == 33
 
 
 @needs_r

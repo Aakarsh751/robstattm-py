@@ -9,12 +9,21 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-# Force a headless backend before matplotlib is imported anywhere.
-import matplotlib  # noqa: E402
 import numpy as np
 import pytest
 
-matplotlib.use("Agg", force=True)
+# matplotlib lives behind the optional ``[plots]`` extra. When it is absent
+# (e.g. the default CI test job), skip collecting the whole tests/plot tree
+# instead of erroring at import time. A headless backend is forced up front so
+# no test ever needs a display.
+try:
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    _HAVE_MPL = True
+except ImportError:  # pragma: no cover - exercised on the no-extras CI job
+    _HAVE_MPL = False
+    collect_ignore_glob = ["test_*.py"]
 
 
 @pytest.fixture
@@ -115,6 +124,7 @@ def _reset_theme():
 @pytest.fixture(autouse=True)
 def _close_figures():
     yield
-    import matplotlib.pyplot as plt
+    if _HAVE_MPL:
+        import matplotlib.pyplot as plt
 
-    plt.close("all")
+        plt.close("all")

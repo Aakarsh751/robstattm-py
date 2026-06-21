@@ -100,5 +100,6 @@ guides/datasets
 guides/psi-families
 guides/utilities
 guides/result-methods
+guides/plotting
 guides/external
 ```

@@ -44,6 +44,14 @@ img = robstatm_py.plotting.residuals(fit, backend="r")  # returns Path to PNG
 
 ---
 
+> **STATUS — native suite shipped (D-023, 2026-06-21).** The native Python
+> renderers below now live in `robstatm_py.plot` (matplotlib primary, plotnine
+> secondary), with `backend="r"` preserving Path A as the fidelity reference.
+> Default backend is `"auto"` → native. Plan: `docs/plotting_suite_plan.md`;
+> user guide + gallery: `docs/guides/plotting.md`. The "Recommended path" column
+> below records the *original* routing decision; all rows are now covered by a
+> native renderer **plus** the R path where one exists.
+
 ## 3. Per-plot inventory
 
 | Plot type | Source (R) | Underlying data | Recommended path | Validation |

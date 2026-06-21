@@ -56,6 +56,8 @@ exclude_patterns = [
     "implementation_rules.md",
     "notebook_plan.md",
     "plotting_strategy.md",
+    "plotting_suite_plan.md",
+    "testing_guide.md",
     "project_understanding.md",
     "proposal_requirements.md",
     "quality_gates.md",
@@ -68,6 +70,9 @@ exclude_patterns = [
 # -- HTML output -------------------------------------------------------------
 html_theme = "furo"
 html_title = "RobStatTM-Py"
+# Static assets (pre-rendered plot gallery images live in _static/plots/;
+# regenerate with `python docs/scripts/render_plots.py` — needs R + [plots]).
+html_static_path = ["_static"]
 html_theme_options = {
     "source_repository": "https://github.com/Aakarsh751/robstatm-py",
     "source_branch": "main",

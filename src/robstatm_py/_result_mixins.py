@@ -134,6 +134,53 @@ def _plot_diagnostics(self: Any, **kw):
     return plot.diagnostics(self, **kw)
 
 
+# ---------- R-idiomatic accessor methods ---------------------------------
+#
+# R fit objects expose a standard S3 accessor family (`coef()`, `resid()`,
+# `fitted()`, `weights()`, `vcov()`, `sigma()`). The per-class `coef()` was
+# hand-written, but its siblings only existed as raw dataclass *fields*
+# (`residuals`, `fitted_values`, `rweights`, `cov`, `scale`). These mixins give
+# the regression results the missing R-idiomatic accessors, reading the
+# already-materialised fields (no R round-trip). Method names are chosen to not
+# collide with the underlying field names (hence `resid`, not `residuals`).
+
+
+def _resid(self: Any) -> pd.Series:
+    """Robust residuals as a pandas Series (R's ``resid()``/``residuals()``)."""
+    return pd.Series(np.asarray(self.residuals).ravel(), name="residuals")
+
+
+def _fitted(self: Any) -> pd.Series:
+    """Fitted values as a pandas Series (R's ``fitted()``)."""
+    return pd.Series(np.asarray(self.fitted_values).ravel(), name="fitted")
+
+
+def _weights(self: Any) -> pd.Series:
+    """Robustness weights as a pandas Series (R's ``weights()``).
+
+    Reads ``rweights`` (or ``rweights_mm`` for the DCML fit).
+    """
+    w = getattr(self, "rweights", None)
+    if w is None:
+        w = getattr(self, "rweights_mm", None)
+    return pd.Series(np.asarray(w).ravel(), name="weights")
+
+
+def _vcov(self: Any) -> pd.DataFrame:
+    """Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``)."""
+    m = np.asarray(self.cov, dtype=float)
+    names = getattr(self, "coef_names", None)
+    if names is not None and len(names) == m.shape[0]:
+        idx = list(names)
+        return pd.DataFrame(m, index=idx, columns=idx)
+    return pd.DataFrame(m)
+
+
+def _sigma(self: Any) -> float:
+    """Robust residual scale (R's ``sigma()``)."""
+    return float(self.scale)
+
+
 def _coef_df(self: Any) -> pd.Series:
     """Return ``coefficients`` as a pandas Series, indexed by coef name."""
     coefs = getattr(self, "coefficients", None)
@@ -186,6 +233,10 @@ def install_result_mixins() -> None:
     from robstatm_py.univariate.loc_scale_m import LocScaleMResult
     from robstatm_py.external.pense import PenseResult, PenseCVResult
     from robstatm_py.external.gse import GSEResult, TSGSResult
+    from robstatm_py.external.arima_rob import ArimaRobResult
+    from robstatm_py.external.var_comprob import VarComprobResult
+    from robstatm_py.external.glmrob import GlmrobResult
+    from robstatm_py.external.cubinf import CubinfResult
 
     all_results = [
         LmrobdetMMResult, LmrobdetDCMLResult, LmrobMResult, PyinitResult,
@@ -195,6 +246,7 @@ def install_result_mixins() -> None:
         PcaRobSResult, PrcompRobResult,
         LogregResult, LocScaleMResult,
         PenseResult, PenseCVResult, GSEResult, TSGSResult,
+        ArimaRobResult, VarComprobResult, GlmrobResult, CubinfResult,
     ]
     regression_results = {
         LmrobdetMMResult, LmrobdetDCMLResult, LmrobMResult, PyinitResult,
@@ -213,6 +265,23 @@ def install_result_mixins() -> None:
             cls._repr_html_ = _result_repr_html
         if cls in regression_results and not hasattr(cls, "coef_df"):
             cls.coef_df = _coef_df
+        # R-idiomatic accessors, installed only where the backing field exists
+        # and the class hasn't already defined the method. `hasattr(cls, field)`
+        # is True for slotted dataclasses (the slot descriptor lives on the
+        # class), so this correctly gates per-class.
+        if cls in regression_results:
+            if hasattr(cls, "residuals") and not hasattr(cls, "resid"):
+                cls.resid = _resid
+            if hasattr(cls, "fitted_values") and not hasattr(cls, "fitted"):
+                cls.fitted = _fitted
+            if (
+                hasattr(cls, "rweights") or hasattr(cls, "rweights_mm")
+            ) and not hasattr(cls, "weights"):
+                cls.weights = _weights
+            if hasattr(cls, "cov") and not hasattr(cls, "vcov"):
+                cls.vcov = _vcov
+            if hasattr(cls, "scale") and not hasattr(cls, "sigma"):
+                cls.sigma = _sigma
         if cls in diag_plot_results:
             if not hasattr(cls, "plot_residuals"):
                 cls.plot_residuals = _plot_residuals

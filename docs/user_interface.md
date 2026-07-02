@@ -271,6 +271,32 @@ Hint: pass `na_action="omit"` to drop rows with NA, or pre-clean your data.
 
 The "Hint:" line is a curated extension: the wrapper's argument-validation layer maps common R error keywords to actionable Python hints.
 
+**R warnings are surfaced too, not just errors.** R defers warnings by default,
+so a long fit used to end with nothing but rpy2's opaque
+`There were 50 or more warnings` console line — the individual messages were
+unrecoverable. Every R call now runs under a capture that forces immediate
+emission and re-raises each message through Python's `warnings` machinery as a
+`RobStatTMWarning`:
+
+```python
+>>> import warnings
+>>> from robstatm_py import RobStatTMWarning, last_r_warnings
+>>> with warnings.catch_warnings(record=True) as caught:
+...     warnings.simplefilter("always")
+...     fit = rpm.lmrob_m("y ~ x", data=hard_df, max_it=2)
+>>> [str(w.message) for w in caught if issubclass(w.category, RobStatTMWarning)]
+['M-step did NOT converge. Returning unconverged lM-estimate']
+
+>>> last_r_warnings()          # messages from the most recent R call
+['M-step did NOT converge. Returning unconverged lM-estimate']
+```
+
+Because this sits at the rpy2 console-callback layer it covers both the fit
+call and the result methods (`.summary()`, `.predict()`, `.drop1()`, which refit
+on the R side). Suppress them like any Python warning
+(`warnings.simplefilter("ignore", RobStatTMWarning)`), or capture a block
+explicitly with the `capture_r_warnings()` context manager.
+
 ---
 
 ## 8. `check_setup()` UX

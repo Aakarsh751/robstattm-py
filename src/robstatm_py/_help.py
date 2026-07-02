@@ -44,6 +44,11 @@ _R_TO_PY: dict[str, str] = {
     # external stretch packages (pense / GSE / TSGS)
     "pense": "pense", "pense_cv": "pense_cv",
     "GSE": "gse", "TSGS": "tsgs",
+    # external stretch packages (example-script reproduction, D-024)
+    "arima.rob": "arima_rob",
+    "varComprob": "var_comprob", "varComprob.control": "var_comprob_control",
+    "glmrob": "glmrob",
+    "cubinf": "cubinf", "cubinf.control": "cubinf",
 }
 
 

@@ -31,3 +31,6 @@ env/
 .DS_Store
 Thumbs.db
 *.swp
+
+# robustvarComp writes a cached spline table to cwd on fit
+MTesSpl*.rda

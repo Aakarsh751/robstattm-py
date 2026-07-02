@@ -201,3 +201,38 @@ all carrying the standard ergonomics (`to_dict` / `to_r` / `_repr_html_`).
 
 **Updated coverage:** 46 / 46 RobStatTM-ecosystem callables now wrapped or
 documented-internal, **plus** the 4 external stretch functions.
+
+## Stretch — example-script externals (DONE 2026-06-21, D-024)
+
+Wraps the remaining external packages that blocked example-script reproduction so
+**all 26/26** `robstattm/examples-scripts/` scripts reproduce from Python. Same
+entry-points-only / optional-install / strict-tier policy as above. Closes B-007.
+
+| R name | Python | Package | Status | Tests |
+|---|---|---|---|---|
+| `robustarima::arima.rob` | `rpm.arima_rob` | `robustarima` | ✅ | `tests/external/test_arima_rob.py` |
+| `robustvarComp::varComprob` | `rpm.var_comprob` | `robustvarComp` | ✅ | `tests/external/test_var_comprob.py` |
+| `robustvarComp::varComprob.control` | `rpm.var_comprob_control` | `robustvarComp` | ✅ | `tests/external/test_var_comprob.py` |
+| `robustbase::glmrob` | `rpm.glmrob` | `robustbase` (CORE) | ✅ | `tests/external/test_glmrob.py` |
+| `robcbi::cubinf` | `rpm.cubinf` | `robcbi` (+`robeth`) | ✅ | `tests/external/test_cubinf.py` |
+
+Result dataclasses: `ArimaRobResult`, `VarComprobResult`, `GlmrobResult`,
+`CubinfResult` (+ `VarComprobControl`), all carrying the standard ergonomics.
+
+**Verification (all installed locally — robustarima 0.2.7, robustvarComp 0.1-7,
+robcbi 1.1.4 + robeth 2.7.8, robustbase 0.99-7):**
+- `arima_rob`: deterministic; strict-tier on resex (p=2 seasonal), ar3 (p=3),
+  MA1-AO (q=1) and the auto-AR path. Model list carries `ar` and/or `ma`.
+- `var_comprob`: stochastic (`lmrob.S` / `TSGS` init) — `set_seed` parity
+  confirmed; strict-tier on the autism Composite-Tau + Classic-S fits. A plain
+  `data.frame` gives results numerically identical to `nlme::groupedData`
+  (verified diff = 0). Whole-frame pandas2ri conversion is fragile, so the test
+  rebuilds the frame column-by-column (bit-identical model matrix).
+- `glmrob`: `method="Mqle"` (RQL) deterministic; `method="MT"` stochastic but
+  seed-reproducible. `residuals()` is undefined for MT → wrapper falls back to the
+  stored working residuals; `tcc`/`dispersion` are NULL for MT → NaN.
+- `cubinf`: deterministic; strict-tier on the epilepsy design (`ufact=1.1`,
+  `null.dev=FALSE`). `robcbi`/`robeth` are CRAN-archived (need Rtools on Windows).
+- Strict-tier throughout (atol=0, rtol=0), auto-skipped via
+  `needs_robustarima` / `needs_robustvarcomp` / `needs_wwgbook` / `needs_glmrob` /
+  `needs_robcbi` when the R package is absent.

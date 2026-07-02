@@ -114,15 +114,17 @@ These are unexported in NAMESPACE but the user (esp. textbook reproducers) somet
 
 ## 2. Examples-script coverage
 
-> **Status (2026-06-14): EXECUTED.** The table below is the original *planning*
-> view. The **authoritative, verified triage** and conversion plan live in
-> **`docs/notebook_plan.md`**. **All 18 group-A+B scripts are now reproduced**
-> across the flagship notebooks + six chapter galleries (`notebooks/gallery/`)
-> + `external_demo.ipynb`, every one CI-executed by `tests/test_notebooks.py`
-> (full suite 442 passing). The 8 group-C scripts (TS +
-> `robustvarComp`/`robustarima`/`glmrob`) are out of scope and registered in
-> `notebooks/README.md`. The "Phase N" labels below were estimates, not
-> completion claims.
+> **Status (2026-06-21, D-024): ALL 26/26 REPRODUCED.** The table below is the
+> original *planning* view; the authoritative triage lives in
+> **`docs/notebook_plan.md`**. The 18 group-A+B scripts were reproduced 2026-06-14.
+> The 8 previously-out-of-scope group-C scripts are now reproduced too (D-024):
+> the six Chapter-8 time-series scripts via `rpm.arima_rob`
+> (`gallery/ch8_timeseries.ipynb`), `autism.R` via `rpm.var_comprob`
+> (`gallery/ch6_autism.ipynb`), and `epilepsy.R` via `rpm.glmrob` + `rpm.cubinf`
+> (`gallery/ch7_glm.ipynb`). **B-007 is closed.** The optional external packages
+> (`robustarima`, `robustvarComp`, `robcbi`+`robeth`, `WWGbook`) are user-installed
+> (D-003); notebook execution runs locally (CI skips notebooks). The "Phase N"
+> labels below were estimates, not completion claims.
 >
 > Reproduced → notebook map: `flour`→ch2; `shock`,`oats`→ch4;
 > `algae`,`ExactFit`,`wood`,`step`→ch5; `biochem`,`vehicle`,`bus`,`wine1`→ch6;

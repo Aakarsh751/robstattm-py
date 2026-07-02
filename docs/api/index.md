@@ -67,6 +67,10 @@ install them separately. See the [external estimators guide](../guides/external.
 | [`pense_cv`](../guides/external.md#pense_cv) | `pense::pense_cv` | Robust elastic-net with cross-validation. |
 | [`gse`](../guides/external.md#gse) | `GSE::GSE` | Generalized S-estimator with missing data. |
 | [`tsgs`](../guides/external.md#tsgs) | `GSE::TSGS` | Two-step GSE for cell-wise outliers. |
+| [`arima_rob`](../guides/external.md#arima_rob) | `robustarima::arima.rob` | Robust ARIMA (filtered tau-estimate). |
+| [`var_comprob`](../guides/external.md#var_comprob) | `robustvarComp::varComprob` | Robust variance-component / mixed models. |
+| [`glmrob`](../guides/external.md#glmrob) | `robustbase::glmrob` | Robust GLM (Poisson RQL/Mqle + MT). |
+| [`cubinf`](../guides/external.md#cubinf) | `robcbi::cubinf` | CUBIF bounded-influence GLM. |
 
 ## See also
 

@@ -49,32 +49,33 @@ output bit-for-bit against direct R.
 | `gallery/ch4_regression.ipynb` | `shock.R`, `oats.R` | `lmrobM`, `rob.linear.test` |
 | `gallery/ch5_regression.ipynb` | `algae.R`, `ExactFit.R`, `wood.R`, `step.R` | `lmrobdetMM`, `step.lmrobdetMM` |
 | `gallery/ch6_multivariate.ipynb` | `biochem.R`, `vehicle.R`, `bus.R`, `wine1.R` | `covRobRocke`, `pcaRobS`, `covRobMM` |
-| `gallery/ch7_glm.ipynb` | `leukemia.R`, `skin.R` | `BYlogreg`, `WBYlogreg`, `WMLlogreg` |
+| `gallery/ch6_autism.ipynb` | `autism.R` | `varComprob` (robust variance components) |
+| `gallery/ch7_glm.ipynb` | `leukemia.R`, `skin.R`, `epilepsy.R` | `BYlogreg`, `WBYlogreg`, `WMLlogreg`, `glmrob`, `cubinf` |
+| `gallery/ch8_timeseries.ipynb` | `resex.R`, `ar3.R`, `identAR2.R`, `identMA1.R`, `MA1-AO.R`, `ar1.R` | `arima_rob` |
 | `gallery/vignette.ipynb` | `fitmodelsRobStatTM.R`, `VignetteRobStatTM.R` | `lmrobdetMM`, `covClassic`, `covRob` |
 
-The notebooks are regenerable from `gallery/_build_galleries.py` and
-`_build_external_demo.py`.
+The notebooks are regenerable from `gallery/_build_galleries.py`,
+`_build_external_demo.py`, and `../dev/build_new_notebooks.py` (ch6 autism, ch7
+epilepsy, ch8 time series).
+
+> The ch6-autism / ch7-epilepsy / ch8 galleries need the optional R packages
+> `robustvarComp`, `robcbi` (+ `robeth`), `robustarima` and `WWGbook` installed
+> (see [`../docs/guides/external.md`](../docs/guides/external.md)). CI skips
+> notebook execution (`RPM_SKIP_NOTEBOOKS=1`), so they run locally.
 
 ## Out-of-scope example scripts
 
-The following RobStatTM example scripts are **not** reproduced. Their *core*
-estimator lives in a package outside this project's scope (the scope rule:
-"every estimator exported by RobStatTM, plus `pense`/`GSE`/`TSGS`"). They are
-listed here transparently rather than silently skipped — see **B-007** in
-[`../project_memory/blockers.md`](../project_memory/blockers.md).
+**None.** As of **D-024** (2026-06-21), all **26/26** `robstattm/examples-scripts/`
+scripts are reproduced from Python. The eight that previously blocked on external
+packages — `autism.R` (`robustvarComp`), `epilepsy.R` (`robustbase::glmrob` +
+`robcbi::cubinf`), and the six Chapter-8 time-series scripts (`resex.R`, `ar3.R`,
+`identAR2.R`, `identMA1.R`, `MA1-AO.R`, `ar1.R`, all `robustarima`) — are now
+covered by the optional `robstatm_py.external` wrappers and the galleries above.
+This **closes B-007** (the Chapter-8 "inline time-series code" worry was moot —
+`arima.rob` is a real exported entry point in `robustarima`).
 
-| Script | Blocking dependency | Reason |
-|---|---|---|
-| `autism.R` | `robustvarComp::varComprob` | robust variance-components — not in scope |
-| `resex.R` | `robustarima` | robust ARIMA (time series) — not in NAMESPACE |
-| `epilepsy.R` | `robustbase::glmrob` | robust GLM — not a wrapped RobStatTM function |
-| `ar1.R` | RobStatTM time-series internals (not exported) | B-007 time-series gray zone |
-| `ar3.R` | RobStatTM time-series internals (not exported) | B-007 |
-| `identAR2.R` | RobStatTM time-series internals (not exported) | B-007 |
-| `identMA1.R` | RobStatTM time-series internals (not exported) | B-007 |
-| `MA1-AO.R` | RobStatTM time-series internals (not exported) | B-007 |
-
-Comparators that several in-scope scripts call only as a *non-robust baseline*
-(e.g. `quantreg::rq`, `robust::glmRob`, `rrcov::CovMcd`/`CovSest`, the
-`fit.models` framework, and GSE helpers used purely for comparison) are dropped
-or noted in the corresponding gallery, not reproduced.
+Comparators that several scripts call only as a *non-robust baseline* (e.g.
+`quantreg::rq`, `robust::glmRob`, `rrcov::CovMcd`/`CovSest`, the `fit.models`
+framework, and the MATLAB-only `epiMP` estimator in `epilepsy.R`) are dropped,
+documented as constants, or reproduced via direct R in the notebook — not exposed
+as new Python wrappers.

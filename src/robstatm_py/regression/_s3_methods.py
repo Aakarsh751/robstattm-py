@@ -20,7 +20,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from robstatm_py._r import r, r_pkg
+from robstatm_py._r import r, r_guard, r_pkg
 from robstatm_py.regression._formula import df_with_r_names
 
 
@@ -195,14 +195,19 @@ def _refit_in_globalenv(
     ro = r()
     _ = r_pkg("RobStatTM")
     ro.globalenv["rpm_methods_data"] = df_with_r_names(data)
-    if r_control is not None:
-        ro.globalenv["rpm_methods_ctrl"] = r_control
-        ro.r(
-            f"{varname} <- {rfn_name}({formula}, data=rpm_methods_data, "
-            f"control=rpm_methods_ctrl)"
-        )
-    else:
-        ro.r(f"{varname} <- {rfn_name}({formula}, data=rpm_methods_data)")
+    # The refit reproduces the model, so it re-emits the same R warnings the
+    # original fit did (non-convergence, NaNs, ...) and can hit the same R
+    # errors. Guard it so both surface to the Python user (RobStatTMWarning /
+    # RobStatTMRError) instead of vanishing into rpy2's console callback.
+    with r_guard():
+        if r_control is not None:
+            ro.globalenv["rpm_methods_ctrl"] = r_control
+            ro.r(
+                f"{varname} <- {rfn_name}({formula}, data=rpm_methods_data, "
+                f"control=rpm_methods_ctrl)"
+            )
+        else:
+            ro.r(f"{varname} <- {rfn_name}({formula}, data=rpm_methods_data)")
 
 
 def _cleanup_method_vars(*names: str) -> None:
@@ -515,15 +520,16 @@ def drop1_of(
     ro.globalenv["rpm_drop_data"] = df_with_r_names(data)
     cleanup = ["rpm_drop_data", "rpm_drop_fit", "rpm_drop_aod"]
     try:
-        if r_control is not None:
-            ro.globalenv["rpm_drop_ctrl"] = r_control
-            cleanup.append("rpm_drop_ctrl")
-            ro.r(
-                f"rpm_drop_fit <- lmrobdetMM({formula}, data=rpm_drop_data, "
-                f"control=rpm_drop_ctrl)"
-            )
-        else:
-            ro.r(f"rpm_drop_fit <- lmrobdetMM({formula}, data=rpm_drop_data)")
+        with r_guard():
+            if r_control is not None:
+                ro.globalenv["rpm_drop_ctrl"] = r_control
+                cleanup.append("rpm_drop_ctrl")
+                ro.r(
+                    f"rpm_drop_fit <- lmrobdetMM({formula}, data=rpm_drop_data, "
+                    f"control=rpm_drop_ctrl)"
+                )
+            else:
+                ro.r(f"rpm_drop_fit <- lmrobdetMM({formula}, data=rpm_drop_data)")
 
         call_args = ["rpm_drop_fit"]
         if scope is not None:

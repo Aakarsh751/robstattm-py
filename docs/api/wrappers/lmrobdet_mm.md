@@ -91,12 +91,17 @@ The `LmrobdetMMResult` object also provides these methods:
 | `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
 | `drop1(scope, scale)` | Port of R's ``drop1.lmrobdetMM`` — single-term-deletion RFPE table. |
+| `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `hatvalues()` | Port of R's ``hatvalues.lmrob`` — leverages of the fitted model. |
 | `predict(newdata, se_fit)` | Port of R's ``predict.lmrobdetMM`` (dispatched via ``robustbase``). |
+| `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
 | `rfpe(both_vals)` | Port of R's ``lmrobdetMM.RFPE`` — robust final prediction error. |
+| `sigma()` | Robust residual scale (R's ``sigma()``). |
 | `summary()` | Port of R's ``summary.lmrobdetMM``. |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
 | `to_r()` | Return the underlying rpy2 R object. |
+| `vcov()` | Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``). |
+| `weights()` | Robustness weights as a pandas Series (R's ``weights()``). |
 
 
 

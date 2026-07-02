@@ -13,18 +13,30 @@ rpy2 names directly.
 """
 from __future__ import annotations
 
+import contextlib
 import os
+import re
 import sys
 import threading
+import warnings as _warnings
 from typing import Any
 
-from robstatm_py._errors import RobStatTMRError, RobStatTMSetupError
+from robstatm_py._errors import (
+    RobStatTMRError,
+    RobStatTMSetupError,
+    RobStatTMWarning,
+)
 
 _init_lock = threading.Lock()
 _pkg_cache: dict[str, Any] = {}
 _conversion_installed = False
 _r_started = False  # flipped True after first successful conversion install
 _windows_dll_path_done = False
+
+# Messages from R warnings captured during the most recent guarded R call.
+# Populated by ``capture_r_warnings`` / ``r_guard``; readable via
+# ``last_r_warnings()``. Thread-local because R is a per-thread singleton here.
+_warn_state = threading.local()
 
 
 def _ensure_windows_r_dll_path() -> None:
@@ -154,27 +166,189 @@ def r_pkg(name: str) -> Any:
         return pkg
 
 
+def require_r_pkg(name: str) -> None:
+    """Ensure an R package is installed *without attaching it* to the search path.
+
+    Unlike :func:`r_pkg` (which ``importr``-attaches the package and, with it, any
+    ``Depends:`` packages — e.g. loading ``robustvarComp``/``robcbi`` would attach
+    ``robustbase``, whose ``BYlogreg``/``Mscale``/… then **mask** RobStatTM's own
+    versions for unqualified R calls), this only loads the namespace. Callers must
+    therefore use namespace-qualified ``pkg::fn`` calls (the external wrappers do).
+
+    Raises
+    ------
+    RobStatTMSetupError
+        If the package is not installed.
+    """
+    ro = r()
+    try:
+        # `requireNamespace` returns *invisibly*; wrap in isTRUE() to force a
+        # visible logical that rpy2 surfaces (otherwise it comes back as None).
+        ok = bool(ro.r(f"isTRUE(requireNamespace('{name}', quietly=TRUE))")[0])
+    except Exception as e:  # pragma: no cover - rare R-startup failure
+        raise RobStatTMSetupError(f"Failed to query R package '{name}': {e}") from e
+    if not ok:
+        raise RobStatTMSetupError(
+            f"R package '{name}' is not installed. "
+            f"Run in R:  install.packages('{name}')",
+            missing=[name],
+        )
+
+
+# ---------------------------------------------------------------------------
+# R warning capture
+# ---------------------------------------------------------------------------
+#
+# rpy2 routes all R console output (including warnings) through the module-level
+# callback ``rpy2.rinterface_lib.callbacks.consolewrite_warnerror``. By default
+# that callback just forwards the text to a Python ``logger.warning`` — and,
+# worse, R *defers* warnings under the default ``options(warn = 0)`` so all the
+# user ever sees is R's opaque summary line ("There were 50 or more warnings").
+#
+# We fix both problems inside :func:`capture_r_warnings`:
+#   1. set ``options(warn = 1)`` so R emits each warning immediately (killing the
+#      deferred "50 warnings" summary), and
+#   2. temporarily swap in a buffering callback that collects the console
+#      fragments, which we then parse into individual messages.
+#
+# The callback layer is below rpy2's Python API, so this covers *every* R call
+# path uniformly — both the :func:`rcall` chokepoint and the many direct
+# ``ro.r("...")`` string-evals in ``_s3_methods`` and the external wrappers.
+
+# One warning record may reach the console as several fragments, e.g.
+# ``"Warning in f(x) :"`` followed by ``" the message\n"``. This matches the
+# leading header so we can split the joined text back into individual records.
+_R_WARN_HEADER = re.compile(
+    r"Warning(?:s)?(?: messages?)?(?: in [^\n:]*)? ?:\s*", re.IGNORECASE
+)
+
+
+def _parse_r_warning_text(fragments: list[str]) -> list[str]:
+    """Turn buffered R console fragments into a list of warning messages."""
+    text = "".join(fragments)
+    if not text.strip():
+        return []
+    # Split on each "Warning ... :" header; the text after a header (up to the
+    # next header) is the message. Drop the empty piece before the first header.
+    pieces = _R_WARN_HEADER.split(text)
+    out: list[str] = []
+    for piece in pieces:
+        msg = re.sub(r"\s+", " ", piece).strip()
+        # Ignore R's deferred-summary noise and stray blanks.
+        if not msg:
+            continue
+        if re.fullmatch(r"There were \d+ or more warnings.*", msg):
+            continue
+        if re.fullmatch(r"There were \d+ warnings.*", msg):
+            continue
+        out.append(msg)
+    return out
+
+
+@contextlib.contextmanager
+def capture_r_warnings(*, emit: bool = True):
+    """Capture R-side warnings raised while the block runs.
+
+    Yields a list that is populated with the individual warning messages when
+    the block exits. When ``emit`` is ``True`` (the default) each message is
+    also re-raised through Python's :mod:`warnings` machinery under the
+    :class:`~robstatm_py.RobStatTMWarning` category, so it is visible in a
+    console or notebook and can be filtered with :func:`warnings.catch_warnings`.
+
+    The captured list is also stored thread-locally and can be retrieved after
+    the fact with :func:`last_r_warnings`.
+
+    Example
+    -------
+    >>> with capture_r_warnings() as w:      # doctest: +SKIP
+    ...     fit = rpm.lmrobM("y ~ x", data=df)
+    >>> w                                    # doctest: +SKIP
+    ['algorithm did not converge in 50 iterations']
+    """
+    ro = r()
+    from rpy2.rinterface_lib import callbacks
+
+    fragments: list[str] = []
+    messages: list[str] = []
+    prev_cb = callbacks.consolewrite_warnerror
+    try:
+        prev_warn = ro.r("getOption('warn')")[0]
+    except Exception:  # pragma: no cover - R not fully up
+        prev_warn = 0
+
+    def _sink(s: str) -> None:
+        fragments.append(str(s))
+
+    callbacks.consolewrite_warnerror = _sink
+    try:
+        try:
+            ro.r("options(warn = 1)")
+        except Exception:  # pragma: no cover
+            pass
+        yield messages
+    finally:
+        callbacks.consolewrite_warnerror = prev_cb
+        try:
+            ro.r(f"options(warn = {int(prev_warn)})")
+        except Exception:  # pragma: no cover
+            pass
+        messages[:] = _parse_r_warning_text(fragments)
+        _warn_state.last = list(messages)
+        if emit:
+            for m in messages:
+                _warnings.warn(m, RobStatTMWarning, stacklevel=3)
+
+
+def last_r_warnings() -> list[str]:
+    """Return the R warning messages from the most recent guarded R call.
+
+    Returns an empty list if no R call has run yet (on this thread) or if the
+    last call produced no warnings. Every wrapper call (fits *and* result
+    methods such as ``.summary()`` / ``.predict()``) refreshes this list.
+    """
+    return list(getattr(_warn_state, "last", []))
+
+
+@contextlib.contextmanager
+def r_guard(*, hint: str | None = None, emit_warnings: bool = True):
+    """Context manager that captures R warnings *and* translates R errors.
+
+    Wraps a block of R calls so that
+      * warnings are collected/emitted via :func:`capture_r_warnings`, and
+      * any rpy2 ``RRuntimeError`` is converted to :class:`RobStatTMRError`
+        (with R's ``geterrmessage()`` attached), matching the behaviour that
+        :func:`rcall` has always provided for fits — now available to the
+        direct-``ro.r()`` code paths too.
+    """
+    from rpy2.rinterface_lib.embedded import RRuntimeError
+
+    with capture_r_warnings(emit=emit_warnings):
+        try:
+            yield
+        except RRuntimeError as e:
+            tb = None
+            try:
+                tb_obj = r().r("paste(geterrmessage())")
+                tb = str(tb_obj[0]) if len(tb_obj) else None
+            except Exception:  # pragma: no cover
+                tb = None
+            raise RobStatTMRError(str(e), r_traceback=tb, hint=hint) from e
+
+
 def rcall(rfun: Any, *args: Any, _hint: str | None = None, **kwargs: Any) -> Any:
     """Call an R function, translating rpy2 errors into RobStatTMRError.
+
+    R warnings raised during the call are captured and surfaced as
+    :class:`~robstatm_py.RobStatTMWarning` (see :func:`capture_r_warnings`);
+    the message list is also available afterwards via :func:`last_r_warnings`.
 
     The keyword ``_hint`` is consumed by this wrapper (not passed to R).
     Any other kwarg ending in ``_`` has the trailing underscore stripped
     (escape hatch for Python-reserved-name R kwargs, e.g. ``class_``).
     """
-    from rpy2.rinterface_lib.embedded import RRuntimeError
-
     clean_kwargs = {(k[:-1] if k.endswith("_") else k): v for k, v in kwargs.items()}
-    try:
+    with r_guard(hint=_hint):
         return rfun(*args, **clean_kwargs)
-    except RRuntimeError as e:
-        # Try to capture an R-side traceback for the user
-        tb = None
-        try:
-            tb_obj = r().r("paste(geterrmessage())")
-            tb = str(tb_obj[0]) if len(tb_obj) else None
-        except Exception:  # pragma: no cover
-            tb = None
-        raise RobStatTMRError(str(e), r_traceback=tb, hint=_hint) from e
 
 
 def rx2(robj: Any, name: str) -> Any:

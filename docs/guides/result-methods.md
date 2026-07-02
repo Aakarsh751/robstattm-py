@@ -30,6 +30,11 @@ fit.coef_df()        # (Intercept)  ...   copper  ...
 | `predict(newdata=None, se_fit=False)` | Fitted/predicted values, optionally with standard errors. |
 | `hatvalues()` | Leverages of the fitted model. |
 | `coef()` | Coefficients as a named pandas `Series`. |
+| `resid()` | Robust residuals as a pandas `Series` (R's `resid()`/`residuals()`). |
+| `fitted()` | Fitted values as a pandas `Series` (R's `fitted()`). |
+| `weights()` | Robustness weights as a pandas `Series` (R's `weights()`; the `rweights`/`rweights_mm` field). |
+| `vcov()` | Coefficient covariance as a coef-labeled `DataFrame` (R's `vcov()`). |
+| `sigma()` | Robust residual scale as a `float` (R's `sigma()`). |
 | `rfpe(both_vals=False)` | Robust Final Prediction Error (`lmrobdet_mm` only). |
 | `drop1(scope=None, scale=None)` | Single-term-deletion RFPE table (`lmrobdet_mm` only). |
 | `r_squared_classic()` | Classical least-squares R² (`lmrobdet_dcml` only — DCML has no robust R²). |

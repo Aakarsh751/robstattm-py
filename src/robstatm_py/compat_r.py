@@ -80,6 +80,15 @@ pense_cv = _rpm.pense_cv
 GSE = _rpm.gse
 TSGS = _rpm.tsgs
 
+# External stretch packages (example-script reproduction, D-024).
+# `arima.rob`, `varComprob.control`, `cubinf.control` have dots → the canonical
+# Python snake_case name is the alias the user gets here too.
+arima_rob = _rpm.arima_rob
+varComprob = _rpm.var_comprob
+varComprob_control = _rpm.var_comprob_control
+glmrob = _rpm.glmrob
+cubinf = _rpm.cubinf
+
 # ψ-family helpers (live under rpm.psi.* but also useful at top level)
 bisquare = _rpm.psi.bisquare
 huber = _rpm.psi.huber
@@ -130,6 +139,7 @@ __all__ = [
     "WMLlogreg", "logregWML",
     # external stretch packages
     "pense", "pense_cv", "GSE", "TSGS",
+    "arima_rob", "varComprob", "varComprob_control", "glmrob", "cubinf",
     # psi
     "bisquare", "huber", "opt", "mopt", "optv0", "moptv0",
     "rho", "rhoprime", "rhoprime2",

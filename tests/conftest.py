@@ -29,24 +29,67 @@ needs_r = pytest.mark.skipif(not _R_OK, reason=f"R / RobStatTM unavailable: {_R_
 
 
 def _r_pkg_available(name: str) -> bool:
-    """True if the named external R package can be loaded."""
-    try:
-        from robstatm_py._r import r_pkg
+    """True if the named external R package is installed.
 
-        r_pkg(name)
-        return True
+    Uses ``requireNamespace`` (loads the namespace only) rather than
+    ``importr``/``r_pkg`` (which *attaches* the package — and any ``Depends:`` —
+    to the R search path). Attaching ``robustarima``/``robustvarComp``/``robcbi``
+    would pull in ``robustbase``, whose ``BYlogreg``/``Mscale``/… then mask
+    RobStatTM's own versions for unqualified R calls in other tests.
+    """
+    if not _R_OK:
+        return False
+    try:
+        from robstatm_py._r import r
+
+        return bool(r().r(f"isTRUE(requireNamespace('{name}', quietly=TRUE))")[0])
     except Exception:
         return False
 
 
 _PENSE_OK = _R_OK and _r_pkg_available("pense")
 _GSE_OK = _R_OK and _r_pkg_available("GSE")
+_ROBUSTARIMA_OK = _R_OK and _r_pkg_available("robustarima")
+_ROBUSTVARCOMP_OK = _R_OK and _r_pkg_available("robustvarComp")
+_GLMROB_OK = _R_OK and _r_pkg_available("robustbase")
+_ROBCBI_OK = _R_OK and _r_pkg_available("robcbi")
+
+
+def _r_dataset_available(name: str, package: str) -> bool:
+    """True if ``data(name, package=package)`` succeeds (probes WWGbook etc.)."""
+    if not _R_OK:
+        return False
+    try:
+        from robstatm_py._r import r
+
+        r().r(f'data({name}, package="{package}")')
+        return True
+    except Exception:
+        return False
+
+
+_WWGBOOK_OK = _r_dataset_available("autism", "WWGbook")
 
 needs_pense = pytest.mark.skipif(
     not _PENSE_OK, reason="external R package 'pense' not installed"
 )
 needs_gse = pytest.mark.skipif(
     not _GSE_OK, reason="external R package 'GSE' not installed"
+)
+needs_robustarima = pytest.mark.skipif(
+    not _ROBUSTARIMA_OK, reason="external R package 'robustarima' not installed"
+)
+needs_robustvarcomp = pytest.mark.skipif(
+    not _ROBUSTVARCOMP_OK, reason="external R package 'robustvarComp' not installed"
+)
+needs_wwgbook = pytest.mark.skipif(
+    not _WWGBOOK_OK, reason="R data package 'WWGbook' (autism) not installed"
+)
+needs_glmrob = pytest.mark.skipif(
+    not _GLMROB_OK, reason="external R package 'robustbase' not installed"
+)
+needs_robcbi = pytest.mark.skipif(
+    not _ROBCBI_OK, reason="external R package 'robcbi' not installed"
 )
 
 

@@ -93,11 +93,16 @@ The `LmrobMResult` object also provides these methods:
 |---|---|
 | `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
+| `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `hatvalues()` | Hat-matrix diagonal computed via QR of ``sqrt(rweights) * X``. |
 | `predict(newdata)` | Predictions on ``data`` (or ``newdata`` if given). |
+| `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
+| `sigma()` | Robust residual scale (R's ``sigma()``). |
 | `summary()` | Port of R's ``summary.lmrobdetMM`` (lmrobM dispatches there). |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
 | `to_r()` | Return the underlying rpy2 R object. |
+| `vcov()` | Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``). |
+| `weights()` | Robustness weights as a pandas Series (R's ``weights()``). |
 
 
 

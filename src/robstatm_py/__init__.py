@@ -14,11 +14,12 @@ from robstatm_py._errors import (
     RobStatTMError,
     RobStatTMRError,
     RobStatTMSetupError,
+    RobStatTMWarning,
 )
 from robstatm_py.utils.check_setup import check_setup
 from robstatm_py.utils.seeds import set_seed
 from robstatm_py._help import help, list_names
-from robstatm_py._r import r_started
+from robstatm_py._r import capture_r_warnings, last_r_warnings, r_started
 from robstatm_py.bench import set_n_jobs, timer as _bench_timer  # noqa: F401
 
 # Univariate
@@ -57,6 +58,15 @@ from robstatm_py.external.pense import (
     pense_cv,
 )
 from robstatm_py.external.gse import GSEResult, TSGSResult, gse, tsgs
+from robstatm_py.external.arima_rob import ArimaRobResult, arima_rob
+from robstatm_py.external.var_comprob import (
+    VarComprobControl,
+    VarComprobResult,
+    var_comprob,
+    var_comprob_control,
+)
+from robstatm_py.external.glmrob import GlmrobResult, glmrob
+from robstatm_py.external.cubinf import CubinfResult, cubinf
 from robstatm_py import datasets, plot, plotting, psi, bench, external
 
 # Attach to_dict / to_r / _repr_html_ / coef_df to every result dataclass
@@ -72,12 +82,15 @@ __all__ = [
     "RobStatTMError",
     "RobStatTMRError",
     "RobStatTMSetupError",
+    "RobStatTMWarning",
     # utilities
     "check_setup",
     "set_seed",
     "help",
     "list_names",
     "r_started",
+    "capture_r_warnings",
+    "last_r_warnings",
     "set_n_jobs",
     "bench",
     # univariate wrappers
@@ -140,6 +153,16 @@ __all__ = [
     "gse",
     "TSGSResult",
     "tsgs",
+    "ArimaRobResult",
+    "arima_rob",
+    "VarComprobControl",
+    "VarComprobResult",
+    "var_comprob",
+    "var_comprob_control",
+    "GlmrobResult",
+    "glmrob",
+    "CubinfResult",
+    "cubinf",
     # submodules
     "datasets",
     "plot",

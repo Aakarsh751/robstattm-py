@@ -42,3 +42,27 @@ class RobStatTMRError(RobStatTMError):
         super().__init__(full)
         self.r_traceback: str | None = r_traceback
         self.hint: str | None = hint
+
+
+class RobStatTMWarning(UserWarning):
+    """A warning emitted by the underlying R code during a computation.
+
+    R warnings (e.g. non-convergence notices, ``NaNs produced``, rank
+    deficiency) are captured at the rpy2 bridge and re-emitted through
+    Python's :mod:`warnings` machinery under this category, so users can
+
+    * see them inline in a console / notebook, and
+    * filter or promote them, e.g.::
+
+          import warnings
+          from robstatm_py import RobStatTMWarning
+
+          with warnings.catch_warnings(record=True) as caught:
+              warnings.simplefilter("always")
+              fit = rpm.lmrobdet_mm("y ~ x", data=df)
+          r_warnings = [w for w in caught
+                        if issubclass(w.category, RobStatTMWarning)]
+
+    The full list of messages from the most recent R call is also available
+    via :func:`robstatm_py.last_r_warnings`.
+    """

@@ -86,12 +86,17 @@ The `LmrobdetDCMLResult` object also provides these methods:
 |---|---|
 | `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
+| `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `hatvalues()` | Port of R's ``hatvalues.lmrob`` on an ``lmrobdetDCML`` fit. |
 | `predict(newdata, se_fit)` | Port of R's ``predict.lmrob`` on an ``lmrobdetDCML`` fit. |
 | `r_squared_classic()` | Classical (least-squares) R² for the DCML fit. |
+| `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
+| `sigma()` | Robust residual scale (R's ``sigma()``). |
 | `summary()` | Port of R's ``summary.lmrobdetMM`` (DCML dispatches there). |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
 | `to_r()` | Return the underlying rpy2 R object. |
+| `vcov()` | Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``). |
+| `weights()` | Robustness weights as a pandas Series (R's ``weights()``). |
 
 
 

@@ -11,6 +11,10 @@ from dataclasses import dataclass
 
 CORE_R_PACKAGES = ("RobStatTM", "robustbase", "rrcov", "pyinit")
 STRETCH_R_PACKAGES = ("pense", "GSE")
+# Optional packages that unblock example-script reproduction (D-024). Absent by
+# default; each enables one or more `robstattm/examples-scripts/` notebooks.
+# `robcbi` additionally needs its Fortran dependency `robeth`.
+OPTIONAL_R_PACKAGES = ("robustarima", "robustvarComp", "robcbi", "WWGbook")
 
 
 def _stdout_supports_unicode() -> bool:
@@ -97,7 +101,7 @@ def check_setup(*, verbose: bool = True) -> bool:
     statuses: list[_PackageStatus] = []
     for pkg in CORE_R_PACKAGES:
         statuses.append(_PackageStatus(pkg, _check_r_package(pkg), is_core=True))
-    for pkg in STRETCH_R_PACKAGES:
+    for pkg in STRETCH_R_PACKAGES + OPTIONAL_R_PACKAGES:
         statuses.append(_PackageStatus(pkg, _check_r_package(pkg), is_core=False))
 
     # Use unicode marks when the terminal supports it; ASCII otherwise.
@@ -126,6 +130,11 @@ def check_setup(*, verbose: bool = True) -> bool:
         lines.append("")
         lines.append("Optional stretch packages — run in R if you want them:")
         lines.append(f"  install.packages(c({', '.join(repr(p) for p in missing_stretch)}))")
+        if "robcbi" in missing_stretch:
+            lines.append(
+                "  # robcbi needs the Fortran package 'robeth' (Rtools on Windows); "
+                "both are CRAN-archived — see docs/guides/external.md"
+            )
 
     lines.append("")
     if missing_core:

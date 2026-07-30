@@ -12,7 +12,7 @@ import numpy as np
 import pytest
 
 import robstatm_py as rpm
-from tests.conftest import needs_robcbi
+from tests.conftest import needs_breslow, needs_robcbi
 
 _R_PREP = """
 data(breslow.dat, package='robust')
@@ -29,6 +29,7 @@ rfit <- robcbi::cubinf(XX, yy, family=poisson(), null.dev=FALSE, control=ctrl)
 
 
 @needs_robcbi
+@needs_breslow
 class TestEpilepsyCUBIF:
     @pytest.fixture
     def setup(self, R):

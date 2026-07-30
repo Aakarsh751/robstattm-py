@@ -69,6 +69,9 @@ def _r_dataset_available(name: str, package: str) -> bool:
 
 
 _WWGBOOK_OK = _r_dataset_available("autism", "WWGbook")
+# breslow.dat lives in the `robust` package, not in robustbase/robcbi — the
+# estimator package being present says nothing about the data being present.
+_BRESLOW_OK = _r_dataset_available("breslow.dat", "robust")
 
 needs_pense = pytest.mark.skipif(
     not _PENSE_OK, reason="external R package 'pense' not installed"
@@ -84,6 +87,9 @@ needs_robustvarcomp = pytest.mark.skipif(
 )
 needs_wwgbook = pytest.mark.skipif(
     not _WWGBOOK_OK, reason="R data package 'WWGbook' (autism) not installed"
+)
+needs_breslow = pytest.mark.skipif(
+    not _BRESLOW_OK, reason="R package 'robust' (breslow.dat) not installed"
 )
 needs_glmrob = pytest.mark.skipif(
     not _GLMROB_OK, reason="external R package 'robustbase' not installed"

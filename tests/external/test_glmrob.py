@@ -12,7 +12,7 @@ import pytest
 
 import robstatm_py as rpm
 from robstatm_py import set_seed
-from tests.conftest import needs_glmrob
+from tests.conftest import needs_breslow, needs_glmrob
 
 _FORMULA = "yy ~ xx1 + xx2 + xx3 + xx4"
 
@@ -40,6 +40,7 @@ def _pull_df(R) -> pd.DataFrame:
 
 
 @needs_glmrob
+@needs_breslow
 class TestEpilepsyRQL:
     """RQL / Mqle fit (default method)."""
 
@@ -83,6 +84,7 @@ class TestEpilepsyRQL:
 
 
 @needs_glmrob
+@needs_breslow
 class TestEpilepsyMT:
     """MT fit (method='MT')."""
 

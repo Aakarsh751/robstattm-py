@@ -50,19 +50,36 @@ jobs:
 
       # use-public-rspm above configures the correct per-OS binary repo, so we
       # let install.packages() use that default (no hardcoded repos).
+      #
+      # `robust` is here for its data, not its estimators: the glmrob strict-tier
+      # tests fit the Breslow epilepsy data (`breslow.dat`), which ships in
+      # `robust` rather than in `robustbase`. It is a core (fatal) dep because
+      # those tests are gated on `robustbase`, which is core — without `robust`
+      # they would skip rather than run, silently losing the R parity coverage.
       - name: Install core R dependencies
         run: |
-          install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
+          install.packages(c("RobStatTM", "pyinit", "robustbase", "robust", "rrcov"))
         shell: Rscript {0}
 
-      # Stretch wrappers (pense / GSE). Installed in a separate, non-fatal step:
-      # the external tests skip gracefully when these are absent (needs_pense /
-      # needs_gse), so a build failure on these heavier packages must not fail
-      # CI — but when they install, their strict-tier tests run.
-      - name: Install optional R dependencies (pense, GSE)
+      # Backing packages for the external-wrapper tests, installed in a separate,
+      # non-fatal step: each such test is gated on a needs_* guard in
+      # tests/conftest.py and skips gracefully when its package is absent, so a
+      # build failure on these heavier packages must not fail CI — but when they
+      # install, their strict-tier parity tests run.
+      #
+      #   pense, GSE     -> test_pense.py, test_gse.py
+      #   robcbi         -> test_cubinf.py
+      #   robustarima    -> test_arima_rob.py
+      #   robustvarComp  -> test_var_comprob.py  (with WWGbook for the autism data)
+      #
+      # Note a skip is not a pass: before this list was completed, four external
+      # test files skipped on every runner and read as green without ever running.
+      - name: Install optional R dependencies (external wrapper backends)
         continue-on-error: true
         run: |
-          install.packages(c("pense", "GSE"))
+          install.packages(c(
+            "pense", "GSE", "robcbi", "robustarima", "robustvarComp", "WWGbook"
+          ))
         shell: Rscript {0}
 
       - name: Export R_HOME (Linux/macOS)

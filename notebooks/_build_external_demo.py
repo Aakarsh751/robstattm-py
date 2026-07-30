@@ -13,7 +13,7 @@ cells = []
 cells.append(new_markdown_cell(
     "# External robust estimators — `pense`, `gse`, `tsgs`\n"
     "\n"
-    "The three *stretch* wrappers in `robstatm_py.external` bring estimators that live in "
+    "The three *stretch* wrappers in `robstattm_py.external` bring estimators that live in "
     "**separate CRAN packages** (`pense`, `GSE`) but are recommended alongside RobStatTM in "
     "Maronna, Martin, Yohai & Salibián-Barrera, *Robust Statistics: Theory and Methods* (2019):\n"
     "\n"
@@ -41,10 +41,10 @@ cells.append(new_code_cell(
     '    os.environ["PATH"] = r"C:\\Program Files\\R\\R-4.5.2\\bin\\x64;" + os.environ["PATH"]\n'
     "\n"
     "import numpy as np\n"
-    "import robstatm_py as rpm\n"
-    "from robstatm_py import set_seed\n"
+    "import robstattm_py as rpm\n"
+    "from robstattm_py import set_seed\n"
     "\n"
-    'print(f"robstatm_py {rpm.__version__}")'
+    'print(f"robstattm_py {rpm.__version__}")'
 ))
 
 # --- pense ---------------------------------------------------------------

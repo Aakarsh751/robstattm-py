@@ -1,6 +1,6 @@
 # `cov_classic`
 
-> **R original:** `covClassic` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; Classical Covariance Estimation
+> **R original:** `covClassic` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; Classical Covariance Estimation
 
 Compute an estimate of the covariance/correlation matrix and location
 vector using classical methods.
@@ -11,7 +11,7 @@ produced by ``covRob``, but fit using classical methods.
 ## Usage
 
 ```python
-from robstatm_py import cov_classic
+from robstattm_py import cov_classic
 
 def cov_classic(
                 X,
@@ -75,7 +75,7 @@ The `CovClassicResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 

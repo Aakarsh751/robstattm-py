@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -18,7 +18,7 @@ class TestMineralDCMLS3:
 
     @pytest.fixture(scope="class")
     def r_ctx(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
         ro = r()
         ro.r(
             "library(RobStatTM); data(mineral); "
@@ -80,7 +80,7 @@ class TestDCMLRSquaredClassic:
     def test_r_squared_classic_matches_r(self, fit, R):
         """Strict-tier vs the R formula
         ``1 - sum(residuals^2) / sum((y - mean(y))^2)``."""
-        from robstatm_py._r import r as _r
+        from robstattm_py._r import r as _r
         ro = _r()
         ro.r(
             "library(RobStatTM); data(mineral); "

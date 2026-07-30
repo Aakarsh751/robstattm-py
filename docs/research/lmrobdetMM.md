@@ -69,4 +69,4 @@ Plus a `summary()` method returning a printable table mirroring `summary.lmrobde
 **Edge cases:** singular X; perfect fit; missing data per `na_action`; categorical columns (convert via patsy / pandas2ri).
 
 ## 7. Validation strategy
-All 11 wrapper test cases from `docs/validation_strategy.md §3`, plus golden `mineral.R` reproduction (Figs 5.1–5.7). Strict-tier on every numeric field. Plotting helper `robstatm_py.plotting.residuals(fit)` validated via pytest-mpl.
+All 11 wrapper test cases from `docs/validation_strategy.md §3`, plus golden `mineral.R` reproduction (Figs 5.1–5.7). Strict-tier on every numeric field. Plotting helper `robstattm_py.plotting.residuals(fit)` validated via pytest-mpl.

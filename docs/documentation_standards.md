@@ -40,7 +40,7 @@ RobStatTMRError
     When the underlying R call fails. The R traceback is attached as
     ``.r_traceback`` on the exception.
 RobStatTMSetupError
-    When R or RobStatTM is unavailable; call ``robstatm_py.check_setup()``
+    When R or RobStatTM is unavailable; call ``robstattm_py.check_setup()``
     for diagnostics.
 
 Notes
@@ -62,8 +62,8 @@ References
 
 Examples
 --------
->>> import robstatm_py as rpm
->>> from robstatm_py.datasets import mineral
+>>> import robstattm_py as rpm
+>>> from robstattm_py.datasets import mineral
 >>> df = mineral()
 >>> fit = rpm.lmrobdet_mm("zinc ~ copper", data=df)
 >>> fit.coefficients
@@ -71,8 +71,8 @@ array([...])
 
 See Also
 --------
-robstatm_py.regression.lmrobdet_dcml : DCML variant; higher efficiency.
-robstatm_py.regression.step_lmrobdet : Robust stepwise model selection.
+robstattm_py.regression.lmrobdet_dcml : DCML variant; higher efficiency.
+robstattm_py.regression.step_lmrobdet : Robust stepwise model selection.
 ```
 
 ### Required sections per public dataclass
@@ -92,7 +92,7 @@ coefficients : np.ndarray, shape (p,)
 Notes
 -----
 Frozen dataclass with __slots__. Field names are the snake_case of the
-R names; see ``robstatm_py._converters._FIELD_MAP_R_TO_PY`` for the
+R names; see ``robstattm_py._converters._FIELD_MAP_R_TO_PY`` for the
 mapping.
 ```
 
@@ -121,7 +121,7 @@ the R packages ``RobStatTM``, ``pyinit`` (default initialization), and
 ## 3. Type hints
 
 - Mandatory on every public function signature.
-- Use the aliases from `robstatm_py._typing` (`ArrayLike`, `FormulaLike`).
+- Use the aliases from `robstattm_py._typing` (`ArrayLike`, `FormulaLike`).
 - Returns are precise dataclasses, not `dict` or `Any`.
 - `py.typed` marker shipped in the wheel.
 
@@ -129,7 +129,7 @@ the R packages ``RobStatTM``, ``pyinit`` (default initialization), and
 
 ## 4. Examples in docstrings are executed
 
-Every `Examples` block is executable. CI runs `pytest --doctest-modules` against `src/robstatm_py/`. Doctest examples may either:
+Every `Examples` block is executable. CI runs `pytest --doctest-modules` against `src/robstattm_py/`. Doctest examples may either:
 - be marked `# doctest: +SKIP` if they require external resources, or
 - use deterministic small inputs that match exactly.
 
@@ -167,7 +167,7 @@ API pages are generated via `sphinx-apidoc` + `autosummary`. The user does not h
 
 - Strip outputs before committing (`nbstripout`).
 - Tutorial notebooks live under `notebooks/tutorials/`; benchmark notebooks under `notebooks/benchmarks/`.
-- Every notebook ends with a "Reproducibility" cell printing `robstatm_py.__version__`, R version, RobStatTM version, and the relevant CRAN packages' versions.
+- Every notebook ends with a "Reproducibility" cell printing `robstattm_py.__version__`, R version, RobStatTM version, and the relevant CRAN packages' versions.
 
 ---
 

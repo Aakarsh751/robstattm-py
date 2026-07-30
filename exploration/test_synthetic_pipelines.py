@@ -38,7 +38,7 @@ import sys
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 sys.path.insert(0, os.path.dirname(__file__))
 from _synth import (  # noqa: E402

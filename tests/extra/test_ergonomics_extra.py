@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 

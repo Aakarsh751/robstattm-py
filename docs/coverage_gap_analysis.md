@@ -51,7 +51,7 @@ Grouped by role:
 | `rhoprime` | $\psi = \rho'$ |
 | `rhoprime2` | $\psi' = \rho''$ |
 
-These are the low-level surface a user needs when implementing custom robust loss diagnostics or extending the package. Wrapped as a small `robstatm_py.psi` submodule.
+These are the low-level surface a user needs when implementing custom robust loss diagnostics or extending the package. Wrapped as a small `robstattm_py.psi` submodule.
 
 ### 1.2 S3 methods exported (13) — ✅ ALL PORTED (drop1 closed 2026-06-14)
 
@@ -75,7 +75,7 @@ All become **dataclass methods** in Python (or module-level helpers when the ope
 
 ### 1.3 Datasets (20)
 
-All 20 ship with RobStatTM. Every book example uses one. **All must be loadable from Python** — currently planned only as an afterthought (`robstatm_py.datasets.mineral()` etc).
+All 20 ship with RobStatTM. Every book example uses one. **All must be loadable from Python** — currently planned only as an afterthought (`robstattm_py.datasets.mineral()` etc).
 
 | Dataset | Used by | Chapter |
 |---------|---------|---------|
@@ -100,7 +100,7 @@ All 20 ship with RobStatTM. Every book example uses one. **All must be loadable 
 | `waste` | textbook example | 5 |
 | `wine` | **flagship example** | 6 |
 
-Each loaded via `robstatm_py.datasets.<name>() -> pd.DataFrame` with the **same column names as R** and a docstring lifted from the corresponding `.Rd` man page.
+Each loaded via `robstattm_py.datasets.<name>() -> pd.DataFrame` with the **same column names as R** and a docstring lifted from the corresponding `.Rd` man page.
 
 ### 1.4 Internal but worth exposing as private utilities
 
@@ -108,7 +108,7 @@ These are unexported in NAMESPACE but the user (esp. textbook reproducers) somet
 
 - `lmrob.MM`, `lmrob.S`, `lmrob.fit` (Mächler/Koller MM internals) — accessed via `RobStatTM:::lmrob.MM`. **Not** exposed publicly.
 - `splitFrame`, `lmrob.tau`, `lmrob.hatmatrix`, `outlierStats` — internal diagnostics. Not exposed.
-- `Mpsi`, `Mchi`, `Mwgt`, `MrhoInf` — Mächler ψ/χ/wgt helpers. **Worth exposing** in `robstatm_py.psi` because user-written diagnostics commonly need them. Phase 2 small extra.
+- `Mpsi`, `Mchi`, `Mwgt`, `MrhoInf` — Mächler ψ/χ/wgt helpers. **Worth exposing** in `robstattm_py.psi` because user-written diagnostics commonly need them. Phase 2 small extra.
 
 ---
 

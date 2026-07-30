@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -54,7 +54,7 @@ def test_vector_tuning_matches_r(R, family, e):
 @needs_r
 @pytest.mark.parametrize("family", ALL_FAMILIES)
 def test_rho_matches_r(R, family):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.globalenv["u_test"] = U_GRID
@@ -71,7 +71,7 @@ def test_rho_matches_r(R, family):
 @needs_r
 @pytest.mark.parametrize("family", ALL_FAMILIES)
 def test_rhoprime_matches_r(R, family):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.globalenv["u_test"] = U_GRID
@@ -88,7 +88,7 @@ def test_rhoprime_matches_r(R, family):
 @needs_r
 @pytest.mark.parametrize("family", ALL_FAMILIES)
 def test_rhoprime2_matches_r(R, family):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.globalenv["u_test"] = U_GRID

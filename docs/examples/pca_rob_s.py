@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 bus = rpm.datasets.bus()         # 218 buses, 18 shape features
 

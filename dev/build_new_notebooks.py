@@ -22,15 +22,15 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")  # headless-safe for CI execution
 import matplotlib.pyplot as plt
-import robstatm_py as rpm
-from robstatm_py import set_seed
-from robstatm_py._r import r as _r
+import robstattm_py as rpm
+from robstattm_py import set_seed
+from robstattm_py._r import r as _r
 
 ro = _r()
 ro.r("suppressMessages(library(RobStatTM))")
 ro.r("suppressMessages(library(robustarima))")
 FIG_DIR = pathlib.Path("figures"); FIG_DIR.mkdir(exist_ok=True)
-print(f"robstatm_py {rpm.__version__}")'''
+print(f"robstattm_py {rpm.__version__}")'''
 
 KSPEC = {"display_name": "Python 3", "language": "python", "name": "python3"}
 

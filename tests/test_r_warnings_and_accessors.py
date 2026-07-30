@@ -3,9 +3,9 @@
 Covers the two gaps closed in the warnings/accessors pass:
 
 * R warnings emitted during a fit / result method are captured and re-raised
-  as :class:`robstatm_py.RobStatTMWarning` (instead of vanishing into rpy2's
+  as :class:`robstattm_py.RobStatTMWarning` (instead of vanishing into rpy2's
   console callback as an opaque "There were 50 or more warnings" line), and are
-  also retrievable via :func:`robstatm_py.last_r_warnings`.
+  also retrievable via :func:`robstattm_py.last_r_warnings`.
 * Regression results expose ``resid`` / ``fitted`` / ``weights`` / ``vcov`` /
   ``sigma`` accessors alongside the pre-existing ``coef``.
 """
@@ -17,10 +17,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import RobStatTMWarning, last_r_warnings
-from robstatm_py._r import _parse_r_warning_text
-from robstatm_py._r import r as _r
+import robstattm_py as rpm
+from robstattm_py import RobStatTMWarning, last_r_warnings
+from robstattm_py._r import _parse_r_warning_text
+from robstattm_py._r import r as _r
 
 try:
     _r()
@@ -154,7 +154,7 @@ class TestRWarningCapture:
         assert last_r_warnings() == []
 
     def test_capture_context_manager_collects_without_emit(self):
-        from robstatm_py import capture_r_warnings
+        from robstattm_py import capture_r_warnings
 
         wdf = self._hard_problem()
         with warnings.catch_warnings(record=True) as caught:

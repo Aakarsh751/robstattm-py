@@ -23,7 +23,7 @@ Returns a list with `coefficients` (matrix; columns are candidate solutions), `o
 
 ## 5. Dependencies
 - pyinit (CRAN)
-- RobStatTM not required at the function level, but the wrapper lives in `robstatm_py.regression.pyinit` because users encountering it from `lmrobdetMM` will look there.
+- RobStatTM not required at the function level, but the wrapper lives in `robstattm_py.regression.pyinit` because users encountering it from `lmrobdetMM` will look there.
 
 ## 6. Python wrapper design
 

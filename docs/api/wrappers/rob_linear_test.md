@@ -1,6 +1,6 @@
 # `rob_linear_test`
 
-> **R original:** `lsRobTestMM` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Test for Least Squares Bias Using Robust MM Regressions
+> **R original:** `lsRobTestMM` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Test for Least Squares Bias Using Robust MM Regressions
 
 Test for Least Squares Bias Using Robust MM Regressions
 
@@ -31,7 +31,7 @@ estimate when test *T0* has been used.
 ## Usage
 
 ```python
-from robstatm_py import rob_linear_test
+from robstattm_py import rob_linear_test
 
 def rob_linear_test(object1: 'LmrobdetMMResult', object2: 'LmrobdetMMResult'):
 ```
@@ -76,7 +76,7 @@ The `RobLinearTestResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 df = rpm.datasets.stackloss()
 

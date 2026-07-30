@@ -5,7 +5,7 @@ throughout the textbook, each returned as a pandas `DataFrame` with the original
 R column names preserved.
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()      # -> pandas DataFrame
 print(mineral.head())

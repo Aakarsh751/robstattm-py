@@ -1,6 +1,6 @@
 # `cov_rob_mm`
 
-> **R original:** `covRobMM` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; MM robust multivariate location and scatter estimator
+> **R original:** `covRobMM` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; MM robust multivariate location and scatter estimator
 
 This function computes an MM robust estimator for multivariate location and scatter with the "SHR" loss function.
 
@@ -9,7 +9,7 @@ This function computes an MM robust estimator for multivariate location and scat
 ## Usage
 
 ```python
-from robstatm_py import cov_rob_mm
+from robstattm_py import cov_rob_mm
 
 def cov_rob_mm(X, maxit: 'int' = 50, tolpar: 'float' = 0.0001, corr: 'bool' = False):
 ```
@@ -66,7 +66,7 @@ The `CovRobMMResult` object also provides these methods:
 
 ```python
 import numpy as np
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Italian wine cultivar — 59 obs of 13 chemical measurements.
 wine = rpm.datasets.wine()

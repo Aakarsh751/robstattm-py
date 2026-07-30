@@ -1,6 +1,6 @@
 # `prcomp_rob`
 
-> **R original:** `prcompRob` &nbsp;·&nbsp; **Python module:** `robstatm_py.pca` &nbsp;·&nbsp; Robust Principal Components Cont'd
+> **R original:** `prcompRob` &nbsp;·&nbsp; **Python module:** `robstattm_py.pca` &nbsp;·&nbsp; Robust Principal Components Cont'd
 
 This function uses the pcaRobS function to compute all principal components while
 behaving similarly to the prcomp function
@@ -8,7 +8,7 @@ behaving similarly to the prcomp function
 ## Usage
 
 ```python
-from robstatm_py import prcomp_rob
+from robstattm_py import prcomp_rob
 
 def prcomp_rob(
                X,
@@ -68,7 +68,7 @@ The `PrcompRobResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Bus silhouettes — 218 obs, 18 image-shape features.
 bus = rpm.datasets.bus()

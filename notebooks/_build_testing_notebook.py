@@ -21,14 +21,14 @@ import numpy as np
 import pandas as pd
 from IPython.display import Markdown, display
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
-from robstatm_py._r import r as _r_bridge
+import robstattm_py as rpm
+from robstattm_py import set_seed
+from robstattm_py._r import r as _r_bridge
 
 ro = _r_bridge()
 ro.r("suppressMessages(library(RobStatTM))")
 
-print(f"robstatm_py {rpm.__version__}  |  R session ready: {rpm.r_started()}")'''
+print(f"robstattm_py {rpm.__version__}  |  R session ready: {rpm.r_started()}")'''
 
 HELPERS = r'''# --- shared test helpers (strict tier: atol=0, rtol=0 vs direct R) ---
 PASS, FAIL = 0, 0

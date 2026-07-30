@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # invtr2 is the inverse transform used to turn a target robust R-squared into
 # the corresponding value on the M-scale objective. The tuning argument `cc`

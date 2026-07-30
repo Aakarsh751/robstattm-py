@@ -6,8 +6,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py._r import r as _r
+import robstattm_py as rpm
+from robstattm_py._r import r as _r
 
 try:
     _r()

@@ -30,7 +30,7 @@ Tests do **not** compare Python to hand-written expected values in a CSV. They c
 
 ### 2.1 Embedded R via rpy2
 
-When pytest imports `robstatm_py`, the first wrapper call starts an **embedded R interpreter** inside the Python process (`src/robstatm_py/_r.py`). Tests use the same bridge as production code:
+When pytest imports `robstattm_py`, the first wrapper call starts an **embedded R interpreter** inside the Python process (`src/robstattm_py/_r.py`). Tests use the same bridge as production code:
 
 | Helper | Location | Purpose |
 |--------|----------|---------|
@@ -38,7 +38,7 @@ When pytest imports `robstatm_py`, the first wrapper call starts an **embedded R
 | `r_pkg("RobStatTM")` | `_r.py` | Cached `importr("RobStatTM")` |
 | `rcall(rfun, ...)` | `_r.py` | Call R function; translate errors to `RobStatTMRError` |
 | `R` fixture | `tests/conftest.py` | Shortcut: `R("coef(fit_r)")` evaluates R strings in tests |
-| `set_seed(n)` | `robstatm_py` | Sets **both** NumPy and R RNG (`set.seed(n)`) |
+| `set_seed(n)` | `robstattm_py` | Sets **both** NumPy and R RNG (`set.seed(n)`) |
 
 Typical strict-tier test pattern:
 
@@ -76,9 +76,9 @@ A separate `Rscript` subprocess would still be “using R,” but would be slowe
 $env:R_HOME = "C:\Program Files\R\R-4.5.2"
 $env:PATH = "C:\Program Files\R\R-4.5.2\bin\x64;" + $env:PATH
 
-cd robstatm-py
+cd robstattm-py
 pip install -e ".[dev]"
-python -c "import robstatm_py as rpm; rpm.check_setup()"
+python -c "import robstattm_py as rpm; rpm.check_setup()"
 ```
 
 **Required R packages:** `RobStatTM`, `robustbase`, `rrcov`, `pyinit`  
@@ -168,7 +168,7 @@ Set `RPM_SKIP_NOTEBOOKS=1` to skip the 14 notebook executions during fast loops.
 | `tests/datasets/` | 20 native loaders + `datasets.load()` | DataFrame shape, column names, values vs R |
 | `tests/external/` | `pense`, `pense_cv`, `gse`, `tsgs` | Coef paths, S4 slots vs R accessors |
 | `tests/extra/` | Gaps not covered elsewhere | No-intercept formulas, multi-predictor X/y, custom control on lmrobM |
-| `tests/plot/` | Native plotting suite (`robstatm_py.plot`) | Return types, `ax=`, themes, backend resolution, **no-refit guard** (R-free) |
+| `tests/plot/` | Native plotting suite (`robstattm_py.plot`) | Return types, `ax=`, themes, backend resolution, **no-refit guard** (R-free) |
 | `tests/test_ui_ergonomics.py` | `help()`, `to_dict()`, pickle, X/y API, plot shortcuts | Structure / round-trip, not always numeric |
 | `tests/test_compat_r.py` | R-name aliases (`lmrobdetMM`, etc.) | Import and call paths |
 | `tests/test_notebooks.py` | All `notebooks/**/*.ipynb` | **No cell errors** (outputs not numerically asserted) |
@@ -205,7 +205,7 @@ Each wrapper returns a **frozen Python dataclass** (e.g. `LmrobdetMMResult`). Te
 
 ## 5b. Plotting tests (`tests/plot/`) — native suite, R-free
 
-**Purpose:** The native plotting suite (`robstatm_py.plot`, decision D-023) is a
+**Purpose:** The native plotting suite (`robstattm_py.plot`, decision D-023) is a
 *rendering* layer, not a numeric one — its inputs are the already-validated
 arrays on the result dataclasses. So these tests check the **plotting contract**,
 not numbers, and they run **without R** (a duck-typed `fake_fit`/`fake_cov`/`fake_pca`
@@ -223,7 +223,7 @@ fixture carries the same arrays a real fit exposes).
 **Two contract guarantees the tests lock in:**
 
 1. **No-refit guard.** Native renderers must never touch the R bridge. The tests
-   monkeypatch `robstatm_py._r.{r,r_pkg,rcall}` to raise, then draw every native
+   monkeypatch `robstattm_py._r.{r,r_pkg,rcall}` to raise, then draw every native
    plot — if any plot calls into R, the test fails. (`backend="r"` is the only
    path allowed to refit.)
 2. **Composability.** Passing `ax=` must draw into that Axes and create **no**
@@ -369,7 +369,7 @@ For every page in `docs/api/wrappers/*.md`:
 
 | Check | Pass criterion |
 |-------|----------------|
-| Import | `from robstatm_py import <name>` resolves |
+| Import | `from robstattm_py import <name>` resolves |
 | Example | Python block under `## Example` runs without exception |
 | Returns table | Every dataclass field documented; no phantom fields |
 | R examples (if present) | Paired `.R` files execute via `Rscript` |
@@ -406,7 +406,7 @@ Not collected by pytest; useful before demos or mentor reviews.
 # Environment (Windows)
 $env:R_HOME = "C:\Program Files\R\R-4.5.2"
 $env:PATH = "C:\Program Files\R\R-4.5.2\bin\x64;" + $env:PATH
-cd C:\ProfDM_Rproject\robstatm-py
+cd C:\ProfDM_Rproject\robstattm-py
 
 # Fast CI loop (no notebooks)
 $env:RPM_SKIP_NOTEBOOKS = "1"

@@ -4,7 +4,7 @@ if sys.platform == "win32" and "R_HOME" not in os.environ:
     os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
     os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
-from robstatm_py._r import r as _r
+from robstattm_py._r import r as _r
 ro = _r()
 
 print("--- Step 1: create matrix in pure R ---")

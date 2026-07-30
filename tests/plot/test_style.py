@@ -5,7 +5,7 @@ import pytest
 
 pytest.importorskip("matplotlib")
 
-from robstatm_py.plot import PlotStyle, get_theme, set_theme, theme_names  # noqa: E402
+from robstattm_py.plot import PlotStyle, get_theme, set_theme, theme_names  # noqa: E402
 
 
 def test_default_theme_is_publication():

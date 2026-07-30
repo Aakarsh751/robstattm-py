@@ -5,9 +5,9 @@ name: CI
 # Slow end-to-end notebook execution is skipped here (RPM_SKIP_NOTEBOOKS=1);
 # run `python -m pytest tests/` locally for the full set.
 #
-# NOTE: this workflow assumes `robstatm-py/` is the repository root. If the
+# NOTE: this workflow assumes `robstattm-py/` is the repository root. If the
 # folder lives inside a larger monorepo, move this file to the repo-root
-# `.github/workflows/` and add `defaults.run.working-directory: robstatm-py`
+# `.github/workflows/` and add `defaults.run.working-directory: robstattm-py`
 # (plus a matching `working-directory` on the checkout-relative steps).
 
 on:

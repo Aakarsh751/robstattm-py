@@ -2,7 +2,7 @@
 
 Reproductions of the RobStatTM textbook examples (Maronna, Martin, Yohai &
 Salibián-Barrera, *Robust Statistics: Theory and Methods*, 2019) and the
-package's example scripts, all built on `robstatm_py`.
+package's example scripts, all built on `robstattm_py`.
 
 Every notebook here is executed end-to-end in CI by
 [`tests/test_notebooks.py`](../tests/test_notebooks.py) (policy **D-019**); a
@@ -70,7 +70,7 @@ scripts are reproduced from Python. The eight that previously blocked on externa
 packages — `autism.R` (`robustvarComp`), `epilepsy.R` (`robustbase::glmrob` +
 `robcbi::cubinf`), and the six Chapter-8 time-series scripts (`resex.R`, `ar3.R`,
 `identAR2.R`, `identMA1.R`, `MA1-AO.R`, `ar1.R`, all `robustarima`) — are now
-covered by the optional `robstatm_py.external` wrappers and the galleries above.
+covered by the optional `robstattm_py.external` wrappers and the galleries above.
 This **closes B-007** (the Chapter-8 "inline time-series code" worry was moot —
 `arima.rob` is a real exported entry point in `robustarima`).
 

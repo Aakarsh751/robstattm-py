@@ -44,13 +44,13 @@ from pathlib import Path
 
 import os
 
-ROOT = Path(__file__).resolve().parents[2]  # the robstatm-py package folder
+ROOT = Path(__file__).resolve().parents[2]  # the robstattm-py package folder
 OUT_DIR = ROOT / "docs" / "_rd_json"
 
 # The upstream RobStatTM R sources (man/*.Rd) are *legacy context* and live at
 # the outer repo root, not inside the package folder. Resolve them via an env
 # override first, then the conventional sibling location next to the package.
-_MAN_ENV = os.environ.get("ROBSTATM_MAN_DIR")
+_MAN_ENV = os.environ.get("ROBSTATTM_MAN_DIR")
 if _MAN_ENV:
     MAN_DIR = Path(_MAN_ENV)
 else:

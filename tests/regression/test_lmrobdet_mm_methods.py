@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -25,7 +25,7 @@ class TestMineralS3Methods:
 
     @pytest.fixture(scope="class")
     def r_fit(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r(
@@ -143,7 +143,7 @@ class TestCustomControlS3Methods:
 
     @pytest.fixture(scope="class")
     def r_fit(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r(

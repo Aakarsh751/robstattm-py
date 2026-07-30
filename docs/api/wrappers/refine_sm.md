@@ -1,6 +1,6 @@
 # `refine_sm`
 
-> **R original:** `refine.sm` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; IRWLS iterations for S- or M-estimators
+> **R original:** `refine.sm` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; IRWLS iterations for S- or M-estimators
 
 This function performs iterative improvements for S- or
 M-estimators.
@@ -17,7 +17,7 @@ to a full computation. This as internal function.
 ## Usage
 
 ```python
-from robstatm_py import refine_sm
+from robstattm_py import refine_sm
 
 def refine_sm(
               X: 'np.ndarray',
@@ -90,7 +90,7 @@ The `RefineSMResult` object also provides these methods:
 ```python
 import numpy as np
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Build a tiny linear dataset: y = 1 + 2*x + noise.
 rng = np.random.default_rng(0)

@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_breslow, needs_robcbi
 
 _R_PREP = """
@@ -68,7 +68,7 @@ class TestEpilepsyCUBIF:
         # epilepsy.R recomputes deviance residuals from yy & fitted. Compute the
         # formula *in R* using the wrapper's fitted values pushed back, so the
         # comparison stays within one math library (strict tier).
-        from robstatm_py._r import r as _r
+        from robstattm_py._r import r as _r
 
         _r().globalenv["rpm_py_fitted"] = setup.fitted_values
         try:

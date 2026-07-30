@@ -10,12 +10,12 @@ This document is the **ergonomics specification** that complements `docs/archite
 
 ```python
 # 1. Install
-$ pip install robstatm-py
-$ python -c "import robstatm_py; robstatm_py.check_setup()"
+$ pip install robstattm-py
+$ python -c "import robstattm_py; robstattm_py.check_setup()"
 # ✓ R 4.5.1   ✓ RobStatTM 1.0.12   ✓ pyinit 1.1.1   ✓ robustbase 0.99-4   ✓ rrcov 1.7-6
 
 # 2. Use
->>> import robstatm_py as rpm
+>>> import robstattm_py as rpm
 >>> data = rpm.datasets.mineral()           # pandas DataFrame, columns match R
 >>> fit  = rpm.lmrobdet_mm("zinc ~ copper", data=data)
 >>> fit                                      # __repr__: short summary
@@ -47,7 +47,7 @@ If any line in the story above is **not** obvious to a working Python data scien
 ### 2.1 Flat re-exports — the user's default import
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 # everything below is available as rpm.<name>:
 
 rpm.loc_scale_m       rpm.m_scale
@@ -74,9 +74,9 @@ rpm.benchmarks        # only loaded when needed; keeps top-level light
 ### 2.2 Submodule access — for users who prefer grouping
 
 ```python
-from robstatm_py.regression import lmrobdet_mm, step_lmrobdet
-from robstatm_py.covariance import cov_rob_mm, cov_rob_rocke
-from robstatm_py.pca import pca_rob_s
+from robstattm_py.regression import lmrobdet_mm, step_lmrobdet
+from robstattm_py.covariance import cov_rob_mm, cov_rob_rocke
+from robstattm_py.pca import pca_rob_s
 ```
 
 Both forms work; both are documented; tutorial notebooks pick whichever is clearer in context.
@@ -86,7 +86,7 @@ Both forms work; both are documented; tutorial notebooks pick whichever is clear
 A Python user transcribing the textbook may want to keep the R name verbatim. We provide aliases gated behind a single import:
 
 ```python
-from robstatm_py.compat_r import *
+from robstattm_py.compat_r import *
 # Now: lmrobdetMM, lmrobdet.control (via a Python-legal alias),
 # scaleM, locScaleM, MLocDis, covRobMM, MMultiSHR, ...
 
@@ -145,13 +145,13 @@ This is documented in every wrapper's `Notes` section.
 
 Each loader returns a **pandas DataFrame** with R column names preserved (dotted R names → underscored). The docstring is **lifted verbatim** from the corresponding `.Rd` man page (parsed once at build time, stored as a Python string).
 
-Implementation: `robstatm_py.datasets.mineral()` calls `R('data(mineral, package="RobStatTM"); mineral')` and converts. Cached after first call.
+Implementation: `robstattm_py.datasets.mineral()` calls `R('data(mineral, package="RobStatTM"); mineral')` and converts. Cached after first call.
 
 ---
 
 ## 5. The R → Python name table (canonical)
 
-A single dictionary in `robstatm_py._namemap` and a **rendered HTML page in the docs** so users can search.
+A single dictionary in `robstattm_py._namemap` and a **rendered HTML page in the docs** so users can search.
 
 | R name | Python name | Module | Notes |
 |--------|-------------|--------|-------|
@@ -253,14 +253,14 @@ These are **enforced by quality gate** — every wrapper PR ships with the appro
 
 Two principles:
 
-1. **Errors must tell the user what to do.** "RobStatTM not installed" is bad; "RobStatTM not installed. Run `install.packages('RobStatTM')` in R, or `robstatm_py.check_setup()` for details" is good.
+1. **Errors must tell the user what to do.** "RobStatTM not installed" is bad; "RobStatTM not installed. Run `install.packages('RobStatTM')` in R, or `robstattm_py.check_setup()` for details" is good.
 2. **R tracebacks are surfaced, not hidden.** When R raises, the Python exception carries the R traceback as `.r_traceback` so the user can debug the R call.
 
 ```python
 >>> rpm.lmrobdet_mm("zinc ~ copper", data=df_with_nan)
 Traceback (most recent call last):
   ...
-robstatm_py.RobStatTMRError: lmrobdetMM failed: missing values not allowed with na.action='fail'.
+robstattm_py.RobStatTMRError: lmrobdetMM failed: missing values not allowed with na.action='fail'.
 
 R traceback (from .r_traceback):
   Error in na.fail.default(...) : missing values in object
@@ -280,7 +280,7 @@ emission and re-raises each message through Python's `warnings` machinery as a
 
 ```python
 >>> import warnings
->>> from robstatm_py import RobStatTMWarning, last_r_warnings
+>>> from robstattm_py import RobStatTMWarning, last_r_warnings
 >>> with warnings.catch_warnings(record=True) as caught:
 ...     warnings.simplefilter("always")
 ...     fit = rpm.lmrob_m("y ~ x", data=hard_df, max_it=2)
@@ -306,7 +306,7 @@ explicitly with the `capture_r_warnings()` context manager.
 RobStatTM-Py setup check
 ========================
 Python:                3.11.6
-robstatm_py:           0.1.0
+robstattm_py:           0.1.0
 rpy2:                  3.6.7                ✓
 R:                     4.5.1 (2025-05-15)   ✓  R_HOME=/usr/local/Cellar/r/4.5.1
 RobStatTM:             1.0.12               ✓
@@ -378,7 +378,7 @@ Each notebook ends with the reproducibility cell (versions of everything) — se
 ## 14. Open questions
 
 1. Should `rpm.lmrobdet_mm` accept an existing rpy2 `Formula` object directly? Recommendation: **yes**, for power users — type-check `isinstance(formula, ro.Formula)`.
-2. Should we ship a `%load_ext robstatm_py` Jupyter extension that pre-warms R? Recommendation: **defer** to v0.2.0.
+2. Should we ship a `%load_ext robstattm_py` Jupyter extension that pre-warms R? Recommendation: **defer** to v0.2.0.
 3. Should `__repr__` truncate long coefficient vectors? Recommendation: **yes** — show first 5, last 5, with "…" middle marker (numpy `printoptions`-aware).
 4. Should `to_pandas()` be standard or `to_polars()` also? Recommendation: pandas standard; polars in v0.2.0.
 

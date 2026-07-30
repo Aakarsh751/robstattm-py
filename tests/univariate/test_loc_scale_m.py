@@ -1,10 +1,10 @@
-"""Strict-tier tests for robstatm_py.loc_scale_m vs direct R."""
+"""Strict-tier tests for robstattm_py.loc_scale_m vs direct R."""
 from __future__ import annotations
 
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import (
     assert_scalar_equal,
     needs_r,
@@ -71,7 +71,7 @@ class TestStrictTierVsR:
         py = rpm.loc_scale_m(GOLDEN_X, psi=psi, eff=eff)
 
         # Direct R call with the same input
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.globalenv["x_test"] = GOLDEN_X
@@ -90,7 +90,7 @@ class TestStrictTierVsR:
         validation lets it through AND the result is strict-tier identical to R.
         """
         py = rpm.loc_scale_m(GOLDEN_X, psi=psi, eff=0.99)
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.globalenv["x_test"] = GOLDEN_X
@@ -112,7 +112,7 @@ class TestStrictTierVsR:
 @needs_r
 class TestEdgeCases:
     def test_clean_gaussian(self, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         x = np.linspace(-2, 2, 51)  # deterministic, no randomness
@@ -123,7 +123,7 @@ class TestEdgeCases:
         assert_scalar_equal(py.disper, R("locScaleM(x_clean)$disper"), where="clean disper")
 
     def test_heavy_contamination(self, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         # Sample with ~40% outliers; tests robustness regime

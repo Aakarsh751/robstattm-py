@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 sys.path.insert(0, os.path.dirname(__file__))
 from _synth import make_binary_xy, make_cov_data, push_to_r, reval, rm_r  # noqa: E402

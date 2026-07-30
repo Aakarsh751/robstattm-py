@@ -32,7 +32,7 @@ Each dataset reproduces an example from Maronna et al. (2019). Loaded as pandas 
 (Exact n / p filled in at implementation time by `str(data)` on each dataset.)
 
 ## 3. Python loader design
-Single module `robstatm_py.datasets` with one function per dataset:
+Single module `robstattm_py.datasets` with one function per dataset:
 
 ```python
 def mineral() -> pd.DataFrame: ...
@@ -57,9 +57,9 @@ Each function:
 Also provides:
 
 ```python
-robstatm_py.datasets.list()           # -> list[str] of all 20 names
-robstatm_py.datasets.info(name)       # -> short description
-robstatm_py.datasets.help(name)       # -> full docstring
+robstattm_py.datasets.list()           # -> list[str] of all 20 names
+robstattm_py.datasets.info(name)       # -> short description
+robstattm_py.datasets.help(name)       # -> full docstring
 ```
 
 ## 4. Dependencies

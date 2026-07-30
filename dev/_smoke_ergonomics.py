@@ -3,7 +3,7 @@ if sys.platform == "win32" and "R_HOME" not in os.environ:
     os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
     os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 df = rpm.datasets.mineral()
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=df)

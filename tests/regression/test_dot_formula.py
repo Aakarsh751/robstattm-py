@@ -18,7 +18,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 
 @pytest.fixture(scope="module")

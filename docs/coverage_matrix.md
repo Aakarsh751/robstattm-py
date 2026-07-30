@@ -6,7 +6,7 @@ Generated 2026-06-11. Source of truth for "what's been ported".
 The R column is the **exact** R-side name from the `RobStatTM` `NAMESPACE`
 `export()` list (**47** callables, verified against
 `robstattm/RobStatTM-master/NAMESPACE`). The Python column is what you type
-after `import robstatm_py as rpm`. Note: `pyinit` lives in its own CRAN package
+after `import robstattm_py as rpm`. Note: `pyinit` lives in its own CRAN package
 (a RobStatTM *dependency*), not in RobStatTM's NAMESPACE — it is wrapped for
 convenience and reported separately by `check_setup()`.
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -56,7 +56,7 @@ class TestInvtr2VsR_Vector:
         cc_arr = getattr(rpm.psi, family)(0.95)  # 95% efficiency
         py = rpm.invtr2(rr2, family, cc_arr)
         # Push the same cc into R
-        from robstatm_py._r import r as _r
+        from robstattm_py._r import r as _r
         _r().globalenv["rpm_cc_test"] = np.asarray(cc_arr, dtype=float)
         r_val = float(R(f"INVTR2({rr2}, '{family}', rpm_cc_test)")[0])
         assert py == r_val
@@ -71,7 +71,7 @@ class TestRFPEMethod:
 
     @pytest.fixture(scope="class")
     def r_ctx(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
         ro = r()
         ro.r(
             "library(RobStatTM); data(mineral); "

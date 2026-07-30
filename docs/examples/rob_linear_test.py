@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 df = rpm.datasets.stackloss()
 

@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_r
 
 
@@ -28,7 +28,7 @@ class TestValidation:
 class TestMineralVsR:
     @pytest.fixture(autouse=True)
     def _r_setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(mineral); "

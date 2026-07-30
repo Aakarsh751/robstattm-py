@@ -1,6 +1,6 @@
 # `lmrobdet_control`
 
-> **R original:** `lmrobdet.control` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Tuning parameters for lmrobdetMM and lmrobdetDCML
+> **R original:** `lmrobdet.control` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Tuning parameters for lmrobdetMM and lmrobdetDCML
 
 This function sets tuning parameters for the MM estimator implemented in `lmrobdetMM` and
 the Distance Constrained Maximum Likelihood regression estimators
@@ -15,7 +15,7 @@ corresponding weight function non-increasing.
 ## Usage
 
 ```python
-from robstatm_py import lmrobdet_control
+from robstattm_py import lmrobdet_control
 
 def lmrobdet_control(**kwargs: 'Any'):
 ```
@@ -80,7 +80,7 @@ and "Optimal Bias Robust Regression Psi and Rho".
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 

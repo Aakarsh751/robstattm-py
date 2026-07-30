@@ -22,7 +22,7 @@ def code(text: str) -> None:
 
 
 md(r"""
-# Native plotting suite — demo (`robstatm_py.plot`)
+# Native plotting suite — demo (`robstattm_py.plot`)
 
 This notebook tours the **native Python plotting suite** added in decision D-023
 and compares it with the original **Path A** (R graphics through `rpy2`).
@@ -48,13 +48,13 @@ if sys.platform == "win32" and "R_HOME" not in os.environ:
 import matplotlib.pyplot as plt
 import numpy as np
 
-import robstatm_py as rpm
-from robstatm_py import plot
-from robstatm_py.plotting import show_png   # Path-A PNG display helper
+import robstattm_py as rpm
+from robstattm_py import plot
+from robstattm_py.plotting import show_png   # Path-A PNG display helper
 
 FIG_DIR = pathlib.Path("figures"); FIG_DIR.mkdir(exist_ok=True)
 plot.set_theme("publication")
-print("robstatm_py", rpm.__version__)
+print("robstattm_py", rpm.__version__)
 """)
 
 md("""
@@ -178,7 +178,7 @@ md("## 7. Reproducibility")
 
 code(r"""
 import matplotlib, numpy, pandas
-print("robstatm_py", rpm.__version__)
+print("robstattm_py", rpm.__version__)
 print("numpy", numpy.__version__, "| pandas", pandas.__version__,
       "| matplotlib", matplotlib.__version__)
 """)

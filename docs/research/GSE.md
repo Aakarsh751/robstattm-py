@@ -1,7 +1,7 @@
 # GSE (external R package — IMPLEMENTED 2026-06-13)
 
 > **Status (2026-06-13):** implemented against installed GSE **4.2-4** as
-> `rpm.gse` in `robstatm_py.external`. The R object is **S4** (not the S3 list
+> `rpm.gse` in `robstattm_py.external`. The R object is **S4** (not the S3 list
 > this file first guessed). 100% strict-tier vs R (`tests/external/test_gse.py`).
 > See "Actual implementation" at the bottom.
 
@@ -56,7 +56,7 @@ Cases 1, 2, 6 (missing values is the **whole point** of this wrapper), 7, 10. Bu
 
 ## Actual implementation (GSE 4.2-4, 2026-06-13)
 
-**Module:** `robstatm_py.external.gse` — exposed as `rpm.gse`.
+**Module:** `robstattm_py.external.gse` — exposed as `rpm.gse`.
 
 `GSE::GSE(x, tol=1e-4, maxiter=150, method="bisquare", ...)` returns an **S4**
 object (class `GSE`) with slots

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_r
 
 
@@ -20,7 +20,7 @@ class TestStackLossVsR:
 
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(stackloss); "

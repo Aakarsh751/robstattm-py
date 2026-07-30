@@ -1,6 +1,6 @@
 # `pca_rob_s`
 
-> **R original:** `pcaRobS` &nbsp;·&nbsp; **Python module:** `robstatm_py.pca` &nbsp;·&nbsp; Robust principal components
+> **R original:** `pcaRobS` &nbsp;·&nbsp; **Python module:** `robstattm_py.pca` &nbsp;·&nbsp; Robust principal components
 
 This function computes robust principal components based on the minimization of
 the "residual" M-scale.
@@ -8,7 +8,7 @@ the "residual" M-scale.
 ## Usage
 
 ```python
-from robstatm_py import pca_rob_s
+from robstattm_py import pca_rob_s
 
 def pca_rob_s(
               X,
@@ -69,7 +69,7 @@ The `PcaRobSResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 bus = rpm.datasets.bus()         # 218 buses, 18 shape features
 

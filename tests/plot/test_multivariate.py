@@ -12,7 +12,7 @@ matplotlib.use("Agg", force=True)
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.axes import Axes  # noqa: E402
 
-from robstatm_py import plot  # noqa: E402
+from robstattm_py import plot  # noqa: E402
 
 
 def test_distance_distance_returns_axes(fake_cov_pair):
@@ -95,7 +95,7 @@ def test_distance_distance_needs_distances():
 
 
 def test_multivariate_does_not_start_r(fake_cov_pair, fake_pca, monkeypatch):
-    import robstatm_py._r as _r
+    import robstattm_py._r as _r
 
     def _boom(*a, **k):  # pragma: no cover
         raise AssertionError("multivariate plot called the R bridge")

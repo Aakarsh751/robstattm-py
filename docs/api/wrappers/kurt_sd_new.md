@@ -1,6 +1,6 @@
 # `kurt_sd_new`
 
-> **R original:** `initPP` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; Robust multivariate location and scatter estimators
+> **R original:** `initPP` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; Robust multivariate location and scatter estimators
 
 This function computes robust multivariate location and scatter
 estimators using both random and deterministic starting points.
@@ -11,7 +11,7 @@ using both Pen~a-Prieto and random candidates.
 ## Usage
 
 ```python
-from robstatm_py import kurt_sd_new
+from robstattm_py import kurt_sd_new
 
 def kurt_sd_new(X, muldirand: 'int' = 20, muldifix: 'int' = 10, dirmin: 'int' = 1000):
 ```
@@ -58,7 +58,7 @@ The `KurtSDResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 
 def test_load_coleman_from_robustbase():

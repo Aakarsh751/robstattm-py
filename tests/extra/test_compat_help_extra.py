@@ -9,8 +9,8 @@ import importlib
 
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import compat_r
+import robstattm_py as rpm
+from robstattm_py import compat_r
 
 
 class TestCompatCompleteness:
@@ -20,10 +20,10 @@ class TestCompatCompleteness:
             assert getattr(compat_r, name) is not None
 
     def test_import_star_exposes_all(self):
-        """`from robstatm_py.compat_r import *` must bring every __all__ name —
+        """`from robstattm_py.compat_r import *` must bring every __all__ name —
         a name defined but absent from __all__ would silently not be exported."""
         ns: dict = {}
-        exec("from robstatm_py.compat_r import *", ns)
+        exec("from robstattm_py.compat_r import *", ns)
         for name in compat_r.__all__:
             assert name in ns, f"{name} not exported by `import *`"
 

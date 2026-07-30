@@ -1,6 +1,6 @@
 # `cov_rob_rocke`
 
-> **R original:** `covRobRocke` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; Rocke's robust multivariate location and scatter estimator
+> **R original:** `covRobRocke` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; Rocke's robust multivariate location and scatter estimator
 
 This function computes Rocke's robust estimator for multivariate location and scatter.
 
@@ -9,7 +9,7 @@ This function computes Rocke's robust estimator for multivariate location and sc
 ## Usage
 
 ```python
-from robstatm_py import cov_rob_rocke
+from robstattm_py import cov_rob_rocke
 
 def cov_rob_rocke(
                   X,
@@ -80,7 +80,7 @@ The `CovRobRockeResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 

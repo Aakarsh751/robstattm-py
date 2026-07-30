@@ -5,7 +5,7 @@ gallery is shipped as static PNGs under ``docs/_static/plots/``. This script
 regenerates them; it needs a working R bridge (for the live fits and the Path-A
 ``backend="r"`` panels) and the ``[plots]`` extra.
 
-Run from the package root (``robstatm-py/``)::
+Run from the package root (``robstattm-py/``)::
 
     # Windows (PowerShell) — set the R env first:
     $env:R_HOME = "C:\\Program Files\\R\\R-4.5.2"
@@ -25,8 +25,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-import robstatm_py as rpm  # noqa: E402
-from robstatm_py import plot  # noqa: E402
+import robstattm_py as rpm  # noqa: E402
+from robstattm_py import plot  # noqa: E402
 
 OUT = pathlib.Path(__file__).resolve().parents[1] / "_static" / "plots"
 OUT.mkdir(parents=True, exist_ok=True)

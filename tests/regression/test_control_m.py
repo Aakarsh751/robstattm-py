@@ -6,9 +6,9 @@ from dataclasses import fields
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py._r import r as _r
-from robstatm_py.regression.control_m import _R_KEY_MAP, _control_m_to_r
+import robstattm_py as rpm
+from robstattm_py._r import r as _r
+from robstattm_py.regression.control_m import _R_KEY_MAP, _control_m_to_r
 
 try:
     _r()
@@ -91,7 +91,7 @@ class TestLmrobMControlVsRFormals:
 
     def test_nondefault_keys_roundtrip_into_r(self):
         """Non-headline keys must reach R under the right argument names."""
-        from robstatm_py._r import rx2
+        from robstattm_py._r import rx2
 
         ctrl = rpm.lmrobm_control(
             efficiency=0.85, max_it=42, rel_tol=1e-8,

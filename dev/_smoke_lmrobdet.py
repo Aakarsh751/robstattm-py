@@ -1,7 +1,7 @@
 """Smoke check: lmrobdet_mm on mineral vs direct R."""
 import numpy as np
-import robstatm_py as rpm
-from robstatm_py._r import r
+import robstattm_py as rpm
+from robstattm_py._r import r
 
 ro = r()
 ro.r("library(RobStatTM); data(mineral)")

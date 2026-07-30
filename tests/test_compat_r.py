@@ -1,10 +1,10 @@
-"""Tests for ``robstatm_py.compat_r`` — R-name alias layer."""
+"""Tests for ``robstattm_py.compat_r`` — R-name alias layer."""
 from __future__ import annotations
 
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import compat_r
+import robstattm_py as rpm
+from robstattm_py import compat_r
 
 
 class TestRNameAliases:
@@ -59,7 +59,7 @@ class TestDataHelper:
 
 
 def test_compat_r_dir_is_clean():
-    """``from robstatm_py.compat_r import *`` should expose the R names
+    """``from robstattm_py.compat_r import *`` should expose the R names
     but not pollute with private symbols."""
     public = set(compat_r.__all__)
     # No private symbols leaked

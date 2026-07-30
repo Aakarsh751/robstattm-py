@@ -10,7 +10,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 U = np.array([-3.0, -1.5, -0.3, 0.0, 0.3, 1.5, 3.0])
@@ -85,7 +85,7 @@ class TestInvtr2:
         assert py == r_val
 
     def test_opt_vector_parity(self, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         cc = np.asarray(rpm.psi.opt(0.95), dtype=float)
         ro = r()

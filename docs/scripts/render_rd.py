@@ -4,7 +4,7 @@ Pilot implementation of M2 from ``docs/documentation_plan.md``.
 
 For each requested wrapper:
   1. Read ``docs/_rd_json/<RName>.json`` (produced by extract_rd.py).
-  2. Look up the Python wrapper in ``robstatm_py._help._R_TO_PY``.
+  2. Look up the Python wrapper in ``robstattm_py._help._R_TO_PY``.
   3. Introspect the Python callable (signature + result dataclass fields).
   4. Build the R→Python argument map (with a small "Notes" column).
   5. Render through ``docs/templates/wrapper_page.md.jinja``.
@@ -40,7 +40,7 @@ TEMPLATE_DIR = ROOT / "docs" / "templates"
 EXAMPLES_DIR = ROOT / "docs" / "examples"
 
 sys.path.insert(0, str(ROOT / "src"))
-from robstatm_py._help import _R_TO_PY  # noqa: E402
+from robstattm_py._help import _R_TO_PY  # noqa: E402
 
 PILOT = ["lmrobdetMM", "covRobMM", "prcompRob", "BYlogreg", "locScaleM"]
 
@@ -401,7 +401,7 @@ def _python_example(rec: dict, py_name: str) -> str:
         s,
     )
     # Prepend an import; hand-authored overrides carry their own.
-    return "import robstatm_py as rpm\n\n" + s.strip()
+    return "import robstattm_py as rpm\n\n" + s.strip()
 
 
 # ---------------------------------------------------------------- main
@@ -411,10 +411,10 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
     if py_name is None:
         raise KeyError(f"no Python mapping for R name {r_name!r}")
 
-    import robstatm_py as rpm
+    import robstattm_py as rpm
     fn = getattr(rpm, py_name, None)
     if fn is None:
-        raise AttributeError(f"robstatm_py has no attribute {py_name!r}")
+        raise AttributeError(f"robstattm_py has no attribute {py_name!r}")
 
     rd_path = RD_JSON / f"{r_name}.json"
     if not rd_path.exists():
@@ -435,9 +435,9 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
 
     result_cls = _result_dataclass(fn)
     py_module = (
-        fn.__module__.replace("robstatm_py.", "").rsplit(".", 1)[0]
-        if "." in fn.__module__.replace("robstatm_py.", "")
-        else fn.__module__.replace("robstatm_py.", "")
+        fn.__module__.replace("robstattm_py.", "").rsplit(".", 1)[0]
+        if "." in fn.__module__.replace("robstattm_py.", "")
+        else fn.__module__.replace("robstattm_py.", "")
     )
 
     # Build the Python-grounded Returns table.  The R man page lists the

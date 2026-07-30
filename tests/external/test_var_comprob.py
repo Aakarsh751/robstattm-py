@@ -12,8 +12,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_robustvarcomp, needs_wwgbook
 
 _FIXED = (

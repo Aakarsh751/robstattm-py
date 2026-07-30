@@ -1,6 +1,6 @@
 # `wby_logreg`
 
-> **R original:** `logregWBY` &nbsp;·&nbsp; **Python module:** `robstatm_py.glm` &nbsp;·&nbsp; Bianco and Yohai estimator for logistic regression
+> **R original:** `logregWBY` &nbsp;·&nbsp; **Python module:** `robstattm_py.glm` &nbsp;·&nbsp; Bianco and Yohai estimator for logistic regression
 
 This function computes the weighted M-estimator of Bianco and Yohai in logistic regression.
 By default, an intercept term is included and p parameters are estimated. Modified by
@@ -13,7 +13,7 @@ Logistic Regression"
 ## Usage
 
 ```python
-from robstatm_py import wby_logreg
+from robstattm_py import wby_logreg
 
 def wby_logreg(
                X,
@@ -80,7 +80,7 @@ The `LogregResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Skin dataset: 39 obs, 3 cols (3rd col is the binary vasoconst response).
 skin = rpm.datasets.load("RobStatTM", "skin")

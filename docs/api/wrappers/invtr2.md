@@ -1,6 +1,6 @@
 # `invtr2`
 
-> **R original:** `INVTR2` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Robust R^2 coefficient of determination
+> **R original:** `INVTR2` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Robust R^2 coefficient of determination
 
 This function computes a robust version of the R^2 coefficient of determination.
 It is used internally by ``lmrobdetMM``,
@@ -13,7 +13,7 @@ and not meant to be used directly.
 ## Usage
 
 ```python
-from robstatm_py import invtr2
+from robstattm_py import invtr2
 
 def invtr2(rr2: 'float', family: 'str', cc: 'float | Sequence[float] | np.ndarray'):
 ```
@@ -39,7 +39,7 @@ Returns `float`.
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # invtr2 is the inverse transform used to turn a target robust R-squared into
 # the corresponding value on the M-scale objective. The tuning argument `cc`

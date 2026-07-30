@@ -114,7 +114,7 @@ def fake_reg_with_data():
 @pytest.fixture(autouse=True)
 def _reset_theme():
     """Keep the global theme isolated between tests."""
-    from robstatm_py.plot import _style
+    from robstattm_py.plot import _style
 
     saved = _style.get_theme()
     yield

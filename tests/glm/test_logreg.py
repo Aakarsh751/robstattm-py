@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -41,7 +41,7 @@ class TestSkinDatasetVsR:
 
     @pytest.fixture(scope="class")
     def r_setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r(

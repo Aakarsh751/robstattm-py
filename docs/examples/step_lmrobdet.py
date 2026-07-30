@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import rpy2.robjects as ro
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # step_lmrobdet runs robust *backward* model selection, dropping terms by their
 # Robust Final Prediction Error (RFPE). This mirrors the R man-page example: a

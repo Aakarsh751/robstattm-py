@@ -24,7 +24,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from robstatm_py._r import r
+from robstattm_py._r import r
 
 
 # ---------------------------------------------------------------------------

@@ -5,8 +5,8 @@ NumPy / pandas / Python objects. Click a name for the full page: description,
 parameters, return fields, result-object methods, and a runnable example.
 
 > Python names are `snake_case` of the R names. Each wrapper is **also**
-> available under its original R name via `robstatm_py.compat_r`
-> (e.g. `from robstatm_py.compat_r import lmrobdetMM`).
+> available under its original R name via `robstattm_py.compat_r`
+> (e.g. `from robstattm_py.compat_r import lmrobdetMM`).
 
 ## Univariate location & scale
 
@@ -74,8 +74,8 @@ install them separately. See the [external estimators guide](../guides/external.
 
 ## See also
 
-- **Datasets** — [`robstatm_py.datasets`](../guides/datasets.md)
-- **ψ-loss families** — [`robstatm_py.psi`](../guides/psi-families.md)
+- **Datasets** — [`robstattm_py.datasets`](../guides/datasets.md)
+- **ψ-loss families** — [`robstattm_py.psi`](../guides/psi-families.md)
 - **External estimators** — [`pense`, `gse`, `tsgs`](../guides/external.md)
 - **Setup & utilities** — [`check_setup`, `set_seed`, …](../guides/utilities.md)
 - **Result-object methods** — [`.summary()`, `.predict()`, …](../guides/result-methods.md)

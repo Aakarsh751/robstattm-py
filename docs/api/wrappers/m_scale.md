@@ -1,6 +1,6 @@
 # `m_scale`
 
-> **R original:** `scaleM` &nbsp;·&nbsp; **Python module:** `robstatm_py.univariate` &nbsp;·&nbsp; M-scale estimator
+> **R original:** `scaleM` &nbsp;·&nbsp; **Python module:** `robstattm_py.univariate` &nbsp;·&nbsp; M-scale estimator
 
 This function computes an M-scale, which is a robust
 scale (spread) estimator.
@@ -24,7 +24,7 @@ cycles through the equation \code{s_{k+1}^2 = s_k^2 * mean(rho(r/s_k, cc)) / del
 ## Usage
 
 ```python
-from robstatm_py import m_scale
+from robstattm_py import m_scale
 
 def m_scale(
             u,
@@ -60,7 +60,7 @@ Returns `float`.
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Concentration of zinc in 53 mineral samples (some are gross outliers).
 zinc = rpm.datasets.mineral()["zinc"].to_numpy()

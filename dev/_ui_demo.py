@@ -17,8 +17,8 @@ def banner(s):
     print("\n" + "=" * 78); print(s); print("=" * 78)
 
 
-banner("1.  import robstatm_py as rpm")
-import robstatm_py as rpm
+banner("1.  import robstattm_py as rpm")
+import robstattm_py as rpm
 print(f"   version  = {rpm.__version__}")
 print(f"   modules  = datasets, plotting, psi")
 print(f"   wrappers = {len([n for n in dir(rpm) if not n.startswith('_')])} symbols on the package root")
@@ -93,7 +93,7 @@ print(f"   converged     : {logfit.converged}")
 
 
 banner("12. Plotting (Path A — R-graphics via rpy2)")
-from robstatm_py.plotting import r_plot
+from robstattm_py.plotting import r_plot
 path = r_plot("plot(zinc ~ copper, data=mineral, pch=19, main='Mineral')",
               path="tests/_ui_demo.png", dpi=80)
 print(f"   r_plot returned: {path}")
@@ -111,7 +111,7 @@ print(f"     summary scale = {back.summary().scale:.6f}")
 
 banner("14. R-name aliases (compat layer status)")
 try:
-    from robstatm_py import compat_r
+    from robstattm_py import compat_r
     print("   compat_r module: AVAILABLE")
 except ImportError:
     print("   compat_r module: NOT YET IMPLEMENTED (planned per UI §2.3)")

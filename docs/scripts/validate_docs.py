@@ -2,7 +2,7 @@
 
 For each MyST page in ``docs/api/wrappers/``, check three claims:
 
-1. **Import** — the line ``from robstatm_py import <py_name>`` works.
+1. **Import** — the line ``from robstattm_py import <py_name>`` works.
 2. **Example** — the Python code block under "Examples" runs to completion
    without raising.
 3. **Returns** — every R field listed in the "Returns" table is reachable
@@ -60,7 +60,7 @@ def _extract_python_block(md_text: str) -> str | None:
 
 
 def _extract_import_line(md_text: str) -> str | None:
-    m = re.search(r"^from robstatm_py import (\S+)$", md_text, re.MULTILINE)
+    m = re.search(r"^from robstattm_py import (\S+)$", md_text, re.MULTILINE)
     return m.group(1) if m else None
 
 
@@ -84,11 +84,11 @@ def _validate_page(md_path: Path) -> dict:
     # ---- 1. Import claim ----
     py_name = _extract_import_line(text)
     if py_name is None:
-        result["messages"].append("no `from robstatm_py import` line found")
+        result["messages"].append("no `from robstattm_py import` line found")
         result["import_ok"] = False
     else:
         try:
-            import robstatm_py as rpm
+            import robstattm_py as rpm
             fn = getattr(rpm, py_name)
             result["import_ok"] = True
             result["py_name"] = py_name
@@ -125,7 +125,7 @@ def _validate_page(md_path: Path) -> dict:
         data = _json.loads(cand.read_text(encoding="utf-8"))
         py_target = data.get("name", "").replace(".", "_")
         # Re-derive py_name from the R↔Python map
-        from robstatm_py._help import _R_TO_PY
+        from robstattm_py._help import _R_TO_PY
         all_r_names = [data.get("name")] + list(data.get("aliases", []))
         for r in all_r_names:
             if _R_TO_PY.get(r) == py_name:

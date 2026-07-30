@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "robstatm-py"
+name = "robstattm-py"
 version = "0.0.1.dev0"
 description = "Python wrappers for the RobStatTM robust-statistics R package"
 readme = "README.md"
@@ -64,15 +64,17 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Aakarsh751/robstattm-pyport-AG-prop"
-Issues = "https://github.com/Aakarsh751/robstattm-pyport-AG-prop/issues"
+Homepage = "https://github.com/Aakarsh751/robstattm-py"
+Documentation = "https://aakarsh751.github.io/robstattm-py/"
+Source = "https://github.com/Aakarsh751/robstattm-py"
+Issues = "https://github.com/Aakarsh751/robstattm-py/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["robstatm_py*"]
+include = ["robstattm_py*"]
 
 [tool.setuptools.package-data]
-"robstatm_py" = ["py.typed"]
+"robstattm_py" = ["py.typed"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

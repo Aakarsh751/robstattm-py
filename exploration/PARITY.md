@@ -37,7 +37,7 @@ Authoritative matrix: `docs/coverage_matrix.md`.
 
 **Control object (`lmrobdet.control`)** — all 25 R keys mapped to Python
 snake_case (`max_it`, `refine_s_py`, `mscale_rho_fun`, …). See
-`src/robstatm_py/regression/control.py`.
+`src/robstattm_py/regression/control.py`.
 
 ### Univariate (`loc_scale_m`, `m_scale`)
 
@@ -102,7 +102,7 @@ For strict field-by-field checks on **exposed** attributes, see `tests/`.
 These are exercised in `exploration/`:
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 rpm.set_seed(42)
 

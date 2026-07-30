@@ -5,7 +5,7 @@ if sys.platform == "win32" and "R_HOME" not in os.environ:
     os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
 import numpy as np, pandas as pd
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 
 def banner(s): print("\n=== " + s + " ===")

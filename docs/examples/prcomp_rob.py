@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Bus silhouettes — 218 obs, 18 image-shape features.
 bus = rpm.datasets.bus()

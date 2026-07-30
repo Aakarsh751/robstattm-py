@@ -9,7 +9,7 @@ Verify that R, `rpy2`, and the required R packages are installed and loadable.
 Prints a `READY` / `MISSING` checklist.
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 rpm.check_setup()
 ```
 
@@ -62,8 +62,8 @@ inline, one per warning — no setup required.
 
 ```python
 import warnings
-import robstatm_py as rpm
-from robstatm_py import RobStatTMWarning
+import robstattm_py as rpm
+from robstattm_py import RobStatTMWarning
 
 with warnings.catch_warnings(record=True) as caught:
     warnings.simplefilter("always")
@@ -94,7 +94,7 @@ To scope capture to a specific block (and get the list directly), use the
 `capture_r_warnings()` context manager:
 
 ```python
-from robstatm_py import capture_r_warnings
+from robstattm_py import capture_r_warnings
 
 with capture_r_warnings() as messages:
     fit = rpm.lmrobdet_mm("y ~ x", data=df)
@@ -111,7 +111,7 @@ If you already know RobStatTM's R API, import wrappers under their original
 names:
 
 ```python
-from robstatm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
+from robstattm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
 fit = lmrobdetMM("zinc ~ copper", data=rpm.datasets.mineral())
 ```
 

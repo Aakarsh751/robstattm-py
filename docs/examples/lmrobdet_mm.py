@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Load Coleman's school data — 20 obs of school outcomes vs predictors.
 coleman = rpm.datasets.load("robustbase", "coleman")

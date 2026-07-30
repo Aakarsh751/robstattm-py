@@ -8,7 +8,7 @@
 
 ## 1. Core deliverables (verbatim from proposal §§3, 7, 10, 11)
 
-1. **Pip-installable Python package** `pip install robstatm-py`.
+1. **Pip-installable Python package** `pip install robstattm-py`.
 2. **`rpy2` wrapper layer** exposing the full proposal §4 target function set.
 3. **Bit-for-bit numerical equivalence** with R: every wrapper field-by-field matches a direct R call (the metric is `max_i |y_i^Py − y_i^R| == 0`).
 4. **`pytest` validation suite with ≥ 90% coverage**, field-by-field against R.
@@ -18,7 +18,7 @@
 8. **Plot reproduction**: R-generated diagnostics where possible; otherwise `matplotlib` / `plotnine` recreations that mirror the R originals closely.
 9. **CI/CD on GitHub Actions**: Linux/macOS/Windows × R 4.3/4.4/4.5 matrix.
 10. **PyPI release** (sdist + wheel) plus GitHub direct-install path.
-11. **Installation guide and `robstatm_py.check_setup()` utility** for R-environment validation.
+11. **Installation guide and `robstattm_py.check_setup()` utility** for R-environment validation.
 
 ---
 
@@ -30,7 +30,7 @@
 - Return objects: **Python dataclass (or named dict)** whose fields mirror R return names.
 - Global `set_conversion(default_converter)` at import time to survive Jupyter async boundaries.
 - R dot-to-Python underscore mapping: `lmrobdet.control` ⇔ `lmrobdet_control` (document both aliases in every relevant docstring).
-- **Deferred `importr("RobStatTM")`**: do not start R at `import robstatm_py`; defer until first wrapper call.
+- **Deferred `importr("RobStatTM")`**: do not start R at `import robstattm_py`; defer until first wrapper call.
 
 ---
 
@@ -148,7 +148,7 @@ These are tracked live in `project_memory/blockers.md`.
 
 ## 7. What this document does NOT decide
 
-- Repository name on PyPI (`robstatm-py` is the proposed slug; mentor confirmation pending).
+- Repository name on PyPI (`robstattm-py` is the proposed slug; mentor confirmation pending).
 - License choice between MIT and Apache 2.0 (proposal §12 says "to be confirmed with mentors").
 - Exact dataclass shapes — designed per function in `docs/research/<fn>.md` and consolidated in `docs/architecture.md`.
 - Plot-by-plot R-vs-Python rendering strategy — see `docs/plotting_strategy.md`.

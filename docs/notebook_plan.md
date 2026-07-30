@@ -38,7 +38,7 @@ reproduced in Python.
 
 ## 2. Example-script triage (all 26)
 
-Classified by whether the script's estimators are wrapped in `robstatm_py`.
+Classified by whether the script's estimators are wrapped in `robstattm_py`.
 Verified by grepping each script's actual function calls on 2026-06-13.
 
 ### A. Convertible — uses only wrapped functions (15)

@@ -9,7 +9,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -21,7 +21,7 @@ class TestValidation:
 
 def _push_X(R, X, name: str) -> None:
     """Push a numpy matrix into R's global env under ``name``."""
-    from robstatm_py._r import r as _r
+    from robstattm_py._r import r as _r
 
     _r().globalenv[name] = X
 

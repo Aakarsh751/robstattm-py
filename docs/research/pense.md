@@ -2,7 +2,7 @@
 
 > **Status (2026-06-13):** implemented against the *installed* pense **2.5.2**,
 > whose API differs from the older CRAN docs this file originally described.
-> `rpm.pense` / `rpm.pense_cv` ship in `robstatm_py.external`, 100% strict-tier
+> `rpm.pense` / `rpm.pense_cv` ship in `robstattm_py.external`, 100% strict-tier
 > vs R (`tests/external/test_pense.py`). The "Actual implementation" section at
 > the bottom is authoritative; the older design notes are kept for provenance.
 
@@ -61,7 +61,7 @@ Cases 1–4, 7, 10. Reproduce one published `pense` example (e.g., the package v
 
 ## Actual implementation (pense 2.5.2, 2026-06-13)
 
-**Module:** `robstatm_py.external.pense` — exposed as `rpm.pense`, `rpm.pense_cv`.
+**Module:** `robstattm_py.external.pense` — exposed as `rpm.pense`, `rpm.pense_cv`.
 
 ### `pense(X, y, *, alpha=0.5, nlambda=50, bdp=0.25, intercept=True, standardize=True) -> PenseResult`
 

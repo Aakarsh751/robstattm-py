@@ -15,7 +15,7 @@ these objects carry **methods** that mirror R's S3 generics (`summary`,
 | `_repr_html_()` | `str` | Rich HTML table — renders automatically in Jupyter. |
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 fit.to_dict()        # {'coefficients': array([...]), 'scale': ..., ...}
@@ -69,7 +69,7 @@ print(cov.summary())          # eigenvalues
 
 Regression results expose diagnostic-plot shortcuts. By default they return a
 **matplotlib `Axes`/`Figure`** from the native plotting suite
-([`robstatm_py.plot`](plotting.md)); pass `backend="r"` for the pixel-faithful
+([`robstattm_py.plot`](plotting.md)); pass `backend="r"` for the pixel-faithful
 PNG drawn by R's own graphics device.
 
 | Method | Plot | Native return |

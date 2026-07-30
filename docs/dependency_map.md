@@ -140,12 +140,12 @@ The package itself enforces the minimums at runtime in `check_setup()`; CI verif
 
 This is the language the eventual install guide must convey (drafted here for review):
 
-> `robstatm-py` requires:
+> `robstattm-py` requires:
 > - Python ≥ 3.10
 > - R ≥ 4.3 with the following CRAN packages installed: `RobStatTM`, `pyinit`, `robustbase`, `rrcov`. Stretch wrappers add `pense` and `GSE`.
 > - `rpy2 ≥ 3.6.6` on the Python side.
 >
-> After installing, run `python -c "import robstatm_py; robstatm_py.check_setup()"` to verify your R environment.
+> After installing, run `python -c "import robstattm_py; robstattm_py.check_setup()"` to verify your R environment.
 
 ---
 

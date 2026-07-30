@@ -1,6 +1,6 @@
 # `loc_scale_m`
 
-> **R original:** `locScaleM` &nbsp;·&nbsp; **Python module:** `robstatm_py.univariate` &nbsp;·&nbsp; Robust univariate location and scale M-estimators
+> **R original:** `locScaleM` &nbsp;·&nbsp; **Python module:** `robstattm_py.univariate` &nbsp;·&nbsp; Robust univariate location and scale M-estimators
 
 This function computes M-estimators for location and scale.
 
@@ -9,7 +9,7 @@ This function computes M-estimators for location and scale.
 ## Usage
 
 ```python
-from robstatm_py import loc_scale_m
+from robstattm_py import loc_scale_m
 
 def loc_scale_m(
                 x,
@@ -62,7 +62,7 @@ The `LocScaleMResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Zinc concentration in 53 mineral samples (some are gross outliers).
 zinc = rpm.datasets.mineral()["zinc"].to_numpy()

@@ -108,7 +108,7 @@ Status: untouched. We rely on these being built in the R installation of RobStat
 | `NOTEBOOKS.md` | Working | Describes the two notebooks |
 | `figures/` (11 PNGs) | Reference outputs | Pairs of R vs Python plots used as visual regression baselines |
 
-**No installable Python package exists yet** — no `pyproject.toml`, no `pytest` suite, no `src/robstatm_py/`. The GSoC project builds this.
+**No installable Python package exists yet** — no `pyproject.toml`, no `pytest` suite, no `src/robstattm_py/`. The GSoC project builds this.
 
 ### 2.4 `robstattm/examples-scripts/` — textbook example scripts (26 .R files)
 

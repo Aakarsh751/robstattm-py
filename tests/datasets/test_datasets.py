@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -63,7 +63,7 @@ def test_shape_matches_r(py_name, r_name, expected_shape):
 @pytest.mark.parametrize("py_name,r_name,expected_shape", ALL_DATASETS)
 def test_values_match_r(py_name, r_name, expected_shape):
     """Numeric columns of every dataset must match R bit-for-bit."""
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.r(f'data({r_name}, package="RobStatTM")')

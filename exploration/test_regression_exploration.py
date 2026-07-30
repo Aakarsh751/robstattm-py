@@ -10,7 +10,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r
 
 # Book-style control used across many R example scripts (shock.R, algae.R, …)
@@ -34,7 +34,7 @@ class TestControlCustomizations:
         ],
     )
     def test_family_efficiency_vs_r(self, mineral, R, family, efficiency):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.globalenv["rpm_mineral"] = mineral.copy()
@@ -51,7 +51,7 @@ class TestControlCustomizations:
         assert py_fit.converged
 
     def test_full_control_object_vs_r(self, mineral, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.globalenv["rpm_mineral"] = mineral.copy()

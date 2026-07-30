@@ -1,11 +1,11 @@
-"""Strict-tier tests for robstatm_py.lmrobdet_mm vs direct R."""
+"""Strict-tier tests for robstattm_py.lmrobdet_mm vs direct R."""
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -57,7 +57,7 @@ class TestMineralVsR:
 
     @pytest.fixture(autouse=True)
     def _r_setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(mineral); "
@@ -154,7 +154,7 @@ def test_coef_returns_named_series():
 @pytest.mark.parametrize("family", ["mopt", "bisquare"])
 @pytest.mark.parametrize("efficiency", [0.85, 0.95])
 def test_family_efficiency_kwargs(R, family, efficiency):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.r("library(RobStatTM); data(mineral)")
@@ -178,7 +178,7 @@ def test_family_efficiency_kwargs(R, family, efficiency):
 
 @needs_r
 def test_multi_variable_formula(R):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.r("library(RobStatTM); data(stackloss)")

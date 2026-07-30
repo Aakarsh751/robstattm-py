@@ -16,7 +16,7 @@ import argparse
 import sys
 from typing import Callable
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 BOOK = rpm.lmrobdet_control(bb=0.5, efficiency=0.85, family="bisquare")
 

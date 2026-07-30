@@ -1,5 +1,5 @@
 import numpy as np
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Italian wine cultivar — 59 obs of 13 chemical measurements.
 wine = rpm.datasets.wine()

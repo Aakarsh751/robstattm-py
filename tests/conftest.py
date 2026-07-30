@@ -14,7 +14,7 @@ import pytest
 
 def _r_available() -> tuple[bool, str]:
     try:
-        from robstatm_py._r import r_pkg
+        from robstattm_py._r import r_pkg
 
         r_pkg("RobStatTM")
         return True, ""
@@ -40,7 +40,7 @@ def _r_pkg_available(name: str) -> bool:
     if not _R_OK:
         return False
     try:
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         return bool(r().r(f"isTRUE(requireNamespace('{name}', quietly=TRUE))")[0])
     except Exception:
@@ -60,7 +60,7 @@ def _r_dataset_available(name: str, package: str) -> bool:
     if not _R_OK:
         return False
     try:
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         r().r(f'data({name}, package="{package}")')
         return True
@@ -107,7 +107,7 @@ needs_robcbi = pytest.mark.skipif(
 @pytest.fixture(scope="session")
 def R():
     """Return a callable ``R(expression_string)`` that evaluates raw R code."""
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     rr = r().r
 

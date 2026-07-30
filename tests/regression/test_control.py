@@ -14,8 +14,8 @@ from __future__ import annotations
 
 from dataclasses import fields
 
-import robstatm_py as rpm
-from robstatm_py.regression.control import _R_KEY_MAP, _control_to_r
+import robstattm_py as rpm
+from robstattm_py.regression.control import _R_KEY_MAP, _control_to_r
 from tests.conftest import needs_r
 
 
@@ -81,7 +81,7 @@ def test_nondefault_keys_roundtrip_into_r():
     dropped, the returned list would still hold R's default. So: build it
     (must not raise) and read the changed values back.
     """
-    from robstatm_py._r import rx2
+    from robstattm_py._r import rx2
 
     ctrl = rpm.lmrobdet_control(
         efficiency=0.85,
@@ -103,7 +103,7 @@ def test_nondefault_control_changes_the_fit():
     """End-to-end: a control with a non-headline key set still matches R's own
     fit built with the same control (strict tier)."""
     import numpy as np
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     df = rpm.datasets.mineral()
     ctrl = rpm.lmrobdet_control(efficiency=0.85, py_maxit=15, mscale_tol=1e-8)

@@ -24,7 +24,7 @@ Maps proposal §10 onto concrete week-by-week tasks, files touched, tests writte
 | Deliverable | File(s) | Definition of done |
 |-------------|---------|---------------------|
 | `pyproject.toml` with PEP 621 metadata, deps from `docs/dependency_map.md §4` | `/pyproject.toml` | `pip install -e .` succeeds in a clean venv |
-| Package scaffold | `src/robstatm_py/__init__.py`, `_r.py`, `_converters.py`, `_errors.py`, `utils/check_setup.py`, `py.typed` | `import robstatm_py; robstatm_py.check_setup()` runs without starting R |
+| Package scaffold | `src/robstattm_py/__init__.py`, `_r.py`, `_converters.py`, `_errors.py`, `utils/check_setup.py`, `py.typed` | `import robstattm_py; robstattm_py.check_setup()` runs without starting R |
 | `pytest` config | `pyproject.toml [tool.pytest.ini_options]` + `tests/conftest.py` | `pytest -q` collects 0 tests, exits 0 |
 | GitHub Actions CI | `.github/workflows/test.yml`, `.github/workflows/docs.yml` | lint + build matrix green |
 | Sphinx + RTD skeleton | `docs_sphinx/` (separate from this planning `docs/`), `.readthedocs.yaml` | RTD project builds the empty skeleton |
@@ -38,7 +38,7 @@ Maps proposal §10 onto concrete week-by-week tasks, files touched, tests writte
 
 | Day | Task | Files |
 |-----|------|-------|
-| Mon | Port `MLocDis.R` understanding into `docs/research/locScaleM.md` (already exists from Phase 2 of this planning); implement `univariate/loc_scale_m.py` | `src/robstatm_py/univariate/loc_scale_m.py` |
+| Mon | Port `MLocDis.R` understanding into `docs/research/locScaleM.md` (already exists from Phase 2 of this planning); implement `univariate/loc_scale_m.py` | `src/robstattm_py/univariate/loc_scale_m.py` |
 | Tue | Implement `univariate/m_scale.py` | same dir |
 | Wed | Write `tests/univariate/test_loc_scale_m.py` and `test_m_scale.py` (cases 1–4, 7–10 from `docs/validation_strategy.md §3`) | tests/ |
 | Thu | Run sweep over `family ∈ {bisquare, huber, mopt}` × `eff ∈ {0.85, 0.90, 0.95}`; all strict-tier vs R | parametrize via pytest |
@@ -64,7 +64,7 @@ Maps proposal §10 onto concrete week-by-week tasks, files touched, tests writte
 | 3 | `lmrobdetMM` (formula, coef, residuals, rweights, scale) | — | pytest green for cases 1–11 from §3 of validation strategy |
 | 4 | `lmrobdetMM` diagnostics (`r_squared`, `summary()`), `lmrobdetDCML` | — | summary table mirrors R `summary()` exactly |
 | 5 | `step.lmrobdet`, `pyinit`, `rob.linear.test`; mineral dataset notebook | `notebooks/ch5_mineral.ipynb` | Figures 5.1–5.7 reproduced (Path A for the published ones) |
-| 6 | Coverage hardening; **midterm report** | `MIDTERM.md` | `pytest --cov=robstatm_py.regression --cov-fail-under=90` green |
+| 6 | Coverage hardening; **midterm report** | `MIDTERM.md` | `pytest --cov=robstattm_py.regression --cov-fail-under=90` green |
 
 ### Critical path notes
 - `lmrobdetMM` depends on `pyinit` for typical defaults — order matters: implement `pyinit` wrapper **with** `lmrobdetMM` in Week 3, not after, so we can use `initial="pyinit"` paths in tests.
@@ -155,7 +155,7 @@ The benchmark CSVs are committed under `benchmarks/results/` with the R/python/r
 
 ## 10. Deliverable summary at end of GSoC
 
-- `pip install robstatm-py == 0.1.0` (or 0.2.0 if stretch lands).
+- `pip install robstattm-py == 0.1.0` (or 0.2.0 if stretch lands).
 - 15 (core) — 18 (full set) wrappers, each with strict-tier R parity tests.
 - ≥ 90% coverage on every module.
 - Sphinx docs live on RTD.

@@ -17,13 +17,13 @@ GitHub **and** builds into a Sphinx site (see below).
 ## Building the Sphinx site
 
 ```bash
-cd robstatm-py
+cd robstattm-py
 pip install -e ".[docs]"
 python -m sphinx -b html docs docs/_build/html
 # open docs/_build/html/index.html
 ```
 
-The build does **not** import `robstatm_py`, so it works without R installed —
+The build does **not** import `robstattm_py`, so it works without R installed —
 the API pages are pre-generated Markdown.
 
 ## How the API pages are generated
@@ -33,7 +33,7 @@ three-step pipeline in [`scripts/`](scripts/):
 
 1. **`extract_rd.py`** — parses RobStatTM's `man/*.Rd` files into JSON
    (`_rd_json/*.json`). Point it at the upstream sources with the
-   `ROBSTATM_MAN_DIR` env var if they are not at the repo root.
+   `ROBSTATTM_MAN_DIR` env var if they are not at the repo root.
    ```bash
    python docs/scripts/extract_rd.py --all
    ```

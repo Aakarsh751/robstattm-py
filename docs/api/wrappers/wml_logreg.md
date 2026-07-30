@@ -1,6 +1,6 @@
 # `wml_logreg`
 
-> **R original:** `logregWML` &nbsp;·&nbsp; **Python module:** `robstatm_py.glm` &nbsp;·&nbsp; Weighted likelihood estimator for the logistic model
+> **R original:** `logregWML` &nbsp;·&nbsp; **Python module:** `robstattm_py.glm` &nbsp;·&nbsp; Weighted likelihood estimator for the logistic model
 
 This function computes a weighted likelihood estimator for the logistic model, where
 the weights penalize high leverage observations. In this version the weights are zero or one.
@@ -8,7 +8,7 @@ the weights penalize high leverage observations. In this version the weights are
 ## Usage
 
 ```python
-from robstatm_py import wml_logreg
+from robstattm_py import wml_logreg
 
 def wml_logreg(X, y, intercept: 'bool' = True):
 ```
@@ -60,7 +60,7 @@ The `LogregResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Skin dataset: 39 obs, 3 cols (3rd col is the binary vasoconst response).
 skin = rpm.datasets.load("RobStatTM", "skin")

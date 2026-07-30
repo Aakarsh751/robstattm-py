@@ -20,7 +20,7 @@ install.packages(c("pense", "GSE"))
 ## 2. Install RobStatTM-Py
 
 ```bash
-pip install -e robstatm-py/      # from the repo root
+pip install -e robstattm-py/      # from the repo root
 ```
 
 On **Windows**, point `rpy2` at your R installation *before* importing the
@@ -31,13 +31,13 @@ import os
 os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
 os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 ```
 
 ## 3. Verify your setup
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 rpm.check_setup()
 ```
 
@@ -47,7 +47,7 @@ This prints a checklist of R, `rpy2`, and each required R package, marking each
 ## 4. Your first robust fit
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # A built-in textbook dataset: zinc & copper content of 53 mineral samples.
 mineral = rpm.datasets.mineral()
@@ -77,7 +77,7 @@ Every regression wrapper accepts a `formula` + `data` pair **or** plain arrays:
 
 ```python
 import numpy as np
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 X = mineral[["copper"]].to_numpy()

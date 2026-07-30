@@ -1,6 +1,6 @@
 # `lmrob_m`
 
-> **R original:** `lmrobM` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Robust estimators for linear regression with fixed designs
+> **R original:** `lmrobM` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Robust estimators for linear regression with fixed designs
 
 This function computes a robust regression
 estimator for a linear models with fixed designs.
@@ -21,7 +21,7 @@ Section 5.8.1 of Maronna, Martin, Yohai and Salibian Barrera, 2019)
 ## Usage
 
 ```python
-from robstatm_py import lmrob_m
+from robstattm_py import lmrob_m
 
 def lmrob_m(
             formula: 'str | None' = None,
@@ -109,7 +109,7 @@ The `LmrobMResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 

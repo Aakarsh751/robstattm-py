@@ -14,7 +14,7 @@ See **[PARITY.md](PARITY.md)** for the full gap table. Short version:
 | **Core estimators** (42/46 NAMESPACE exports) | Wrapped; strict-tier tests in `tests/` |
 | **S3 methods** (`summary`, `predict`, `hatvalues`, …) | Ported as dataclass methods |
 | **20 datasets** | Loadable as pandas DataFrames |
-| **ψ-family helpers** | Full coverage in `robstatm_py.psi` |
+| **ψ-family helpers** | Full coverage in `robstattm_py.psi` |
 | **R `lm()` extras** (`subset`, `weights`, `na.action`) | **Not exposed** on regression wrappers |
 | **Some R return fields** (`MD`, `weights`, `qr`, …) | **Not extracted**; available via `fit._r_fit` / `fit.to_r()` |
 | **Internal helpers** (`DCML`, `MMPY`, `SMPY`, `cov.dcml`) | **Intentionally not public** |
@@ -28,7 +28,7 @@ this folder extends that verification to combinations the main suite does not sw
 ```bash
 pip install -e ".[dev]"    # from repo root
 # R with RobStatTM, robustbase, rrcov, pyinit installed
-python -c "import robstatm_py as rpm; rpm.check_setup()"
+python -c "import robstattm_py as rpm; rpm.check_setup()"
 ```
 
 ## Running

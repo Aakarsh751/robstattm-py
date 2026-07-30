@@ -1,6 +1,6 @@
 # `fastmve`
 
-> **R original:** `fastmve` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; Minimum Volume Ellipsoid covariance estimator
+> **R original:** `fastmve` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; Minimum Volume Ellipsoid covariance estimator
 
 This function uses a fast algorithm to compute the Minimum Volume
 Ellipsoid (MVE) for multivariate location and scatter.
@@ -13,7 +13,7 @@ estimators (see ``lmrob``).
 ## Usage
 
 ```python
-from robstatm_py import fastmve
+from robstattm_py import fastmve
 
 def fastmve(X, nsamp: 'int' = 500):
 ```
@@ -61,7 +61,7 @@ The `FastMVEResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 

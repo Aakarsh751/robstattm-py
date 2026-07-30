@@ -34,7 +34,7 @@ truth for *how to call it from Python*.
 | Asset | Location | Used for |
 |---|---|---|
 | 57 `.Rd` files | `tools::Rd_db("RobStatTM")` (installed CRAN package) | Per-wrapper page content |
-| R↔Python name map | `src/robstatm_py/_help.py` `_R_TO_PY` (single source of truth) | Cross-refs, hover, search |
+| R↔Python name map | `src/robstattm_py/_help.py` `_R_TO_PY` (single source of truth) | Cross-refs, hover, search |
 | Coverage matrix | `docs/coverage_matrix.md` | One-page status overview |
 | User-interface spec | `docs/user_interface.md` | Quickstart / API tour pages |
 | Tutorial notebooks | `notebooks/tutorials/` (×3) | Embedded examples via `nbsphinx` |
@@ -107,7 +107,7 @@ Saved as `docs/templates/wrapper_page.md.jinja`:
 # `{{ py_name }}`  ({{ r_name }})
 
 ```{eval-rst}
-.. currentmodule:: robstatm_py
+.. currentmodule:: robstattm_py
 .. autofunction:: {{ py_name }}
 ```
 
@@ -165,7 +165,7 @@ Saved as `docs/templates/wrapper_page.md.jinja`:
 ## See also
 
 {% for ref in rd.seealso %}
-- {func}`~robstatm_py.{{ ref.py_name }}` ({{ ref.r_name }})
+- {func}`~robstattm_py.{{ ref.py_name }}` ({{ ref.r_name }})
 {% endfor %}
 
 ## References
@@ -276,7 +276,7 @@ inspector. Stretch goal; defer to v0.2.
      extractor → run renderer → `sphinx-build -W` (warnings = errors)
      → upload artifact.
 2. **ReadTheDocs**: standard YAML config, builds on every push, hosts
-   on `robstatm-py.readthedocs.io`. Falls back to GH Pages if RTD
+   on `robstattm-py.readthedocs.io`. Falls back to GH Pages if RTD
    integration is delayed.
 3. **PR previews** via RTD's PR-builder so reviewers see rendered docs
    inline with code review.
@@ -292,7 +292,7 @@ inspector. Stretch goal; defer to v0.2.
 | M5 | User-guide narrative pages (install, quickstart, formulas, plotting, errors, perf, from_r) | 1 day |
 | M6 | API page with autosummary + R↔Python search index | 0.5 day |
 | M7 | Tutorials + gallery embedded via nbsphinx | 0.5 day |
-| M8 | GitHub Actions + RTD config; first successful build at robstatm-py.readthedocs.io | 0.5 day |
+| M8 | GitHub Actions + RTD config; first successful build at robstattm-py.readthedocs.io | 0.5 day |
 | M9 | `sphinx-doctest` over every embedded example; CI gates on warnings | 0.5 day |
 | M10 | Cross-version pin, changelog page, contributor guide | 0.5 day |
 
@@ -306,7 +306,7 @@ package work (pense / GSE / TSGS).
 - [ ] Every embedded Python example executes via sphinx-doctest
 - [ ] Every R↔Python name in `_help._R_TO_PY` resolves on search
 - [ ] CI builds in < 5 minutes on a clean runner
-- [ ] RTD hosts the docs at `robstatm-py.readthedocs.io` with a `main`
+- [ ] RTD hosts the docs at `robstattm-py.readthedocs.io` with a `main`
       tag for the latest release
 - [ ] Re-running the extractor against a new RobStatTM release produces
       a `git diff` that shows ONLY the upstream prose changes

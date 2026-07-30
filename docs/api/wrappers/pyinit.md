@@ -1,13 +1,13 @@
 # `pyinit`
 
-> **R original:** `pyinit` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Pena-Yohai initial estimator for robust regression
+> **R original:** `pyinit` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Pena-Yohai initial estimator for robust regression
 
 Computes the Pena-Yohai (PY) deterministic initial estimator for MM-regression. Instead of random subsampling, it builds a small set of robust candidate coefficient vectors by iteratively removing observations with high 'principal sensitivity'. RobStatTM uses these candidates as the deterministic starting points for `lmrobdetMM`. This wrapper exposes the `pyinit` routine from the companion `pyinit` package.
 
 ## Usage
 
 ```python
-from robstatm_py import pyinit
+from robstattm_py import pyinit
 
 def pyinit(
            X,
@@ -79,7 +79,7 @@ The `PyinitResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 

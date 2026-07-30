@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_r
 
 
@@ -40,7 +40,7 @@ class TestValidation:
 class TestCovClassic:
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(wine); X_test <- as.matrix(wine[, sapply(wine, is.numeric)]); "
@@ -91,7 +91,7 @@ class TestCovClassicNaActionAndArgs:
                             na_action="bogus")
 
     def test_na_action_omit_matches_r(self, data_with_nan, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
         ro = r()
         ro.globalenv["A_na"] = data_with_nan
         py = rpm.cov_classic(data_with_nan, na_action="omit")
@@ -104,7 +104,7 @@ class TestCovClassicNaActionAndArgs:
         assert py.dist.size == 28  # 30 rows minus 2 with NaN
 
     def test_corr_and_unbiased_match_r(self, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
         rng = np.random.RandomState(3)
         M = rng.randn(25, 4)
         ro = r()
@@ -124,7 +124,7 @@ class TestCovClassicNaActionAndArgs:
 class TestCovRobMM:
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(wine); X_test <- as.matrix(wine[, sapply(wine, is.numeric)])")
@@ -187,7 +187,7 @@ class TestCovRobMM:
 class TestCovRobRocke:
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(wine); X_test <- as.matrix(wine[, sapply(wine, is.numeric)])")
@@ -234,7 +234,7 @@ class TestCovRobRocke:
 
 @needs_r
 def test_cov_classic_small_synthetic(R):
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     # Pure deterministic Hilbert-like matrix (no randomness)

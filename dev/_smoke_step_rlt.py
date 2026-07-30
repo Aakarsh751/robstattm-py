@@ -1,8 +1,8 @@
 """Smoke check: step_lmrobdet + rob_linear_test."""
 import numpy as np
-import robstatm_py as rpm
-from robstatm_py import set_seed
-from robstatm_py._r import r
+import robstattm_py as rpm
+from robstattm_py import set_seed
+from robstattm_py._r import r
 
 ro = r()
 ro.r("library(RobStatTM); data(mineral); data(stackloss)")

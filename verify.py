@@ -45,7 +45,7 @@ def check(label: str, ok: bool, detail: str = "") -> bool:
 def run_smoke() -> int:
     """Quick: every wrapper family runs end-to-end without crashing."""
     import numpy as np
-    import robstatm_py as rpm
+    import robstattm_py as rpm
 
     banner("SMOKE — every wrapper family runs end-to-end")
     failures = 0
@@ -117,7 +117,7 @@ def run_smoke() -> int:
                           np.array_equal(fit_xy.coefficients, fit_mm.coefficients))
 
     section("R-name aliases (UI doc §2.3)")
-    from robstatm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
+    from robstattm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
     failures += not check("compat_r.lmrobdetMM", lmrobdetMM is rpm.lmrobdet_mm)
     failures += not check("compat_r.covRobMM", covRobMM is rpm.cov_rob_mm)
 
@@ -163,7 +163,7 @@ def print_coverage() -> int:
 
 def print_help_all() -> int:
     """Print docstring of every wrapper for the reviewer."""
-    import robstatm_py as rpm
+    import robstattm_py as rpm
     banner("FULL WRAPPER INVENTORY")
     names = sorted(rpm.list_names().values())
     seen: set[str] = set()

@@ -10,7 +10,7 @@ original, peer-reviewed R routine through `rpy2`, so results are **byte-identica
 to R** (validated at `atol=0, rtol=0`). No reimplementation, no surprises.
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()                 # a built-in textbook dataset
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=mineral)   # robust MM-regression
@@ -31,14 +31,14 @@ available without writing any R.
 ## Install
 
 ```bash
-pip install -e robstatm-py/      # from the repo root
+pip install -e robstattm-py/      # from the repo root
 ```
 
 You also need **R** with the `RobStatTM` package (and its dependencies). See
 [Getting started](getting-started.md) for the full setup, then run:
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 rpm.check_setup()      # verifies R, rpy2, and each R package are READY
 ```
 
@@ -79,7 +79,7 @@ The 20 built-in textbook datasets and how to load your own data.
 
 Python names are `snake_case` versions of the R names (`lmrobdetMM` →
 `lmrobdet_mm`, `covRobMM` → `cov_rob_mm`). Prefer the originals? Every wrapper is
-also exposed under its R name via `robstatm_py.compat_r`. See the
+also exposed under its R name via `robstattm_py.compat_r`. See the
 [API reference](api/index.md) for the complete map.
 
 ```{toctree}

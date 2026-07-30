@@ -11,15 +11,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import drop1_lmrobdet
-from robstatm_py.regression._s3_methods import Drop1Result
+import robstattm_py as rpm
+from robstattm_py import drop1_lmrobdet
+from robstattm_py.regression._s3_methods import Drop1Result
 from tests.conftest import needs_r
 
 
 def _r_drop1(setup_code: str, drop_call: str):
     """Run an R drop1 and return (rownames, Df, RFPE)."""
-    from robstatm_py._r import r
+    from robstattm_py._r import r
 
     ro = r()
     ro.r("suppressMessages(library(RobStatTM))")

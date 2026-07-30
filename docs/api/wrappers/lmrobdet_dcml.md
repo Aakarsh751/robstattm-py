@@ -1,6 +1,6 @@
 # `lmrobdet_dcml`
 
-> **R original:** `lmrobdetDCML` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Robust Distance Constrained Maximum Likelihood estimators for linear regression
+> **R original:** `lmrobdetDCML` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Robust Distance Constrained Maximum Likelihood estimators for linear regression
 
 This function computes robust Distance Constrained Maximum Likelihood
 estimators for linear models.
@@ -19,7 +19,7 @@ Section 5.8.1 of Maronna, Martin, Yohai and Salibian Barrera, 2019)
 ## Usage
 
 ```python
-from robstatm_py import lmrobdet_dcml
+from robstattm_py import lmrobdet_dcml
 
 def lmrobdet_dcml(
                   formula: 'str | None' = None,
@@ -103,7 +103,7 @@ The `LmrobdetDCMLResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 

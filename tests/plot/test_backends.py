@@ -5,7 +5,7 @@ import pytest
 
 pytest.importorskip("matplotlib")
 
-from robstatm_py.plot import _backends, _deps  # noqa: E402
+from robstattm_py.plot import _backends, _deps  # noqa: E402
 
 
 def test_auto_resolves_native_when_matplotlib_present():

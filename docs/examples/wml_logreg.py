@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Skin dataset: 39 obs, 3 cols (3rd col is the binary vasoconst response).
 skin = rpm.datasets.load("RobStatTM", "skin")

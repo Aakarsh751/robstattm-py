@@ -14,7 +14,7 @@
                                │ Python API
                                ▼
 ┌───────────────────────────────────────────────────────────────┐
-│                       robstatm_py  (this package)             │
+│                       robstattm_py  (this package)             │
 │   ┌─────────────────┐  ┌────────────────┐  ┌───────────────┐  │
 │   │  Public API     │  │  Converters    │  │ Result types  │  │
 │   │  (function defs)│  │  np/pd ↔ R     │  │  (dataclasses)│  │
@@ -47,7 +47,7 @@ Each layer has one responsibility:
 ## 2. Package layout
 
 ```
-robstatm_py/                          # importable package root
+robstattm_py/                          # importable package root
 ├── __init__.py                       # version, set_conversion patch, lazy importr
 ├── _r.py                             # singleton R bridge: importr cache, .rx2 helpers
 ├── _converters.py                    # np/pd → R, R → dict, dot/underscore name map
@@ -105,13 +105,13 @@ robstatm_py/                          # importable package root
 │   └── synthetic.py
 │
 ├── utils/
-│   ├── check_setup.py                # robstatm_py.check_setup() entrypoint
+│   ├── check_setup.py                # robstattm_py.check_setup() entrypoint
 │   └── seeds.py                      # set_seed(value) → both R and Python
 │
 └── py.typed                          # PEP 561 marker
 ```
 
-**Public surface** (what `from robstatm_py import *` exposes): every wrapper plus `check_setup`, `set_seed`, the result dataclasses, and `__version__`. Nothing else.
+**Public surface** (what `from robstattm_py import *` exposes): every wrapper plus `check_setup`, `set_seed`, the result dataclasses, and `__version__`. Nothing else.
 
 **Tests** mirror the package tree:
 
@@ -153,7 +153,7 @@ import numpy as np
 
 @dataclass(frozen=True, slots=True)
 class LmrobdetMMResult:
-    """Result of robstatm_py.regression.lmrobdet_mm().
+    """Result of robstattm_py.regression.lmrobdet_mm().
 
     Fields map 1:1 to the named elements of R's lmrobdetMM() return list
     (see RobStatTM man page lmrobdetMM.Rd). R names with dots are converted
@@ -185,7 +185,7 @@ Why **frozen**?
 
 ```python
 class RobStatTMError(RuntimeError):
-    """Base for all robstatm_py errors."""
+    """Base for all robstattm_py errors."""
 
 class RobStatTMSetupError(RobStatTMError):
     """R is not installed, RobStatTM is missing, or rpy2 cannot start."""
@@ -216,7 +216,7 @@ Translation happens in `_r.py` so every wrapper inherits it.
 |---------|----------------|----------|
 | Argument validation | inside each wrapper, before R call | Type / shape / NaN / categorical checks; raise `TypeError` / `ValueError` with a Python-style message **before** crossing the rpy2 boundary |
 | R runtime error | `_r.py::_rcall` | `RRuntimeError` → `RobStatTMRError(msg, r_traceback=…)` |
-| Missing R/package | `_r.py::_get_pkg` | `RobStatTMSetupError("RobStatTM not installed. Run install.packages('RobStatTM') in R, or call robstatm_py.check_setup() for details.")` |
+| Missing R/package | `_r.py::_get_pkg` | `RobStatTMSetupError("RobStatTM not installed. Run install.packages('RobStatTM') in R, or call robstattm_py.check_setup() for details.")` |
 | Reproducibility | `utils/seeds.py::set_seed(n)` | Calls both `np.random.seed(n)` and `R("set.seed(%d)" % n)` in one shot; tests always use this |
 | Coercion warnings | `_converters.py` | Any silent coercion (e.g. `int → float`) logs at INFO level, never silently drops |
 
@@ -224,11 +224,11 @@ Translation happens in `_r.py` so every wrapper inherits it.
 
 ## 5. Lazy R startup
 
-`from robstatm_py import lmrobdet_mm` must **not** start R — only `lmrobdet_mm(...)` does. Implementation: every wrapper's first line is `_r.RobStatTM` (a property that lazily calls `importr("RobStatTM")` once and caches it).
+`from robstattm_py import lmrobdet_mm` must **not** start R — only `lmrobdet_mm(...)` does. Implementation: every wrapper's first line is `_r.RobStatTM` (a property that lazily calls `importr("RobStatTM")` once and caches it).
 
 This keeps:
 - doc builds (Sphinx autodoc) fast and offline,
-- `import robstatm_py` cheap for unit tests that don't need R,
+- `import robstattm_py` cheap for unit tests that don't need R,
 - error messages directed at the **first wrapper call**, not the import.
 
 ---

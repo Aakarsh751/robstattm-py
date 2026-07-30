@@ -1,13 +1,13 @@
 # Plotting
 
-RobStatTM-Py ships a native Python plotting suite — `robstatm_py.plot` — for
+RobStatTM-Py ships a native Python plotting suite — `robstattm_py.plot` — for
 publication-quality, fully customizable robust-statistics figures, plus a
 pixel-faithful **R graphics** path for when you want exactly what the textbook
 prints.
 
 ```python
-import robstatm_py as rpm
-from robstatm_py import plot
+import robstattm_py as rpm
+from robstattm_py import plot
 
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 
@@ -17,7 +17,7 @@ fig = fit.plot_diagnostics()                  # shortcut on the result object
 ```
 
 > **Install:** the native engine needs the optional plotting extra —
-> `pip install "robstatm-py[plots]"` (matplotlib; plotnine is optional). The
+> `pip install "robstattm-py[plots]"` (matplotlib; plotnine is optional). The
 > `backend="r"` path needs a working R bridge.
 
 ## Backends

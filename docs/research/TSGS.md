@@ -1,7 +1,7 @@
 # TSGS (external R package GSE — IMPLEMENTED 2026-06-13)
 
 > **Status (2026-06-13):** implemented against installed GSE **4.2-4** as
-> `rpm.tsgs` in `robstatm_py.external`. S4 object, same shape as `GSEResult`
+> `rpm.tsgs` in `robstattm_py.external`. S4 object, same shape as `GSEResult`
 > plus the filtered-data matrix `xf`. 100% strict-tier vs R
 > (`tests/external/test_gse.py::TestTSGS`). See "Actual implementation" below.
 
@@ -54,7 +54,7 @@ Cases 1, 2, 6 (cell-wise contamination is the point), 7, 10. Synthetic cell-wise
 
 ## Actual implementation (GSE 4.2-4, 2026-06-13)
 
-**Module:** `robstatm_py.external.gse` — exposed as `rpm.tsgs`.
+**Module:** `robstattm_py.external.gse` — exposed as `rpm.tsgs`.
 
 `GSE::TSGS(x, filter="UBF-DDC", partial.impute=FALSE, tol=1e-4, maxiter=150,
 method="bisquare", ...)` returns an **S4** object (class `TSGS`) with the same

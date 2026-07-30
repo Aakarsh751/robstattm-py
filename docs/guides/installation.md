@@ -115,17 +115,17 @@ source .venv/bin/activate
 
 ### Install the package (which pulls in rpy2, numpy, pandas)
 
-From the directory that contains the `robstatm-py/` folder:
+From the directory that contains the `robstattm-py/` folder:
 
 ```bash
-pip install -e robstatm-py/
+pip install -e robstattm-py/
 ```
 
 Optional extras:
 
 ```bash
-pip install -e "robstatm-py/[notebooks]"   # scipy + matplotlib + jupyter, to run the example notebooks
-pip install -e "robstatm-py/[dev]"         # the test/lint toolchain
+pip install -e "robstattm-py/[notebooks]"   # scipy + matplotlib + jupyter, to run the example notebooks
+pip install -e "robstattm-py/[dev]"         # the test/lint toolchain
 ```
 
 > RobStatTM-Py is not yet on PyPI, so install it **editable from the repo**
@@ -142,13 +142,13 @@ pip install -e "robstatm-py/[dev]"         # the test/lint toolchain
 ### Windows — set `R_HOME` before importing
 
 Windows does not expose R on the default `PATH`, so set it explicitly **before**
-`import robstatm_py` (adjust the version to match yours):
+`import robstattm_py` (adjust the version to match yours):
 
 ```python
 import os
 os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
 
-import robstatm_py as rpm   # the package handles the bin\x64 DLL path for you
+import robstattm_py as rpm   # the package handles the bin\x64 DLL path for you
 ```
 
 To avoid repeating this, set it once as a system environment variable
@@ -169,7 +169,7 @@ export R_HOME="$(R RHOME)"     # add to ~/.bashrc / ~/.zshrc to persist
 ## 5. Verify everything
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 rpm.check_setup()
 ```
 
@@ -205,8 +205,8 @@ print(fit.summary())
 To run notebooks or use the rich `_repr_html_` result rendering:
 
 ```bash
-pip install -e "robstatm-py/[notebooks]"   # installs ipykernel + plotting deps
-python -m ipykernel install --user --name robstatm-py
+pip install -e "robstattm-py/[notebooks]"   # installs ipykernel + plotting deps
+python -m ipykernel install --user --name robstattm-py
 ```
 
 On Windows, put the `R_HOME` bootstrap from [step 4](#windows--set-r_home-before-importing)
@@ -242,9 +242,9 @@ share the output — it pinpoints which of the four layers is missing.
 # 1. install R from CRAN, note the path
 # 2. in R:  install.packages(c("RobStatTM","pyinit","robustbase","rrcov"))
 py -3 -m venv .venv; .\.venv\Scripts\Activate.ps1
-pip install -e robstatm-py/
+pip install -e robstattm-py/
 $env:R_HOME = "C:\Program Files\R\R-4.5.2"
-python -c "import robstatm_py as rpm; rpm.check_setup()"
+python -c "import robstattm_py as rpm; rpm.check_setup()"
 ```
 
 **macOS / Linux (bash):**
@@ -254,9 +254,9 @@ python -c "import robstatm_py as rpm; rpm.check_setup()"
 # macOS: install R .pkg matching your CPU arch
 Rscript -e 'install.packages(c("RobStatTM","pyinit","robustbase","rrcov"), repos="https://cloud.r-project.org")'
 python3 -m venv .venv && source .venv/bin/activate
-pip install -e robstatm-py/
+pip install -e robstattm-py/
 export R_HOME="$(R RHOME)"
-python -c "import robstatm_py as rpm; rpm.check_setup()"
+python -c "import robstattm_py as rpm; rpm.check_setup()"
 ```
 
 ## See also

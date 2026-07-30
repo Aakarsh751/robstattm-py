@@ -35,9 +35,9 @@ Does RobStatTM ship an R function whose sole purpose is producing this plot?
 The user-facing API is uniform regardless of which path renders:
 
 ```python
-fit = robstatm_py.lmrobdet_mm("zinc ~ copper", data=mineral)
-ax  = robstatm_py.plotting.residuals(fit)         # returns a matplotlib Axes
-img = robstatm_py.plotting.residuals(fit, backend="r")  # returns Path to PNG
+fit = robstattm_py.lmrobdet_mm("zinc ~ copper", data=mineral)
+ax  = robstattm_py.plotting.residuals(fit)         # returns a matplotlib Axes
+img = robstattm_py.plotting.residuals(fit, backend="r")  # returns Path to PNG
 ```
 
 `backend="auto"` (default) picks Path A if the wrapped object knows an R plot fn; otherwise Path B; otherwise Path C.
@@ -45,7 +45,7 @@ img = robstatm_py.plotting.residuals(fit, backend="r")  # returns Path to PNG
 ---
 
 > **STATUS — native suite shipped (D-023, 2026-06-21).** The native Python
-> renderers below now live in `robstatm_py.plot` (matplotlib primary, plotnine
+> renderers below now live in `robstattm_py.plot` (matplotlib primary, plotnine
 > secondary), with `backend="r"` preserving Path A as the fidelity reference.
 > Default backend is `"auto"` → native. Plan: `docs/plotting_suite_plan.md`;
 > user guide + gallery: `docs/guides/plotting.md`. The "Recommended path" column
@@ -87,7 +87,7 @@ def _r_plot(plot_call: str, *, dpi: int = 100, width: int = 6, height: int = 5) 
     return f
 ```
 
-Wrappers expose this through helpers like `robstatm_py.plotting.residuals(fit, backend="r")` so the user never writes raw R code.
+Wrappers expose this through helpers like `robstattm_py.plotting.residuals(fit, backend="r")` so the user never writes raw R code.
 
 ### 4.2 Path B — plotnine
 
@@ -137,6 +137,6 @@ Use only when neither A nor B fits cleanly (rare). Same data extraction; bespoke
 
 ## 7. Open questions
 
-1. Should plotnine be a hard dependency or an optional extra (`pip install robstatm-py[plots]`)? Recommendation: **optional extra**, with helpful `ImportError` when a Path-B plot is requested without it installed.
+1. Should plotnine be a hard dependency or an optional extra (`pip install robstattm-py[plots]`)? Recommendation: **optional extra**, with helpful `ImportError` when a Path-B plot is requested without it installed.
 2. R `png(...)` device on Windows occasionally needs `cairo` for anti-alias parity. Document in install guide.
 3. SVG vs PNG default: PNG (broader notebook support), but expose `format="svg"` arg.

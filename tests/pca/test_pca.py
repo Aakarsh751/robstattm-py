@@ -4,8 +4,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_r
 
 
@@ -25,7 +25,7 @@ class TestPcaRobSVsR:
 
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(bus); X_bus <- as.matrix(bus[, sapply(bus, is.numeric)])")
@@ -75,7 +75,7 @@ class TestPrcompRobVsR:
 
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(wine); X_wine <- as.matrix(wine[, sapply(wine, is.numeric)])")

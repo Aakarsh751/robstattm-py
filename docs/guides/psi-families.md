@@ -3,11 +3,11 @@
 Robust estimators replace the squared-error loss with a **bounded** loss
 function ρ, whose derivative ψ caps the influence of any single observation.
 RobStatTM-Py exposes the loss families and their ρ/ψ functions under
-`robstatm_py.psi`.
+`robstattm_py.psi`.
 
 ```python
-import robstatm_py as rpm
-from robstatm_py import psi
+import robstattm_py as rpm
+from robstattm_py import psi
 ```
 
 ## Available families
@@ -35,7 +35,7 @@ derivative `rhoprime2` are available directly:
 
 ```python
 import numpy as np
-from robstatm_py import psi
+from robstattm_py import psi
 
 r = np.linspace(-6, 6, 13)
 cc = psi.bisquare(0.95)

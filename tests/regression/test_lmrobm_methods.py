@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -33,7 +33,7 @@ class TestMineralLmrobMS3:
 
     @pytest.fixture(scope="class")
     def r_ctx(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
         ro = r()
         ro.r(
             "library(RobStatTM); data(mineral); "

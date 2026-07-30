@@ -2,7 +2,7 @@
 
 A handful of robust estimators referenced by the textbook ship in **separate
 CRAN packages** rather than in RobStatTM itself. RobStatTM-Py wraps them under
-`robstatm_py.external` (and re-exports them at the top level), with the same
+`robstattm_py.external` (and re-exports them at the top level), with the same
 rpy2 bridge and bit-for-bit parity as the core wrappers.
 
 These require their R package to be installed separately:
@@ -60,7 +60,7 @@ def pense(X, y, *, alpha=0.5, nlambda=50, bdp=0.25,
 
 ```python
 import numpy as np
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 rng = np.random.default_rng(0)
 X = rng.standard_normal((60, 8))
@@ -104,7 +104,7 @@ Returns `mu` (location), `cov` (scatter), `pmd` / `pmd_adj` (partial Mahalanobis
 distances), `weights`, `ximp` (imputed data), and scalars `sc` / `iter` / `eps`.
 
 ```python
-import numpy as np, robstatm_py as rpm
+import numpy as np, robstattm_py as rpm
 
 X = rpm.datasets.wine().to_numpy()[:, :5].copy()
 X[::10, 0] = np.nan                      # introduce some missingness
@@ -159,7 +159,7 @@ or a `formula` + `data`. The model list carries `ar` and/or `ma` depending on
 | `sigma_innov` / `sigma_regresid` / `sigma_first` | scales |
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 resex = rpm.datasets.resex()["resex"].to_numpy()
 fit = rpm.arima_rob(y=resex, p=2, sd=1, sfreq=12)   # resex.R, Example 8.6
@@ -189,7 +189,7 @@ covariance kernels. Returns `beta`/`eta`/`gamma` (+ their `vcov_*`), `sigma2`,
 `Sigma`, `scales`, `iterations`, `method`.
 
 ```python
-import numpy as np, robstatm_py as rpm
+import numpy as np, robstattm_py as rpm
 
 ctrl = rpm.var_comprob_control(lower=[0.01, 0.01, 0.01, -np.inf, -np.inf, -np.inf])
 rpm.set_seed(2468)
@@ -218,7 +218,7 @@ Returns `coefficients` (+ `coef_names`), `cov`, `std_errors` (`sqrt(diag(cov))`)
 `iter`, `converged`, `method`.
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 epi = rpm.datasets.breslow_dat()                            # cols: sumY, Age10, Base4, Trt
 df = epi.assign(prog=(epi["Trt"] == "progabide"))
@@ -253,7 +253,7 @@ when `intercept=False` (the default), as `epilepsy.R` does. Returns `coefficient
 `cov`, `std_errors`, `fitted_values`, `deviance_residuals` (`rsdev`), `converged`.
 
 ```python
-import numpy as np, robstatm_py as rpm
+import numpy as np, robstattm_py as rpm
 
 XX = np.column_stack([np.ones(59), age10, base4, progabide, base4*progabide])
 fit = rpm.cubinf(XX, yy, family="poisson", intercept=False, null_dev=False, ufact=1.1)

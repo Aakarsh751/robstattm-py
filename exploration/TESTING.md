@@ -23,7 +23,7 @@ pytest exploration/test_edge_cases.py -q
 pytest tests/ exploration/ -q          # add RPM_SKIP_NOTEBOOKS=1 to skip notebooks
 
 # 5. With coverage
-pytest tests/ exploration/ --cov=robstatm_py --cov-report=term-missing
+pytest tests/ exploration/ --cov=robstattm_py --cov-report=term-missing
 
 # 6. Verbose + print output from demos
 pytest exploration/ -v -s
@@ -131,7 +131,7 @@ python docs/examples/by_logreg.py
 
 ```bash
 pip install -e ".[dev]"
-python -c "import robstatm_py as rpm; assert rpm.check_setup()"
+python -c "import robstattm_py as rpm; assert rpm.check_setup()"
 ```
 
 R packages: `RobStatTM`, `robustbase`, `rrcov`, `pyinit` (required);

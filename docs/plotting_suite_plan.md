@@ -11,7 +11,7 @@
 
 ## 0. Why this exists
 
-Today `src/robstatm_py/plotting.py` is **Path A only**: every helper *refits the model
+Today `src/robstattm_py/plotting.py` is **Path A only**: every helper *refits the model
 in R*, opens a PNG device, and returns a `pathlib.Path`. That is pixel-faithful to the
 book but:
 
@@ -33,7 +33,7 @@ reachable with `backend="r"`).
 ## 1. Module layout
 
 ```
-src/robstatm_py/
+src/robstattm_py/
   plot/                      # NEW public subpackage  →  rpm.plot
     __init__.py              # public surface: set_theme/get_theme/PlotStyle,
                              #   all plot fns, backend constants
@@ -55,7 +55,7 @@ src/robstatm_py/
                              #   (r_plot, show_png, residuals, qq, diagnostics)
 ```
 
-`robstatm_py.plot` is re-exported from `__init__.py` alongside `plotting`. Importing
+`robstattm_py.plot` is re-exported from `__init__.py` alongside `plotting`. Importing
 either is cheap; matplotlib/plotnine are imported only when a native/plotnine plot is
 actually drawn.
 
@@ -74,7 +74,7 @@ actually drawn.
 
 - `"auto"` → native matplotlib when a native renderer exists **and** matplotlib is
   importable; else `"r"` if an R renderer exists; else a helpful `ImportError`
-  (`pip install "robstatm-py[plots]"`).
+  (`pip install "robstattm-py[plots]"`).
 - **matplotlib is primary** (Axes return type per spec, composable `ax=`, lighter dep,
   already the engine in the notebooks/archive). **plotnine is secondary** for
   grammar-of-graphics users.
@@ -86,7 +86,7 @@ actually drawn.
 ## 3. Theme / style API
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 rpm.plot.set_theme("publication")          # named theme (global default)
 rpm.plot.set_theme("book", font_scale=1.1) # named theme + overrides

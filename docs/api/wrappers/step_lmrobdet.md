@@ -1,6 +1,6 @@
 # `step_lmrobdet`
 
-> **R original:** `step.lmrobdetMM` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Robust stepwise using RFPE
+> **R original:** `step.lmrobdetMM` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Robust stepwise using RFPE
 
 This function performs stepwise model selection on a robustly fitted
 linear model using the RFPE
@@ -21,7 +21,7 @@ is used to compute the Robust Final Prediction Error throughout the procedure.
 ## Usage
 
 ```python
-from robstatm_py import step_lmrobdet
+from robstattm_py import step_lmrobdet
 
 def step_lmrobdet(
                   fit: 'LmrobdetMMResult',
@@ -78,7 +78,7 @@ import numpy as np
 import pandas as pd
 import rpy2.robjects as ro
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # step_lmrobdet runs robust *backward* model selection, dropping terms by their
 # Robust Final Prediction Error (RFPE). This mirrors the R man-page example: a

@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()       # 59 wines, 13 chemical measurements
 

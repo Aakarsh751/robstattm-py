@@ -26,11 +26,11 @@ File: `psiFuns.R` + `psiFunUtils.R`. The family identifier objects (`bisquare`, 
 RobStatTM only (uses base R + the package's own C kernels).
 
 ## 6. Python wrapper design
-A small **`robstatm_py.psi` submodule**:
+A small **`robstattm_py.psi` submodule**:
 
 ```python
-from robstatm_py.psi import bisquare, huber, mopt, opt, moptv0, optv0
-from robstatm_py.psi import rho, rhoprime, rhoprime2
+from robstattm_py.psi import bisquare, huber, mopt, opt, moptv0, optv0
+from robstattm_py.psi import rho, rhoprime, rhoprime2
 
 # 1. Family identifiers
 bisquare.name     # "bisquare"

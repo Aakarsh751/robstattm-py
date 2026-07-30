@@ -1,8 +1,8 @@
 """Manual strict-tier check: Python wrapper vs direct R reference."""
 import numpy as np
 
-import robstatm_py as rpm
-from robstatm_py._r import r
+import robstattm_py as rpm
+from robstattm_py._r import r
 
 # Deterministic input (no randomness) so R and Python see identical bits.
 x = np.array(

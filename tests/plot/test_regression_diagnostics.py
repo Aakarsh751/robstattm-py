@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.axes import Axes  # noqa: E402
 from matplotlib.figure import Figure  # noqa: E402
 
-from robstatm_py import plot  # noqa: E402
+from robstattm_py import plot  # noqa: E402
 
 SINGLE_PANEL = ["residuals", "qq", "scale_location", "weights"]
 
@@ -107,7 +107,7 @@ def test_missing_field_raises_typeerror():
 
 def test_native_plots_do_not_start_r(fake_fit, monkeypatch):
     """No-refit guard: native rendering must not import/start the R bridge."""
-    import robstatm_py._r as _r
+    import robstattm_py._r as _r
 
     def _boom(*a, **k):  # pragma: no cover - only runs on failure
         raise AssertionError("native plot unexpectedly called the R bridge")

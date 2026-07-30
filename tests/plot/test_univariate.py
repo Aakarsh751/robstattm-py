@@ -12,7 +12,7 @@ matplotlib.use("Agg", force=True)
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.axes import Axes  # noqa: E402
 
-from robstatm_py import plot  # noqa: E402
+from robstattm_py import plot  # noqa: E402
 
 
 def test_location_scale_returns_axes(fake_locscale):
@@ -113,7 +113,7 @@ def test_plotnine_backend_univariate(fake_locscale, fake_reg_with_data):
 
 
 def test_scatter_compare_do_not_start_r(fake_reg_with_data, monkeypatch):
-    import robstatm_py._r as _r
+    import robstattm_py._r as _r
 
     def _boom(*a, **k):  # pragma: no cover
         raise AssertionError("native plot called the R bridge")

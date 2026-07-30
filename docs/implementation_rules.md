@@ -53,7 +53,7 @@ Mandatory ordering for every wrapper. **Do not skip steps.** Skipping leads to w
 ## Rules that apply to all wrappers
 
 - **Argument validation happens in Python, before the rpy2 boundary.** Catching bad shapes / dtypes in R yields opaque `RRuntimeError` messages.
-- **All randomness goes through `robstatm_py.set_seed`.** Never call `np.random.seed` or `R("set.seed(…)")` directly inside a wrapper.
+- **All randomness goes through `robstattm_py.set_seed`.** Never call `np.random.seed` or `R("set.seed(…)")` directly inside a wrapper.
 - **Never call `importr("RobStatTM")` at module import.** Use the `_r._get_pkg("RobStatTM")` lazy accessor.
 - **No `from rpy2 import *`-style imports.** Use explicit `from rpy2 import robjects as ro`.
 - **No silent type coercion.** If input is a list instead of an array, accept it via `np.asarray`; if input is the wrong dtype, raise `TypeError` with a clear message.

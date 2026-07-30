@@ -4,14 +4,14 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py import set_seed
 from tests.conftest import needs_r
 
 
 def _pyinit_available() -> bool:
     try:
-        from robstatm_py._r import r_pkg
+        from robstattm_py._r import r_pkg
 
         r_pkg("pyinit")
         return True
@@ -36,7 +36,7 @@ class TestValidation:
 class TestMineralVsR:
     @pytest.fixture
     def setup(self):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); library(pyinit); data(mineral); "

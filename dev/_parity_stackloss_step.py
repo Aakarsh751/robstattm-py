@@ -1,7 +1,7 @@
 """One-off parity check: stackloss step_lmrobdet with custom control."""
 import numpy as np
-import robstatm_py as rpm
-from robstatm_py._r import r
+import robstattm_py as rpm
+from robstattm_py._r import r
 
 df = rpm.datasets.stackloss()
 ctrl = rpm.lmrobdet_control(bb=0.5, efficiency=0.85, family="bisquare")

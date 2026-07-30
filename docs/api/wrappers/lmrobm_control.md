@@ -1,6 +1,6 @@
 # `lmrobm_control`
 
-> **R original:** `lmrobM.control` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Tuning parameters for lmrobM
+> **R original:** `lmrobM.control` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Tuning parameters for lmrobM
 
 This function sets tuning parameters for the M estimators of regression implemented
 in ``lmrobM``.
@@ -8,7 +8,7 @@ in ``lmrobM``.
 ## Usage
 
 ```python
-from robstatm_py import lmrobm_control
+from robstattm_py import lmrobm_control
 
 def lmrobm_control(**kwargs: 'Any'):
 ```
@@ -42,7 +42,7 @@ not run the deterministic-initial / Peña–Yohai / pyinit cascade.
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 mineral = rpm.datasets.mineral()
 

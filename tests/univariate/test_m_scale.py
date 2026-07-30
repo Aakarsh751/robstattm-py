@@ -1,10 +1,10 @@
-"""Strict-tier tests for robstatm_py.m_scale vs direct R."""
+"""Strict-tier tests for robstattm_py.m_scale vs direct R."""
 from __future__ import annotations
 
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r
 
 
@@ -37,7 +37,7 @@ class TestStrictTierVsR:
     @pytest.mark.parametrize("family", ["bisquare", "huber"])
     @pytest.mark.parametrize("delta", [0.25, 0.5])
     def test_m_scale_matches_r(self, R, family, delta):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.globalenv["u_test"] = GOLDEN_U

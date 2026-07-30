@@ -1,4 +1,4 @@
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Concentration of zinc in 53 mineral samples (some are gross outliers).
 zinc = rpm.datasets.mineral()["zinc"].to_numpy()

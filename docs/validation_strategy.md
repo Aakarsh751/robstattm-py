@@ -1,6 +1,6 @@
 # Validation Strategy
 
-**Core invariant:** for every wrapper output field, a `robstatm_py` call and a same-input, same-seed direct R call must produce values whose maximum absolute difference is **exactly zero**.
+**Core invariant:** for every wrapper output field, a `robstattm_py` call and a same-input, same-seed direct R call must produce values whose maximum absolute difference is **exactly zero**.
 
 The proposal (§6, §9.1) sets this expectation and the existing notebook (`robstattm/python/robstatpy_comparison_rpy2.ipynb`) demonstrates it for `locScaleM` and `mScale` (14/14 checks pass with zero numerical difference). This document scales that policy to the full target set.
 
@@ -61,7 +61,7 @@ For wrappers, only R-side randomness matters (the R code does the simulation). F
 
 ### 2.2 Seed policy
 
-- All randomness goes through `robstatm_py.set_seed(n)`. It calls **both** `np.random.seed(n)` and `R("set.seed(%d)" % n)` in that order.
+- All randomness goes through `robstattm_py.set_seed(n)`. It calls **both** `np.random.seed(n)` and `R("set.seed(%d)" % n)` in that order.
 - Every test that touches randomness opens with `set_seed(20260601)` (or another fixed integer). The integer **is part of the test** and never read from the clock.
 - For wrappers whose R implementation calls `set.seed` internally with a fixed value (e.g. some bootstrap helpers), document this in the wrapper docstring and **do not** override it in the test fixture.
 - The `pyinit` wrapper takes an explicit `seed` argument and forwards it to the R call; tests assert that two calls with the same seed return bit-identical results.
@@ -69,9 +69,9 @@ For wrappers, only R-side randomness matters (the R code does the simulation). F
 ### 2.3 Cross-language reproducibility recipe (drafted)
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 import numpy as np
-from robstatm_py import set_seed
+from robstattm_py import set_seed
 
 def golden_dataset_1():
     set_seed(20260601)
@@ -128,7 +128,7 @@ Phase-6 GLM wrappers add:
 
 ## 4. Coverage gate
 
-- Tool: `pytest --cov=robstatm_py --cov-fail-under=90`.
+- Tool: `pytest --cov=robstattm_py --cov-fail-under=90`.
 - Branch coverage on. Coverage is enforced in CI on every push to `main` and every PR.
 - The 90% figure is **per module** (univariate, regression, covariance, pca, glm) — averaging hides under-tested modules.
 

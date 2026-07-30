@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r
 
 
@@ -297,7 +297,7 @@ def test_seed_reproducibility(call):
 
 def _has_r_pkg(name: str) -> bool:
     try:
-        from robstatm_py._r import r_pkg
+        from robstattm_py._r import r_pkg
         r_pkg(name)
         return True
     except Exception:
@@ -317,7 +317,7 @@ def test_pense_synthetic_vs_r(R):
     beta = np.array([2.0, -1.0, 0.5, 0, 0, 0])
     y = X @ beta + np.random.default_rng(1).normal(size=n) * 0.3
     py = rpm.pense(X, y, alpha=0.5, nlambda=8)
-    from robstatm_py._r import r
+    from robstattm_py._r import r
     ro = r()
     ro.globalenv["Xp"] = X
     ro.globalenv["yp"] = y

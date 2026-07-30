@@ -1,6 +1,6 @@
 # `cov_rob`
 
-> **R original:** `covRob` &nbsp;·&nbsp; **Python module:** `robstatm_py.covariance` &nbsp;·&nbsp; Robust multivariate location and scatter estimators
+> **R original:** `covRob` &nbsp;·&nbsp; **Python module:** `robstattm_py.covariance` &nbsp;·&nbsp; Robust multivariate location and scatter estimators
 
 This function computes robust estimators for multivariate location and scatter.
 
@@ -13,7 +13,7 @@ SHR rho function (as implemented in ``covRobMM``) otherwise.
 ## Usage
 
 ```python
-from robstatm_py import cov_rob
+from robstattm_py import cov_rob
 
 def cov_rob(
             X,
@@ -76,7 +76,7 @@ The `CovRobResult` object also provides these methods:
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 wine = rpm.datasets.wine()       # 59 wines, 13 chemical measurements
 

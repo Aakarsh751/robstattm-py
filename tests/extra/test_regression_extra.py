@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 
@@ -29,7 +29,7 @@ class TestNoInterceptFormula:
         assert fit.iters_const is None
 
     def test_no_intercept_parity(self, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(mineral)")
@@ -60,7 +60,7 @@ class TestMultiPredictorArrayForm:
 class TestLmrobMHeadlineKwargs:
     @pytest.mark.parametrize("family", ["bisquare", "opt"])
     def test_family_kwarg_parity(self, family, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(mineral)")
@@ -92,7 +92,7 @@ class TestPredictAndCoefDCML:
         np.testing.assert_allclose(fit.predict(), fit.fitted_values, rtol=1e-9)
 
     def test_predict_newdata_parity(self, df):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         ro.r("library(RobStatTM); data(mineral)")

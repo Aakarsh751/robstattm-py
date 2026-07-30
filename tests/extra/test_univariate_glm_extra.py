@@ -9,7 +9,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 from tests.conftest import needs_r
 
 FAMILIES = ["mopt", "bisquare", "opt"]
@@ -27,7 +27,7 @@ class TestLocScaleFamilies:
 
     @pytest.mark.parametrize("psi", FAMILIES)
     def test_matches_r(self, psi, R):
-        from robstatm_py._r import r
+        from robstattm_py._r import r
 
         ro = r()
         x = np.concatenate([np.linspace(-1, 1, 30), [12.0, -15.0]])

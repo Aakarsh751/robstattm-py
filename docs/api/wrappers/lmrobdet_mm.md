@@ -1,6 +1,6 @@
 # `lmrobdet_mm`
 
-> **R original:** `lmrobdetMM` &nbsp;·&nbsp; **Python module:** `robstatm_py.regression` &nbsp;·&nbsp; Robust Linear Regression Estimators
+> **R original:** `lmrobdetMM` &nbsp;·&nbsp; **Python module:** `robstattm_py.regression` &nbsp;·&nbsp; Robust Linear Regression Estimators
 
 This function computes an MM-regression estimators for linear models
 using deterministic starting points.
@@ -18,7 +18,7 @@ Section 5.8.1 of Maronna, Martin, Yohai and Salibian Barrera, 2019).
 ## Usage
 
 ```python
-from robstatm_py import lmrobdet_mm
+from robstattm_py import lmrobdet_mm
 
 def lmrobdet_mm(
                 formula: 'str | None' = None,
@@ -127,7 +127,7 @@ and "Optimal Bias Robust Regression Psi and Rho".
 ## Example
 
 ```python
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Load Coleman's school data — 20 obs of school outcomes vs predictors.
 coleman = rpm.datasets.load("robustbase", "coleman")

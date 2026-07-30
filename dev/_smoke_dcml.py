@@ -1,8 +1,8 @@
 """Smoke check: lmrobdet_dcml, lmrob_m, pyinit vs direct R."""
 import numpy as np
-import robstatm_py as rpm
-from robstatm_py._r import r
-from robstatm_py import set_seed
+import robstattm_py as rpm
+from robstattm_py._r import r
+from robstattm_py import set_seed
 
 ro = r()
 ro.r("library(RobStatTM); library(pyinit); data(mineral)")

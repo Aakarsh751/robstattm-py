@@ -1,6 +1,6 @@
 import numpy as np
 
-import robstatm_py as rpm
+import robstattm_py as rpm
 
 # Build a tiny linear dataset: y = 1 + 2*x + noise.
 rng = np.random.default_rng(0)

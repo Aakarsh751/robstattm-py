@@ -284,10 +284,25 @@ def _version_key(name: str) -> tuple:
     return (0, nums)
 
 
+def _injected_roots(probe: Probe, source: str) -> list[Candidate] | None:
+    """Return candidates from ``probe.system_roots`` when a test supplied them.
+
+    ``None`` means "no injection; search the real filesystem". An empty tuple is
+    meaningful and different: it describes a machine with no R installed, and
+    must not fall through to the host's actual install locations.
+    """
+    if probe.system_roots is None:
+        return None
+    return [Candidate(p, source) for p in probe.system_roots if p.is_dir()]
+
+
 def _from_windows_scan(probe: Probe) -> list[Candidate]:
     """Glob the conventional Windows install roots, newest version first."""
     if not probe.is_windows:
         return []
+    injected = _injected_roots(probe, "winscan")
+    if injected is not None:
+        return injected
     roots: list[Path] = []
     for var in ("ProgramFiles", "ProgramW6432", "ProgramFiles(x86)"):
         value = probe.environ.get(var, "").strip()
@@ -317,6 +332,9 @@ def _from_windows_scan(probe: Probe) -> list[Candidate]:
 def _from_macos(probe: Probe) -> list[Candidate]:
     if not probe.is_macos:
         return []
+    injected = _injected_roots(probe, "macframework")
+    if injected is not None:
+        return injected
     out: list[Candidate] = []
     framework = Path("/Library/Frameworks/R.framework")
     current = framework / "Resources"
@@ -341,6 +359,9 @@ def _from_macos(probe: Probe) -> list[Candidate]:
 def _from_linux(probe: Probe) -> list[Candidate]:
     if not probe.is_linux:
         return []
+    injected = _injected_roots(probe, "linux")
+    if injected is not None:
+        return injected
     out: list[Candidate] = []
     for fixed in (Path("/usr/lib/R"), Path("/usr/lib64/R"), Path("/usr/local/lib/R")):
         if fixed.is_dir():

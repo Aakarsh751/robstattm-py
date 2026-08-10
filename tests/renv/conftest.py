@@ -153,15 +153,19 @@ def make_probe(
     home: Path | None = None,
     sys_prefix: Path | None = None,
     registry: list[tuple[Path, str]] | None = None,
+    system_roots: tuple[Path, ...] = (),
 ) -> Probe:
     """Build a synthetic :class:`Probe`.
 
     ``path_exes`` maps an executable name to the path ``which`` should report,
     letting a test place a working — or deliberately broken — ``R`` on ``PATH``.
 
-    ``registry`` stubs the Windows registry. It defaults to an empty list rather
-    than ``None`` so a Windows-flavoured test never reads the *host's* real
-    registry and silently picks up a genuine R installation.
+    ``registry`` and ``system_roots`` both default to *empty* rather than
+    ``None``, which is the important part: ``None`` would mean "look at the real
+    machine". A test describing a host with no R must not be quietly
+    contradicted by the R that happens to be installed on a CI runner - that is
+    precisely how these tests passed locally and failed on Linux, where
+    ``/opt/R/4.6.1`` exists.
     """
     exes = path_exes or {}
     installs = list(registry or [])
@@ -174,6 +178,7 @@ def make_probe(
         home=home or Path("/nonexistent-home"),
         sys_prefix=sys_prefix or Path("/nonexistent-prefix"),
         registry_installs=lambda: installs,
+        system_roots=system_roots,
     )
 
 

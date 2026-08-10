@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from robstattm_py._renv.discovery import Candidate, discover
+from robstattm_py._renv.discovery import discover
 from robstattm_py._renv.errors import ArchMismatchError, InvalidRHomeError
 
 from .conftest import make_conda_prefix, make_probe, make_r_home
@@ -33,7 +33,7 @@ def _linux_probe(tmp_path, **overrides):
 # ---------------------------------------------------------------------------
 
 
-def test_full_precedence_ladder(tmp_path, monkeypatch):
+def test_full_precedence_ladder(tmp_path):
     """Populate every rung, then peel them off and assert the exact order."""
     rtm_home = tmp_path / "rtm"
 
@@ -62,15 +62,12 @@ def test_full_precedence_ladder(tmp_path, monkeypatch):
     (path_r / "bin").mkdir(exist_ok=True)
     (path_r / "bin" / "R").write_text("#!/bin/sh\n")
 
-    # Stand in for /usr/lib/R without touching the real filesystem. This works
-    # because _RUNGS names its generators and resolves them at call time.
-    monkeypatch.setattr(
-        "robstattm_py._renv.discovery._from_linux",
-        lambda probe: [Candidate(distro, "linux")],
-    )
-
     def run(env):
-        probe = _linux_probe(tmp_path, environ=env, path_exes=exes)
+        # system_roots stands in for /usr/lib/R and friends, so the ladder is
+        # unaffected by whatever R happens to be installed on the test machine.
+        probe = _linux_probe(
+            tmp_path, environ=env, path_exes=exes, system_roots=(distro,)
+        )
         return discover(probe=probe)
 
     # 1. Explicit override wins over everything.
@@ -95,7 +92,7 @@ def test_full_precedence_ladder(tmp_path, monkeypatch):
     assert run(env).info.path == path_r
 
     # 6. Finally the conventional distro location.
-    probe = _linux_probe(tmp_path, environ=env, path_exes={})
+    probe = _linux_probe(tmp_path, environ=env, path_exes={}, system_roots=(distro,))
     assert discover(probe=probe).info.path == distro
 
 

@@ -652,6 +652,32 @@ def uninstall(
     return removed
 
 
+def virtual_package_overrides(subdir: str) -> dict[str, str]:
+    """Environment overrides needed to solve for a *foreign* platform.
+
+    conda expresses host capabilities as virtual packages: ``__osx`` carries the
+    macOS version, ``__glibc`` the C library version. They are detected from the
+    running machine, so when solving for another platform they are simply
+    absent and the solve fails with, for example::
+
+        nothing provides __osx >=11.0 needed by r-rrcov-1.7_7-...
+
+    That is an artefact of cross-solving, not a real packaging problem - the
+    same specification resolves fine on an actual macOS machine. Declaring
+    plausible values lets a single runner check every platform.
+
+    The values are floors, chosen to match what conda-forge currently targets.
+    """
+    if subdir.startswith("osx"):
+        # conda-forge's arm64 builds require macOS 11; Intel builds target 10.13.
+        return {"CONDA_OVERRIDE_OSX": "11.0" if subdir.endswith("arm64") else "10.13"}
+    if subdir.startswith("linux"):
+        return {"CONDA_OVERRIDE_GLIBC": "2.17"}
+    if subdir.startswith("win"):
+        return {"CONDA_OVERRIDE_WIN": "0"}
+    return {}
+
+
 def solve_only(
     subdir: str,
     *,
@@ -677,9 +703,12 @@ def solve_only(
         platform=subdir,
         dry_run=True,
     )
+    env = child_env(probe)
+    # Added after child_env, which strips everything CONDA*-prefixed.
+    env.update(virtual_package_overrides(subdir))
     completed = subprocess.run(  # noqa: S603 - fixed argv, no shell
         argv, capture_output=True, text=True, errors="replace",
-        env=child_env(probe), timeout=timeout, check=False,
+        env=env, timeout=timeout, check=False,
     )
     if completed.returncode != 0:
         raise ProvisionError(

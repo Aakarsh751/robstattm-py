@@ -27,8 +27,11 @@ def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.Compl
     }
     env["ROBSTATTM_HOME"] = str(tmp_path / "rtm-home")
     env.update(env_overrides)
-    # Keep the package importable without inheriting R-related settings.
-    env["PYTHONPATH"] = os.pathsep.join(sys.path)
+    # Deliberately do NOT rebuild PYTHONPATH from sys.path. Doing so injects the
+    # interpreter's own stdlib and lib-dynload directories, which on CI produced
+    # `ImportError: _ctypes ... undefined symbol: _PyErr_SetLocaleString` - a
+    # broken interpreter, not a real result. The package is pip-installed, so
+    # the child finds it on its own.
     return subprocess.run(
         [sys.executable, "-c", textwrap.dedent(code)],
         capture_output=True,

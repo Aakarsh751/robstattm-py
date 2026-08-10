@@ -379,6 +379,42 @@ def test_opaque_micromamba_cache_errors_are_translated(tmp_path):
     assert not provision._looks_like_path_overflow("nothing provides r-base", windows)
 
 
+# ---------------------------------------------------------------------------
+# Cross-platform solving
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("subdir", SUPPORTED_SUBDIRS)
+def test_every_platform_declares_its_virtual_packages(subdir):
+    """Solving for a foreign platform needs ``__osx`` / ``__glibc`` declared.
+
+    conda derives these from the running machine, so cross-solving without them
+    fails with "nothing provides __osx >=11.0" - an artefact of the check, not a
+    real packaging problem. Missing an entry here silently turns a CI signal
+    into a false alarm.
+    """
+    overrides = provision.virtual_package_overrides(subdir)
+    assert overrides, f"no virtual-package overrides declared for {subdir}"
+    assert all(k.startswith("CONDA_OVERRIDE_") for k in overrides)
+
+
+def test_apple_silicon_requires_a_newer_macos_floor_than_intel():
+    """conda-forge's arm64 builds need macOS 11; Intel builds go back further."""
+    assert provision.virtual_package_overrides("osx-arm64")["CONDA_OVERRIDE_OSX"] == "11.0"
+    assert provision.virtual_package_overrides("osx-64")["CONDA_OVERRIDE_OSX"] == "10.13"
+
+
+def test_overrides_survive_the_environment_scrubber(tmp_path):
+    """child_env strips CONDA*, so the overrides must be applied afterwards."""
+    scrubbed = provision.child_env(
+        make_probe(environ={"ROBSTATTM_HOME": str(tmp_path), "CONDA_OVERRIDE_OSX": "9.9"})
+    )
+    assert "CONDA_OVERRIDE_OSX" not in scrubbed
+
+    merged = {**scrubbed, **provision.virtual_package_overrides("osx-arm64")}
+    assert merged["CONDA_OVERRIDE_OSX"] == "11.0"
+
+
 def test_licence_notice_names_both_licences():
     """Users must be told what they are downloading before it happens."""
     notice = provision.licence_notice()

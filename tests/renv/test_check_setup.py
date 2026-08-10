@@ -61,15 +61,29 @@ def test_reports_a_real_rpy2_version_not_unknown(capsys):
 def test_package_table_columns_line_up(capsys):
     """`robustvarComp` is 13 characters and used to overflow a 12-wide column."""
     mod.check_setup()
+    all_packages = mod.CORE_R_PACKAGES + mod.STRETCH_R_PACKAGES + mod.OPTIONAL_R_PACKAGES
+
+    # Match only genuine table rows: two-space indent followed immediately by a
+    # package name. Substring matching would also pull in the install-hint lines
+    # that appear when a package is missing (as `robcbi` is on CI), which are
+    # not part of the table and are not expected to align.
     rows = [
-        line
+        (name, line)
         for line in capsys.readouterr().out.splitlines()
-        if line.startswith("  ") and any(p in line for p in mod.OPTIONAL_R_PACKAGES + mod.CORE_R_PACKAGES)
+        for name in all_packages
+        if line.startswith(f"  {name} ")
     ]
     assert rows, "no package rows found"
 
-    starts = {line.index("[") if "[" in line else line.rindex(" ") for line in rows}
-    assert len(starts) == 1, f"status column is ragged across rows: {rows}"
+    # Where the second column begins: past the name, past its padding.
+    def second_column_start(name: str, line: str) -> int:
+        after_name = 2 + len(name)
+        return after_name + (len(line[after_name:]) - len(line[after_name:].lstrip()))
+
+    starts = {second_column_start(name, line) for name, line in rows}
+    assert len(starts) == 1, "version column is ragged:\n" + "\n".join(
+        line for _, line in rows
+    )
 
 
 @needs_r

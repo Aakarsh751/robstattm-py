@@ -99,6 +99,13 @@ class Probe:
         registry. ``None`` means "read the real registry". Tests inject a stub,
         because the registry is process-global and would otherwise leak the
         host's actual R installations into synthetic scenarios.
+    system_roots : tuple[Path, ...], optional
+        Directories to search instead of the conventional per-OS install
+        locations (``/usr/lib/R``, ``/opt/R/*``,
+        ``/Library/Frameworks/R.framework``, ``C:\\Program Files\\R``).
+        ``None`` means "use the real ones". Tests pass an explicit tuple -
+        often empty - so that a scenario describing a machine with no R is not
+        quietly contradicted by an R that happens to exist on the CI runner.
     """
 
     system: str
@@ -109,6 +116,7 @@ class Probe:
     home: Path = field(default_factory=Path.home)
     sys_prefix: Path = field(default_factory=lambda: Path(sys.prefix))
     registry_installs: Callable[[], list[tuple[Path, str]]] | None = None
+    system_roots: tuple[Path, ...] | None = None
 
     @classmethod
     def current(cls) -> Probe:

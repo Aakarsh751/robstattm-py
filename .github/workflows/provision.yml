@@ -1,0 +1,189 @@
+name: Provision
+
+# Proves the claim that a user needs no R of their own.
+#
+# Two jobs with different cost profiles:
+#
+#   solve    ~30 s, ~10 MB. Runs on every relevant PR. micromamba can solve for
+#            a foreign platform, so one Linux runner checks that the package
+#            specification is satisfiable on all six targets without downloading
+#            a single package. This is what catches the two most likely
+#            real-world breakages -- conda-forge dropping a build we depend on,
+#            and osx-arm64 still lacking r-robstattm -- for almost no cost.
+#
+#   clean    ~10 min per OS. Actually provisions R on a machine with none, then
+#            runs a real fit. Scheduled nightly and on changes to the
+#            provisioning code, not on every PR.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/robstattm_py/_renv/**"
+      - "src/robstattm_py/cli/**"
+      - "pyproject.toml"
+      - ".github/workflows/provision.yml"
+  pull_request:
+    paths:
+      - "src/robstattm_py/_renv/**"
+      - "src/robstattm_py/cli/**"
+      - "pyproject.toml"
+      - ".github/workflows/provision.yml"
+  schedule:
+    # 04:20 UTC daily. conda-forge migrations land without warning, and a
+    # nightly solve tells us before a user does.
+    - cron: "20 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: provision-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  solve:
+    name: solve ${{ matrix.subdir }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        subdir: [linux-64, linux-aarch64, osx-64, osx-arm64, win-64]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package (no R needed to solve)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Solve for ${{ matrix.subdir }}
+        run: python dev/_solve_check.py ${{ matrix.subdir }}
+
+  clean:
+    name: clean machine (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    # Downloading ~400 MB per OS is not worth doing on every pull request.
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # A stock slim image: no R, no conda. Cleanliness is structural here
+          # rather than asserted.
+          - os: ubuntu-latest
+            label: linux-64 (container)
+            container: python:3.12-slim
+          - os: windows-latest
+            label: win-64
+          - os: macos-14
+            label: osx-arm64
+          - os: macos-13
+            label: osx-64
+    container: ${{ matrix.container }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        if: matrix.container == ''
+        with:
+          python-version: "3.12"
+
+      # GitHub's Windows and macOS images ship R. Remove it, then *fail the job*
+      # if any trace remains: without this the run could quietly succeed by
+      # finding a system R and would prove nothing at all.
+      - name: Remove any preinstalled R
+        if: matrix.container == ''
+        shell: bash
+        continue-on-error: true
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            choco uninstall r.project r -y --skip-autouninstaller || true
+            rm -rf "/c/Program Files/R" || true
+          else
+            sudo rm -rf /Library/Frameworks/R.framework /usr/local/bin/R /usr/local/bin/Rscript || true
+            sudo rm -rf /opt/homebrew/bin/R /opt/homebrew/bin/Rscript || true
+          fi
+
+      - name: Assert this machine really has no R
+        shell: bash
+        run: |
+          fail() { echo "::error::$1"; exit 1; }
+          command -v R       >/dev/null 2>&1 && fail "R is still on PATH: $(command -v R)"
+          command -v Rscript >/dev/null 2>&1 && fail "Rscript is still on PATH"
+          [ -n "${R_HOME:-}" ] && fail "R_HOME is set: $R_HOME"
+          [ -d "/c/Program Files/R" ] && fail "C:\\Program Files\\R still exists"
+          [ -d "/Library/Frameworks/R.framework" ] && fail "R.framework still exists"
+          echo "confirmed: no R on this machine"
+
+      # Short root on Windows: conda-forge's R pulls in mingw headers that sit
+      # ~215 characters deep, and long-path support is off by default.
+      - name: Choose a short install root (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "ROBSTATTM_HOME=C:\\rtm" >> "$GITHUB_ENV"
+
+      # Cache only the downloaded packages, never the environment itself.
+      # Caching envs/ would skip the create/link/verify path and make this job
+      # vacuous.
+      - name: Cache conda packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.ROBSTATTM_HOME || '~/.local/share/robstattm-py' }}/pkgs
+            ${{ env.ROBSTATTM_HOME || '~/.local/share/robstattm-py' }}/bin
+          key: provision-${{ matrix.label }}-${{ hashFiles('src/robstattm_py/_renv/provision.py', 'src/robstattm_py/_renv/micromamba.py') }}
+
+      # Install the built wheel, not `-e .`: users get the wheel, so that is
+      # what should be proven to work.
+      - name: Build and install the wheel
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel
+          python -m pip install dist/*.whl
+
+      - name: robstattm-py setup
+        shell: bash
+        run: python -m robstattm_py.cli setup --yes
+
+      - name: Assert the provisioned R is the one being used
+        shell: bash
+        run: |
+          python -m robstattm_py.cli doctor
+          python -m robstattm_py.cli doctor --json > doctor.json
+          python dev/_assert_doctor.py doctor.json --expect-source provisioned
+
+      - name: Run a real robust fit
+        shell: bash
+        run: |
+          python - <<'PY'
+          import robstattm_py as rpm
+          fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
+          print("coefficients:", fit.coefficients)
+          # Known values for this dataset; a provisioned R must agree with the
+          # figures the strict-tier suite pins against a system R.
+          assert abs(fit.coefficients[0] - 15.2012174) < 1e-4, fit.coefficients
+          assert abs(fit.coefficients[1] - 0.0125614958) < 1e-6, fit.coefficients
+          cov = rpm.cov_rob(rpm.datasets.wine())
+          assert cov.cov.shape == (13, 13)
+          print("provisioned R produces the expected results")
+          PY
+
+      - name: Uninstall cleanly
+        shell: bash
+        run: |
+          python -m robstattm_py.cli uninstall --env --rlibs --yes
+          python -m robstattm_py.cli info
+
+      - name: Upload setup log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup-log-${{ matrix.label }}
+          path: |
+            ${{ env.ROBSTATTM_HOME || '~/.local/share/robstattm-py' }}/logs/*.log
+          if-no-files-found: ignore

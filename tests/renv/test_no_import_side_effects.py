@@ -4,10 +4,10 @@ Run in a subprocess with a scrubbed environment, because the checks are about
 what happens at interpreter start — by the time an in-process test runs, the
 package has already been imported by the collector.
 
-Why this is worth a dedicated test: the package is about to grow the ability to
-download and install a 250 MB R environment. The line between "a library you
-imported" and "a program that reconfigures your machine" is exactly this, and it
-is easy to cross by accident with a well-meaning convenience default.
+Why this is worth a dedicated test: the package can download and install a
+multi-gigabyte R environment. The line between "a library you imported" and "a
+program that reconfigures your machine" is exactly this, and it is easy to
+cross by accident with a well-meaning convenience default.
 """
 from __future__ import annotations
 
@@ -15,8 +15,27 @@ import os
 import subprocess
 import sys
 import textwrap
+from pathlib import Path
 
 import pytest
+
+
+def package_parent_dir() -> str:
+    """Directory containing the ``robstattm_py`` package.
+
+    Child processes need this on ``PYTHONPATH``: under an editable install
+    pytest makes the package importable in the *parent* without it necessarily
+    being importable from a bare interpreter, so a subprocess gets
+    ``ModuleNotFoundError``.
+
+    Only this one directory, never the whole ``sys.path`` — copying ``sys.path``
+    also drags in the interpreter's stdlib and ``lib-dynload``, which on CI
+    produced ``ImportError: _ctypes ... undefined symbol:
+    _PyErr_SetLocaleString``: a broken child rather than a real result.
+    """
+    import robstattm_py
+
+    return str(Path(robstattm_py.__file__).resolve().parent.parent)
 
 
 def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.CompletedProcess:
@@ -26,12 +45,11 @@ def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.Compl
         if not k.startswith(("R_", "ROBSTATTM_", "RPY2_", "CONDA", "MAMBA"))
     }
     env["ROBSTATTM_HOME"] = str(tmp_path / "rtm-home")
+    existing = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = (
+        package_parent_dir() + (os.pathsep + existing if existing else "")
+    )
     env.update(env_overrides)
-    # Deliberately do NOT rebuild PYTHONPATH from sys.path. Doing so injects the
-    # interpreter's own stdlib and lib-dynload directories, which on CI produced
-    # `ImportError: _ctypes ... undefined symbol: _PyErr_SetLocaleString` - a
-    # broken interpreter, not a real result. The package is pip-installed, so
-    # the child finds it on its own.
     return subprocess.run(
         [sys.executable, "-c", textwrap.dedent(code)],
         capture_output=True,

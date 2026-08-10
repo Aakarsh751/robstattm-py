@@ -22,9 +22,11 @@ no longer pristine and the bug cannot be observed.
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import textwrap
+from pathlib import Path
 
 import pytest
 
@@ -33,11 +35,23 @@ from .conftest import needs_r
 
 def _fresh(code: str) -> subprocess.CompletedProcess:
     """Run ``code`` in a brand-new interpreter, and hence a brand-new R."""
+    import robstattm_py
+
+    # Under an editable install pytest makes the package importable in this
+    # process without it necessarily being importable from a bare interpreter,
+    # so the child would fail with ModuleNotFoundError. Add exactly the one
+    # directory that fixes it.
+    env = dict(os.environ)
+    parent = str(Path(robstattm_py.__file__).resolve().parent.parent)
+    existing = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = parent + (os.pathsep + existing if existing else "")
+
     return subprocess.run(
         [sys.executable, "-c", textwrap.dedent(code)],
         capture_output=True,
         text=True,
         timeout=600,
+        env=env,
         check=False,
     )
 

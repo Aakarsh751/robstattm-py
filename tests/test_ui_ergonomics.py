@@ -1,9 +1,6 @@
 """Tests for the §6, §10, §11 UI surfaces added in the ergonomics pass."""
 from __future__ import annotations
 
-import os
-import pickle
-
 import numpy as np
 import pandas as pd
 import pytest

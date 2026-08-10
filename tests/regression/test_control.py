@@ -103,6 +103,7 @@ def test_nondefault_control_changes_the_fit():
     """End-to-end: a control with a non-headline key set still matches R's own
     fit built with the same control (strict tier)."""
     import numpy as np
+
     from robstattm_py._r import r
 
     df = rpm.datasets.mineral()

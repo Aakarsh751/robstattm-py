@@ -10,7 +10,6 @@ from tests.conftest import (
     needs_r,
 )
 
-
 # Deterministic golden input (no Python randomness — R and Py see identical bits)
 GOLDEN_X = np.array(
     [

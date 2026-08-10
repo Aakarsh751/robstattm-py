@@ -8,7 +8,6 @@ import pytest
 import robstattm_py as rpm
 from tests.conftest import needs_r
 
-
 # (Python loader name, R name, expected shape, has-numeric-only-check)
 ALL_DATASETS = [
     ("alcohol",     "alcohol",     (44, 7)),

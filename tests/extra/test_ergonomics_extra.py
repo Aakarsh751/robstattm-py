@@ -16,7 +16,6 @@ import pytest
 import robstattm_py as rpm
 from tests.conftest import needs_r
 
-
 # --------------------------------------------------------------------------
 # to_dict() contract holds for non-regression result types
 # --------------------------------------------------------------------------

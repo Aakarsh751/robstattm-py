@@ -8,7 +8,6 @@ estimators and Python-side invariants.
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 import robstattm_py as rpm
 from tests.conftest import needs_r

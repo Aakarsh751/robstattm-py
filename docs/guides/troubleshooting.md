@@ -171,8 +171,10 @@ The covariance, PCA, and external estimators use random subsampling. Fix the
 seed immediately before the fit:
 
 ```python
+import robstattm_py as rpm
+
 rpm.set_seed(42)
-cov = rpm.cov_rob(data)
+cov = rpm.cov_rob(rpm.datasets.wine())
 ```
 
 Regression estimators (`lmrobdet_mm`, `lmrobdet_dcml`, `lmrob_m`) are

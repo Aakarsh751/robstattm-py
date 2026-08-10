@@ -8,7 +8,6 @@ import pytest
 import robstattm_py as rpm
 from tests.conftest import needs_r
 
-
 # ---------------------------------------------------------------------------
 # Argument validation
 # ---------------------------------------------------------------------------

@@ -5,8 +5,6 @@ These would have caught the recently-fixed gaps: missing names in
 """
 from __future__ import annotations
 
-import importlib
-
 import pytest
 
 import robstattm_py as rpm

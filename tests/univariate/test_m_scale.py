@@ -7,7 +7,6 @@ import pytest
 import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r
 
-
 GOLDEN_U = np.array(
     [
         1.2, -0.4, 0.7, 2.1, -1.0, 0.3, 1.8, -2.5, 0.9, 0.0,

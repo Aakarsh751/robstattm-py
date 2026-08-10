@@ -7,7 +7,6 @@ import pytest
 import robstattm_py as rpm
 from tests.conftest import needs_r
 
-
 U_GRID = np.array([-3.0, -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0, 3.0])
 SCALAR_FAMILIES = ["bisquare", "huber"]
 VECTOR_FAMILIES = ["mopt", "opt", "moptv0", "optv0"]

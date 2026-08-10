@@ -2,13 +2,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pandas as pd
 import pytest
 
 import robstattm_py as rpm
 from robstattm_py import set_seed
 from tests.conftest import needs_r
-
 
 # ---------------------------------------------------------------------------
 # Argument validation

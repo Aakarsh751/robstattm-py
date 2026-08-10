@@ -95,8 +95,12 @@ api/index
 :caption: Guides
 :maxdepth: 1
 
+guides/install-beginner
 guides/installation
+guides/platform-support
 guides/troubleshooting
+guides/testing-for-beginners
+guides/for-r-users
 guides/datasets
 guides/psi-families
 guides/utilities

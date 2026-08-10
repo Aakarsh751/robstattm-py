@@ -9,7 +9,8 @@ prints.
 import robstattm_py as rpm
 from robstattm_py import plot
 
-fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
+mineral = rpm.datasets.mineral()
+fit = rpm.lmrobdet_mm("zinc ~ copper", data=mineral)
 
 ax  = plot.residuals(fit)                    # native matplotlib Axes (default)
 ax  = plot.residuals(fit, backend="r")       # R's own graphics → PNG path
@@ -98,7 +99,9 @@ multi-estimator comparison:
 
 ```python
 plot.scatter_with_fit(fit, show_ols=True)
-plot.compare_fits({"robust MM": fit, "OLS-ish": other_fit})
+
+dcml_fit = rpm.lmrobdet_dcml("zinc ~ copper", data=mineral)
+plot.compare_fits({"MM": fit, "DCML": dcml_fit})
 ```
 
 ![Scatter with fit](../_static/plots/scatter_with_fit.png)

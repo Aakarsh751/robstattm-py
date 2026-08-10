@@ -65,9 +65,11 @@ import warnings
 import robstattm_py as rpm
 from robstattm_py import RobStatTMWarning
 
+mineral = rpm.datasets.mineral()
+
 with warnings.catch_warnings(record=True) as caught:
     warnings.simplefilter("always")
-    fit = rpm.lmrob_m("y ~ x", data=df)
+    fit = rpm.lmrob_m("zinc ~ copper", data=mineral)
 
 for w in caught:
     if issubclass(w.category, RobStatTMWarning):
@@ -79,9 +81,9 @@ from the most recent R call (a fit *or* a result method such as `.summary()` /
 `.predict()`):
 
 ```python
-fit = rpm.lmrob_m("y ~ x", data=df)
+fit = rpm.lmrob_m("zinc ~ copper", data=rpm.datasets.mineral())
 rpm.last_r_warnings()
-# ['M-step did NOT converge. Returning unconverged lM-estimate']
+# e.g. ['M-step did NOT converge. Returning unconverged lM-estimate']
 ```
 
 To **silence** them, filter like any Python warning:
@@ -97,7 +99,7 @@ To scope capture to a specific block (and get the list directly), use the
 from robstattm_py import capture_r_warnings
 
 with capture_r_warnings() as messages:
-    fit = rpm.lmrobdet_mm("y ~ x", data=df)
+    fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 print(messages)   # list of R warning strings from inside the block
 ```
 

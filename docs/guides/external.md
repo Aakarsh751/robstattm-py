@@ -188,6 +188,8 @@ def var_comprob(fixed, data, *, groups, varcov, varcov_names=None,
 covariance kernels. Returns `beta`/`eta`/`gamma` (+ their `vcov_*`), `sigma2`,
 `Sigma`, `scales`, `iterations`, `method`.
 
+<!-- doc-check: skip - needs the optional robustvarComp and WWGbook R packages, plus the autism data prepared in examples-scripts/autism.R -->
+
 ```python
 import numpy as np, robstattm_py as rpm
 
@@ -251,6 +253,8 @@ def cubinf(X, y, *, family="poisson", intercept=False,
 `X` is a **design matrix** (variables in columns); supply your own intercept column
 when `intercept=False` (the default), as `epilepsy.R` does. Returns `coefficients`,
 `cov`, `std_errors`, `fitted_values`, `deviance_residuals` (`rsdev`), `converged`.
+
+<!-- doc-check: skip - needs the optional robcbi R package (archived on CRAN) and the epilepsy data from examples-scripts/epilepsy.R -->
 
 ```python
 import numpy as np, robstattm_py as rpm

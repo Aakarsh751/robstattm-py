@@ -16,24 +16,13 @@ through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 ## Requirements
 
 - **Python** ≥ 3.10
-- **R** ≥ 4.2 with the `RobStatTM` package installed (plus its deps:
-  `pyinit`, `robustbase`, `rrcov`). Optional stretch estimators need `pense`
-  and `GSE`.
-- On Windows, point `rpy2` at your R install before importing:
+- **R** ≥ 4.2 — [install it from CRAN](https://cran.r-project.org/) if you don't
+  already have it.
 
-  ```python
-  import os
-  os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-  os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
-  ```
-
-Install the R side once:
-
-```r
-install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
-# optional stretch estimators:
-install.packages(c("pense", "GSE"))
-```
+You do **not** need to configure R. RobStatTM-Py finds it on its own — via the
+Windows registry, `PATH`, an active conda environment, or the standard install
+location for your OS — and rejects an R built for the wrong CPU architecture
+before it can crash Python.
 
 ## Install
 
@@ -43,21 +32,39 @@ pip install -e robstattm-py/          # from the repo root
 cd robstattm-py && pip install -e .
 ```
 
-Optional extras: `pip install -e ".[notebooks,plots,dev,docs,benchmarks]"`
+Then the R packages, from your normal terminal — no R console required:
+
+```bash
+robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
+robstattm-py install-r-packages pense GSE      # optional stretch estimators
+```
+
+Optional Python extras: `pip install -e ".[notebooks,plots,dev,docs,benchmarks]"`
 (`notebooks` = scipy + matplotlib + Jupyter, needed to run the example notebooks).
 
-> **Setting up on macOS or Linux, or hitting an `R_HOME` / rpy2 error?** See the
-> full cross-OS [Installation & setup guide](docs/guides/installation.md) — it
-> covers R + R-package install per OS, virtual environments, Jupyter, and a
-> troubleshooting table.
-
 ## Check your setup
+
+```bash
+robstattm-py doctor
+```
+
+Reports Python, rpy2, R, and every R package — and when something is wrong, the
+exact command that fixes it.
+
+> **`robstattm-py: command not found`?** On Windows, `pip` often installs
+> scripts to a folder outside your `PATH`. `python -m robstattm_py.cli doctor`
+> always works and does exactly the same thing.
+
+From inside Python or a notebook:
 
 ```python
 import robstattm_py as rpm
 
 rpm.check_setup()        # reports R, rpy2, and each R package as READY / MISSING
 ```
+
+> Stuck? See the [troubleshooting guide](docs/guides/troubleshooting.md), or the
+> full cross-OS [installation guide](docs/guides/installation.md).
 
 ## Quickstart
 

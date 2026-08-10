@@ -29,7 +29,15 @@ dependencies = [
     "rpy2>=3.6",
     "numpy>=1.24",
     "pandas>=2.0",
+    # Used by robstattm_py._renv to locate the private R environment
+    # (platformdirs) and to version-sort R installations (packaging). Both are
+    # small, pure-Python, and already present in most scientific environments.
+    "platformdirs>=3",
+    "packaging>=23",
 ]
+
+[project.scripts]
+robstattm-py = "robstattm_py.cli._main:main"
 
 [project.optional-dependencies]
 plots = ["matplotlib>=3.7", "plotnine>=0.13"]

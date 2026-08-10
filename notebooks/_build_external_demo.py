@@ -32,13 +32,9 @@ cells.append(new_markdown_cell(
     "them as missing and the relevant cells will raise a clear setup error."
 ))
 
+# No R_HOME bootstrap needed: robstattm_py locates R itself.
 cells.append(new_code_cell(
     "import os, sys\n"
-    "\n"
-    "# Windows R_HOME setup (skip if already configured)\n"
-    'if sys.platform == "win32" and "R_HOME" not in os.environ:\n'
-    '    os.environ["R_HOME"] = r"C:\\Program Files\\R\\R-4.5.2"\n'
-    '    os.environ["PATH"] = r"C:\\Program Files\\R\\R-4.5.2\\bin\\x64;" + os.environ["PATH"]\n'
     "\n"
     "import numpy as np\n"
     "import robstattm_py as rpm\n"

@@ -96,6 +96,7 @@ api/index
 :maxdepth: 1
 
 guides/installation
+guides/troubleshooting
 guides/datasets
 guides/psi-families
 guides/utilities

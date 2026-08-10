@@ -38,11 +38,8 @@ See the [Plotting guide](../docs/guides/plotting.md) and
 md("## Setup\n\nOn Windows, point `rpy2` at R before importing the package.")
 
 code(r"""
-import os, sys, pathlib
+import pathlib
 
-if sys.platform == "win32" and "R_HOME" not in os.environ:
-    os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-    os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
 %matplotlib inline
 import matplotlib.pyplot as plt

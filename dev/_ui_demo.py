@@ -6,11 +6,7 @@ new user sees when they reach for the library.
 """
 from __future__ import annotations
 
-import os, sys
 
-if sys.platform == "win32" and "R_HOME" not in os.environ:
-    os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-    os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
 
 def banner(s):

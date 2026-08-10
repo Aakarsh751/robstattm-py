@@ -1,8 +1,4 @@
 """Smoke-test the new UI surfaces from this turn."""
-import os, sys
-if sys.platform == "win32" and "R_HOME" not in os.environ:
-    os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-    os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
 
 import numpy as np, pandas as pd
 import robstattm_py as rpm

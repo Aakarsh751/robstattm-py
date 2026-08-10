@@ -19,9 +19,14 @@ htmlcov/
 
 # Generated notebook/verify/doc-example figures (regenerated on run)
 verify_smoke_plot.png
-# Doc-example plot outputs written to CWD by guides/result-methods.md & utilities.md
+# Doc-example plot outputs written to CWD by guides/result-methods.md,
+# guides/plotting.md & utilities.md when dev/_check_all_doc_code.py runs them
 /diagnostics.png
 /scatter.png
+/resid.png
+
+# Local build/verification output
+dist_verify/
 
 # Virtual envs
 .venv/

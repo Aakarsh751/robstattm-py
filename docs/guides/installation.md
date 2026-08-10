@@ -14,7 +14,7 @@ installed in this order:
 >
 > | Layer | Requirement | How RobStatTM-Py finds it |
 > |---|---|---|
-> | R | ≥ 4.2 (tested on 4.5.2) | `R_HOME` env var, or `R` on your `PATH` |
+> | R | ≥ 4.2 (tested on 4.5.2) | found automatically — registry, `PATH`, conda, and the standard install locations |
 > | R packages | `RobStatTM`, `pyinit`, `robustbase`, `rrcov` (core); `pense`, `GSE` (optional) | `library()` search path |
 > | Python | ≥ 3.10 | the interpreter you `pip install` into |
 > | rpy2 | ≥ 3.6 | installed from PyPI; links against R at import |
@@ -28,14 +28,14 @@ copy-paste commands per OS, then [Verify](#5-verify-everything).
 
 ### Windows
 
-1. Download the installer from <https://cran.r-project.org/bin/windows/base/>
-   and run it. Accept the defaults.
-2. Note the install path — it looks like `C:\Program Files\R\R-4.5.2`. You will
-   point Python at it in [step 4](#4-point-python-at-r-r_home).
+Download the installer from <https://cran.r-project.org/bin/windows/base/> and
+run it. Accept the defaults — there is nothing to note down.
 
-> On 64-bit Windows the R DLLs live in `…\R-4.5.2\bin\x64`. RobStatTM-Py adds
-> this to the DLL search path for you (see `_ensure_windows_r_dll_path`), so you
-> normally only need to set `R_HOME`.
+> The Windows installer records R in the registry, and RobStatTM-Py reads it
+> from there, so R does **not** need to be on your `PATH` and you do **not**
+> need to set `R_HOME`. The package also puts R's own DLL directories on the
+> search path for you, which is what prevents the
+> `LoadLibrary failure: The specified module could not be found` error.
 
 ### macOS
 
@@ -75,25 +75,42 @@ sudo dnf install -y R R-devel
 
 ## 2. Install the R packages
 
-Open an **R session** (`R` in a terminal, or RGui/RStudio) and run:
+You can do this from your normal terminal after [step 3](#3-install-python-rpy2-and-robstattm-py) —
+no R knowledge, and no R console, required:
+
+```bash
+robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
+
+# optional — only for the external "stretch" estimators
+# (pense / pense_cv / gse / tsgs):
+robstattm-py install-r-packages pense GSE
+```
+
+These go into a private library that RobStatTM-Py owns, so your own R
+installation is left exactly as it was. This compiles C/Fortran code, so the
+first install can take several minutes.
+
+<details>
+<summary>Prefer to use R directly?</summary>
+
+Open an R session (`R` in a terminal, or RGui/RStudio) and run:
 
 ```r
 install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
-
-# optional — only needed for the external "stretch" estimators
-# (pense / pense_cv / gse / tsgs):
-install.packages(c("pense", "GSE"))
+install.packages(c("pense", "GSE"))   # optional
 ```
 
-Pick a CRAN mirror when prompted (any is fine). This compiles C/Fortran code, so
-the first install can take several minutes.
+Pick a CRAN mirror when prompted (any is fine).
 
-> **Linux tip:** for much faster *binary* installs (no compilation), use Posit
-> Public Package Manager:
-> ```r
-> options(repos = "https://packagemanager.posit.co/cran/latest")
-> install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
-> ```
+**Linux tip:** for much faster *binary* installs (no compilation), use Posit
+Public Package Manager:
+
+```r
+options(repos = "https://packagemanager.posit.co/cran/latest")
+install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
+```
+
+</details>
 
 ---
 
@@ -135,33 +152,46 @@ pip install -e "robstattm-py/[dev]"         # the test/lint toolchain
 
 ---
 
-## 4. Point Python at R (`R_HOME`)
+## 4. Point Python at R — nothing to do
 
-`rpy2` has to locate your R installation. How depends on the OS:
+RobStatTM-Py locates R by itself, on every OS. It searches, in order:
 
-### Windows — set `R_HOME` before importing
+1. `ROBSTATTM_R_HOME`, if you set it
+2. R installed by `robstattm-py setup`
+3. `R_HOME`
+4. The active conda environment
+5. `R` or `Rscript` on your `PATH`
+6. **Windows:** the registry (per-user *and* machine-wide installs, newest
+   first), then `C:\Program Files\R\R-*`
+7. **macOS:** `/Library/Frameworks/R.framework`, Homebrew
+8. **Linux:** `/usr/lib/R`, `/usr/local/lib/R`, `/opt/R/*`
 
-Windows does not expose R on the default `PATH`, so set it explicitly **before**
-`import robstattm_py` (adjust the version to match yours):
+So on any platform, this is all you need:
 
 ```python
-import os
-os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-
-import robstattm_py as rpm   # the package handles the bin\x64 DLL path for you
+import robstattm_py as rpm
 ```
 
-To avoid repeating this, set it once as a system environment variable
-(System Properties → Environment Variables → New → `R_HOME` =
-`C:\Program Files\R\R-4.5.2`) and restart your shell.
+An R built for a different CPU architecture is rejected *before* it can crash
+Python, and if the search comes up empty the error lists every location that was
+checked and why each was ruled out.
 
-### macOS / Linux — usually automatic
+> **Setting `R_HOME` yourself still works** and takes priority over
+> auto-detection — useful when you have several R versions installed. Prefer
+> `ROBSTATTM_R_HOME`, which pins R for this package only and leaves your other R
+> tooling alone.
 
-If `R` is on your `PATH`, `rpy2` finds it with no configuration. If you have
-multiple R installs (or use a non-standard prefix), pin it:
+To see which R was chosen:
 
 ```bash
-export R_HOME="$(R RHOME)"     # add to ~/.bashrc / ~/.zshrc to persist
+robstattm-py doctor
+```
+
+If that command is not found — common on Windows, where `pip` often installs
+scripts to a folder outside your `PATH` — use this instead, which always works:
+
+```bash
+python -m robstattm_py.cli doctor
 ```
 
 ---
@@ -209,28 +239,40 @@ pip install -e "robstattm-py/[notebooks]"   # installs ipykernel + plotting deps
 python -m ipykernel install --user --name robstattm-py
 ```
 
-On Windows, put the `R_HOME` bootstrap from [step 4](#windows--set-r_home-before-importing)
-in the **first cell** of each notebook (the bundled notebooks already do this).
+No R configuration cell is needed — notebooks just `import robstattm_py as rpm`
+like any other script.
 
 ---
 
 ## 7. Troubleshooting
 
+Run this first; it diagnoses every layer and prints the fix for whatever is
+wrong:
+
+```bash
+robstattm-py doctor
+```
+
+The [troubleshooting guide](troubleshooting.md) covers each failure in depth.
+The most common ones:
+
 | Symptom | Cause & fix |
 |---|---|
+| `robstattm-py: command not found` | `pip` installed the script outside your `PATH` (usual on Windows). Use `python -m robstattm_py.cli doctor` instead. |
 | `RobStatTMSetupError: rpy2 is not installed` | `pip install "rpy2>=3.6"` (it's a dependency, so normally automatic). |
-| rpy2 can't find R / `R_HOME` errors at import | Set `R_HOME` (step 4). On macOS/Linux, `export R_HOME="$(R RHOME)"`; confirm `R` runs in your terminal. |
-| **Windows:** `LoadLibrary failure: The specified module could not be found` | R's `bin\x64` isn't on the DLL path. RobStatTM-Py adds it automatically — make sure `R_HOME` points at the install **root** (e.g. `C:\Program Files\R\R-4.5.2`), not `bin\x64`. |
-| `RobStatTMSetupError: R package 'RobStatTM' is not installed` | Run step 2 in R: `install.packages("RobStatTM")`. The message names exactly which package is missing. |
-| **macOS:** `mach-o, but wrong architecture` / rpy2 import crash | Your R and Python architectures differ. Reinstall R matching `platform.machine()` (arm64 vs x86_64). |
-| rpy2 fails to build (`R.h: No such file`) on Linux | Install R headers + toolchain: `apt-get install r-base-dev build-essential` (or `dnf install R-devel gcc-gfortran`). |
-| `RobStatTMSetupError: R package 'pense'/'GSE' is not installed` | Only needed for `pense`/`gse`/`tsgs`. Install them (step 2) or avoid those functions. |
+| `No usable R installation was found` | The message lists every location searched. Install R (step 1), or set `ROBSTATTM_R_HOME` to an existing install. |
+| **Windows:** `LoadLibrary failure: The specified module could not be found` | Run `robstattm-py doctor` and check the `home` line points at the install **root** (`C:\Program Files\R\R-4.5.2`), not `bin\x64`. If you set `R_HOME` by hand, try removing it and letting auto-detection work. |
+| `R at ... is x86_64, but this Python is arm64` | Your R and Python target different CPUs. Reinstall R to match `platform.machine()`. |
+| `R package 'RobStatTM' is not installed` | `robstattm-py install-r-packages RobStatTM`. The message names exactly which package is missing. |
+| rpy2 fails to build (`R.h: No such file`) on Linux | Install R headers + toolchain: `apt-get install r-base-dev build-essential` (or `dnf install R-devel gcc-gfortran`). Or set `RPY2_CFFI_MODE=ABI` to use rpy2's compiler-free binding. |
+| `R package 'pense'/'GSE' is not installed` | Only needed for `pense`/`gse`/`tsgs`: `robstattm-py install-r-packages pense GSE`. |
 | `RobStatTMRError: … (quasi-)separable …` from `*_logreg` | Not a setup issue — the binary response is perfectly separable. Condition the data or drop over-powerful predictors. |
-| Conda environments pick the wrong R | Conda may ship its own `r-base`. Either install RobStatTM into the conda R, or set `R_HOME` to the R you intend to use. |
+| Conda picks the wrong R | Set `ROBSTATTM_R_MODE=system`, or `ROBSTATTM_R_HOME` to the R you intend to use. |
 | Results aren't reproducible across runs | The covariance/PCA/external estimators use random subsampling — call `rpm.set_seed(n)` immediately before the fit. (Regression estimators are deterministic.) |
 
-If `check_setup()` still reports a problem, run it with the full report and
-share the output — it pinpoints which of the four layers is missing.
+Still stuck? Open an issue with the output of `robstattm-py doctor --json` — it
+captures your Python, rpy2, R, the full search trace, and every R package
+version in one go.
 
 ---
 
@@ -239,12 +281,11 @@ share the output — it pinpoints which of the four layers is missing.
 **Windows (PowerShell):**
 
 ```powershell
-# 1. install R from CRAN, note the path
-# 2. in R:  install.packages(c("RobStatTM","pyinit","robustbase","rrcov"))
+# 1. install R from CRAN (accept the defaults; no need to note the path)
 py -3 -m venv .venv; .\.venv\Scripts\Activate.ps1
 pip install -e robstattm-py/
-$env:R_HOME = "C:\Program Files\R\R-4.5.2"
-python -c "import robstattm_py as rpm; rpm.check_setup()"
+python -m robstattm_py.cli install-r-packages RobStatTM pyinit robustbase rrcov
+python -m robstattm_py.cli doctor
 ```
 
 **macOS / Linux (bash):**
@@ -252,12 +293,13 @@ python -c "import robstattm_py as rpm; rpm.check_setup()"
 ```bash
 # Linux: sudo apt-get install -y r-base r-base-dev   (or dnf install R R-devel)
 # macOS: install R .pkg matching your CPU arch
-Rscript -e 'install.packages(c("RobStatTM","pyinit","robustbase","rrcov"), repos="https://cloud.r-project.org")'
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e robstattm-py/
-export R_HOME="$(R RHOME)"
-python -c "import robstattm_py as rpm; rpm.check_setup()"
+robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
+robstattm-py doctor
 ```
+
+No `R_HOME` in either — the package finds R on its own.
 
 ## See also
 

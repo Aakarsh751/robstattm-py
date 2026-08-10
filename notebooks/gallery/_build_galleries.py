@@ -14,13 +14,11 @@ group-A/B rule in docs/notebook_plan.md §2.
 import nbformat as nbf
 from nbformat.v4 import new_notebook, new_markdown_cell, new_code_cell
 
+# No R_HOME bootstrap: robstattm_py locates R itself (see
+# robstattm_py/_renv/discovery.py). The old block hardcoded
+# C:\Program Files\R\R-4.5.2, so these notebooks only ran on one machine.
 BOOTSTRAP = (
     "import os, sys, pathlib\n"
-    "\n"
-    "# Windows R_HOME setup (skip if already configured)\n"
-    'if sys.platform == "win32" and "R_HOME" not in os.environ:\n'
-    '    os.environ["R_HOME"] = r"C:\\Program Files\\R\\R-4.5.2"\n'
-    '    os.environ["PATH"] = r"C:\\Program Files\\R\\R-4.5.2\\bin\\x64;" + os.environ["PATH"]\n'
     "\n"
     "import numpy as np\n"
     "import pandas as pd\n"

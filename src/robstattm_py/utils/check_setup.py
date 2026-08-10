@@ -3,18 +3,28 @@
 Prints a one-screen status table of the R + Python + CRAN-package versions and
 returns ``True`` if all *core* packages are available, ``False`` otherwise.
 See ``docs/user_interface.md §8``.
+
+``robstattm-py doctor`` reports the same facts in more depth (including the
+R-discovery trace). This function stays because it is public API and works from
+inside a notebook, where shelling out is awkward.
 """
 from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
 
-CORE_R_PACKAGES = ("RobStatTM", "robustbase", "rrcov", "pyinit")
-STRETCH_R_PACKAGES = ("pense", "GSE")
-# Optional packages that unblock example-script reproduction (D-024). Absent by
-# default; each enables one or more `robstattm/examples-scripts/` notebooks.
-# `robcbi` additionally needs its Fortran dependency `robeth`.
-OPTIONAL_R_PACKAGES = ("robustarima", "robustvarComp", "robcbi", "WWGbook")
+# Single source of truth, shared with `robstattm-py doctor`:
+#   core     -- the wrappers cannot work without these
+#   stretch  -- pense / gse / tsgs only
+#   optional -- example-script reproduction (D-024); `robcbi` also needs the
+#               Fortran package `robeth`.
+from robstattm_py._renv.report import (
+    CORE_R_PACKAGES,
+    OPTIONAL_R_PACKAGES,
+    STRETCH_R_PACKAGES,
+    install_hint,
+    rpy2_version,
+)
 
 
 def _stdout_supports_unicode() -> bool:
@@ -74,19 +84,17 @@ def check_setup(*, verbose: bool = True) -> bool:
     >>> robstattm_py.check_setup(verbose=False)  # doctest: +SKIP
     True
     """
-    from robstattm_py import __version__ as PYVER
+    from robstattm_py import __version__ as package_version
     from robstattm_py._r import r
 
     lines: list[str] = ["RobStatTM-Py setup check", "=" * 24]
     lines.append(f"Python:       {sys.version.split()[0]}")
-    lines.append(f"robstattm_py:  {PYVER}")
+    lines.append(f"robstattm_py: {package_version}")
 
-    try:
-        import rpy2
-
-        rpy2_ver = getattr(rpy2, "__version__", "unknown")
-    except ImportError:
-        rpy2_ver = None
+    # Read from package metadata, not `rpy2.__version__`: rpy2 3.6 removed that
+    # attribute, so the old attribute lookup reported "unknown" on every
+    # current install.
+    rpy2_ver = rpy2_version()
     lines.append(f"rpy2:         {rpy2_ver if rpy2_ver else '(missing)'}")
 
     try:
@@ -94,7 +102,7 @@ def check_setup(*, verbose: bool = True) -> bool:
     except Exception as e:
         if verbose:
             print("\n".join(lines))
-            print(f"R:            (cannot start — {e})")
+            print(f"R:            (cannot start - {e})")
         return False
     lines.append(f"R:            {rver}")
 
@@ -111,38 +119,52 @@ def check_setup(*, verbose: bool = True) -> bool:
     bad_mark = "✗" if use_unicode else "[MISSING]"
     warn_mark = "⚠" if use_unicode else "[WARN]"
 
+    # Width driven by the longest name actually being reported, so a new package
+    # cannot silently break the alignment (`robustvarComp` is 13 characters and
+    # used to overflow a hardcoded 12).
+    name_width = max(len(s.name) for s in statuses)
+
     for s in statuses:
         if s.version is None:
             mark = bad_mark if s.is_core else warn_mark
             label = "(not installed)" + ("" if s.is_core else "  stretch wrappers unavailable")
-            lines.append(f"  {s.name:<12}  {label:<30}  {mark}")
+            lines.append(f"  {s.name:<{name_width}}  {label:<30}  {mark}")
         else:
-            lines.append(f"  {s.name:<12}  {s.version:<30}  {ok_mark}")
+            lines.append(f"  {s.name:<{name_width}}  {s.version:<30}  {ok_mark}")
 
     missing_core = [s.name for s in statuses if s.is_core and s.version is None]
     missing_stretch = [s.name for s in statuses if not s.is_core and s.version is None]
 
+    # The install command depends on whether R was provisioned by us (in which
+    # case there is no R console for the user to type into).
+    from robstattm_py._renv import r_home_info
+
+    info = r_home_info()
+
     if missing_core:
         lines.append("")
-        lines.append("Missing CORE packages — run in R:")
-        lines.append(f"  install.packages(c({', '.join(repr(p) for p in missing_core)}))")
+        lines.append("Missing CORE packages:")
+        lines.append("  " + install_hint(missing_core, info).replace("\n", "\n  "))
     if missing_stretch:
         lines.append("")
-        lines.append("Optional stretch packages — run in R if you want them:")
-        lines.append(f"  install.packages(c({', '.join(repr(p) for p in missing_stretch)}))")
+        lines.append("Optional packages - install them if you want those wrappers:")
+        lines.append("  " + install_hint(missing_stretch, info).replace("\n", "\n  "))
         if "robcbi" in missing_stretch:
             lines.append(
                 "  # robcbi needs the Fortran package 'robeth' (Rtools on Windows); "
-                "both are CRAN-archived — see docs/guides/external.md"
+                "both are CRAN-archived - see docs/guides/external.md"
             )
 
+    # ASCII hyphens, not em dashes: this report is routinely read on a Windows
+    # cp1252 console, where a U+2014 renders as a replacement character. The
+    # status glyphs above already fall back; these lines used to be missed.
     lines.append("")
     if missing_core:
-        lines.append("Result: NOT READY — core packages missing.")
+        lines.append("Result: NOT READY - core packages missing.")
     elif missing_stretch:
         lines.append("Result: READY for core wrappers. STRETCH WRAPPERS UNAVAILABLE.")
     else:
-        lines.append("Result: READY — all core and stretch packages installed.")
+        lines.append("Result: READY - all core and stretch packages installed.")
 
     if verbose:
         print("\n".join(lines))

@@ -14,9 +14,7 @@ rpy2 names directly.
 from __future__ import annotations
 
 import contextlib
-import os
 import re
-import sys
 import threading
 import warnings as _warnings
 from typing import Any
@@ -31,7 +29,6 @@ _init_lock = threading.Lock()
 _pkg_cache: dict[str, Any] = {}
 _conversion_installed = False
 _r_started = False  # flipped True after first successful conversion install
-_windows_dll_path_done = False
 
 # Messages from R warnings captured during the most recent guarded R call.
 # Populated by ``capture_r_warnings`` / ``r_guard``; readable via
@@ -39,46 +36,39 @@ _windows_dll_path_done = False
 _warn_state = threading.local()
 
 
-def _ensure_windows_r_dll_path() -> None:
-    """Prepend R's ``bin/x64`` to the DLL search path on Windows.
+def _ensure_r_environment() -> Any:
+    """Locate, validate and activate an R installation.
 
-    When Python embeds R via rpy2, Windows does not inherit the same DLL
-    search path as a standalone ``Rscript.exe`` process.  Without this,
-    loading base packages such as ``stats`` fails with::
+    Delegates to :mod:`robstattm_py._renv`, which searches a documented chain of
+    locations (``ROBSTATTM_R_HOME``, the private provisioned environment,
+    ``R_HOME``, conda prefixes, ``PATH``, the Windows registry, and the
+    conventional install roots for each OS), rejects any candidate whose
+    architecture does not match this interpreter, and puts R's library
+    directories on the search path.
 
-        LoadLibrary failure: The specified module could not be found.
+    Must run **before** rpy2 is imported: rpy2 resolves ``R_HOME`` and
+    ``dlopen``s R at ``rpy2.rinterface_lib.openrlib`` import time, so the choice
+    of R is fixed from that moment on.
 
-    Must run before rpy2 initialises the embedded R interpreter.
+    Raises
+    ------
+    RobStatTMSetupError
+        When no usable R is found. The message lists every location that was
+        checked and why each was rejected.
     """
-    global _windows_dll_path_done
-    if _windows_dll_path_done or sys.platform != "win32":
-        return
-    _windows_dll_path_done = True
+    from robstattm_py._renv import ensure_r_environment
 
-    r_home = os.environ.get("R_HOME")
-    if not r_home:
-        try:
-            from rpy2.situation import get_r_home
+    return ensure_r_environment()
 
-            r_home = get_r_home()
-        except Exception:
-            return
-    if not r_home:
-        return
 
-    r_bin = os.path.join(os.path.normpath(r_home), "bin", "x64")
-    if not os.path.isdir(r_bin):
-        return
+def _ensure_windows_r_dll_path() -> None:
+    """Deprecated alias for :func:`_ensure_r_environment`.
 
-    if hasattr(os, "add_dll_directory"):
-        try:
-            os.add_dll_directory(r_bin)
-        except OSError:
-            pass
-
-    path = os.environ.get("PATH", "")
-    if r_bin.lower() not in path.lower():
-        os.environ["PATH"] = r_bin + os.pathsep + path
+    Retained because the name is referenced from the installation guide and may
+    appear in user notebooks. The Windows-only DLL handling it used to do is now
+    part of the cross-platform activation step.
+    """
+    _ensure_r_environment()
 
 
 def r_started() -> bool:
@@ -103,10 +93,12 @@ def _install_conversion() -> None:
     global _conversion_installed, _r_started
     if _conversion_installed:
         return
-    _ensure_windows_r_dll_path()
+    _ensure_r_environment()
+    _harden_rpy2_windows_probe()
     try:
-        from rpy2.robjects import default_converter, numpy2ri, pandas2ri
-        from rpy2.robjects.conversion import set_conversion
+        with _quiet_rpy2_probe():
+            from rpy2.robjects import default_converter, numpy2ri, pandas2ri
+            from rpy2.robjects.conversion import set_conversion
     except ImportError as e:  # pragma: no cover - import-time failure
         raise RobStatTMSetupError(
             "rpy2 is not installed. Install with `pip install rpy2>=3.6`."
@@ -115,6 +107,7 @@ def _install_conversion() -> None:
     set_conversion(cv)
     _conversion_installed = True
     _r_started = True
+    _ensure_random_seed_exists()
     # UI doc §11: print a one-line startup message when RPM_VERBOSE=1.
     import os as _os
     if _os.environ.get("RPM_VERBOSE", "") == "1":
@@ -126,12 +119,186 @@ def _install_conversion() -> None:
         print(f"[robstattm_py] R session ready: {ver}", flush=True)
 
 
+def _harden_rpy2_windows_probe() -> None:
+    """Work around an rpy2 crash when ``R CMD config`` returns nothing.
+
+    On Windows, importing ``rpy2.rinterface_lib.openrlib`` runs::
+
+        rpy2.situation.get_r_flags(R_HOME, '--ldflags')
+
+    and ``rpy2/situation/__init__.py`` then does an unguarded
+    ``output_lst[0].startswith('WARNING')``. ``R CMD`` is a shell script, so on
+    an R with no ``sh`` available - exactly the conda-forge R that
+    ``robstattm-py setup`` installs - that command produces **no output**, and
+    the indexing raises ``IndexError``.
+
+    rpy2 wraps the call in ``except subprocess.CalledProcessError`` only, so the
+    ``IndexError`` escapes and ``import rpy2.robjects`` fails outright. The
+    failure is intermittent in a way that makes it especially confusing: if no
+    other R is on ``PATH`` the command exits non-zero, rpy2 catches
+    ``CalledProcessError``, and everything works. It only breaks when the user
+    *also* has a normal R installed.
+
+    We convert the ``IndexError`` into the ``CalledProcessError`` rpy2 already
+    handles, so its own directory-scanning fallback runs - which is the correct
+    behaviour, and the path we have already populated ourselves.
+
+    Idempotent, and a no-op off Windows or if rpy2 is already loaded.
+    """
+    import sys as _sys
+
+    if _sys.platform != "win32":
+        return
+    if "rpy2.rinterface_lib.openrlib" in _sys.modules:
+        return  # too late to matter; R is already resolved
+
+    try:
+        import subprocess as _subprocess
+
+        import rpy2.situation as _situation
+    except ImportError:  # pragma: no cover - rpy2 missing is handled elsewhere
+        return
+
+    original = getattr(_situation, "get_r_flags", None)
+    if original is None or getattr(original, "_robstattm_hardened", False):
+        return
+
+    def _get_r_flags(r_home, flags):
+        try:
+            return original(r_home, flags)
+        except IndexError as exc:
+            raise _subprocess.CalledProcessError(
+                returncode=1, cmd=f"R CMD config {flags}", output=""
+            ) from exc
+
+    _get_r_flags._robstattm_hardened = True  # type: ignore[attr-defined]
+    _situation.get_r_flags = _get_r_flags
+
+
+#: Output rpy2's ``R CMD config --ldflags`` start-up probe produces on an R that
+#: has no shell or build toolchain - i.e. the conda-forge R that
+#: ``robstattm-py setup`` installs. rpy2 discards the result and falls back to
+#: scanning directories, so none of this indicates a problem.
+#:
+#: Kept deliberately specific to that probe. Anything else written to stderr is
+#: passed straight through, so a real error can never be swallowed.
+_PROBE_NOISE = (
+    # cmd.exe, when `sh` is absent entirely
+    "is not recognized as an internal or external command",
+    "operable program or batch file",
+    # R's own config.sh, when a shell exists but the build tools do not
+    "bin/config.sh: line",
+    "make: command not found",
+    "was not built as a library",
+)
+
+
+@contextlib.contextmanager
+def _quiet_rpy2_probe():
+    """Swallow one specific, harmless stderr message from rpy2's start-up.
+
+    On Windows, importing ``rpy2.rinterface_lib.openrlib`` runs
+    ``R CMD config --ldflags`` to locate R's libraries. ``R CMD`` is a shell
+    script, so on an R with no ``sh`` on ``PATH`` - which is the case for the
+    conda-forge R that ``robstattm-py setup`` installs - the command prints::
+
+        'sh' is not recognized as an internal or external command
+
+    rpy2 catches the resulting error and falls back to its own directory scan,
+    so nothing is actually wrong. But the message is written by ``cmd.exe``
+    straight to the process's stderr, and the first thing a new user sees
+    should not look like a failure.
+
+    The redirection is at the file-descriptor level because the text comes from
+    a child process, not from Python. Everything captured is inspected and
+    anything unrecognised is re-emitted, so a real error can never be hidden.
+    """
+    import sys as _sys
+
+    if _sys.platform != "win32":
+        yield
+        return
+
+    import os as _os
+    import tempfile
+
+    try:
+        stderr_fd = _sys.stderr.fileno()
+    except (AttributeError, OSError, ValueError):
+        # Captured or replaced stderr (pytest, notebooks): nothing to redirect.
+        yield
+        return
+
+    saved_fd = _os.dup(stderr_fd)
+    with tempfile.TemporaryFile(mode="w+b") as sink:
+        try:
+            _os.dup2(sink.fileno(), stderr_fd)
+            yield
+        finally:
+            _os.dup2(saved_fd, stderr_fd)
+            _os.close(saved_fd)
+            sink.seek(0)
+            captured = sink.read().decode("utf-8", errors="replace")
+
+    for line in captured.splitlines():
+        if line.strip() and not any(marker in line for marker in _PROBE_NOISE):
+            print(line, file=_sys.stderr)
+
+
+def _ensure_random_seed_exists() -> None:
+    """Force R's RNG to initialise so ``.Random.seed`` exists in globalenv.
+
+    R does not create ``.Random.seed`` until the RNG is first used. Most code
+    accounts for that, but RobStatTM's ``KurtSDNew``/``initPP`` reads it
+    unconditionally to save and restore RNG state::
+
+        oldSeed <- get(".Random.seed", mode="numeric", envir=globalenv())
+
+    (``R/KurtSDNew.R:42``; compare ``R/lmrob.MM.R:690``, which correctly guards
+    the same operation with ``exists()``.) Since ``covRob`` and
+    ``covRobRocke`` route through it (``R/Multirobu.R:123,359``), calling
+    ``cov_rob`` as the *first* action in a fresh session fails with::
+
+        object '.Random.seed' of mode 'numeric' was not found
+
+    Interactive R users rarely hit this because something has usually consumed a
+    random number already; an embedded session started by rpy2 is pristine.
+
+    ``set.seed(NULL)`` re-initialises the generator from the clock and process
+    ID, so ``.Random.seed`` exists without pinning a fixed value — results stay
+    random, and a later :func:`robstattm_py.set_seed` still fully determines
+    them.
+    """
+    try:
+        import rpy2.robjects as ro
+
+        ro.r('if (!exists(".Random.seed", envir = globalenv())) set.seed(NULL)')
+    except Exception:  # pragma: no cover - never block startup over this
+        pass
+
+
 def r() -> Any:
     """Return the rpy2 ``robjects`` module, initialising conversion if needed."""
     _install_conversion()
     import rpy2.robjects as ro  # local import to keep package import cheap
 
     return ro
+
+
+def _install_hint(name: str) -> str:
+    """Return the right way to install an R package for *this* setup.
+
+    A user whose R was provisioned by ``robstattm-py setup`` has no R console to
+    type ``install.packages`` into, so the historical advice was a dead end for
+    exactly the people least equipped to work around it.
+    """
+    try:
+        from robstattm_py._renv import r_home_info
+        from robstattm_py._renv.report import install_hint
+
+        return "  " + install_hint([name], r_home_info()).replace("\n", "\n  ")
+    except Exception:  # pragma: no cover - never let a hint break the real error
+        return f"  Run: robstattm-py install-r-packages {name}"
 
 
 def r_pkg(name: str) -> Any:
@@ -153,8 +320,7 @@ def r_pkg(name: str) -> Any:
             pkg = importr(name)
         except PackageNotInstalledError as e:
             raise RobStatTMSetupError(
-                f"R package '{name}' is not installed. "
-                f"Run in R:  install.packages('{name}')",
+                f"R package '{name}' is not installed.\n{_install_hint(name)}",
                 missing=[name],
             ) from e
         except Exception as e:  # pragma: no cover - rare R-startup failure
@@ -189,8 +355,7 @@ def require_r_pkg(name: str) -> None:
         raise RobStatTMSetupError(f"Failed to query R package '{name}': {e}") from e
     if not ok:
         raise RobStatTMSetupError(
-            f"R package '{name}' is not installed. "
-            f"Run in R:  install.packages('{name}')",
+            f"R package '{name}' is not installed.\n{_install_hint(name)}",
             missing=[name],
         )
 

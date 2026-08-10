@@ -11,44 +11,22 @@ cross by accident with a well-meaning convenience default.
 """
 from __future__ import annotations
 
-import os
 import subprocess
 import sys
 import textwrap
-from pathlib import Path
 
 import pytest
 
-
-def package_parent_dir() -> str:
-    """Directory containing the ``robstattm_py`` package.
-
-    Child processes need this on ``PYTHONPATH``: under an editable install
-    pytest makes the package importable in the *parent* without it necessarily
-    being importable from a bare interpreter, so a subprocess gets
-    ``ModuleNotFoundError``.
-
-    Only this one directory, never the whole ``sys.path`` — copying ``sys.path``
-    also drags in the interpreter's stdlib and ``lib-dynload``, which on CI
-    produced ``ImportError: _ctypes ... undefined symbol:
-    _PyErr_SetLocaleString``: a broken child rather than a real result.
-    """
-    import robstattm_py
-
-    return str(Path(robstattm_py.__file__).resolve().parent.parent)
+from ..conftest import child_python_env
 
 
 def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.CompletedProcess:
-    env = {
-        k: v
-        for k, v in os.environ.items()
-        if not k.startswith(("R_", "ROBSTATTM_", "RPY2_", "CONDA", "MAMBA"))
-    }
+    """Run ``code`` in a fresh interpreter with a scrubbed R environment."""
+    env = child_python_env()
+    for key in list(env):
+        if key.startswith(("R_", "ROBSTATTM_", "RPY2_", "CONDA", "MAMBA")):
+            del env[key]
     env["ROBSTATTM_HOME"] = str(tmp_path / "rtm-home")
-    existing = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = (
-        package_parent_dir() + (os.pathsep + existing if existing else "")
-    )
     env.update(env_overrides)
     return subprocess.run(
         [sys.executable, "-c", textwrap.dedent(code)],

@@ -178,3 +178,61 @@ def assert_r_equal_dataclass(py_obj, r_list, field_map: dict[str, str]):
             assert_array_equal(py_val, r_val, where=py_attr)
         else:
             assert_scalar_equal(py_val, r_val, where=py_attr)
+
+
+# ---------------------------------------------------------------------------
+# Subprocess helper
+# ---------------------------------------------------------------------------
+
+
+def child_python_env(**overrides: str) -> dict[str, str]:
+    """Return an environment in which a child ``sys.executable`` can import us.
+
+    Several tests must run in a fresh interpreter — checking that importing the
+    package has no side effects, and that the first call in a *pristine* R
+    session works. Those properties are unobservable in-process once pytest has
+    already imported everything.
+
+    Getting the child's import path right turned out to be fiddly, and both
+    obvious approaches fail on CI:
+
+    * Inheriting the environment unchanged is not enough. Under an editable
+      install the package is importable in the parent without necessarily being
+      importable from a bare interpreter, giving ``ModuleNotFoundError: No
+      module named 'robstattm_py'``.
+    * Copying the whole of ``sys.path`` is too much. It drags in the
+      interpreter's own stdlib and ``lib-dynload``, which produced
+      ``ImportError: _ctypes ... undefined symbol: _PyErr_SetLocaleString`` on
+      Python 3.12 — a broken child rather than a real test result.
+
+    So we propagate exactly two kinds of directory: the one containing the
+    package, and the site-packages directories holding its dependencies. The
+    child's own stdlib resolution is left alone.
+    """
+    import os
+    import site
+    import sysconfig
+    from pathlib import Path
+
+    import robstattm_py
+
+    wanted: list[str] = [str(Path(robstattm_py.__file__).resolve().parent.parent)]
+    for getter in (site.getsitepackages, site.getusersitepackages):
+        try:
+            found = getter()
+        except Exception:  # pragma: no cover - not available in every layout
+            continue
+        wanted.extend([found] if isinstance(found, str) else list(found))
+    for key in ("purelib", "platlib"):
+        path = sysconfig.get_paths().get(key)
+        if path:
+            wanted.append(path)
+
+    seen: set[str] = set()
+    ordered = [p for p in wanted if p and not (p in seen or seen.add(p))]
+
+    env = dict(os.environ)
+    existing = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = os.pathsep.join([*ordered, existing] if existing else ordered)
+    env.update(overrides)
+    return env

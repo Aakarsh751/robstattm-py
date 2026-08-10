@@ -1,0 +1,35 @@
+# What goes into the source distribution.
+#
+# The wheel is defined by [tool.setuptools] in pyproject.toml and contains only
+# the package itself. The sdist additionally carries the licence, the notices,
+# and the tests, so a distributor can verify the build.
+
+include LICENSE
+include NOTICE.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include SECURITY.md
+include README.md
+include pyproject.toml
+
+recursive-include src/robstattm_py py.typed
+
+# Tests travel with the sdist so downstream packagers can run them.
+recursive-include tests *.py
+recursive-include tests *.R
+
+# Everything below is development or documentation material: useful in the
+# repository, but only inflates a distribution nobody builds docs from.
+prune docs
+prune notebooks
+prune dev
+prune exploration
+prune templates
+prune .github
+exclude verify.py
+exclude .gitignore
+
+global-exclude *.py[cod]
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude *.rda

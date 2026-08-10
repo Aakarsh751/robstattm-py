@@ -1,0 +1,139 @@
+name: Release
+
+# Publishes to PyPI when a v* tag is pushed.
+#
+# Uses PyPI Trusted Publishing (OIDC): no API token is stored in this
+# repository, and nothing can publish except this workflow, from this repo, on
+# this environment. Setup is one-time, on PyPI:
+#
+#   https://pypi.org/manage/account/publishing/
+#     PyPI project name : robstattm-py
+#     Owner             : Aakarsh751
+#     Repository        : robstattm-py
+#     Workflow          : release.yml
+#     Environment       : pypi
+#
+# Dry run first:  push a tag ending in -rc1 (or run manually with
+# target=testpypi) to publish to TestPyPI and check the result before the real
+# thing. A version number, once published to PyPI, can never be reused.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Where to publish
+        required: true
+        default: testpypi
+        type: choice
+        options: [testpypi, pypi]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Check metadata renders on PyPI
+        run: |
+          python -m pip install twine
+          python -m twine check dist/*
+
+      # A tag that disagrees with pyproject.toml would publish the wrong
+      # version under the right name, which cannot be undone.
+      - name: Verify the tag matches the packaged version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(python -c "import tomllib,pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          echo "tag=$TAG  pyproject=$PKG"
+          test "$TAG" = "$PKG" || { echo "::error::tag $TAG != version $PKG"; exit 1; }
+
+      # The wheel must be usable, not merely well-formed. R is absent on this
+      # runner, so this also re-confirms that importing the package needs no R.
+      - name: Smoke-test the wheel
+        run: |
+          python -m venv /tmp/smoke
+          /tmp/smoke/bin/pip install --quiet dist/*.whl
+          /tmp/smoke/bin/python -c "
+          import robstattm_py, sys
+          print('version:', robstattm_py.__version__)
+          assert 'rpy2.rinterface_lib.openrlib' not in sys.modules
+          "
+          /tmp/smoke/bin/robstattm-py --version
+          /tmp/smoke/bin/robstattm-py info
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+
+  testpypi:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/robstattm-py
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.target == 'pypi')
+    environment:
+      name: pypi
+      url: https://pypi.org/p/robstattm-py
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    name: Attach artifacts to the GitHub release
+    needs: pypi
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "$GITHUB_REF_NAME" \
+            --notes "See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md)."

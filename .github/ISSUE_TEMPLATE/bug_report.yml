@@ -1,0 +1,76 @@
+name: Bug report
+description: Something does not work
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The single most useful thing you can include is
+        the output of `robstattm-py doctor --json` — it captures your Python,
+        rpy2, R, the full R-discovery trace, and every installed R package
+        version in one go.
+
+        (If `robstattm-py` is not found, use `python -m robstattm_py.cli doctor --json`.)
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `robstattm-py doctor --json`
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you run, and what did you get?
+      placeholder: |
+        I ran:
+
+            fit = rpm.lmrobdet_mm("y ~ x", data=df)
+
+        and got:
+
+            RobStatTMRError: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Smallest example that reproduces it
+      description: >
+        If you can reproduce it with one of the built-in datasets
+        (`rpm.datasets.mineral()` and friends), that is ideal — it means we can
+        run it too. Otherwise describe the shape of your data.
+      render: python
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: How is R installed?
+      options:
+        - I ran `robstattm-py setup`
+        - I installed R myself
+        - R came with conda
+        - Not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I ran `robstattm-py doctor` and it did not explain the problem
+          required: true
+        - label: I checked the [troubleshooting guide](https://aakarsh751.github.io/robstattm-py/guides/troubleshooting.html)
+          required: true

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robstattm-py"
-version = "0.0.1.dev0"
+version = "0.1.0"
 description = "Python wrappers for the RobStatTM robust-statistics R package"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ authors = [
 ]
 keywords = ["robust statistics", "rpy2", "RobStatTM", "MM-estimator", "Rocke S-estimator"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -22,8 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Mathematics",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
 ]
 dependencies = [
     "rpy2>=3.6",

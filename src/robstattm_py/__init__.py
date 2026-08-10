@@ -8,7 +8,23 @@ Importing this module is cheap — R is not started until the first wrapper call
 """
 from __future__ import annotations
 
-__version__ = "0.0.1.dev0"
+def _detect_version() -> str:
+    """Return the installed distribution's version.
+
+    Read from installed metadata rather than hardcoded here, so the number can
+    never drift from what pip actually installed — a discrepancy that makes bug
+    reports impossible to interpret. The fallback covers running from a source
+    checkout that was never installed.
+    """
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        return version("robstattm-py")
+    except PackageNotFoundError:  # pragma: no cover - uninstalled checkout
+        return "0.0.0+unknown"
+
+
+__version__ = _detect_version()
 
 from robstattm_py._errors import (
     RobStatTMError,

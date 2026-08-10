@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # Actions pin themselves to major tags that still move, so this mostly
+  # surfaces deprecations (the Node 20 runner change, for example) before they
+  # break a run.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"
+
+  # Python dependencies are floor constraints (`rpy2>=3.6`), not pins, so there
+  # is nothing routine to bump. Grouped and monthly to keep the noise low; the
+  # value is the security advisories.
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      python-dependencies:
+        patterns: ["*"]
+    commit-message:
+      prefix: "deps"

@@ -1,6 +1,6 @@
 """Render Rd JSON → MyST-Markdown wrapper pages.
 
-Pilot implementation of M2 from ``docs/documentation_plan.md``.
+Pilot implementation of M2 from ``project_memory/robstattm-py-planning-docs/documentation_plan.md``.
 
 For each requested wrapper:
   1. Read ``docs/_rd_json/<RName>.json`` (produced by extract_rd.py).

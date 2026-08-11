@@ -4,6 +4,14 @@ Reproductions of the RobStatTM textbook examples (Maronna, Martin, Yohai &
 Salibián-Barrera, *Robust Statistics: Theory and Methods*, 2019) and the
 package's example scripts, all built on `robstattm_py`.
 
+> **Notebooks or [`examples/`](../examples/)?** Both cover the same 25 R
+> scripts, differently. `examples/` is **one Python script per R script** — go
+> there to port a specific R script, or to run one from a terminal. The
+> galleries here are **one notebook per book chapter**, consolidating several
+> scripts with figures rendered inline — go here to read a chapter's worth of
+> material with the plots visible. Neither is a subset of the other, and both
+> are executed in CI.
+
 Every notebook here is executed end-to-end in CI by
 [`tests/test_notebooks.py`](../tests/test_notebooks.py) (policy **D-019**); a
 notebook is "done" only when it runs clean in the same suite as the unit tests.

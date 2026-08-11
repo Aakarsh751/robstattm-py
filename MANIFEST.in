@@ -18,6 +18,11 @@ recursive-include src/robstattm_py py.typed
 recursive-include tests *.py
 recursive-include tests *.R
 
+# The examples travel too. tests/test_examples.py runs them, so an sdist
+# without them would ship a test suite that cannot pass.
+recursive-include examples *.py
+include examples/README.md
+
 # Everything below is development or documentation material: useful in the
 # repository, but only inflates a distribution nobody builds docs from.
 prune docs
@@ -28,6 +33,8 @@ prune templates
 prune .github
 exclude verify.py
 exclude .gitignore
+
+prune examples/_figures
 
 global-exclude *.py[cod]
 global-exclude __pycache__

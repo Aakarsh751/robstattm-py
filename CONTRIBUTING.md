@@ -65,7 +65,7 @@ return field — read the R source, not our notes:
 - Installed package: `Rscript -e "print(formals(RobStatTM::lmrobdetMM))"`
 - Man pages: `man/*.Rd`, extracted to `docs/_rd_json/`
 
-`docs/research/*.md` are working notes and have been wrong before.
+`project_memory/robstattm-py-planning-docs/research/*.md` are working notes and have been wrong before.
 
 ## Documentation
 

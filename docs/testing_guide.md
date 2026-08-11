@@ -349,7 +349,6 @@ These run as part of `pytest tests/` (strict tier).
 | `tutorials/01_quickstart.ipynb` | End-user quickstart |
 | `tutorials/02_outlier_detection.ipynb` | Multivariate outliers |
 | `tutorials/03_from_R.ipynb` | R → Python porting guide |
-| `tutorials/aakarsh_test.ipynb` | Scratch / experiments |
 | `ch5_mineral.ipynb`, `ch6_wine.ipynb` | Chapter figures |
 | `external_demo.ipynb` | pense / GSE / TSGS |
 | `gallery/ch2_*.ipynb` … `ch7_*.ipynb`, `vignette.ipynb` | Example-script reproductions |
@@ -488,7 +487,7 @@ Always use **fixed integer seeds** in tests — never `time.time()` or unseeded 
 | `docs/coverage_matrix.md` | Authoritative wrapper ↔ test file map |
 | `exploration/TESTING.md` | Short command cheat sheet |
 | `exploration/DATA_PIPELINES.md` | Full synthetic/ingress/edge catalog |
-| `docs/notebook_plan.md` | Notebook CI policy (D1–D4) |
+| `project_memory/robstattm-py-planning-docs/notebook_plan.md` | Notebook CI policy (D1–D4) |
 | `project_memory/progress_log.md` | Session history of test campaigns |
 | `project_memory/decisions.md` | D-021, D-022, D-019 testing decisions |
 

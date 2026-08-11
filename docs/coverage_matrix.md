@@ -236,3 +236,22 @@ robcbi 1.1.4 + robeth 2.7.8, robustbase 0.99-7):**
 - Strict-tier throughout (atol=0, rtol=0), auto-skipped via
   `needs_robustarima` / `needs_robustvarcomp` / `needs_wwgbook` / `needs_glmrob` /
   `needs_robcbi` when the R package is absent.
+
+## Example-script coverage (updated 2026-08-11)
+
+The claim above — that every R example script reproduces from Python — was
+carried by the gallery notebooks, which consolidate several scripts per chapter.
+It is now also carried **one-to-one** by [`examples/`](../examples/README.md):
+25 Python scripts, one per script in `system.file("scripts", package =
+"RobStatTM")`, each executed end to end on every CI runner by
+`tests/test_examples.py`.
+
+`wineDougtest.R` appears in the local `robstattm/examples-scripts/` copy but not
+upstream, and is byte-identical to `wine.R` — hence 25 rather than 26.
+
+Writing them surfaced four defects the wrapper tests had not found: formula
+column names, `rob_linear_test`'s type guard, `cubinf` on an unnamed design
+matrix, and R integer `NA` arriving as `-2147483648`. All four are fixed and
+regression-tested (see the CHANGELOG). Worth recording as evidence for the
+general point: a green suite is not the same as a working package. Each of those
+four sat on a path no test exercised but every reader of the book would take.

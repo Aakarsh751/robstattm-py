@@ -1,7 +1,7 @@
 # Architecture — RobStatTM-Py
 
 **Status:** design (pre-implementation).
-**Constraints driving this design:** see `docs/proposal_requirements.md §2`.
+**Constraints driving this design:** see `project_memory/robstattm-py-planning-docs/proposal_requirements.md §2` (see docs/RELOCATED.md).
 
 ---
 
@@ -169,7 +169,7 @@ class LmrobdetMMResult:
     converged:     bool
     iter:          int
     control:       dict         # echo of the lmrobdet_control payload
-    # ... full field list determined per-function in docs/research/<fn>.md
+    # ... full field list determined per-function in the vendored R source (see docs/RELOCATED.md)
 ```
 
 Why dataclass and not dict?
@@ -260,6 +260,6 @@ Aliases (`lmrobdetMM = lmrobdet_mm`, etc.) **may** be exposed at the top of each
 
 ## 8. Out of scope for this document
 
-- Plot rendering strategy → `docs/plotting_strategy.md`.
-- Exact field-by-field field maps per function → `docs/research/<fn>.md` (one report per function).
+- Plot rendering strategy → `project_memory/robstattm-py-planning-docs/plotting_strategy.md`.
+- Exact field-by-field field maps per function → `the vendored R source (see docs/RELOCATED.md)` (one report per function).
 - CI workflow YAML → drafted during Community Bonding, not now.

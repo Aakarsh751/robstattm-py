@@ -167,6 +167,6 @@ tests/fixtures/
 
 ## 7. What this strategy does NOT cover
 
-- Plot-image regression (covered separately in `docs/plotting_strategy.md` and the `pytest-mpl` config).
+- Plot-image regression (covered separately in `project_memory/robstattm-py-planning-docs/plotting_strategy.md` and the `pytest-mpl` config).
 - Benchmark *performance* targets (Phase 4 evaluates speed; no pass/fail gate other than "must complete within CI timeout").
 - Native-Python (Phase 6 stretch) tests use the **Algorithmic** tier and live in `tests/native/` — they are not part of the ≥ 90 % coverage gate for the wrapper code.

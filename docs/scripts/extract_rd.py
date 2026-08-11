@@ -1,6 +1,6 @@
 """Rd → JSON extractor.
 
-Pilot implementation of M1 from ``docs/documentation_plan.md``.
+Pilot implementation of M1 from ``project_memory/robstattm-py-planning-docs/documentation_plan.md``.
 
 The full M1 spec calls for an R-side extractor using ``tools::Rd_db``,
 which gives the most faithful parse tree.  This pilot is a *Python*

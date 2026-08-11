@@ -107,4 +107,5 @@ guides/utilities
 guides/result-methods
 guides/plotting
 guides/external
+guides/book-examples
 ```

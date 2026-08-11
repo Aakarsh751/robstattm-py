@@ -13,9 +13,9 @@ Wrapper: <python_name>  (wraps R <RFUN>)
 PR:      #...
 
 [ ]  R source reviewed                              — file:line cited in PR description
-[ ]  R return structure captured                    — pasted into docs/research/<fn>.md
+[ ]  R return structure captured                    — pasted into the vendored R source (see docs/RELOCATED.md)
 [ ]  Dependency chain documented                    — docs/dependency_map.md §3 row updated
-[ ]  docs/research/<fn>.md written / refreshed      — all 7 required sections present
+[ ]  the vendored R source (see docs/RELOCATED.md) written / refreshed      — all 7 required sections present
 [ ]  Wrapper implemented                            — src/robstattm_py/<module>/<file>.py
 [ ]  NumPy-style docstring                          — Parameters, Returns, Raises, Notes, References, Examples, See Also
 [ ]  Frozen dataclass return type                   — per docs/architecture.md §3
@@ -27,9 +27,9 @@ PR:      #...
 [ ]  Validation matrix cases covered                — cases 1–11 from docs/validation_strategy.md §3 as applicable
 [ ]  Sphinx page builds without warnings            — sphinx-build -W -b html docs_sphinx/ _build/
 [ ]  Example notebook updated                       — notebooks/<chapter>.ipynb runs top-to-bottom
-[ ]  Plot helpers updated                           — docs/plotting_strategy.md §3 row(s)
+[ ]  Plot helpers updated                           — project_memory/robstattm-py-planning-docs/plotting_strategy.md §3 row(s)
 [ ]  progress_log.md session block appended         — project_memory/
-[ ]  proposal_requirements.md §4 status updated     — wrapper/testing/doc columns set to ✅
+[ ]  project_memory/robstattm-py-planning-docs/proposal_requirements.md §4 status updated     — wrapper/testing/doc columns set to ✅
 [ ]  Architecture docs updated if applicable        — docs/architecture.md (only if a new pattern was introduced)
 [ ]  No new files in archive/ moved or deleted
 [ ]  No edits inside robstattm/RobStatTM-master/

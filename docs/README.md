@@ -56,6 +56,18 @@ To add or improve an example, edit `examples/<py_name>.py` and re-run steps 2–
 ## Implementation / design docs
 
 The Markdown files at the top level of this folder (`architecture.md`,
-`coverage_matrix.md`, `validation_strategy.md`, `user_interface.md`, …) and
-`research/` are internal design notes, not part of the published site (they are
+`coverage_matrix.md`, `validation_strategy.md`, `user_interface.md`, …) are
+contributor-facing design notes, not part of the published site (they are
 excluded in `conf.py`).
+
+The planning documents that used to sit alongside them — `implementation_plan`,
+`notebook_plan`, `plotting_strategy`, `research/` and the rest — recorded how
+the package was built rather than how it works, and `research/` had drifted out
+of step with the code. They now live outside this repo; see
+[`RELOCATED.md`](RELOCATED.md) for where they went and what to read instead.
+
+**Careful with the name `examples`:** the `examples/` directory *inside* `docs/`
+holds the small snippets embedded in the API reference pages. The book-example
+scripts are in [`../examples/`](../examples/) at the repository root — a
+different thing entirely, described in
+[`guides/book-examples.md`](guides/book-examples.md).

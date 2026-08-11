@@ -22,12 +22,12 @@ Mandatory ordering for every wrapper. **Do not skip steps.** Skipping leads to w
    names(fit)
    sapply(fit, class)
    ```
-   Capture this into the function's `docs/research/<fn>.md` "R return structure" section. Field names here are authoritative for the Python dataclass.
+   Capture this into the function's `the vendored R source (see docs/RELOCATED.md)` "R return structure" section. Field names here are authoritative for the Python dataclass.
 
 3. **Identify dependencies.**
    Cross-check against `docs/dependency_map.md §3`. If a new external package is needed that the map does not list, **update the map first** in the same PR.
 
-4. **Write/refresh `docs/research/<fn>.md`.**
+4. **Write/refresh `the vendored R source (see docs/RELOCATED.md)`.**
    The research doc must answer all of: statistical purpose, theory pointer, R location, inputs, outputs, deps, helper functions, Python API design, edge cases, validation strategy. If the doc already exists, verify and amend.
 
 5. **Write the test first** (TDD).
@@ -45,8 +45,8 @@ Mandatory ordering for every wrapper. **Do not skip steps.** Skipping leads to w
 
 8. **Update tracking.**
    - Append a session block to `project_memory/progress_log.md`.
-   - Update the status columns in `docs/proposal_requirements.md §4`.
-   - If this wrapper produces a plot, update `docs/plotting_strategy.md §3`.
+   - Update the status columns in `project_memory/robstattm-py-planning-docs/proposal_requirements.md §4`.
+   - If this wrapper produces a plot, update `project_memory/robstattm-py-planning-docs/plotting_strategy.md §3`.
 
 ---
 

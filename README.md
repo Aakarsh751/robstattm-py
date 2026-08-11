@@ -136,19 +136,36 @@ python -m pytest tests/ -q
 `python verify.py --quick` runs a ~5 s smoke check that every wrapper family
 executes; `python verify.py --coverage` prints the R↔Python coverage matrix.
 
+## Examples
+
+[`examples/`](examples/) holds a runnable Python script for **every** example
+script that ships with the RobStatTM R package — 25 of them, covering Chapters
+2 and 4–8 of Maronna et al. plus both vignettes.
+
+```bash
+pip install -e ".[examples]"
+python examples/ch05_mineral_lmrobdet_mm.py
+```
+
+Each keeps its source script's structure, example numbers and figure numbers, so
+you can read it next to the book. Every one is executed end to end by
+`tests/test_examples.py`, so an example that stops working is a failing test.
+See [`examples/README.md`](examples/README.md) for the full R → Python map.
+
 ## Layout
 
 ```
 robstattm-py/
 ├── pyproject.toml          # PEP 621 metadata, build + tooling config
 ├── verify.py               # fast human-readable confidence harness
-├── src/robstattm_py/        # the package (src-layout)
-├── tests/                  # strict-tier pytest suite + notebook CI
+├── src/robstattm_py/       # the package (src-layout)
+├── examples/               # one Python script per RobStatTM R example script
+├── tests/                  # strict-tier pytest suite + example/notebook CI
 ├── notebooks/              # textbook reproductions + tutorials + galleries
 ├── exploration/            # exploratory parity tests (not part of the suite)
 ├── templates/              # wrapper/test/docstring code-gen templates
-├── docs/                   # implementation docs, API pages, rd→md pipeline
-└── .github/workflows/      # CI (pytest on Windows + Linux)
+├── docs/                   # contributor docs, API pages, rd→md pipeline
+└── .github/workflows/      # CI (pytest + lint on Linux, Windows, macOS)
 ```
 
 ## Project context

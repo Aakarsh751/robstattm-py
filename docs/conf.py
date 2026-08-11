@@ -44,26 +44,21 @@ exclude_patterns = [
     "examples",
     "scripts",
     "templates",
-    "research",
     "misc",
-    # implementation/design docs kept in the repo but not part of the site
+    # Contributor-facing design docs. Kept in the repo because CONTRIBUTING and
+    # the wrapper-authoring workflow refer to them, but not part of the site —
+    # they describe how the package is built, not how it is used.
     "architecture.md",
-    "coverage_gap_analysis.md",
     "dependency_map.md",
-    "documentation_plan.md",
     "documentation_standards.md",
-    "implementation_plan.md",
     "implementation_rules.md",
-    "notebook_plan.md",
-    "plotting_strategy.md",
-    "plotting_suite_plan.md",
     "testing_guide.md",
     "project_understanding.md",
-    "proposal_requirements.md",
     "quality_gates.md",
     "validation_strategy.md",
     "user_interface.md",
     "coverage_matrix.md",
+    "RELOCATED.md",
     "README.md",
 ]
 

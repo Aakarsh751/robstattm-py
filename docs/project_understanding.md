@@ -253,13 +253,13 @@ Every file above is tagged in §2 with which proposal deliverable it supports. K
 
 ## 7. Next-document pointers
 
-- Proposal-level requirements distilled: → `docs/proposal_requirements.md`
-- Per-function research: → `docs/research/<function>.md`
+- Proposal-level requirements distilled: → `project_memory/robstattm-py-planning-docs/proposal_requirements.md`
+- Per-function research: → `the vendored R source (see docs/RELOCATED.md)`
 - Dependency graph: → `docs/dependency_map.md`
 - Architecture: → `docs/architecture.md`
 - Validation policy: → `docs/validation_strategy.md`
-- Plotting: → `docs/plotting_strategy.md`
-- Implementation timeline + critical path: → `docs/implementation_plan.md`
+- Plotting: → `project_memory/robstattm-py-planning-docs/plotting_strategy.md`
+- Implementation timeline + critical path: → `project_memory/robstattm-py-planning-docs/implementation_plan.md`
 - Documentation standards: → `docs/documentation_standards.md`
 - Implementation rules + quality gates: → `docs/implementation_rules.md`, `docs/quality_gates.md`
 - Live memory: → `project_memory/{decisions,progress_log,discoveries,blockers,lessons_learned,resume_prompts}.md`

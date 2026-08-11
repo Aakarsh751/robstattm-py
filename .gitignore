@@ -25,8 +25,12 @@ verify_smoke_plot.png
 /scatter.png
 /resid.png
 
+# Figures written by the example scripts (regenerated on every run)
+examples/_figures/
+
 # Local build/verification output
 dist_verify/
+docs/dist/
 
 # Virtual envs
 .venv/

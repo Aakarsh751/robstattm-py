@@ -185,39 +185,33 @@ def assert_r_equal_dataclass(py_obj, r_list, field_map: dict[str, str]):
 # ---------------------------------------------------------------------------
 
 
-def child_python_env(**overrides: str) -> dict[str, str]:
-    """Return an environment in which a child ``sys.executable`` can import us.
+def child_preamble() -> str:
+    """Python source that makes ``robstattm_py`` importable in a child process.
 
-    Several tests must run in a fresh interpreter — checking that importing the
-    package has no side effects, and that the first call in a *pristine* R
-    session works. Those properties are unobservable in-process once pytest has
-    already imported everything.
+    Several tests must run in a genuinely fresh interpreter: verifying that
+    importing the package has no side effects, and that the *first* call in a
+    pristine R session works. Neither is observable in-process once pytest has
+    imported everything.
 
-    Getting the child's import path right turned out to be fiddly, and both
-    obvious approaches fail on CI:
+    The obvious way to give the child our import path — setting ``PYTHONPATH``
+    — turned out to be the wrong tool, and took four attempts on CI to
+    understand. ``PYTHONPATH`` is consulted while the interpreter is still
+    booting, so a bad entry breaks start-up itself: on Python 3.12 it produced
 
-    * Inheriting the environment unchanged is not enough. Under an editable
-      install the package is importable in the parent without necessarily being
-      importable from a bare interpreter, giving ``ModuleNotFoundError: No
-      module named 'robstattm_py'``.
-    * Copying the whole of ``sys.path`` is too much. It drags in the
-      interpreter's own stdlib and ``lib-dynload``, which produced
-      ``ImportError: _ctypes ... undefined symbol: _PyErr_SetLocaleString`` on
-      Python 3.12 — a broken child rather than a real test result.
+        ImportError: .../lib-dynload/_ctypes...so: undefined symbol:
+        _PyErr_SetLocaleString
 
-    So we propagate exactly two kinds of directory: the one containing the
-    package, and the site-packages directories holding its dependencies —
-    while explicitly refusing to pass on anything that is a *stdlib* root.
+    before a single line of test code ran. Narrowing which directories were
+    passed only changed which failure appeared, because the hazard is *when*
+    the paths are applied, not which ones.
 
-    That last filter is not theoretical. ``site.getsitepackages()`` returns the
-    interpreter prefix itself in some layouts (it does on Windows), and putting
-    a stdlib root on ``PYTHONPATH`` is what reintroduces the ``_ctypes ...
-    undefined symbol`` failure. A directory containing ``lib-dynload`` (or equal
-    to ``sys.prefix``/``sys.base_prefix``) is therefore dropped.
+    Injecting into ``sys.path`` from inside the child sidesteps it entirely:
+    by then the interpreter is fully initialised, its own stdlib resolution has
+    already happened, and prepending directories cannot disturb it.
+
+    Returns a source prefix to place before the test's own code.
     """
-    import os
     import site
-    import sys
     import sysconfig
     from pathlib import Path
 
@@ -235,27 +229,19 @@ def child_python_env(**overrides: str) -> dict[str, str]:
         if path:
             wanted.append(path)
 
-    prefixes = {
-        os.path.normcase(os.path.normpath(p))
-        for p in (sys.prefix, sys.base_prefix, sys.exec_prefix)
-    }
-
-    def _is_stdlib_root(path: str) -> bool:
-        """True when adding ``path`` would shadow the child's own stdlib."""
-        normalised = os.path.normcase(os.path.normpath(path))
-        if normalised in prefixes:
-            return True
-        return Path(path, "lib-dynload").is_dir()
-
     seen: set[str] = set()
-    ordered = [
-        p
-        for p in wanted
-        if p and not _is_stdlib_root(p) and not (p in seen or seen.add(p))
-    ]
+    ordered = [p for p in wanted if p and not (p in seen or seen.add(p))]
+    return "import sys\nsys.path[:0] = " + repr(ordered) + "\n"
 
-    env = dict(os.environ)
-    existing = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = os.pathsep.join([*ordered, existing] if existing else ordered)
+
+def child_env(**overrides: str) -> dict[str, str]:
+    """Return the parent environment with all R-related settings removed."""
+    import os
+
+    env = {
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith(("R_", "ROBSTATTM_", "RPY2_", "CONDA", "MAMBA"))
+    }
     env.update(overrides)
     return env

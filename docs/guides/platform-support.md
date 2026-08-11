@@ -50,6 +50,13 @@ What that means in practice:
 Once built, it is a fully native arm64 R with no emulation and no performance
 penalty.
 
+> **Where it gets installed.** On macOS the private R goes in
+> `~/.robstattm-py`, not the usual `~/Library/Application Support`. R's own
+> launcher script cannot cope with the space in "Application Support" — it
+> expands its path unquoted and fails to start. Any path you choose with
+> `ROBSTATTM_HOME` must likewise contain no spaces; `setup` checks this
+> before downloading anything.
+
 ### If the source build fails
 
 It is the most fragile path in the package, and it says so rather than pretending

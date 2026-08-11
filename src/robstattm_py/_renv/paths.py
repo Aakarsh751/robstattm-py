@@ -59,6 +59,19 @@ def root(probe: Probe | None = None) -> Path:
     if override:
         return Path(override).expanduser().absolute()
 
+    # macOS is deliberately not platformdirs' answer here. Its user-data
+    # directory is ~/Library/Application Support/..., and the space in
+    # "Application Support" breaks R: conda-forge's `bin/R` is a shell script
+    # that expands R_HOME_DIR unquoted, so the path splits and R cannot start:
+    #
+    #   .../Application Support/.../bin/R: line 4:
+    #     Support/robstattm-py/envs/r/lib/R: No such file or directory
+    #
+    # A dot-directory in $HOME is both space-free and the convention other
+    # language tooling uses (~/.cargo, ~/.rustup, ~/.conda).
+    if probe.is_macos:
+        return (probe.home / f".{APP_NAME}").absolute()
+
     # platformdirs is a hard dependency, but fall back rather than fail if a
     # minimal install is missing it — the fallback matches its own conventions.
     try:

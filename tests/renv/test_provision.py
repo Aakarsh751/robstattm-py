@@ -415,6 +415,65 @@ def test_overrides_survive_the_environment_scrubber(tmp_path):
     assert merged["CONDA_OVERRIDE_OSX"] == "11.0"
 
 
+# ---------------------------------------------------------------------------
+# Spaces in the install path
+# ---------------------------------------------------------------------------
+
+
+def test_macos_default_root_has_no_space():
+    """Regression: the macOS default location broke R for every user.
+
+    platformdirs puts application data in ``~/Library/Application Support``.
+    conda-forge's ``bin/R`` is a shell script that expands ``R_HOME_DIR``
+    unquoted, so the space splits the path and R fails to start:
+
+        .../Application Support/.../bin/R: line 4:
+          Support/robstattm-py/envs/r/lib/R: No such file or directory
+
+    Provisioning therefore failed on macOS out of the box, which the CI
+    clean-machine job caught.
+    """
+    from pathlib import Path
+
+    from robstattm_py._renv import paths
+
+    probe = make_probe(
+        system="Darwin", machine="arm64", environ={}, home=Path("/Users/someone")
+    )
+    assert " " not in str(paths.root(probe))
+
+
+@pytest.mark.parametrize(
+    ("system", "machine"),
+    [("Darwin", "arm64"), ("Linux", "x86_64"), ("Windows", "AMD64")],
+)
+def test_default_root_never_contains_a_space(system, machine):
+    from pathlib import Path
+
+    from robstattm_py._renv import paths
+
+    probe = make_probe(
+        system=system,
+        machine=machine,
+        environ={"LOCALAPPDATA": r"C:\Users\someone\AppData\Local"},
+        home=Path("/home/someone"),
+    )
+    assert " " not in str(paths.root(probe))
+
+
+def test_a_space_in_the_install_path_is_refused_before_downloading(tmp_path):
+    """Fail fast: this used to surface only after R had been installed."""
+    spaced = tmp_path / "Application Support" / "rtm"
+    probe = make_probe(
+        system="Darwin", machine="arm64", environ={"ROBSTATTM_HOME": str(spaced)}
+    )
+
+    with pytest.raises(provision.SpaceInPathError) as excinfo:
+        provision.preflight(probe)
+
+    assert "ROBSTATTM_HOME" in str(excinfo.value)
+
+
 def test_licence_notice_names_both_licences():
     """Users must be told what they are downloading before it happens."""
     notice = provision.licence_notice()

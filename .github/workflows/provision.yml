@@ -54,15 +54,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      # --no-deps on purpose. Solving only exercises robstattm_py._renv, which
-      # is stdlib plus platformdirs/packaging; it never imports rpy2. Pulling
-      # the full dependency set would try to build rpy2, and rpy2 cannot be
-      # built without R — which is exactly the situation this runner is in.
-      - name: Install package without its R-dependent deps
+      # --no-deps, then everything except rpy2. Solving exercises only
+      # robstattm_py._renv, which never imports rpy2 — but reaching it runs the
+      # package's __init__, which does import numpy and pandas. Installing the
+      # full dependency set instead would try to build rpy2, and rpy2 cannot be
+      # built without R, which is exactly the situation this runner is in.
+      - name: Install package without rpy2
         run: |
           python -m pip install --upgrade pip
           pip install --no-deps -e .
-          pip install platformdirs packaging
+          pip install numpy pandas platformdirs packaging
 
       - name: Solve for ${{ matrix.subdir }}
         run: python dev/_solve_check.py ${{ matrix.subdir }}

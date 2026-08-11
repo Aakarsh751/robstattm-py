@@ -17,19 +17,15 @@ import textwrap
 
 import pytest
 
-from ..conftest import child_python_env
+from ..conftest import child_env, child_preamble
 
 
 def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.CompletedProcess:
-    """Run ``code`` in a fresh interpreter with a scrubbed R environment."""
-    env = child_python_env()
-    for key in list(env):
-        if key.startswith(("R_", "ROBSTATTM_", "RPY2_", "CONDA", "MAMBA")):
-            del env[key]
-    env["ROBSTATTM_HOME"] = str(tmp_path / "rtm-home")
-    env.update(env_overrides)
+    """Run ``code`` in a fresh interpreter with every R setting scrubbed."""
+    env = child_env(ROBSTATTM_HOME=str(tmp_path / "rtm-home"), **env_overrides)
+    source = child_preamble() + textwrap.dedent(code)
     return subprocess.run(
-        [sys.executable, "-c", textwrap.dedent(code)],
+        [sys.executable, "-c", source],
         capture_output=True,
         text=True,
         env=env,

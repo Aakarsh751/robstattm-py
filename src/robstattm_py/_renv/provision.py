@@ -102,6 +102,25 @@ class DiskSpaceError(RenvError):
     )
 
 
+class SpaceInPathError(RenvError):
+    """The install path contains a space, which R's launcher cannot handle.
+
+    Not a stylistic objection. conda-forge ships ``bin/R`` as a shell script
+    that expands ``R_HOME_DIR`` unquoted, so a space splits the path and R fails
+    to start. This bit the *default* macOS location, since
+    ``~/Library/Application Support`` contains one.
+    """
+
+    code = "E_SPACE_IN_PATH"
+    exit_code = EXIT_PROVISION
+    default_remedy = (
+        "Set ROBSTATTM_HOME to a path with no spaces and try again, for example:\n"
+        "    macOS/Linux:  export ROBSTATTM_HOME=\"$HOME/.robstattm-py\"\n"
+        "    Windows:      $env:ROBSTATTM_HOME = 'C:\\rtm'\n"
+        "  then re-run `robstattm-py setup`."
+    )
+
+
 class LongPathError(RenvError):
     """The install path is too long for Windows' 260-character limit.
 
@@ -250,6 +269,24 @@ def preflight(probe: Probe | None = None) -> list[str]:
                     "Long-path support is currently disabled on this machine."
                 ),
             )
+
+    # A space is fatal, not cosmetic. conda-forge's `bin/R` is a shell script
+    # that expands R_HOME_DIR unquoted, so a space splits the path and R cannot
+    # start at all:
+    #
+    #   .../Application Support/.../bin/R: line 4:
+    #     Support/robstattm-py/envs/r/lib/R: No such file or directory
+    #
+    # Caught here rather than after the download, which is where it surfaced
+    # the first time.
+    if " " in text:
+        raise SpaceInPathError(
+            f"The install path contains a space, which R cannot handle: {root}",
+            detail=(
+                "R's launcher script expands its own location without quoting, "
+                "so a space in the path stops R from starting."
+            ),
+        )
 
     if any(ord(ch) > 127 for ch in text):
         warnings.append(

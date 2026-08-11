@@ -28,17 +28,16 @@ import textwrap
 
 import pytest
 
-from .conftest import child_python_env, needs_r
+from .conftest import child_preamble, needs_r
 
 
 def _fresh(code: str) -> subprocess.CompletedProcess:
     """Run ``code`` in a brand-new interpreter, and hence a brand-new R."""
     return subprocess.run(
-        [sys.executable, "-c", textwrap.dedent(code)],
+        [sys.executable, "-c", child_preamble() + textwrap.dedent(code)],
         capture_output=True,
         text=True,
         timeout=600,
-        env=child_python_env(),
         check=False,
     )
 

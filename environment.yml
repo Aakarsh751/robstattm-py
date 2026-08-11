@@ -1,0 +1,58 @@
+# One-command environment with R, RobStatTM and rpy2 already built.
+#
+#     conda env create -f environment.yml
+#     conda activate robstattm-py
+#     robstattm-py doctor
+#
+# (mamba or micromamba work too, and are much faster.)
+#
+# Worth knowing: on Linux this is the smoothest route by some margin. rpy2
+# publishes no Linux wheels, so `pip install` has to compile it and its default
+# build mode requires R to already be present — a chicken-and-egg problem if you
+# were relying on `robstattm-py setup` to install R. conda-forge ships prebuilt
+# rpy2 *and* R, so neither compilation nor `setup` is needed.
+#
+# Apple Silicon: conda-forge has no r-robstattm/r-pyinit for osx-arm64 yet, so
+# `conda env create` will fail to solve there. Use pip plus
+# `robstattm-py setup`, which compiles those two from source. See
+# docs/guides/platform-support.md.
+
+name: robstattm-py
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python >=3.10,<3.14
+
+  # The R side. Deliberately unpinned beyond a floor: conda-forge's R packages
+  # carry their own run constraints, and pinning r-base here would force the
+  # solver to choose between an old r-robstattm and failing outright.
+  - r-base >=4.3
+  - r-robstattm
+  - r-pyinit
+  - r-robustbase
+  - r-rrcov
+  - r-robust        # for breslow.dat, used by the glmrob parity tests
+
+  # The Python side.
+  - rpy2 >=3.6
+  - numpy >=1.24
+  - pandas >=2.0
+  - platformdirs >=3
+  - packaging >=23
+
+  # Plotting and notebooks. Drop these for a leaner environment.
+  - matplotlib-base >=3.7
+  - plotnine >=0.13
+  - scipy >=1.10
+  - jupyterlab
+  - ipykernel
+
+  - pip
+  - pip:
+      # No dependencies: everything above is already provided by conda, and
+      # letting pip resolve them again risks shadowing the conda rpy2 with a
+      # wheel built against a different R.
+      - --no-deps
+      - robstattm-py

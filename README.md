@@ -13,6 +13,26 @@ through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 
 ---
 
+## Three ways to get started
+
+| | Command | R installed for you? |
+|---|---|---|
+| **pip** | `pip install robstattm-py` then `robstattm-py setup` | Yes, by `setup` |
+| **conda** | `conda env create -f environment.yml` | Yes, by conda |
+| **Docker** | `docker build -t robstattm-py .` then `docker run --rm -it robstattm-py` | Already inside |
+
+All three end with a working R that you never had to install or configure. If
+you already have R, plain `pip install robstattm-py` finds it automatically.
+
+> **New to Python or to the terminal?** Start with
+> [Install in 10 minutes](docs/guides/install-beginner.md), which assumes
+> nothing.
+>
+> **Coming from R?** [Coming from R](docs/guides/for-r-users.md) is the whole
+> translation on one page.
+
+---
+
 ## Requirements
 
 - **Python** ≥ 3.10

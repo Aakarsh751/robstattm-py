@@ -1,0 +1,34 @@
+# Binder configuration: click the badge in the README and get a working
+# JupyterLab with R, RobStatTM and RobStatTM-Py already installed. Nothing to
+# install locally, which makes it the fastest way to try the package or to
+# share a reproducible example on an issue.
+#
+# Kept separate from the repository-root environment.yml because Binder pins
+# what it needs for the notebook server, and because this file must stay small
+# — Binder builds are slow and time out.
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+
+  - r-base >=4.3
+  - r-robstattm
+  - r-pyinit
+  - r-robustbase
+  - r-rrcov
+
+  - rpy2 >=3.6
+  - numpy >=1.24
+  - pandas >=2.0
+  - platformdirs >=3
+  - packaging >=23
+
+  - matplotlib-base >=3.7
+  - scipy >=1.10
+
+  - pip
+  - pip:
+      - --no-deps
+      - .

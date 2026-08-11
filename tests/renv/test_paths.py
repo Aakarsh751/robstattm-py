@@ -30,13 +30,14 @@ def test_override_expands_user(tmp_path):
     ("system", "machine", "env", "expected_tail"),
     [
         ("Windows", "AMD64", {"LOCALAPPDATA": r"C:\Users\x\AppData\Local"}, "robstattm-py"),
-        ("Darwin", "arm64", {}, "robstattm-py"),
+        # macOS uses a dot-directory: see _default_data_dir.
+        ("Darwin", "arm64", {}, ".robstattm-py"),
         ("Linux", "x86_64", {"XDG_DATA_HOME": "/home/x/.local/share"}, "robstattm-py"),
     ],
 )
 def test_fallback_data_dir_per_platform(system, machine, env, expected_tail):
     probe = make_probe(system=system, machine=machine, environ=env, home=Path("/home/x"))
-    assert paths._fallback_data_dir(probe).name == expected_tail
+    assert paths._default_data_dir(probe).name == expected_tail
 
 
 def test_layout_is_all_under_one_root(tmp_path):

@@ -67,6 +67,14 @@ Documented exit codes, and every error carries a concrete remedy.
   several minutes into a download with an opaque "Package cache error".
 - All 17 example notebooks hardcoded `C:\Program Files\R\R-4.5.2`, so they only
   ran on one machine. Removed; R is found automatically.
+- **macOS**: provisioning failed out of the box. R's launcher script expands
+  its own path unquoted, so the space in `~/Library/Application Support`
+  stopped R from starting. The private R now lives in `~/.robstattm-py`, and
+  a space anywhere in the install path is refused before anything is
+  downloaded.
+- `robstattm-py doctor --json` could emit unparseable output. Both rpy2 and R
+  itself write to stdout while R starts; that text is now captured (at the
+  file-descriptor level, since R writes from C) and re-emitted on stderr.
 
 ### Changed
 

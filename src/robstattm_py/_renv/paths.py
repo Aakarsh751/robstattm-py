@@ -38,11 +38,21 @@ APP_NAME = "robstattm-py"
 def root(probe: Probe | None = None) -> Path:
     """Return the root directory of the package-private R environment.
 
-    Honours ``ROBSTATTM_HOME`` when set and non-empty; otherwise uses the
-    platform user-data directory (``%LOCALAPPDATA%\\robstattm-py`` on Windows,
-    ``~/Library/Application Support/robstattm-py`` on macOS,
-    ``$XDG_DATA_HOME/robstattm-py`` or ``~/.local/share/robstattm-py`` on
-    Linux).
+    Honours ``ROBSTATTM_HOME`` when set and non-empty; otherwise uses a
+    per-platform default:
+
+    ==========  =========================================================
+    Windows     ``%LOCALAPPDATA%\\robstattm-py``
+    macOS       ``~/.robstattm-py``
+    Linux       ``$XDG_DATA_HOME/robstattm-py`` or ``~/.local/share/...``
+    ==========  =========================================================
+
+    Computed entirely from ``probe``, deliberately. This used to delegate to
+    ``platformdirs``, which reads the *real* process environment — so a
+    synthetic probe describing another platform was silently ignored, and the
+    seam that is supposed to make this testable did not actually cover the one
+    function everything else is built on. The conventions below are the same
+    ones platformdirs applies, minus the macOS exception noted there.
 
     Parameters
     ----------
@@ -58,36 +68,27 @@ def root(probe: Probe | None = None) -> Path:
     override = probe.environ.get(ENV_HOME, "").strip()
     if override:
         return Path(override).expanduser().absolute()
+    return _default_data_dir(probe).absolute()
 
-    # macOS is deliberately not platformdirs' answer here. Its user-data
-    # directory is ~/Library/Application Support/..., and the space in
-    # "Application Support" breaks R: conda-forge's `bin/R` is a shell script
+
+def _default_data_dir(probe: Probe) -> Path:
+    """Return the conventional per-user data directory for this platform."""
+    if probe.is_windows:
+        base = probe.environ.get("LOCALAPPDATA") or str(probe.home / "AppData" / "Local")
+        return Path(base) / APP_NAME
+
+    # macOS deliberately does NOT use ~/Library/Application Support. The space
+    # in "Application Support" breaks R: conda-forge's `bin/R` is a shell script
     # that expands R_HOME_DIR unquoted, so the path splits and R cannot start:
     #
     #   .../Application Support/.../bin/R: line 4:
     #     Support/robstattm-py/envs/r/lib/R: No such file or directory
     #
-    # A dot-directory in $HOME is both space-free and the convention other
-    # language tooling uses (~/.cargo, ~/.rustup, ~/.conda).
+    # A dot-directory in $HOME is space-free and matches what other language
+    # tooling does (~/.cargo, ~/.rustup, ~/.conda).
     if probe.is_macos:
-        return (probe.home / f".{APP_NAME}").absolute()
+        return probe.home / f".{APP_NAME}"
 
-    # platformdirs is a hard dependency, but fall back rather than fail if a
-    # minimal install is missing it — the fallback matches its own conventions.
-    try:
-        from platformdirs import user_data_dir
-    except ImportError:  # pragma: no cover - platformdirs is a declared dep
-        return _fallback_data_dir(probe)
-    return Path(user_data_dir(APP_NAME, appauthor=False)).absolute()
-
-
-def _fallback_data_dir(probe: Probe) -> Path:
-    """Reproduce platformdirs' user-data directory without the dependency."""
-    if probe.is_windows:
-        base = probe.environ.get("LOCALAPPDATA") or str(probe.home / "AppData" / "Local")
-        return Path(base) / APP_NAME
-    if probe.is_macos:
-        return probe.home / "Library" / "Application Support" / APP_NAME
     base = probe.environ.get("XDG_DATA_HOME") or str(probe.home / ".local" / "share")
     return Path(base) / APP_NAME
 

@@ -30,10 +30,8 @@ dependencies = [
     "rpy2>=3.6",
     "numpy>=1.24",
     "pandas>=2.0",
-    # Used by robstattm_py._renv to locate the private R environment
-    # (platformdirs) and to version-sort R installations (packaging). Both are
-    # small, pure-Python, and already present in most scientific environments.
-    "platformdirs>=3",
+    # Used by robstattm_py._renv to version-sort R installations. Small,
+    # pure-Python, and already present in most scientific environments.
     "packaging>=23",
 ]
 

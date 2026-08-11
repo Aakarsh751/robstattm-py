@@ -88,9 +88,12 @@ Documented exit codes, and every error carries a concrete remedy.
 
 ### Known limitations
 
-- **Apple Silicon**: conda-forge has no `r-robstattm` or `r-pyinit` build for
-  `osx-arm64`, so `setup` compiles them from source (10–15 minutes, needs Xcode
-  command line tools). Everything works afterwards. See *Platform support*.
+- **Apple Silicon, ARM Linux and POWER Linux**: conda-forge has no
+  `r-robstattm` or `r-pyinit` build for `osx-arm64`, `linux-aarch64` or
+  `linux-ppc64le`, so `setup` compiles those two from CRAN source (10–15
+  minutes; on macOS it also needs the Xcode command line tools). Everything
+  works afterwards — Apple Silicon provisioning is verified in CI. See
+  *Platform support*.
 - `pense` and `GSE` are not on conda-forge and are not installed by `setup`;
   use `robstattm-py install-r-packages pense GSE`.
 - `robcbi` is archived on CRAN, so the `cubinf` wrapper cannot be exercised

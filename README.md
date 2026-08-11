@@ -32,6 +32,11 @@ pip install -e robstattm-py/          # from the repo root
 cd robstattm-py && pip install -e .
 ```
 
+> **Linux, and no R installed yet?** Prefix the command with
+> `RPY2_CFFI_MODE=ABI`. rpy2 ships no Linux wheels, so pip compiles it, and its
+> default mode refuses to build without R already present. ABI mode binds to R
+> at run time instead — see [platform support](docs/guides/platform-support.md).
+
 Then the R packages, from your normal terminal — no R console required:
 
 ```bash

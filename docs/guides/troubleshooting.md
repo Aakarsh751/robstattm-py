@@ -137,7 +137,29 @@ R works, but the R packages are missing. The message names the exact package:
 robstattm-py install-r-packages RobStatTM
 ```
 
-### rpy2 fails to install with `pip`
+### `pip install` fails with "rpy2 in API mode cannot be built without R"
+
+The full message is:
+
+```text
+Error: rpy2 in API mode cannot be built without R in the PATH or R_HOME
+defined. Correct this or force ABI mode-only by defining the environment
+variable RPY2_CFFI_MODE=ABI
+```
+
+This is the chicken-and-egg case on **Linux**: rpy2 ships no Linux wheels, so
+pip compiles it, and its default mode wants R at build time — but you were
+going to let `robstattm-py setup` install R. Do as the message says:
+
+```bash
+RPY2_CFFI_MODE=ABI pip install robstattm-py
+robstattm-py setup
+```
+
+ABI mode binds to R at run time instead, so it builds with no R present and
+then uses whichever R you end up with. Results are identical.
+
+### rpy2 fails to install with `pip` for other reasons
 
 `pip install rpy2` may try to compile against R and fail if R headers or a C
 compiler are missing.

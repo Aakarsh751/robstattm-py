@@ -114,9 +114,31 @@ Two smaller Windows notes:
 
 ## Linux
 
-**Fully supported, nothing special.** `robstattm-py setup` uses prebuilt
-packages, and an R from your distribution is found automatically at
-`/usr/lib/R`, `/usr/local/lib/R` or `/opt/R/*`.
+**Fully supported**, with one wrinkle at install time if you do not already
+have R.
+
+`rpy2` — the bridge this package is built on — publishes prebuilt wheels for
+Windows and macOS but **not for Linux**, so on Linux `pip` compiles it. Its
+default build mode refuses to compile unless R is already present, which is a
+chicken-and-egg problem if you were relying on `robstattm-py setup` to install
+R for you. The fix is one environment variable:
+
+```bash
+RPY2_CFFI_MODE=ABI pip install robstattm-py
+robstattm-py setup
+```
+
+ABI mode resolves R's symbols at run time instead of link time, so it builds
+with no R present and then binds to whichever R `setup` installs. Per-call
+overhead is marginally higher; results are identical. `robstattm-py doctor`
+shows which mode is in use on the `binding` line.
+
+If you already have R installed, plain `pip install robstattm-py` works and
+you get the faster API mode.
+
+Once installed, `robstattm-py setup` uses prebuilt packages, and an R from your
+distribution is found automatically at `/usr/lib/R`, `/usr/local/lib/R` or
+`/opt/R/*`.
 
 If you install R packages from source rather than using `setup`, you need the R
 headers and a toolchain:

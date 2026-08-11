@@ -206,11 +206,18 @@ def child_python_env(**overrides: str) -> dict[str, str]:
       Python 3.12 — a broken child rather than a real test result.
 
     So we propagate exactly two kinds of directory: the one containing the
-    package, and the site-packages directories holding its dependencies. The
-    child's own stdlib resolution is left alone.
+    package, and the site-packages directories holding its dependencies —
+    while explicitly refusing to pass on anything that is a *stdlib* root.
+
+    That last filter is not theoretical. ``site.getsitepackages()`` returns the
+    interpreter prefix itself in some layouts (it does on Windows), and putting
+    a stdlib root on ``PYTHONPATH`` is what reintroduces the ``_ctypes ...
+    undefined symbol`` failure. A directory containing ``lib-dynload`` (or equal
+    to ``sys.prefix``/``sys.base_prefix``) is therefore dropped.
     """
     import os
     import site
+    import sys
     import sysconfig
     from pathlib import Path
 
@@ -228,8 +235,24 @@ def child_python_env(**overrides: str) -> dict[str, str]:
         if path:
             wanted.append(path)
 
+    prefixes = {
+        os.path.normcase(os.path.normpath(p))
+        for p in (sys.prefix, sys.base_prefix, sys.exec_prefix)
+    }
+
+    def _is_stdlib_root(path: str) -> bool:
+        """True when adding ``path`` would shadow the child's own stdlib."""
+        normalised = os.path.normcase(os.path.normpath(path))
+        if normalised in prefixes:
+            return True
+        return Path(path, "lib-dynload").is_dir()
+
     seen: set[str] = set()
-    ordered = [p for p in wanted if p and not (p in seen or seen.add(p))]
+    ordered = [
+        p
+        for p in wanted
+        if p and not _is_stdlib_root(p) and not (p in seen or seen.add(p))
+    ]
 
     env = dict(os.environ)
     existing = env.get("PYTHONPATH", "")

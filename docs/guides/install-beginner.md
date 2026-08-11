@@ -120,6 +120,20 @@ pip install robstattm-py
 This takes a minute or two and prints a lot of text. The last line should say
 `Successfully installed ...`.
 
+> **On Linux, and you do not have R yet?** Run this instead:
+>
+> ```bash
+> RPY2_CFFI_MODE=ABI pip install robstattm-py
+> ```
+>
+> One of the pieces underneath (`rpy2`) publishes ready-made packages for
+> Windows and macOS but not for Linux, so on Linux it gets compiled — and by
+> default it refuses to compile unless R is already there. `RPY2_CFFI_MODE=ABI`
+> tells it to connect to R when it *runs* rather than when it is built, which
+> is what you want here. Everything works the same afterwards.
+>
+> Already have R installed? Then the plain `pip install` above is fine.
+
 ---
 
 ## Step 5 — Install R

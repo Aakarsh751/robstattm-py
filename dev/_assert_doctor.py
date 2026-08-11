@@ -43,9 +43,22 @@ def main(argv: list[str] | None = None) -> int:
     try:
         # utf-8-sig, not utf-8: PowerShell's `>` redirection writes a BOM, and
         # a CI failure that turns out to be an encoding artifact wastes an hour.
-        report = json.loads(args.report.read_text(encoding="utf-8-sig"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raw = args.report.read_text(encoding="utf-8-sig")
+    except (OSError, UnicodeDecodeError) as exc:
         print(f"FAIL: cannot read {args.report}: {exc}", file=sys.stderr)
+        return 1
+
+    try:
+        report = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        # Show what was actually there. "Expecting value: line 1 column 1" is
+        # indistinguishable between an empty file and one prefixed with library
+        # chatter, and guessing between those cost a full CI round.
+        print(f"FAIL: {args.report} is not valid JSON: {exc}", file=sys.stderr)
+        if not raw.strip():
+            print("  the file is empty", file=sys.stderr)
+        else:
+            print(f"  first 400 characters:\n{raw[:400]}", file=sys.stderr)
         return 1
 
     failures: list[str] = []

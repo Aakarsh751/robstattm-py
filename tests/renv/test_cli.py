@@ -154,6 +154,39 @@ def test_doctor_json_exposes_the_discovery_source(capsys, tmp_path, monkeypatch)
         assert data["r"]["home"]
 
 
+def test_doctor_json_stays_parseable_when_something_prints(
+    capsys, tmp_path, monkeypatch
+):
+    """Regression: rpy2's binding-fallback message corrupted `--json`.
+
+    Starting R can print to stdout without asking. rpy2 announces an API-to-ABI
+    fallback whenever it was built against a different R than the one found,
+    which is routine on macOS:
+
+        Error importing in API mode: ImportError(...)
+        Trying to import in ABI mode.
+
+    That landed in front of the JSON and made `doctor --json` unparseable for
+    anything consuming it — which is how CI found it.
+    """
+    import robstattm_py.cli._doctor as doctor_module
+
+    real_collect = doctor_module.collect_report
+
+    def _noisy_collect(**kwargs):
+        print("Error importing in API mode: ImportError(...)")
+        print("Trying to import in ABI mode.")
+        return real_collect(**kwargs)
+
+    monkeypatch.setenv("ROBSTATTM_HOME", str(tmp_path / "rtm-home"))
+    monkeypatch.setattr(doctor_module, "collect_report", _noisy_collect)
+
+    _, out, err = _run(capsys, ["doctor", "--no-start-r", "--json"])
+
+    json.loads(out)  # must parse; the assertion is that this does not raise
+    assert "API mode" in err, "the message must be preserved, just moved"
+
+
 def test_doctor_verbose_always_shows_the_trace(capsys, tmp_path, monkeypatch):
     monkeypatch.setenv("ROBSTATTM_HOME", str(tmp_path / "rtm-home"))
     _, out, _ = _run(capsys, ["doctor", "--no-start-r", "-v"])

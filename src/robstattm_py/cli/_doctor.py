@@ -6,6 +6,8 @@ was rejected, usually makes the fix obvious without any support round-trip.
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import sys
 
@@ -44,12 +46,34 @@ def add_parser(subparsers) -> None:
 
 def run(args) -> int:
     """Execute ``doctor``."""
-    report = collect_report(start_r=not args.no_start_r)
-
     if args.json:
+        # Starting R can print to stdout without asking us. rpy2, for instance,
+        # announces its binding fallback:
+        #
+        #     Error importing in API mode: ImportError(...)
+        #     Trying to import in ABI mode.
+        #
+        # which happens whenever the installed rpy2 was built against a
+        # different R than the one found — common on macOS. That text landing in
+        # front of the JSON makes `doctor --json` unparseable for anything
+        # consuming it, so collection runs with stdout diverted and only the
+        # JSON is emitted. Nothing is lost: the captured text goes to stderr.
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            report = collect_report(start_r=not args.no_start_r)
+        noise = buffer.getvalue().strip()
+        if noise:
+            print(noise, file=sys.stderr)
         print(json.dumps(report.to_dict(), indent=2))
-    else:
-        print(render_text(report, verbose=args.verbose))
+        return _exit_code(report)
+
+    report = collect_report(start_r=not args.no_start_r)
+    print(render_text(report, verbose=args.verbose))
+    return _exit_code(report)
+
+
+def _exit_code(report: SetupReport) -> int:
+    """Map a report onto the documented exit-code contract."""
 
     if report.ok:
         return EXIT_OK

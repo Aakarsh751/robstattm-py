@@ -1,9 +1,54 @@
 """Shared helpers for formula-based regression wrappers."""
 from __future__ import annotations
 
+import re
+
 import pandas as pd
 
 from robstattm_py._r import r
+
+
+def r_name_map(data: pd.DataFrame) -> dict[str, str]:
+    """Return ``{python column name: R column name}`` for names that differ.
+
+    Populated only for frames carrying ``attrs['r_columns']`` — i.e. the ones
+    our dataset loaders produce, where ``copper.ppm`` became ``copper_ppm``.
+    Empty for a frame the user built themselves, whose column names are already
+    the only spelling there is.
+    """
+    r_cols = getattr(data, "attrs", {}).get("r_columns") if hasattr(data, "attrs") else None
+    if r_cols is None or len(r_cols) != data.shape[1]:
+        return {}
+    return {
+        str(py): str(rr)
+        for py, rr in zip(data.columns, r_cols, strict=True)
+        if str(py) != str(rr)
+    }
+
+
+def formula_to_r_names(formula: str, data: pd.DataFrame) -> str:
+    """Rewrite Python-safe column names in ``formula`` to their R spellings.
+
+    The frame is pushed to R under its original R column names (see
+    :func:`df_with_r_names`), so a formula must ultimately speak R's spelling.
+    But the frame the *caller* is holding shows the Python spelling — running
+    ``rpm.datasets.shock()`` yields a column called ``n_shocks``, and writing
+    ``"time ~ n_shocks"`` is the only reasonable thing to do with that. Before
+    this rewrite it failed with R's ``object 'n_shocks' not found``, which
+    points at nothing the caller can see.
+
+    Both spellings now work. Substitution is on whole identifiers only, and the
+    substitution table holds nothing but this frame's own columns, so a
+    same-named function or variable elsewhere in the formula is untouched.
+    """
+    mapping = r_name_map(data)
+    if not mapping:
+        return formula
+    # Longest first, so a name that is a prefix of another cannot shadow it.
+    alternation = "|".join(
+        re.escape(name) for name in sorted(mapping, key=len, reverse=True)
+    )
+    return re.sub(rf"\b(?:{alternation})\b", lambda m: mapping[m.group(0)], formula)
 
 
 def df_with_r_names(data: pd.DataFrame) -> pd.DataFrame:
@@ -110,7 +155,9 @@ def resolve_formula_args(
             raise TypeError("data must be a pandas.DataFrame")
         if data.empty:
             raise ValueError("data is empty")
-        return formula, data
+        # Accept the column names the caller can actually see on their frame,
+        # not only R's original spelling.
+        return formula_to_r_names(formula, data), data
     if xy_given:
         if X is None or y is None:
             raise TypeError("Both `X` and `y` are required for the array form.")
@@ -122,7 +169,7 @@ def resolve_formula_args(
 
 def xy_to_formula_and_data(
     X, y, *, y_name: str = "y"
-) -> tuple[str, "pd.DataFrame"]:
+) -> tuple[str, pd.DataFrame]:
     """Convert (X, y) array form to (formula_str, DataFrame).
 
     Supports the ``X, y`` invocation style promised by

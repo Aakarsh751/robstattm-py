@@ -85,9 +85,17 @@ jobs:
             container: python:3.12-slim
           - os: windows-latest
             label: win-64
-          - os: macos-14
+          # macos-latest tracks the current Apple Silicon image. Pinning a
+          # version here (macos-14) means the job breaks when that image is
+          # retired, and macOS images are retired on a roughly annual cycle.
+          - os: macos-latest
             label: osx-arm64
-          - os: macos-13
+          # Intel macOS. NOT macos-13: that image was retired in December 2025,
+          # so the job simply never received a runner — it sat queued until the
+          # job timeout, on every single run, while reporting nothing useful.
+          # macos-15-intel is the supported Intel label and is available until
+          # August 2027, after which GitHub drops hosted x86_64 macOS entirely.
+          - os: macos-15-intel
             label: osx-64
     container: ${{ matrix.container }}
     steps:

@@ -23,7 +23,6 @@ import pandas as pd
 from robstattm_py._r import r, r_guard, r_pkg
 from robstattm_py.regression._formula import df_with_r_names
 
-
 # ---------------------------------------------------------------------------
 # Result dataclasses (shared across lmrobdetMM / lmrobdetDCML / lmrobM)
 # ---------------------------------------------------------------------------

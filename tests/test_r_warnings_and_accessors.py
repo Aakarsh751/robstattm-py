@@ -157,7 +157,9 @@ class TestRWarningCapture:
         from robstattm_py import capture_r_warnings
 
         wdf = self._hard_problem()
-        with warnings.catch_warnings(record=True) as caught:
+        # record=True only to keep the inner guard's warnings off the test log;
+        # the assertion below is about what the outer CM collected.
+        with warnings.catch_warnings(record=True):
             warnings.simplefilter("always")
             with capture_r_warnings(emit=False) as msgs:
                 # Fit directly through R inside the CM.

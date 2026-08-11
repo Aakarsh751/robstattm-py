@@ -1,29 +1,18 @@
-"""Cross-language conversion helpers.
+"""Cross-language conversion primitives.
 
-Two responsibilities:
+Pulling a value out of an R object is never quite one operation: the active
+rpy2 conversion context may hand back an rpy2 vector, a 0-d numpy array, a
+length-1 array, or an already-native scalar, depending on the call path. These
+helpers absorb that variation so wrappers can state the type they want.
 
-1. Reshape numpy/pandas inputs for R-friendly consumption.
-2. Pull named fields out of R lists, applying the R-dot ↔ Python-underscore
-   convention.
-
-The field-name map for any given wrapper lives next to the wrapper, not here —
-this module only provides primitives.
+The R-field-name map for any given wrapper lives next to that wrapper, not
+here — this module only provides the primitives.
 """
 from __future__ import annotations
 
 from typing import Any
 
 import numpy as np
-
-
-def py_to_r_field_name(py_name: str) -> str:
-    """``r_squared`` -> ``r.squared`` (used when calling R-side helpers)."""
-    return py_name.replace("_", ".")
-
-
-def r_to_py_field_name(r_name: str) -> str:
-    """``r.squared`` -> ``r_squared``."""
-    return r_name.replace(".", "_")
 
 
 def extract_scalar(rval: Any) -> Any:

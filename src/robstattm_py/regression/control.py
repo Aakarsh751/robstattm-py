@@ -6,10 +6,10 @@ factory function (``lmrobdet_control``).
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import dataclass, field, fields
 from typing import Any, Literal
 
-from robstattm_py._r import r, r_pkg, rcall
+from robstattm_py._r import r_pkg, rcall
 
 # Per R's lmrobdet.control formal kwargs (25 keys, RobStatTM 1.0.11).
 # A few R names use dots; Python uses underscores. See _R_KEY_MAP below.

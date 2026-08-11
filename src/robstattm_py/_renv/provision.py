@@ -28,7 +28,6 @@ from conda-forge at setup time. This package is MIT and ships neither.
 from __future__ import annotations
 
 import json
-import os
 import shutil
 import subprocess
 import threading
@@ -757,12 +756,6 @@ def solve_only(
         return json.loads(completed.stdout)
     except json.JSONDecodeError:
         return {"raw": completed.stdout}
-
-
-def _clean_environ_for_tests() -> dict[str, str]:  # pragma: no cover - helper
-    """Return ``os.environ`` without conda/R leakage, for interactive debugging."""
-    return child_env(Probe(system="Linux", machine="x86_64", is_64bit=True,
-                           environ=dict(os.environ)))
 
 
 __all__ = [

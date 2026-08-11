@@ -20,7 +20,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-
 # ---------- public free functions ----------------------------------------
 
 def _result_to_dict(self: Any) -> dict[str, Any]:
@@ -120,16 +119,19 @@ def _render_value_html(v: Any) -> str | None:
 # docs/user_interface.md §6); pass ``backend="r"`` for the Path-A PNG.
 
 def _plot_residuals(self: Any, **kw):
+    """Residuals-vs-fitted plot (R's ``plot(fit, which = 1)``). Returns an Axes."""
     from robstattm_py import plot
     return plot.residuals(self, **kw)
 
 
 def _plot_qq(self: Any, **kw):
+    """Normal Q-Q plot of standardized residuals (R's ``plot(fit, which = 2)``)."""
     from robstattm_py import plot
     return plot.qq(self, **kw)
 
 
 def _plot_diagnostics(self: Any, **kw):
+    """Four-panel diagnostic figure: residuals, Q-Q, scale-location, weights."""
     from robstattm_py import plot
     return plot.diagnostics(self, **kw)
 
@@ -214,29 +216,29 @@ def install_result_mixins() -> None:
 
     # Lazy imports to avoid circular import (this module is imported by
     # __init__ which imports the wrapper modules below).
-    from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
-    from robstattm_py.regression.lmrobdet_dcml import LmrobdetDCMLResult
-    from robstattm_py.regression.lmrob_m import LmrobMResult
-    from robstattm_py.regression.pyinit import PyinitResult
-    from robstattm_py.regression.step import StepResult
-    from robstattm_py.regression.linear_test import RobLinearTestResult
-    from robstattm_py.regression.refine_sm import RefineSMResult
     from robstattm_py.covariance.cov_classic import CovClassicResult
+    from robstattm_py.covariance.cov_rob import CovRobResult
     from robstattm_py.covariance.cov_rob_mm import CovRobMMResult
     from robstattm_py.covariance.cov_rob_rocke import CovRobRockeResult
-    from robstattm_py.covariance.cov_rob import CovRobResult
-    from robstattm_py.covariance.kurt_sd_new import KurtSDResult
     from robstattm_py.covariance.fastmve import FastMVEResult
+    from robstattm_py.covariance.kurt_sd_new import KurtSDResult
+    from robstattm_py.external.arima_rob import ArimaRobResult
+    from robstattm_py.external.cubinf import CubinfResult
+    from robstattm_py.external.glmrob import GlmrobResult
+    from robstattm_py.external.gse import GSEResult, TSGSResult
+    from robstattm_py.external.pense import PenseCVResult, PenseResult
+    from robstattm_py.external.var_comprob import VarComprobResult
+    from robstattm_py.glm.logreg import LogregResult
     from robstattm_py.pca.pca_rob_s import PcaRobSResult
     from robstattm_py.pca.prcomp_rob import PrcompRobResult
-    from robstattm_py.glm.logreg import LogregResult
+    from robstattm_py.regression.linear_test import RobLinearTestResult
+    from robstattm_py.regression.lmrob_m import LmrobMResult
+    from robstattm_py.regression.lmrobdet_dcml import LmrobdetDCMLResult
+    from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
+    from robstattm_py.regression.pyinit import PyinitResult
+    from robstattm_py.regression.refine_sm import RefineSMResult
+    from robstattm_py.regression.step import StepResult
     from robstattm_py.univariate.loc_scale_m import LocScaleMResult
-    from robstattm_py.external.pense import PenseResult, PenseCVResult
-    from robstattm_py.external.gse import GSEResult, TSGSResult
-    from robstattm_py.external.arima_rob import ArimaRobResult
-    from robstattm_py.external.var_comprob import VarComprobResult
-    from robstattm_py.external.glmrob import GlmrobResult
-    from robstattm_py.external.cubinf import CubinfResult
 
     all_results = [
         LmrobdetMMResult, LmrobdetDCMLResult, LmrobMResult, PyinitResult,

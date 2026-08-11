@@ -21,8 +21,9 @@ the grouping — so this wrapper does not require ``nlme``.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -219,7 +220,7 @@ def _push_control(ro, control: VarComprobControl | None, pushed: list[str]) -> s
 
 def var_comprob(
     fixed: str,
-    data: "pd.DataFrame",
+    data: pd.DataFrame,
     *,
     groups: np.ndarray,
     varcov: Sequence[np.ndarray],
@@ -336,7 +337,8 @@ def var_comprob(
 
 def _fetch_raw(r_name: str):
     """Return a global R object WITHOUT numpy/pandas conversion (for ``.to_r()``)."""
-    from rpy2.robjects import conversion, default_converter, r as _rr
+    from rpy2.robjects import conversion, default_converter
+    from rpy2.robjects import r as _rr
 
     with conversion.localconverter(default_converter):
         return _rr(r_name)

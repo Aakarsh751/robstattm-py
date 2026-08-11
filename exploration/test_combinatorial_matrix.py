@@ -20,12 +20,10 @@ Or as part of the full exploration folder::
 from __future__ import annotations
 
 import numpy as np
-import pandas as pd
 import pytest
 
 import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r
-
 
 # ---------------------------------------------------------------------------
 # Regression: dataset × family × estimator
@@ -66,7 +64,7 @@ def _regression_case(loader, formula, estimator, family, efficiency):
 @pytest.mark.parametrize(
     "loader,formula,estimator,family,efficiency",
     REGRESSION_GRID,
-    ids=[f"{e}-{l}-{f}" for l, _, e, f, _ in REGRESSION_GRID],
+    ids=[f"{est}-{ds}-{fam}" for ds, _, est, fam, _ in REGRESSION_GRID],
 )
 def test_regression_grid_converges(loader, formula, estimator, family, efficiency):
     rpm.set_seed(42)
@@ -252,7 +250,9 @@ def _glm_xy(loader: str):
 
 
 @needs_r
-@pytest.mark.parametrize("method,loader", GLM_GRID, ids=[f"{m}-{l}" for m, l in GLM_GRID])
+@pytest.mark.parametrize(
+    "method,loader", GLM_GRID, ids=[f"{m}-{ds}" for m, ds in GLM_GRID]
+)
 def test_glm_grid(method, loader):
     X, y = _glm_xy(loader)
     fit = getattr(rpm, method)(X, y)

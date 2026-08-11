@@ -41,9 +41,8 @@ from robstattm_py._converters import (
     extract_float,
     extract_int,
 )
-from robstattm_py._errors import RobStatTMRError
 from robstattm_py._r import r, r_pkg, rcall, rx2, rx2_opt
-from robstattm_py.regression._formula import coef_names_for, df_with_r_names
+from robstattm_py.regression._formula import coef_names_for
 from robstattm_py.regression._s3_methods import (
     Drop1Result,
     LmrobdetMMPrediction,
@@ -101,7 +100,8 @@ class LmrobdetMMResult:
 
     def __repr__(self) -> str:  # short S3-print-equivalent
         cf = ", ".join(
-            f"{n}={v:.4g}" for n, v in zip(self.coef_names, self.coefficients)
+            f"{n}={v:.4g}"
+            for n, v in zip(self.coef_names, self.coefficients, strict=False)
         )
         return (
             f"<LmrobdetMMResult: {self.formula} | {cf} | "

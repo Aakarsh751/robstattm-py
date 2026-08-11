@@ -52,6 +52,14 @@ notebooks = [
     "nbformat>=5",
     "ipykernel>=6",
 ]
+# Everything the scripts in examples/ need beyond the package itself. They draw
+# the non-robust comparators the book's R scripts plot alongside the robust fit
+# (matplotlib for the figures, scipy for the classical F distribution); neither
+# belongs in the runtime dependencies.
+examples = [
+    "matplotlib>=3.7",
+    "scipy>=1.10",
+]
 dev = [
     "pytest>=7",
     "pytest-cov>=4",
@@ -99,3 +107,26 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B"]
 ignore = ["E501"]
+
+# Every entry below is a deliberate exception, not a backlog. `ruff check src
+# tests examples` is enforced in CI, so an undocumented violation fails the
+# build instead of accumulating.
+[tool.ruff.lint.per-file-ignores]
+# The flat re-export surface. `__version__` is computed by a function that must
+# be defined before it runs, so the wrapper imports necessarily follow code
+# (E402); they are grouped by statistical domain rather than alphabetically,
+# which is the order the API reference presents them in (I001).
+"src/robstattm_py/__init__.py" = ["E402", "I001"]
+# This module exists to expose the R spellings — `lmrobdetMM`, `covRobMM`,
+# `BYlogreg`. Renaming them to snake_case would delete its reason to exist.
+"src/robstattm_py/compat_r.py" = ["N816"]
+# Wrapper signatures mirror the R functions they call, so a design matrix is
+# `X` and a scatter matrix is `Sigma`. Matching R is the contract (see
+# docs/architecture.md); renaming to `x`/`sigma` would turn the mapping from
+# the R documentation to these wrappers into guesswork.
+"src/robstattm_py/**" = ["N803", "N806"]
+# Tests and examples deliberately reuse the book's variable names so a reader
+# holding Maronna et al. can follow along line by line.
+"tests/**" = ["N802", "N803", "N806", "N816"]
+"exploration/**" = ["N802", "N803", "N806", "N816"]
+"examples/**" = ["N802", "N803", "N806", "N816"]

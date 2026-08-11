@@ -17,13 +17,14 @@ R formals (RobStatTM 1.0.11)::
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Any, Literal, Sequence
+from typing import Any, Literal
 
 import numpy as np
 
-from robstattm_py._r import r_pkg, rcall, rx2
 from robstattm_py._converters import extract_array, extract_bool, extract_float, extract_int
+from robstattm_py._r import r_pkg, rx2
 
 
 @dataclass(frozen=True, slots=True)

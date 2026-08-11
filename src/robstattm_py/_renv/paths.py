@@ -23,7 +23,6 @@ callers that actually write must call :func:`ensure_dir` explicitly.
 """
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 from robstattm_py._renv.probe import Probe
@@ -250,22 +249,18 @@ def describe_env_vars() -> dict[str, str]:
         "ROBSTATTM_NO_PROVISION": "Set to 1 to forbid provisioning (used by the test suite).",
         "ROBSTATTM_AUTO_SETUP": "Set to 1 to allow provisioning on first import.",
         "R_HOME": "Standard R variable; honoured if ROBSTATTM_R_HOME is unset.",
-        "RPY2_CFFI_MODE": "Set to ABI by us when rpy2's compiled module mismatches R.",
+        "RPY2_CFFI_MODE": (
+            "Read by rpy2, not by us. Set it to ABI yourself before installing "
+            "or importing rpy2 to use its compiler-free binding."
+        ),
         "RPM_VERBOSE": "Set to 1 to print a line when the R session starts.",
     }
-
-
-def current_root_env() -> str | None:
-    """Return the raw ``ROBSTATTM_HOME`` value, or None when unset."""
-    value = os.environ.get(ENV_HOME, "").strip()
-    return value or None
 
 
 __all__ = [
     "APP_NAME",
     "ENV_HOME",
     "bin_dir",
-    "current_root_env",
     "describe_env_vars",
     "ensure_dir",
     "env_prefix",

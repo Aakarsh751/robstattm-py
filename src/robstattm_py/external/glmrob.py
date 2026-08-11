@@ -94,7 +94,7 @@ class GlmrobResult:
 
 def glmrob(
     formula: str,
-    data: "pd.DataFrame",
+    data: pd.DataFrame,
     *,
     family: str = "poisson",
     method: str | None = None,
@@ -208,7 +208,8 @@ def glmrob(
 
 def _fetch_raw(r_name: str):
     """Return a global R object WITHOUT numpy/pandas conversion (for ``.to_r()``)."""
-    from rpy2.robjects import conversion, default_converter, r as _rr
+    from rpy2.robjects import conversion, default_converter
+    from rpy2.robjects import r as _rr
 
     with conversion.localconverter(default_converter):
         return _rr(r_name)

@@ -61,16 +61,6 @@ def _ensure_r_environment() -> Any:
     return ensure_r_environment()
 
 
-def _ensure_windows_r_dll_path() -> None:
-    """Deprecated alias for :func:`_ensure_r_environment`.
-
-    Retained because the name is referenced from the installation guide and may
-    appear in user notebooks. The Windows-only DLL handling it used to do is now
-    part of the cross-platform activation step.
-    """
-    _ensure_r_environment()
-
-
 def r_started() -> bool:
     """Return ``True`` once the rpy2 conversion context is installed.
 
@@ -551,11 +541,3 @@ def rx2_opt(robj: Any, name: str, default: Any = None) -> Any:
         return rx2(robj, name)
     except (KeyError, ValueError, TypeError):
         return default
-
-
-def to_py(rval: Any) -> Any:
-    """Convert an R object to its native Python form using the active context."""
-    from rpy2.robjects import conversion
-
-    with conversion.localconverter(conversion.get_conversion()):
-        return conversion.get_conversion().rpy2py(rval)

@@ -6,7 +6,6 @@ None of these parameter combinations appear in ``docs/examples/`` except
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 import robstattm_py as rpm
 from tests.conftest import assert_scalar_equal, needs_r

@@ -76,7 +76,9 @@ def test_values_match_r(py_name, r_name, expected_shape):
         np.testing.assert_array_equal(df["resex"].to_numpy(), r_vec)
         return
 
-    for py_col, r_col in zip(df.columns, df.attrs["r_columns"]):
+    # strict=True: a Python/R column-count mismatch is exactly the drift this
+    # test exists to catch, so it must fail rather than compare only a prefix.
+    for py_col, r_col in zip(df.columns, df.attrs["r_columns"], strict=True):
         # Determine if R column is numeric
         is_num = bool(ro.r(f'is.numeric({r_name}[["{r_col}"]])')[0])
         if not is_num:

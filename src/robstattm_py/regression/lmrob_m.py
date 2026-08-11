@@ -63,7 +63,12 @@ class LmrobMResult:
     _r_control: Any = field(default=None, repr=False, compare=False)
 
     def __repr__(self) -> str:
-        cf = ", ".join(f"{n}={v:.4g}" for n, v in zip(self.coef_names, self.coefficients))
+        # strict=False deliberately: a repr must never raise, even on a fit whose
+        # names and values somehow came back out of step.
+        cf = ", ".join(
+            f"{n}={v:.4g}"
+            for n, v in zip(self.coef_names, self.coefficients, strict=False)
+        )
         return (
             f"<LmrobMResult: {self.formula} | {cf} | "
             f"scale={self.scale:.4g}, R²={self.r_squared:.3f}, iter={self.iter}>"

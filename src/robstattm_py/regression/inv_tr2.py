@@ -18,18 +18,18 @@ R signature: ``INVTR2(RR2, family, cc)`` returning a scalar numeric.
 """
 from __future__ import annotations
 
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
 from robstattm_py._r import r_pkg, rcall
 
-
 _VALID_FAMILIES = {
     "bisquare", "huber", "mopt", "moptv0", "opt", "optv0",
 }
 _SCALAR_FAMILIES = {"bisquare"}
-_VECTOR_FAMILIES = {"opt", "optv0", "mopt", "moptv0", "huber"}
+# Every family not in _SCALAR_FAMILIES takes a vector; the keys below are the
+# authoritative list, so there is no separate set to keep in step with them.
 _VECTOR_LEN_REQ = {  # required cc length per vector family
     "opt": 16, "optv0": 16, "mopt": 16, "moptv0": 16, "huber": 3,
 }

@@ -137,7 +137,7 @@ class TestSkinDatasetVsR:
 
     def test_by_wby_have_objective_and_converged(self, r_setup, inputs, R):
         X, y = inputs
-        for py_fn, r_var in [("by_logreg", "by_r"), ("wby_logreg", "wby_r")]:
+        for py_fn in ("by_logreg", "wby_logreg"):
             py = getattr(rpm, py_fn)(X, y)
             assert py.objective is not None
             assert py.converged is not None

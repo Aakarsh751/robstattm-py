@@ -14,7 +14,8 @@ Public Python fields (numeric subset):
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace as _replace
+from dataclasses import dataclass, field
+from dataclasses import replace as _replace
 from typing import Any
 
 import numpy as np
@@ -27,7 +28,6 @@ from robstattm_py._converters import (
     extract_int,
 )
 from robstattm_py._r import r, r_pkg, rcall, rx2
-from robstattm_py.regression.control import LmrobdetControl, _control_to_r
 from robstattm_py.regression._formula import (
     cleanup_r_var,
     coef_names_for,
@@ -41,6 +41,7 @@ from robstattm_py.regression._s3_methods import (
     r_squared_classic,
     summary_of,
 )
+from robstattm_py.regression.control import LmrobdetControl, _control_to_r
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,7 +75,8 @@ class LmrobdetDCMLResult:
 
     def __repr__(self) -> str:
         cf = ", ".join(
-            f"{n}={v:.4g}" for n, v in zip(self.coef_names, self.coefficients)
+            f"{n}={v:.4g}"
+            for n, v in zip(self.coef_names, self.coefficients, strict=False)
         )
         return (
             f"<LmrobdetDCMLResult: {self.formula} | {cf} | "

@@ -9,9 +9,9 @@ from typing import Any, Literal
 
 import numpy as np
 
-from robstattm_py._r import r, r_pkg, rcall
-from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
+from robstattm_py._r import r, r_pkg
 from robstattm_py.regression._formula import df_with_r_names
+from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
 
 
 @dataclass(frozen=True, slots=True)

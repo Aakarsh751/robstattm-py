@@ -21,7 +21,7 @@ from typing import Literal
 
 import numpy as np
 
-from robstattm_py._converters import extract_array, extract_float, validate_1d_numeric
+from robstattm_py._converters import extract_array, validate_1d_numeric
 from robstattm_py._r import r_pkg, rcall
 
 Family = Literal["bisquare", "huber", "mopt", "opt", "moptv0", "optv0"]

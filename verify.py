@@ -15,11 +15,9 @@ to a reviewer.
 from __future__ import annotations
 
 import argparse
-import importlib
 import subprocess
 import sys
 import time
-
 
 
 def banner(msg: str) -> None:
@@ -41,6 +39,7 @@ def check(label: str, ok: bool, detail: str = "") -> bool:
 def run_smoke() -> int:
     """Quick: every wrapper family runs end-to-end without crashing."""
     import numpy as np
+
     import robstattm_py as rpm
 
     banner("SMOKE — every wrapper family runs end-to-end")
@@ -89,11 +88,17 @@ def run_smoke() -> int:
     failures += not check("by_logreg", lg.converged)
 
     section("Plotting (Path A R-graphics)")
-    p = rpm.plotting.r_plot(
-        "plot(zinc ~ copper, data=mineral, pch=19)",
-        path="verify_smoke_plot.png", dpi=72, width=4, height=3,
-    )
-    failures += not check("r_plot", p.exists() and p.stat().st_size > 0)
+    # Into a temp directory, not the cwd. Writing here is how stray PNGs ended
+    # up committed at the repo root.
+    import tempfile
+    from pathlib import Path as _Path
+
+    with tempfile.TemporaryDirectory() as tmp:
+        p = rpm.plotting.r_plot(
+            "plot(zinc ~ copper, data=mineral, pch=19)",
+            path=_Path(tmp) / "verify_smoke_plot.png", dpi=72, width=4, height=3,
+        )
+        failures += not check("r_plot", p.exists() and p.stat().st_size > 0)
 
     section("Ergonomics (UI doc §6)")
     failures += not check("fit.to_dict()", isinstance(fit_mm.to_dict(), dict))
@@ -113,9 +118,12 @@ def run_smoke() -> int:
                           np.array_equal(fit_xy.coefficients, fit_mm.coefficients))
 
     section("R-name aliases (UI doc §2.3)")
-    from robstattm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
+    from robstattm_py.compat_r import BYlogreg, covRobMM, lmrobdetMM
+
     failures += not check("compat_r.lmrobdetMM", lmrobdetMM is rpm.lmrobdet_mm)
     failures += not check("compat_r.covRobMM", covRobMM is rpm.cov_rob_mm)
+    # BYlogreg was imported here but never asserted — the alias went unchecked.
+    failures += not check("compat_r.BYlogreg", BYlogreg is rpm.by_logreg)
 
     banner(f"SMOKE RESULT: {failures} failure(s)" if failures
            else "SMOKE RESULT: all green")
@@ -125,16 +133,9 @@ def run_smoke() -> int:
 def run_pytest() -> int:
     """Run the full pytest suite and report."""
     banner("PYTEST — full strict-tier suite (atol=0, rtol=0 vs R)")
-    cmd = [
-        sys.executable, "-m", "pytest", "tests/", "-q", "--tb=line",
-        "--ignore=tests/_smoke_check.py",
-        "--ignore=tests/_smoke_dcml.py",
-        "--ignore=tests/_smoke_lmrobdet.py",
-        "--ignore=tests/_smoke_step_rlt.py",
-        "--ignore=tests/_smoke_ergonomics.py",
-        "--ignore=tests/_smoke_ui_phase2.py",
-        "--ignore=tests/_ui_demo.py",
-    ]
+    # The `--ignore=tests/_smoke_*.py` flags that used to be here named files
+    # that moved to dev/ long ago, so they had been silently ignoring nothing.
+    cmd = [sys.executable, "-m", "pytest", "tests/", "-q", "--tb=line"]
     t0 = time.time()
     proc = subprocess.run(cmd, capture_output=True, text=True)
     dt = time.time() - t0

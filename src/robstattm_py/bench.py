@@ -6,8 +6,8 @@ Provides ``rpm.set_n_jobs(n)``, ``rpm.bench.timer(fit)``, and
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 
 @dataclass(frozen=True, slots=True)

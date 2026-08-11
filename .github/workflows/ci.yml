@@ -90,7 +90,17 @@ jobs:
       - name: Install Python package
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -e ".[dev,examples]"
+
+      # Lint was documented in CONTRIBUTING but never actually enforced, so it
+      # had accumulated ~790 findings across the repo — including an undefined
+      # name in src/. It is clean now; this keeps it that way. Deliberate
+      # exceptions live in pyproject.toml's per-file-ignores with the reason
+      # beside each, so a new violation cannot be waved through silently.
+      # One runner is enough: ruff's findings are platform-independent.
+      - name: Lint
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: python -m ruff check src tests exploration examples
 
       # `robstattm-py setup` is never run here, so discovery must land on the
       # system R installed above. Asserting the source keeps this job honest:
@@ -104,6 +114,12 @@ jobs:
           python -m robstattm_py.cli doctor --json > doctor.json
           python dev/_assert_doctor.py doctor.json --expect-source system
 
+      # This includes tests/test_examples.py, which executes all 25 scripts in
+      # examples/ end to end on every runner (~2 minutes). Kept on every leg
+      # rather than one, because the examples exercise real file paths, console
+      # encoding and figure output — the things that differ per OS. An example
+      # whose R backend is missing reports a skip naming the package, not a
+      # pass, so a failed optional-R install above cannot hide as green.
       - name: Run test suite (notebooks skipped)
         env:
           RPM_SKIP_NOTEBOOKS: "1"

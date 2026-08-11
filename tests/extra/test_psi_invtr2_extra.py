@@ -100,4 +100,5 @@ class TestInvtr2:
     def test_invtr2_is_increasing_in_rr2(self):
         cc = float(rpm.psi.bisquare(0.95))
         vals = [rpm.invtr2(r, "bisquare", cc) for r in (0.1, 0.3, 0.5, 0.7)]
-        assert all(b > a for a, b in zip(vals, vals[1:]))
+        # strict=False: pairing a list with its own tail is intentionally ragged.
+        assert all(b > a for a, b in zip(vals, vals[1:], strict=False))

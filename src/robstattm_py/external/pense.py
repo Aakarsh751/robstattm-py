@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 
 from robstattm_py._converters import extract_array, validate_1d_numeric
-from robstattm_py._r import r, r_pkg, rcall
+from robstattm_py._r import r, r_pkg
 from robstattm_py.covariance._common import validate_2d_numeric
 
 
@@ -310,7 +310,8 @@ def _fetch_raw(r_name: str):
     pense_cvfit) and crash. Fetching under ``default_converter`` keeps the
     object as a raw rpy2 R object, suitable for ``.to_r()`` round-trips.
     """
-    from rpy2.robjects import conversion, default_converter, r as _rr
+    from rpy2.robjects import conversion, default_converter
+    from rpy2.robjects import r as _rr
 
     with conversion.localconverter(default_converter):
         return _rr(r_name)

@@ -143,32 +143,9 @@ def prepend_r_libs(library: Path) -> None:
     os.environ["R_LIBS"] = os.pathsep.join([entry, *parts])
 
 
-def force_abi_mode(reason: str = "") -> None:
-    """Ask rpy2 to use its pure-Python ABI binding instead of the compiled one.
-
-    rpy2 ships two bindings: ``_rinterface_cffi_api``, compiled against the
-    headers of whichever R was present at build time, and
-    ``_rinterface_cffi_abi``, which resolves symbols dynamically at run time and
-    is always present. When the compiled binding was built against a different R
-    than the one we are about to load, it can fail to import or misbehave; ABI
-    mode is immune to that skew at the cost of slower per-call dispatch.
-
-    This is also what makes a ``pip install rpy2`` that could not compile
-    against a local R still usable.
-
-    Has no effect once ``rpy2.rinterface_lib.openrlib`` has been imported.
-    """
-    if os.environ.get("RPY2_CFFI_MODE"):
-        return
-    os.environ["RPY2_CFFI_MODE"] = "ABI"
-    if reason:  # pragma: no cover - diagnostic only
-        os.environ.setdefault("ROBSTATTM_ABI_REASON", reason)
-
-
 __all__ = [
     "apply",
     "applied",
-    "force_abi_mode",
     "prepend_r_libs",
     "reset_for_tests",
 ]

@@ -8,8 +8,8 @@ a sensible default is chosen and documented in the table below.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 import numpy as np
 import pytest

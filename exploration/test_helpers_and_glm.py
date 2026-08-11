@@ -28,7 +28,7 @@ class TestPsiFamilies:
         u = np.linspace(-3, 3, 7)
         cc = rpm.psi.bisquare(0.95)
         py_rho = rpm.psi.rho(u, family="bisquare", cc=cc)
-        R(f"c <- bisquare(0.95); u <- seq(-3,3,length=7); r_rho <- rho(u, family='bisquare', cc=c)")
+        R("c <- bisquare(0.95); u <- seq(-3,3,length=7); r_rho <- rho(u, family='bisquare', cc=c)")
         np.testing.assert_allclose(py_rho, np.asarray(R("r_rho"), dtype=float), rtol=0, atol=0)
 
 

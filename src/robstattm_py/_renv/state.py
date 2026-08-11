@@ -151,7 +151,10 @@ class SetupLock:
             if age < STALE_LOCK_SECONDS:
                 raise LockedError(
                     "Another robstattm-py setup is already running.",
-                    detail=f"Lock file: {self.path}\nHeld by: {self._holder()}",
+                    detail=(
+                        f"Lock file: {self.path}\nHeld by: {self._holder()}\n"
+                        "If that process is gone, re-run with --force-unlock."
+                    ),
                 )
         try:
             # O_EXCL makes creation atomic, so two processes racing here cannot
@@ -161,7 +164,10 @@ class SetupLock:
             if not self.force:
                 raise LockedError(
                     "Another robstattm-py setup is already running.",
-                    detail=f"Lock file: {self.path}\nHeld by: {self._holder()}",
+                    detail=(
+                        f"Lock file: {self.path}\nHeld by: {self._holder()}\n"
+                        "If that process is gone, re-run with --force-unlock."
+                    ),
                 ) from None
             self.path.unlink(missing_ok=True)
             fd = os.open(str(self.path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
@@ -184,21 +190,11 @@ class SetupLock:
             return "unknown"
 
 
-def clear_lock(probe: Probe | None = None) -> bool:
-    """Remove a stale lock. Returns True if one was present."""
-    path = paths.lock_file(probe)
-    existed = path.exists()
-    path.unlink(missing_ok=True)
-    return existed
-
-
-
 __all__ = [
     "SCHEMA_VERSION",
     "STALE_LOCK_SECONDS",
     "LockedError",
     "SetupLock",
     "State",
-    "clear_lock",
     "spec_hash",
 ]

@@ -26,7 +26,7 @@ from typing import Any, Literal
 
 import numpy as np
 
-from robstattm_py._converters import extract_array, extract_float
+from robstattm_py._converters import extract_array
 from robstattm_py._r import r_pkg, rcall, rx2
 from robstattm_py.covariance._common import validate_2d_numeric
 

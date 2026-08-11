@@ -1,13 +1,16 @@
-"""Plotting helpers — Path A (R graphics via rpy2 PNG device).
+"""Plotting via R's own graphics device — "Path A" (decision D-008).
 
-Per ``docs/plotting_strategy.md`` (decision D-008) the preferred plotting
-backend is R's own graphics device. We open a PNG device, run the R plot
-expression, close the device, and return a path to the resulting file.
-The user can ``display`` it in Jupyter or embed it elsewhere.
+We open a PNG device, run the R plot expression, close the device, and return
+a path to the resulting file. The user can ``display`` it in Jupyter or embed
+it elsewhere.
 
-Why R-side: fidelity. The textbook's published figures are rendered by R;
-calling the same plotting functions through rpy2 gives pixel-perfect
-parity (subject to OS-level font and DPI differences).
+This is **not** the default any more: D-023 added the native matplotlib suite
+in :mod:`robstattm_py.plot`, and ``backend="auto"`` prefers it because it
+returns a live Axes/Figure the caller can keep composing. Path A is what
+``backend="r"`` selects, and it is still the right choice when you want
+fidelity to the textbook's published figures — those are rendered by R, so
+calling the same R plotting functions gives pixel parity (subject to OS-level
+font and DPI differences).
 
 Example
 -------
@@ -23,7 +26,6 @@ from __future__ import annotations
 import pathlib
 import tempfile
 import uuid
-from typing import Optional
 
 from robstattm_py._r import r, r_pkg
 
@@ -34,7 +36,7 @@ def r_plot(
     dpi: int = 100,
     width: float = 6.0,
     height: float = 5.0,
-    path: Optional[pathlib.Path] = None,
+    path: pathlib.Path | None = None,
     bg: str = "white",
 ) -> pathlib.Path:
     """Run ``r_code`` against an open PNG device and return the file path.

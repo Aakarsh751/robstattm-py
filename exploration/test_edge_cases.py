@@ -30,10 +30,9 @@ import pytest
 import robstattm_py as rpm
 
 sys.path.insert(0, os.path.dirname(__file__))
-from _synth import make_binary_xy, make_cov_data, push_to_r, reval, rm_r  # noqa: E402
+from _synth import make_cov_data, push_to_r, reval, rm_r  # noqa: E402
 
 from tests.conftest import assert_array_equal, assert_scalar_equal, needs_r  # noqa: E402
-
 
 # ===========================================================================
 # 1. NaN / Inf inputs are rejected in Python, before the rpy2 boundary

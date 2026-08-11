@@ -1,7 +1,7 @@
 """Tests for ``lmrobm_control`` + integration with ``lmrob_m(control=...)``."""
 from __future__ import annotations
 
-from dataclasses import fields
+from dataclasses import FrozenInstanceError, fields
 
 import numpy as np
 import pytest
@@ -45,7 +45,9 @@ class TestLmrobMControl:
 
     def test_frozen(self):
         c = rpm.lmrobm_control()
-        with pytest.raises(Exception):
+        # FrozenInstanceError specifically — a blind `Exception` would also pass
+        # if the assignment failed for some unrelated reason.
+        with pytest.raises(FrozenInstanceError):
             c.bb = 0.7  # frozen dataclass
 
 

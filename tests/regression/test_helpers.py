@@ -31,7 +31,7 @@ class TestInvtr2Validation:
 
 
 @needs_r
-class TestInvtr2VsR_Scalar:
+class TestInvtr2VsRScalar:
     """Strict-tier scalar-family parity with R's INVTR2."""
 
     @pytest.mark.parametrize("rr2", [0.0, 0.1, 0.5, 0.9, 0.99])
@@ -46,7 +46,7 @@ class TestInvtr2VsR_Scalar:
 
 
 @needs_r
-class TestInvtr2VsR_Vector:
+class TestInvtr2VsRVector:
     """Strict-tier vector-family parity (opt/mopt take a 16-elt cc vector)."""
 
     @pytest.mark.parametrize("rr2", [0.1, 0.5, 0.9])

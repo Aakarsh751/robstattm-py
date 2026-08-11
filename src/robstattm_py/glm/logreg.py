@@ -23,7 +23,7 @@ docs/user_interface.md contract. Numerical values are bit-identical.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
@@ -69,10 +69,10 @@ class LogregResult:
     fitted_values: np.ndarray
     residual_deviances: np.ndarray
     method: str
-    objective: Optional[float] = None
-    converged: Optional[bool] = None
-    xweights: Optional[np.ndarray] = None
-    cov: Optional[np.ndarray] = None
+    objective: float | None = None
+    converged: bool | None = None
+    xweights: np.ndarray | None = None
+    cov: np.ndarray | None = None
     _r_fit: Any = field(default=None, repr=False, compare=False)
 
     def __repr__(self) -> str:

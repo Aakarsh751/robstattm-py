@@ -8,8 +8,19 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from robstattm_py._r import r, r_pkg
-from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
 from robstattm_py.regression._formula import df_with_r_names
+from robstattm_py.regression.lmrob_m import LmrobMResult
+from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
+
+#: R fitter to replay each result type with. ``rob.linear.test`` accepts both
+#: (``R/lmrobdet.R``: ``'lmrobdetMM' %in% class(.) | 'lmrobM' %in% class(.)``),
+#: and the R help page's own example for it uses ``lmrobM`` — as does the book's
+#: Example 4.2. Refitting an M fit as MM would silently test a different pair of
+#: models, so the mapping is on the result class rather than assumed.
+_R_FITTER = {
+    LmrobdetMMResult: "lmrobdetMM",
+    LmrobMResult: "lmrobM",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -42,18 +53,25 @@ class RobLinearTestResult:
 
 
 def rob_linear_test(
-    object1: LmrobdetMMResult,
-    object2: LmrobdetMMResult,
+    object1: LmrobdetMMResult | LmrobMResult,
+    object2: LmrobdetMMResult | LmrobMResult,
 ) -> RobLinearTestResult:
-    """Robust likelihood-ratio-style test for nested MM fits.
+    """Robust likelihood-ratio-style test for nested M or MM fits.
 
     Wraps ``RobStatTM::rob.linear.test``. Compares ``object1`` (full) against
     ``object2`` (reduced). Both fits must have been built via
-    :func:`lmrobdet_mm` so their original data is available for the R-side
-    re-fit.
+    :func:`lmrobdet_mm` or :func:`lmrob_m` from a DataFrame, so their original
+    data is available for the R-side re-fit.
+
+    R requires both fits to share a rho family and tuning constant, and raises
+    if they do not; that check is left to R rather than duplicated here.
     """
-    if not (isinstance(object1, LmrobdetMMResult) and isinstance(object2, LmrobdetMMResult)):
-        raise TypeError("both objects must be LmrobdetMMResult")
+    for name, obj in (("object1", object1), ("object2", object2)):
+        if type(obj) not in _R_FITTER:
+            raise TypeError(
+                f"{name} must be an lmrobdet_mm or lmrob_m result; "
+                f"got {type(obj).__name__}"
+            )
     if object1._data is None or object2._data is None:
         raise ValueError("both fits must have their original DataFrame attached")
 
@@ -61,26 +79,27 @@ def rob_linear_test(
     _ = r_pkg("RobStatTM")
     ro.globalenv["rpm_rlt_data1"] = df_with_r_names(object1._data)
     ro.globalenv["rpm_rlt_data2"] = df_with_r_names(object2._data)
-    f1_str = object1.formula
-    f2_str = object2.formula
-    # Rebuild each fit with its *own* control (the converted _r_fit lost its S3
-    # class), so the test compares the user's actual models — not default ones.
+    # Rebuild each fit with its *own* fitter and control (the converted _r_fit
+    # lost its S3 class), so the test compares the user's actual models.
     cleanup_vars = [
         "rpm_rlt_data1", "rpm_rlt_data2",
         "rpm_rlt_o1", "rpm_rlt_o2", "rpm_rlt_result",
     ]
-    if object1._r_control is not None:
-        ro.globalenv["rpm_rlt_ctrl1"] = object1._r_control
-        cleanup_vars.append("rpm_rlt_ctrl1")
-        o1_cmd = f"rpm_rlt_o1 <- lmrobdetMM({f1_str}, data=rpm_rlt_data1, control=rpm_rlt_ctrl1); "
-    else:
-        o1_cmd = f"rpm_rlt_o1 <- lmrobdetMM({f1_str}, data=rpm_rlt_data1); "
-    if object2._r_control is not None:
-        ro.globalenv["rpm_rlt_ctrl2"] = object2._r_control
-        cleanup_vars.append("rpm_rlt_ctrl2")
-        o2_cmd = f"rpm_rlt_o2 <- lmrobdetMM({f2_str}, data=rpm_rlt_data2, control=rpm_rlt_ctrl2); "
-    else:
-        o2_cmd = f"rpm_rlt_o2 <- lmrobdetMM({f2_str}, data=rpm_rlt_data2); "
+
+    def _refit_cmd(obj, slot: str) -> str:
+        fitter = _R_FITTER[type(obj)]
+        if obj._r_control is None:
+            return f"rpm_rlt_o{slot} <- {fitter}({obj.formula}, data=rpm_rlt_data{slot}); "
+        ctrl = f"rpm_rlt_ctrl{slot}"
+        ro.globalenv[ctrl] = obj._r_control
+        cleanup_vars.append(ctrl)
+        return (
+            f"rpm_rlt_o{slot} <- {fitter}({obj.formula}, "
+            f"data=rpm_rlt_data{slot}, control={ctrl}); "
+        )
+
+    o1_cmd = _refit_cmd(object1, "1")
+    o2_cmd = _refit_cmd(object2, "2")
     try:
         ro.r(
             o1_cmd + o2_cmd

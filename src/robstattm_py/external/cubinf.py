@@ -169,11 +169,20 @@ def cubinf(
         cov = np.asarray(ro.r("rpm_cubinf_fit$cov"), dtype=float)
         if cov.ndim == 1:
             cov = cov.reshape(coef.shape[0], coef.shape[0])
+        # `names()` on an unnamed vector returns R NULL, which rpy2 hands back as
+        # a NULLType — not Python None, and not sized. Testing `is not None`
+        # alone let it reach len() and raise. A design matrix built from a plain
+        # numpy array has no dimnames, so this is the common case, not the edge
+        # case: it made cubinf unusable from the (X, y) form entirely.
         names = ro.r("names(rpm_cubinf_fit$coefficients)")
+        try:
+            named = tuple(str(n) for n in names)
+        except TypeError:  # NULLType, or anything else not iterable
+            named = ()
         coef_names = (
-            tuple(str(n) for n in names)
-            if names is not None and len(names) == coef.shape[0]
-            else (col_names or tuple(f"V{i+1}" for i in range(coef.shape[0])))
+            named
+            if len(named) == coef.shape[0]
+            else (col_names or tuple(f"V{i + 1}" for i in range(coef.shape[0])))
         )
 
         df_resid = rx2_opt(ro.r("rpm_cubinf_fit"), "df.residual")
@@ -207,7 +216,8 @@ def cubinf(
 
 def _fetch_raw(r_name: str):
     """Return a global R object WITHOUT numpy/pandas conversion (for ``.to_r()``)."""
-    from rpy2.robjects import conversion, default_converter, r as _rr
+    from rpy2.robjects import conversion, default_converter
+    from rpy2.robjects import r as _rr
 
     with conversion.localconverter(default_converter):
         return _rr(r_name)

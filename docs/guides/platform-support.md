@@ -14,10 +14,10 @@ everywhere. Only the first differs.
 |---|---|---|---|
 | **Windows** (64-bit) | Fully supported | Prebuilt, ~4 min | Use a short install path; see below |
 | **Linux** (x86-64) | Fully supported | Prebuilt, ~3 min | — |
-| **Linux** (ARM64) | Fully supported | Prebuilt, ~4 min | — |
+| **Linux** (ARM64) | Fully supported | **Compiles from source, ~10-15 min** | Same conda-forge gap as Apple Silicon |
 | **macOS Intel** | Fully supported | Prebuilt, ~3 min | — |
-| **macOS Apple Silicon** | Fully supported | **Compiles from source, ~10-15 min** | Needs Xcode command line tools |
-| Linux ppc64le | Fully supported | Prebuilt | Rarely tested |
+| **macOS Apple Silicon** | Fully supported | **Compiles from source, ~10-15 min** | Needs Xcode command line tools; verified in CI |
+| Linux ppc64le | Fully supported | **Compiles from source** | Same gap; rarely tested |
 | Windows on ARM | Fully supported *if you install R yourself* | **Not available** | No conda-forge R build |
 | 32-bit Python | Not supported | Not available | Use 64-bit Python |
 
@@ -26,20 +26,26 @@ against R at zero tolerance.
 
 ---
 
-## Apple Silicon (M1, M2, M3, M4)
+## Platforms that compile RobStatTM from source
 
-**Everything works, but the first setup takes longer.**
+**Apple Silicon (M1-M4), ARM Linux, and POWER Linux.**
 
-conda-forge publishes `r-base`, `r-robustbase` and `r-rrcov` for `osx-arm64`,
-but **not** `r-robstattm` or `r-pyinit` (verified 2026-08-10). Those two are
-therefore compiled from CRAN source during `robstattm-py setup`.
+Everything works on these, but the first setup takes longer.
+
+conda-forge publishes `r-base`, `r-robustbase`, `r-rrcov` and `r-robust` for
+all of them, but **not** `r-robstattm` or `r-pyinit` — those exist only for
+`linux-64`, `osx-64` and `win-64` (verified 2026-08-11). They are therefore
+compiled from CRAN source during `robstattm-py setup`.
+
+Apple Silicon is the case people notice, but ARM Linux (Raspberry Pi, AWS
+Graviton) and POWER have exactly the same gap.
 
 What that means in practice:
 
 - Setup takes roughly **10-15 minutes** instead of 3-6.
 - It needs about **1.5 GB extra** for a compiler toolchain.
-- You must have Apple's command line tools. If they are missing, setup stops
-  immediately and tells you to run:
+- On macOS you must have Apple's command line tools. If they are missing,
+  setup stops immediately and tells you to run:
 
   ```bash
   xcode-select --install

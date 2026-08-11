@@ -205,9 +205,15 @@ SUPPORTED_SUBDIRS: tuple[str, ...] = (
 )
 
 #: Subdirs for which conda-forge has no ``r-robstattm`` / ``r-pyinit`` build,
-#: so provisioning must fall back to building those two from source.
-#: Verified against the conda-forge API on 2026-07-30.
-SOURCE_BUILD_SUBDIRS: frozenset[str] = frozenset({"osx-arm64"})
+#: so provisioning must compile those two from CRAN source.
+#:
+#: Verified against the conda-forge API on 2026-08-11: both packages exist only
+#: for linux-64, osx-64 and win-64, while ``r-base``, ``r-rrcov``,
+#: ``r-robustbase`` and ``r-robust`` cover every platform below. Apple Silicon
+#: is the case people notice, but ARM and POWER Linux have the identical gap.
+SOURCE_BUILD_SUBDIRS: frozenset[str] = frozenset(
+    {"osx-arm64", "linux-aarch64", "linux-ppc64le"}
+)
 
 
 __all__ = [

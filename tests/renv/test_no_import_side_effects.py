@@ -17,11 +17,12 @@ import textwrap
 
 import pytest
 
-from ..conftest import child_env, child_preamble
+from ..conftest import child_env, child_preamble, require_working_child_interpreter
 
 
 def _run(code: str, env_overrides: dict[str, str], tmp_path) -> subprocess.CompletedProcess:
     """Run ``code`` in a fresh interpreter with every R setting scrubbed."""
+    require_working_child_interpreter()
     env = child_env(ROBSTATTM_HOME=str(tmp_path / "rtm-home"), **env_overrides)
     source = child_preamble() + textwrap.dedent(code)
     return subprocess.run(

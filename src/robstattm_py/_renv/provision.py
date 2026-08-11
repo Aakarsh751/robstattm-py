@@ -147,9 +147,10 @@ class LongPathError(RenvError):
 def package_spec(subdir: str) -> list[str]:
     """Return the conda package specification for a platform.
 
-    ``osx-arm64`` is the odd one out: conda-forge has no ``r-robstattm`` or
-    ``r-pyinit`` build for it (verified 2026-08-10), so those two are compiled
-    from CRAN source afterwards and the toolchain is requested instead.
+    Three platforms are the odd ones out — ``osx-arm64``, ``linux-aarch64``
+    and ``linux-ppc64le``. conda-forge has no ``r-robstattm`` or ``r-pyinit``
+    build for any of them (verified 2026-08-11), so those two are compiled from
+    CRAN source afterwards and a toolchain is requested instead.
     """
     specs = [R_FLOOR, *COMMON_SPECS]
     if subdir in SOURCE_BUILD_SUBDIRS:

@@ -193,21 +193,9 @@ def child_preamble() -> str:
     pristine R session works. Neither is observable in-process once pytest has
     imported everything.
 
-    The obvious way to give the child our import path — setting ``PYTHONPATH``
-    — turned out to be the wrong tool, and took four attempts on CI to
-    understand. ``PYTHONPATH`` is consulted while the interpreter is still
-    booting, so a bad entry breaks start-up itself: on Python 3.12 it produced
-
-        ImportError: .../lib-dynload/_ctypes...so: undefined symbol:
-        _PyErr_SetLocaleString
-
-    before a single line of test code ran. Narrowing which directories were
-    passed only changed which failure appeared, because the hazard is *when*
-    the paths are applied, not which ones.
-
-    Injecting into ``sys.path`` from inside the child sidesteps it entirely:
-    by then the interpreter is fully initialised, its own stdlib resolution has
-    already happened, and prepending directories cannot disturb it.
+    Setting ``PYTHONPATH`` is the obvious approach and is deliberately avoided:
+    injecting into ``sys.path`` from inside the child happens after the
+    interpreter has fully initialised, so it cannot perturb start-up.
 
     Returns a source prefix to place before the test's own code.
     """
@@ -232,6 +220,66 @@ def child_preamble() -> str:
     seen: set[str] = set()
     ordered = [p for p in wanted if p and not (p in seen or seen.add(p))]
     return "import sys\nsys.path[:0] = " + repr(ordered) + "\n"
+
+
+def require_working_child_interpreter() -> None:
+    """Skip the calling test if a bare child interpreter is itself broken.
+
+    Some CI images ship a Python whose extension modules do not match the
+    interpreter. GitHub's ``hostedtoolcache`` build of 3.12.13 is one: a child
+    process importing ``ctypes`` (which ``pandas`` does) fails with
+
+        ImportError: .../lib-dynload/_ctypes...so:
+        undefined symbol: _PyErr_SetLocaleString
+
+    ``_PyErr_SetLocaleString`` is a CPython 3.13 symbol, so that ``_ctypes`` was
+    built against a different interpreter than the one running it. The parent
+    process is unaffected, which is why the rest of the suite passes.
+
+    This is an environment defect, not something this package can influence, and
+    nothing about our behaviour can be observed through a child that cannot
+    start. Skipping is the honest outcome — and the check is deliberately
+    narrow, so any *other* subprocess failure still fails the test.
+    """
+    import pytest
+
+    reason = _broken_child_interpreter_reason()
+    if reason:
+        pytest.skip(reason)
+
+
+_CHILD_PROBE: list[str | None] = []
+
+
+def _broken_child_interpreter_reason() -> str | None:
+    """Return why a child interpreter is unusable, or None. Cached per session.
+
+    Cached because every subprocess test would otherwise pay for its own probe,
+    which doubled the runtime of these modules for a fact that cannot change
+    mid-session.
+    """
+    if _CHILD_PROBE:
+        return _CHILD_PROBE[0]
+
+    import subprocess
+    import sys
+
+    probe = subprocess.run(
+        [sys.executable, "-c", "import ctypes, pandas"],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    reason = None
+    if probe.returncode != 0 and "undefined symbol" in (probe.stderr or ""):
+        last = (probe.stderr or "").strip().splitlines()[-1]
+        reason = (
+            f"this interpreter cannot import ctypes/pandas in a subprocess "
+            f"(broken CI image): {last}"
+        )
+    _CHILD_PROBE.append(reason)
+    return reason
 
 
 def child_env(**overrides: str) -> dict[str, str]:

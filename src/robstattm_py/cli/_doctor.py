@@ -47,21 +47,9 @@ def add_parser(subparsers) -> None:
 def run(args) -> int:
     """Execute ``doctor``."""
     if args.json:
-        # Starting R can print to stdout without asking us. rpy2, for instance,
-        # announces its binding fallback:
-        #
-        #     Error importing in API mode: ImportError(...)
-        #     Trying to import in ABI mode.
-        #
-        # which happens whenever the installed rpy2 was built against a
-        # different R than the one found — common on macOS. That text landing in
-        # front of the JSON makes `doctor --json` unparseable for anything
-        # consuming it, so collection runs with stdout diverted and only the
-        # JSON is emitted. Nothing is lost: the captured text goes to stderr.
-        buffer = io.StringIO()
-        with contextlib.redirect_stdout(buffer):
+        with _captured_stdout() as captured:
             report = collect_report(start_r=not args.no_start_r)
-        noise = buffer.getvalue().strip()
+        noise = captured().strip()
         if noise:
             print(noise, file=sys.stderr)
         print(json.dumps(report.to_dict(), indent=2))
@@ -70,6 +58,55 @@ def run(args) -> int:
     report = collect_report(start_r=not args.no_start_r)
     print(render_text(report, verbose=args.verbose))
     return _exit_code(report)
+
+
+@contextlib.contextmanager
+def _captured_stdout():
+    """Capture everything written to stdout, including from C code.
+
+    ``--json`` must emit JSON and nothing else, but starting R is not
+    output-neutral. Two different sources write to this process's stdout:
+
+    * rpy2, from Python, announcing a binding fallback when the installed wheel
+      was built against a different R than the one found (routine on macOS)::
+
+          Error importing in API mode: ImportError(...)
+          Trying to import in ABI mode.
+
+    * **R itself, from C**, e.g. ``WARNING: ignoring environment value of
+      R_HOME``.
+
+    Only the first is caught by :func:`contextlib.redirect_stdout`, which
+    rebinds ``sys.stdout`` and leaves file descriptor 1 alone. The R message
+    goes straight to the descriptor, so this redirects at that level instead.
+
+    Yields a callable returning the captured text. Falls back to a Python-level
+    redirect when stdout has no real descriptor, as under pytest's capture.
+    """
+    import os
+    import tempfile
+
+    try:
+        stdout_fd = sys.stdout.fileno()
+    except (AttributeError, OSError, ValueError):
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            yield buffer.getvalue
+        return
+
+    sys.stdout.flush()
+    saved_fd = os.dup(stdout_fd)
+    text = ""
+    with tempfile.TemporaryFile(mode="w+b") as sink:
+        try:
+            os.dup2(sink.fileno(), stdout_fd)
+            yield lambda: text
+        finally:
+            sys.stdout.flush()
+            os.dup2(saved_fd, stdout_fd)
+            os.close(saved_fd)
+            sink.seek(0)
+            text = sink.read().decode("utf-8", errors="replace")
 
 
 def _exit_code(report: SetupReport) -> int:

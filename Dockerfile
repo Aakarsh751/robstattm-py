@@ -24,7 +24,12 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 # Install everything except our own package: the source is not in the image yet,
 # and this layer is the expensive one, so it should not be invalidated by an
 # edit to the Python code.
-RUN sed '/robstattm-py/d; /--no-deps/d; /^  - pip:/d' /tmp/environment.yml > /tmp/deps.yml \
+#
+# The `- .` pattern matters as much as the others: environment.yml installs this
+# package from the checkout rather than from PyPI (it is not published yet), and
+# a stray `- .` surviving into deps.yml would ask micromamba to solve for a
+# package literally named ".".
+RUN sed '/robstattm-py/d; /--no-deps/d; /^  - pip:/d; /^ *- \.$/d' /tmp/environment.yml > /tmp/deps.yml \
     && micromamba install -y -n base -f /tmp/deps.yml \
     && micromamba clean --all --yes
 

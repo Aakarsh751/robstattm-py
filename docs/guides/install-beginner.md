@@ -113,17 +113,37 @@ active.
 
 ## Step 4 — Install RobStatTM-Py
 
+> **Not yet on PyPI.** RobStatTM-Py has not been published to the Python Package
+> Index yet, so `pip install robstattm-py` will fail with *"No matching
+> distribution found"*. Install from the source repository instead — the two
+> commands below. Everything after this step is identical either way.
+
+You need `git` for this. If `git --version` prints an error, install it from
+<https://git-scm.com/downloads> first (accept every default), then close and
+reopen your terminal.
+
 ```bash
-pip install robstattm-py
+git clone https://github.com/Aakarsh751/robstattm-py.git
+pip install ./robstattm-py
 ```
 
 This takes a minute or two and prints a lot of text. The last line should say
 `Successfully installed ...`.
 
-> **On Linux, and you do not have R yet?** Run this instead:
+Check it worked:
+
+```bash
+python -c "import robstattm_py; print(robstattm_py.__version__)"
+```
+
+That should print a version number such as `0.1.0`. It is fine that R is not
+installed yet — importing the package does not start R.
+
+> **On Linux, and you do not have R yet?** Use this instead for the second
+> command:
 >
 > ```bash
-> RPY2_CFFI_MODE=ABI pip install robstattm-py
+> RPY2_CFFI_MODE=ABI pip install ./robstattm-py
 > ```
 >
 > One of the pieces underneath (`rpy2`) publishes ready-made packages for

@@ -152,9 +152,13 @@ pip compiles it, and its default mode wants R at build time — but you were
 going to let `robstattm-py setup` install R. Do as the message says:
 
 ```bash
-RPY2_CFFI_MODE=ABI pip install robstattm-py
+RPY2_CFFI_MODE=ABI pip install ./robstattm-py
 robstattm-py setup
 ```
+
+> Until RobStatTM-Py is published to PyPI, replace `pip install robstattm-py`
+> with `git clone https://github.com/Aakarsh751/robstattm-py.git` followed by
+> `pip install ./robstattm-py`. Everything else is unchanged.
 
 ABI mode binds to R at run time instead, so it builds with no R present and
 then uses whichever R you end up with. Results are identical.

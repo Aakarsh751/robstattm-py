@@ -15,14 +15,19 @@ through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 
 ## Three ways to get started
 
+> **Not on PyPI yet.** `pip install robstattm-py` will fail with *"No matching
+> distribution found"* until the package is published. Install from source
+> meanwhile — it is one extra command, and everything afterwards is identical.
+
 | | Command | R installed for you? |
 |---|---|---|
-| **pip** | `pip install robstattm-py` then `robstattm-py setup` | Yes, by `setup` |
+| **pip** | `git clone https://github.com/Aakarsh751/robstattm-py.git` then `pip install ./robstattm-py` then `robstattm-py setup` | Yes, by `setup` |
 | **conda** | `conda env create -f environment.yml` | Yes, by conda |
 | **Docker** | `docker build -t robstattm-py .` then `docker run --rm -it robstattm-py` | Already inside |
 
 All three end with a working R that you never had to install or configure. If
-you already have R, plain `pip install robstattm-py` finds it automatically.
+you already have R, the plain `pip install` finds it automatically — no `R_HOME`,
+no configuration.
 
 > **New to Python or to the terminal?** Start with
 > [Install in 10 minutes](docs/guides/install-beginner.md), which assumes

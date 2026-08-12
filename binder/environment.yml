@@ -22,7 +22,6 @@ dependencies:
   - rpy2 >=3.6
   - numpy >=1.24
   - pandas >=2.0
-  - platformdirs >=3
   - packaging >=23
 
   - matplotlib-base >=3.7

@@ -10,7 +10,7 @@ This document is the **ergonomics specification** that complements `docs/archite
 
 ```python
 # 1. Install
-$ pip install robstattm-py
+$ pip install ./robstattm-py        # not on PyPI yet; clone first
 $ python -c "import robstattm_py; robstattm_py.check_setup()"
 # ✓ R 4.5.1   ✓ RobStatTM 1.0.12   ✓ pyinit 1.1.1   ✓ robustbase 0.99-4   ✓ rrcov 1.7-6
 

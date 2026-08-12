@@ -43,3 +43,6 @@ Thumbs.db
 
 # robustvarComp writes a cached spline table to cwd on fit
 MTesSpl*.rda
+
+# pytest logs written by `pytest ... | Tee-Object`
+dev/_*.txt

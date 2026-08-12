@@ -5,44 +5,66 @@
 > Jupyter, and a troubleshooting table, see the
 > **[Installation & setup guide](guides/installation.md)**.
 
-## 1. Install R and the RobStatTM package
+## 1. Install RobStatTM-Py
 
-RobStatTM-Py is a *bridge* to R, so you need a working R installation with the
-`RobStatTM` package and its dependencies.
-
-```r
-# in an R session
-install.packages(c("RobStatTM", "pyinit", "robustbase", "rrcov"))
-# optional stretch estimators (pense / GSE / TSGS):
-install.packages(c("pense", "GSE"))
-```
-
-## 2. Install RobStatTM-Py
+> **Not on PyPI yet.** `pip install robstattm-py` fails with *"No matching
+> distribution found"* until the package is published, so install from a clone.
 
 ```bash
-pip install -e robstattm-py/      # from the repo root
+git clone https://github.com/Aakarsh751/robstattm-py.git
+pip install ./robstattm-py
 ```
 
-On **Windows**, point `rpy2` at your R installation *before* importing the
-package (adjust the version path to match yours):
+## 2. Get R
 
-```python
-import os
-os.environ["R_HOME"] = r"C:\Program Files\R\R-4.5.2"
-os.environ["PATH"] = r"C:\Program Files\R\R-4.5.2\bin\x64;" + os.environ["PATH"]
+RobStatTM-Py is a *bridge* to R, so R has to be present — but you do not have to
+install or configure it yourself:
 
-import robstattm_py as rpm
+```bash
+robstattm-py setup
+```
+
+That downloads a private R plus RobStatTM into a directory this package owns,
+leaving any R you already have untouched. It takes 3–6 minutes.
+
+**Already have R?** Skip the command — R is found automatically, from the
+Windows registry, `PATH`, a conda prefix, or the standard install locations.
+
+> **You do not need to set `R_HOME`, on any platform, including Windows.**
+> Earlier versions of this page told Windows users to set `R_HOME` and `PATH`
+> before importing. That is no longer necessary and is best avoided: setting it
+> by hand pins the choice of R before discovery runs, which is how people ended
+> up bound to an R of the wrong architecture. Use `ROBSTATTM_R_HOME` only if you
+> deliberately want to override the search.
+
+If you prefer to install the R packages into an R you already have:
+
+```bash
+robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
+# optional stretch estimators (pense / GSE / TSGS):
+robstattm-py install-r-packages pense GSE
 ```
 
 ## 3. Verify your setup
+
+```bash
+robstattm-py doctor
+```
+
+Look for **`Result: READY`** at the bottom. The report shows which R was found,
+how it was found, and which packages are present; anything missing comes with
+the command that fixes it.
+
+The same check from inside Python:
 
 ```python
 import robstattm_py as rpm
 rpm.check_setup()
 ```
 
-This prints a checklist of R, `rpy2`, and each required R package, marking each
-`READY` or `MISSING` so you know exactly what (if anything) is missing.
+> If `robstattm-py` is "not found" — common on Windows, where pip puts scripts
+> outside `PATH` — use `python -m robstattm_py.cli doctor` instead. That
+> substitution works for every `robstattm-py ...` command.
 
 ## 4. Your first robust fit
 
@@ -70,6 +92,9 @@ fit.hatvalues()            # leverages
 - **[API reference](api/index.md)** — every function with a worked, runnable example.
 - **[Datasets](guides/datasets.md)** — the 20 built-in datasets and using your own.
 - **[Result methods](guides/result-methods.md)** — what you can do with a fit object.
+- **[The book's examples](guides/book-examples.md)** — a runnable Python script
+  for each of the 25 RobStatTM example scripts.
+- **[Troubleshooting](guides/troubleshooting.md)** — when something goes wrong.
 
 ## The (X, y) array form
 

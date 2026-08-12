@@ -137,17 +137,21 @@ chicken-and-egg problem if you were relying on `robstattm-py setup` to install
 R for you. The fix is one environment variable:
 
 ```bash
-RPY2_CFFI_MODE=ABI pip install robstattm-py
+RPY2_CFFI_MODE=ABI pip install ./robstattm-py
 robstattm-py setup
 ```
+
+> Until RobStatTM-Py is published to PyPI, replace `pip install robstattm-py`
+> with `git clone https://github.com/Aakarsh751/robstattm-py.git` followed by
+> `pip install ./robstattm-py`. Everything else is unchanged.
 
 ABI mode resolves R's symbols at run time instead of link time, so it builds
 with no R present and then binds to whichever R `setup` installs. Per-call
 overhead is marginally higher; results are identical. `robstattm-py doctor`
 shows which mode is in use on the `binding` line.
 
-If you already have R installed, plain `pip install robstattm-py` works and
-you get the faster API mode.
+If you already have R installed, a plain install works and you get the faster
+API mode.
 
 Once installed, `robstattm-py setup` uses prebuilt packages, and an R from your
 distribution is found automatically at `/usr/lib/R`, `/usr/local/lib/R` or

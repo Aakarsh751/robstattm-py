@@ -39,7 +39,6 @@ dependencies:
   - rpy2 >=3.6
   - numpy >=1.24
   - pandas >=2.0
-  - platformdirs >=3
   - packaging >=23
 
   # Plotting and notebooks. Drop these for a leaner environment.
@@ -54,5 +53,10 @@ dependencies:
       # No dependencies: everything above is already provided by conda, and
       # letting pip resolve them again risks shadowing the conda rpy2 with a
       # wheel built against a different R.
+      #
+      # Installed from this checkout ("."), not from PyPI, because the package
+      # is not published yet — naming it would make `conda env create` fail at
+      # the very last step with "No matching distribution found". Run this file
+      # from a clone. Switch to `robstattm-py` once it is on PyPI.
       - --no-deps
-      - robstattm-py
+      - .

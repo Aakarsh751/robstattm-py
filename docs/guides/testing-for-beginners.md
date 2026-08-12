@@ -77,7 +77,7 @@ Then:
 # fast: skips the notebooks (~4 minutes)
 RPM_SKIP_NOTEBOOKS=1 python -m pytest tests/ -q
 
-# everything, including executing all 18 notebooks (~20 minutes)
+# everything, including executing all 16 notebooks (~20 minutes)
 python -m pytest tests/ -q
 ```
 
@@ -90,11 +90,12 @@ python -m pytest tests/ -q
 
 ### The fast subset with no R at all
 
-Roughly 220 tests cover R discovery, the CLI and the plotting backends without
-starting R. They run in seconds and are a good sanity check:
+Roughly 330 tests cover R discovery, the CLI, the psi families and the
+plotting backends without starting R. They run in seconds and are a good
+sanity check:
 
 ```bash
-python -m pytest tests/renv/ tests/plot/ -q
+python -m pytest tests/renv/ tests/plot/ tests/psi/ -q
 ```
 
 ---
@@ -111,7 +112,7 @@ during setup.
 The summary at the bottom is what matters:
 
 ```text
-934 passed, 19 skipped in 222.83s
+1018 passed, 17 skipped in 238.65s
 ```
 
 ### Skips are usually fine

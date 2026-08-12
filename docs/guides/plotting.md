@@ -18,8 +18,10 @@ fig = fit.plot_diagnostics()                  # shortcut on the result object
 ```
 
 > **Install:** the native engine needs the optional plotting extra —
-> `pip install "robstattm-py[plots]"` (matplotlib; plotnine is optional). The
-> `backend="r"` path needs a working R bridge.
+> `pip install "./robstattm-py[plots]"` from a clone (matplotlib; plotnine is
+> optional). Once the package is on PyPI this becomes
+> `pip install "robstattm-py[plots]"`. The `backend="r"` path needs a working R
+> bridge.
 
 ## Backends
 

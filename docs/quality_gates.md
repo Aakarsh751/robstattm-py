@@ -69,6 +69,20 @@ In addition to the per-wrapper checklist, each phase has an exit gate:
 - Install guide live; `robstattm_py.check_setup()` returns clean on at least one machine per OS.
 - All tutorial notebooks polished.
 
+> **When PyPI publication actually happens, flip the install instructions back.**
+> Until then the docs deliberately say `git clone` + `pip install ./robstattm-py`,
+> because `pip install robstattm-py` fails with *"No matching distribution
+> found"* — and that was step 4 of a 7-step beginner guide, a dead end for
+> exactly the reader least equipped to work around it.
+>
+> Files carrying the temporary wording: `README.md`,
+> `docs/guides/install-beginner.md`, `docs/guides/platform-support.md`,
+> `docs/guides/troubleshooting.md`, `docs/guides/plotting.md`,
+> `docs/user_interface.md`. Grep for `not on PyPI` and `./robstattm-py`.
+>
+> Verify the replacement the way the problem was found: run `pip install
+> robstattm-py` in a fresh venv on a machine that has never seen this repo.
+
 ### End of Phase 6 (Week 22) — Final submission
 - Stretch wrappers (whichever landed) all have their per-wrapper checklists complete.
 - Native-Python comparison documented in `notebooks/native_comparison.ipynb`.

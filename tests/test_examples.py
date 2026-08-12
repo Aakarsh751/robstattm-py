@@ -15,23 +15,21 @@ Exit status 77 means the script announced a missing optional R package and
 stopped — reported as a skip naming the package, not as a pass. See
 ``examples/_common.py``.
 
-Two things here are borrowed from ``tests/conftest.py`` rather than
-reimplemented, because writing my own cost a red CI leg the first time:
+``require_working_child_interpreter`` comes from ``tests/conftest.py``. GitHub's
+hostedtoolcache build of Python 3.12.13 ships a ``_ctypes`` compiled against a
+different interpreter, so *any* child process on that image fails to import
+pandas — and numpy with it. The parent is unaffected, which is why the rest of
+the suite passes there. Eleven other subprocess tests already skip on it; these
+25 failed instead, with a `ModuleNotFoundError` that read like a packaging bug
+and was not.
 
-``require_working_child_interpreter``
-    GitHub's hostedtoolcache build of Python 3.12.13 ships a ``_ctypes`` built
-    against a different interpreter, so *any* child process on that image fails
-    to import pandas — and, downstream of that, numpy. The parent is fine, which
-    is why the rest of the suite passes. Eleven other subprocess tests already
-    skip on it; these 25 failed instead, with a `ModuleNotFoundError` that looked
-    like a packaging bug and was not.
-
-``child_env``
-    Strips ``R_*`` / ``ROBSTATTM_*`` / ``RPY2_*`` / ``CONDA*`` / ``MAMBA*`` from
-    the inherited environment. By the time this module runs, the parent process
-    has activated an R and written ``R_HOME`` and ``R_LIBS`` into its own
-    ``os.environ``; passing that on would test a preconfigured child rather than
-    the discovery every real user gets.
+The child **inherits the parent environment**, deliberately. Scrubbing it with
+``conftest.child_env`` was tried and reverted: that helper strips ``R_*``, which
+on CI includes the ``R_LIBS_USER`` naming the library the R packages were just
+installed into — so R was found and then had nothing in it, and every example
+died on "R package 'RobStatTM' is not installed". ``child_env`` exists for the
+discovery tests in ``tests/renv/``, which are *about* the environment. This
+module is about whether the examples run; R discovery has its own tests.
 
 Set ``RPM_SKIP_EXAMPLES=1`` to skip the whole module during a fast unit loop.
 """
@@ -44,7 +42,7 @@ from pathlib import Path
 
 import pytest
 
-from .conftest import child_env, require_working_child_interpreter
+from .conftest import require_working_child_interpreter
 
 EXAMPLES_DIR = Path(__file__).resolve().parent.parent / "examples"
 
@@ -86,16 +84,15 @@ def test_scripts_were_discovered():
 def test_example_runs(script: Path, tmp_path: Path):
     require_working_child_interpreter()
 
-    env = child_env(
-        MPLBACKEND="Agg",
-        # Never let an example provision R: that is a several-minute network
-        # operation and has its own tests.
-        ROBSTATTM_NO_PROVISION="1",
-        # UTF-8 so a Windows cp1252 pipe cannot fail a script for its output
-        # rather than its statistics. The console-encodability of user-facing
-        # strings is tested directly in tests/datasets/test_printable.py.
-        PYTHONIOENCODING="utf-8",
-    )
+    env = dict(os.environ)
+    env["MPLBACKEND"] = "Agg"
+    # Never let an example provision R: that is a several-minute network
+    # operation and has its own tests.
+    env["ROBSTATTM_NO_PROVISION"] = "1"
+    # UTF-8 so a Windows cp1252 pipe cannot fail a script for its output rather
+    # than its statistics. The console-encodability of user-facing strings is
+    # tested directly in tests/datasets/test_printable.py.
+    env["PYTHONIOENCODING"] = "utf-8"
 
     completed = subprocess.run(
         [sys.executable, str(script)],

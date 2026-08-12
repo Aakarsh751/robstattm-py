@@ -132,9 +132,11 @@ source .venv/bin/activate
 
 ### Install the package (which pulls in rpy2, numpy, pandas)
 
-From the directory that contains the `robstattm-py/` folder:
+Get the source, then install from the directory that now contains the
+`robstattm-py/` folder:
 
 ```bash
+git clone https://github.com/Aakarsh751/robstattm-py.git
 pip install -e robstattm-py/
 ```
 

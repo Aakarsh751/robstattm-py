@@ -1,5 +1,7 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+# 77.0.3 is the floor for PEP 639 (`license` as an SPDX expression plus
+# `license-files`), which the metadata below uses.
+requires = ["setuptools>=77.0.3", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,7 +10,14 @@ version = "0.1.0"
 description = "Python wrappers for the RobStatTM robust-statistics R package"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+# PEP 639: an SPDX expression, not a table, and the licence file listed
+# explicitly so it is carried in the distribution metadata. The older
+# `{ text = "MIT" }` form and the `License :: OSI Approved ::` classifier are
+# both deprecated — setuptools removes them on 2027-02-18 — and package metadata
+# cannot be edited after release, so this is fixed before the first publish
+# rather than after.
+license = "MIT"
+license-files = ["LICENSE", "NOTICE.md"]
 authors = [
     { name = "Aakarsh Gupta", email = "aakarshg@uw.edu" },
 ]
@@ -16,7 +25,6 @@ keywords = ["robust statistics", "rpy2", "RobStatTM", "MM-estimator", "Rocke S-e
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

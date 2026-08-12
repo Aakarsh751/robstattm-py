@@ -67,6 +67,12 @@ return field — read the R source, not our notes:
 
 `project_memory/robstattm-py-planning-docs/research/*.md` are working notes and have been wrong before.
 
+## Releasing
+
+Publishing to PyPI is documented step by step in
+[`docs/RELEASING.md`](docs/RELEASING.md) — including creating the trusted
+publisher, rehearsing on TestPyPI, and what cannot be undone afterwards.
+
 ## Documentation
 
 Every code example must run:

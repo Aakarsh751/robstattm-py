@@ -55,6 +55,7 @@ exclude_patterns = [
     "testing_guide.md",
     "project_understanding.md",
     "quality_gates.md",
+    "RELEASING.md",
     "validation_strategy.md",
     "user_interface.md",
     "coverage_matrix.md",

@@ -69,6 +69,9 @@ In addition to the per-wrapper checklist, each phase has an exit gate:
 - Install guide live; `robstattm_py.check_setup()` returns clean on at least one machine per OS.
 - All tutorial notebooks polished.
 
+> The full release procedure — creating the trusted publisher, rehearsing on
+> TestPyPI, tagging — is in [`RELEASING.md`](RELEASING.md).
+>
 > **When PyPI publication actually happens, flip the install instructions back.**
 > Until then the docs deliberately say `git clone` + `pip install ./robstattm-py`,
 > because `pip install robstattm-py` fails with *"No matching distribution

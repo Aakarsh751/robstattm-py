@@ -52,6 +52,15 @@ jobs:
           python -m pip install twine
           python -m twine check dist/*
 
+      # Metadata cannot be edited once a version is on PyPI, so the licence
+      # fields are asserted rather than assumed. `twine check` validates that
+      # the README renders; it does not check that the licence is declared the
+      # modern way (PEP 639 `License-Expression`), nor that LICENSE and
+      # NOTICE.md actually travel inside the wheel — and NOTICE.md is the file
+      # that explains the GPL R software this package downloads but never ships.
+      - name: Verify the licence metadata
+        run: python dev/_check_metadata.py dist --assert
+
       # A tag that disagrees with pyproject.toml would publish the wrong
       # version under the right name, which cannot be undone.
       - name: Verify the tag matches the packaged version

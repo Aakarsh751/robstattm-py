@@ -6,6 +6,16 @@ Notable changes to RobStatTM-Py. Format based on
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.1.0] — 2026-08-12
+
+First release published to PyPI.
+
+> Version 0.1.0 was prepared on 2026-08-10 but never tagged or published. The
+> entries below are therefore all part of it: the production audit first, then
+> the release engineering that preceded it.
+
 ### Added
 
 - **`examples/` — a runnable Python script for every RobStatTM example script.**
@@ -79,11 +89,9 @@ Notable changes to RobStatTM-Py. Format based on
   excluded from the published site, and `docs/research/*.md` had drifted out of
   step with the code.
 
-## [0.1.0] — 2026-08-10
+---
 
-First public release.
-
-### Added
+### Added — release engineering (prepared 2026-08-10)
 
 **R is found automatically, or installed for you.**
 
@@ -118,7 +126,7 @@ Documented exit codes, and every error carries a concrete remedy.
 - *Checking your install* — verifying things, and reading errors
 - *Troubleshooting* — symptom-by-symptom fixes
 
-### Fixed
+### Fixed — release engineering
 
 - `cov_rob`, `cov_rob_rocke` and `kurt_sd_new` failed when called first in a
   session. RobStatTM's `KurtSDNew.R:42` reads `.Random.seed` unconditionally,
@@ -149,7 +157,7 @@ Documented exit codes, and every error carries a concrete remedy.
   itself write to stdout while R starts; that text is now captured (at the
   file-descriptor level, since R writes from C) and re-emitted on stderr.
 
-### Changed
+### Changed — release engineering
 
 - **Renamed** from `robstatm-py` to `robstattm-py` (import `robstattm_py`) to
   match the spelling of the upstream R package RobStatTM. There are no previous

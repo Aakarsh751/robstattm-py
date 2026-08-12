@@ -161,17 +161,25 @@ built against the headers of whichever R was present when rpy2 was built; the
 rpy2 was built against one R and you point it at another, the compiled binding
 fails to load, usually with an undefined symbol or a missing shared library.
 
-Since 0.1.0 this is handled automatically: the ABI binding is selected and a
-warning is printed. To make it permanent and silent, set the variable **before**
-starting Python — rpy2 reads it when it first loads R, so setting it inside a
-notebook cell after importing anything is too late:
+Since 0.1.0 this is handled automatically **when the R came from
+`robstattm-py setup`**: the ABI binding is selected before rpy2 is imported, so
+the compiled binding is never given a chance to fail. An R found on the system
+keeps the faster compiled binding, since that is plausibly the one rpy2 was
+built against.
+
+If you hit it anyway — an R that is neither, or an rpy2/R pairing we cannot
+predict — set the variable yourself. It must be set **before Python starts**;
+rpy2 reads it when it first loads R, and by the time you can run a cell in an
+already-started kernel it may be too late:
 
 ```bash
 export RPY2_CFFI_MODE=ABI
 ```
 
 In a Colab or Jupyter notebook, put this in the **first** cell, before any
-import:
+import — and if you have already imported anything that loads R, restart the
+runtime first. rpy2 embeds R as a process-global singleton, so the binding
+cannot be changed once R is loaded:
 
 ```python
 import os

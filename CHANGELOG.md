@@ -37,14 +37,24 @@ Notable changes to RobStatTM-Py. Format based on
   fact, and discarded the message that said what had actually failed.
 
   It now checks whether rpy2 is importable before claiming it is missing, and
-  otherwise reports an R-loading failure quoting rpy2's own error.
+  otherwise reports an R-loading failure quoting rpy2's own error, the R it
+  tried to load, and the binding mode in effect.
 
   The usual cause is rpy2's compiled binding having been built against a
   different R than the one being loaded — normal wherever rpy2 arrives prebuilt
   (Colab, a distro package) and the R is one we provisioned. rpy2's ABI binding
-  is immune, so `RPY2_CFFI_MODE=ABI` is now selected automatically, once, with a
-  warning, before giving up. Failing that, the error names three concrete
-  remedies instead of one wrong one.
+  is immune, so it is now chosen **before rpy2 is imported** whenever the R
+  being loaded is one `robstattm-py setup` provisioned. A system R keeps the
+  faster compiled binding.
+
+  Chosen up front rather than retried after a failure, because there is no valid
+  retry: rpy2 embeds R as a process-global singleton, so once an import has
+  attempted to load R the attempt cannot be undone. An earlier version of this
+  fix did retry — purging `sys.modules` and re-importing — and on Colab it
+  printed a reassuring "fell back to ABI" warning and then failed on the next
+  line with `cannot import name 'default_converter' from 'rpy2.robjects'
+  (unknown location)`, a module with no `__file__`. That was worse than the bug
+  it replaced, because it also destroyed the evidence.
 
 - **The advice for that failure was actively wrong.** It said to re-run with
   `--force`, which re-downloads several minutes and a gigabyte of bytes that

@@ -334,15 +334,26 @@ def _bin_dirs_for(r_home: Path, shared_lib: Path, probe: Probe,
     if probe.is_windows:
         dirs.append(r_home / "bin")
         if conda_prefix is not None:
-            # conda on Windows scatters runtime DLLs (openblas, gfortran,
-            # zlib, ...) across these; R's own DLLs link against them.
+            # conda on Windows scatters runtime DLLs (the mingw runtime,
+            # openblas, gfortran, zlib, ...) across these; R's own DLLs link
+            # against them.
+            #
+            # The order is conda's own activation order, verified by reading
+            # what `micromamba run` puts on PATH, and it is deliberate rather
+            # than alphabetical: `Library\mingw-w64\bin` must precede
+            # `Library\bin`, because both can hold a copy of the same runtime
+            # DLL and Windows takes the first match. Using a different order
+            # here than conda uses is how one process ends up with two
+            # toolchains' DLLs and the "32 bit pseudo relocation out of range"
+            # failure. `Scripts` was missing altogether.
             dirs.extend(
                 [
-                    conda_prefix / "Library" / "bin",
+                    conda_prefix,
                     conda_prefix / "Library" / "mingw-w64" / "bin",
                     conda_prefix / "Library" / "usr" / "bin",
+                    conda_prefix / "Library" / "bin",
+                    conda_prefix / "Scripts",
                     conda_prefix / "bin",
-                    conda_prefix,
                 ]
             )
     else:

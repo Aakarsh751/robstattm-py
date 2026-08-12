@@ -28,6 +28,7 @@ from conda-forge at setup time. This package is MIT and ships neither.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import threading
@@ -87,6 +88,81 @@ class ProvisionError(RenvError):
     default_remedy = (
         "The log above names the underlying failure. Re-run with --force to "
         "rebuild from scratch, and include the log if you report this."
+    )
+
+
+class RStartupError(ProvisionError):
+    """The environment was built, but R will not start in it.
+
+    Kept distinct from :class:`ProvisionError` because the two need opposite
+    advice. A provisioning failure means the files are wrong, and rebuilding
+    can help. This means the files are *fine* — everything downloaded and
+    linked — and something about the machine stops R loading. Rebuilding
+    downloads the same bytes and fails the same way, so telling the user to
+    re-run with ``--force`` wastes several minutes and a gigabyte to arrive
+    back where they started.
+    """
+
+    code = "E_R_STARTUP"
+
+
+#: Signatures of a DLL resolving to the wrong copy, or not at all, on Windows.
+#: 0xC0000135 is STATUS_DLL_NOT_FOUND; the mingw message is what a DLL prints
+#: when it *did* load but was built against a different toolchain.
+_DLL_TROUBLE_MARKERS = (
+    "pseudo relocation",
+    "mingw-w64 runtime failure",
+    "the specified module could not be found",
+    "0xc0000135",
+    "dll load failed",
+)
+
+#: Returncodes Windows reports for the same class of failure.
+_DLL_TROUBLE_RETURNCODES = frozenset({
+    3221225781,  # 0xC0000135 STATUS_DLL_NOT_FOUND
+    3221225785,  # 0xC0000139 STATUS_ENTRYPOINT_NOT_FOUND
+    3221226505,  # 0xC0000409 STATUS_STACK_BUFFER_OVERRUN (mingw fail-fast)
+})
+
+
+def _startup_failure(
+    output: str, returncode: int, *, probe: Probe | None = None
+) -> ProvisionError:
+    """Build the right error for R failing to start, with usable advice."""
+    probe = probe or Probe.current()
+    lowered = output.lower()
+    dll_trouble = returncode in _DLL_TROUBLE_RETURNCODES or any(
+        marker in lowered for marker in _DLL_TROUBLE_MARKERS
+    )
+
+    if not (dll_trouble and probe.is_windows):
+        return ProvisionError(
+            "The provisioned R could not be started.", detail=output[-2000:]
+        )
+
+    return RStartupError(
+        "The provisioned R was built correctly, but Windows would not load it.",
+        detail=(
+            f"{output[-1500:]}\n\n"
+            "This is a DLL conflict, not a bad download. Windows searches PATH "
+            "left to right and loads the first matching DLL name, and R needs "
+            "names — R.dll, Rblas.dll, and a mingw runtime — that other software "
+            "also ships. Loading a foreign copy into this R gives exactly the "
+            "message above."
+        ),
+        remedy=(
+            "Something else on PATH is providing R's DLLs. Common sources are a "
+            "CRAN R installation, Rtools, MSYS2, Git's bundled mingw, and other "
+            "conda environments.\n\n"
+            "  1. Diagnose it:      robstattm-py doctor\n"
+            "  2. Try a clean PATH: open a new terminal, run\n"
+            "       $env:PATH = \"$env:SystemRoot\\System32;$env:SystemRoot\"\n"
+            "     then re-run `robstattm-py setup`.\n"
+            "  3. Or skip the download entirely and use the R you already have:\n"
+            "       robstattm-py setup --use-system-r\n\n"
+            "Re-running with --force will NOT help: the files are already "
+            "correct. Nothing needs rebuilding."
+        ),
     )
 
 
@@ -355,6 +431,47 @@ def _stream(
             handle.close()
 
 
+#: Directories inside a conda prefix that hold DLLs R links against, in the
+#: order Windows should search them. conda scatters the mingw runtime, OpenBLAS,
+#: gfortran and zlib across several of these, and R's own DLLs link against
+#: them.
+_WINDOWS_ENV_BIN_DIRS = (
+    ("Library", "mingw-w64", "bin"),
+    ("Library", "usr", "bin"),
+    ("Library", "bin"),
+    ("Scripts",),
+    ("bin",),
+)
+
+
+def env_path_prefix(prefix: Path, probe: Probe | None = None) -> str:
+    """Return the environment's own DLL directories, ordered, as a PATH string.
+
+    Windows resolves a DLL by searching PATH left to right and taking the first
+    name match. The provisioned R needs `R.dll`, `Rblas.dll` and a mingw runtime
+    — and a machine that already does R work very often has *other* copies of
+    those names on PATH, from a CRAN R installation, Rtools, MSYS2, Git's
+    bundled mingw, or another conda environment. Loading a foreign one into
+    conda's R gives either
+
+        The specified module could not be found            (0xC0000135)
+
+    or, when the DLL loads but was built against a different toolchain,
+
+        Mingw-w64 runtime failure: 32 bit pseudo relocation ... out of range
+
+    which is the same fault seen later: a relocation that can only span ±2 GB
+    being asked to span more, because the two images came from unrelated builds.
+    """
+    probe = probe or Probe.current()
+    if not probe.is_windows:
+        return os.pathsep.join(
+            str(d) for d in (prefix / "lib", prefix / "bin") if d.is_dir()
+        )
+    dirs = [prefix, *(prefix.joinpath(*parts) for parts in _WINDOWS_ENV_BIN_DIRS)]
+    return os.pathsep.join(str(d) for d in dirs if d.is_dir())
+
+
 def run_in_env(
     executable: Path,
     prefix: Path,
@@ -369,7 +486,19 @@ def run_in_env(
     that executes the environment's activation scripts, which is what puts the
     conda compilers and their ``CONDA_BUILD_SYSROOT`` on the path for the
     Apple Silicon source build.
+
+    The environment's own directories are *also* placed at the front of ``PATH``
+    ourselves rather than left entirely to that activation. Doing both is not
+    redundancy for its own sake: if activation is incomplete for any reason, R
+    still starts, whereas otherwise it fails on a DLL it cannot find or — worse
+    — one it finds in the wrong place. See :func:`env_path_prefix`.
     """
+    env = child_env(probe)
+    env_dirs = env_path_prefix(prefix, probe)
+    if env_dirs:
+        current = env.get("PATH", "")
+        env["PATH"] = env_dirs + (os.pathsep + current if current else "")
+
     argv = [
         str(executable),
         "run",
@@ -385,7 +514,7 @@ def run_in_env(
         capture_output=True,
         text=True,
         errors="replace",
-        env=child_env(probe),
+        env=env,
         timeout=timeout,
         check=False,
     )
@@ -418,10 +547,8 @@ def verify_environment(
     )
     completed = run_in_env(executable, prefix, expression, probe=probe)
     if completed.returncode != 0:
-        raise ProvisionError(
-            "The provisioned R could not be started.",
-            detail=(completed.stderr or completed.stdout or "").strip()[-2000:],
-        )
+        output = (completed.stderr or completed.stdout or "").strip()
+        raise _startup_failure(output, completed.returncode, probe=probe)
 
     found: dict[str, str] = {}
     r_version = ""
@@ -766,12 +893,14 @@ __all__ = [
     "SOURCE_BUILD_SPECS",
     "DiskSpaceError",
     "ProvisionError",
+    "RStartupError",
     "build_create_argv",
     "child_env",
     "licence_notice",
     "package_spec",
     "preflight",
     "provision",
+    "env_path_prefix",
     "run_in_env",
     "solve_only",
     "uninstall",

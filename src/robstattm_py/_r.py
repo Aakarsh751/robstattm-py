@@ -89,10 +89,11 @@ def _install_conversion() -> None:
         with _quiet_rpy2_probe():
             from rpy2.robjects import default_converter, numpy2ri, pandas2ri
             from rpy2.robjects.conversion import set_conversion
-    except ImportError as e:  # pragma: no cover - import-time failure
-        raise RobStatTMSetupError(
-            "rpy2 is not installed. Install with `pip install rpy2>=3.6`."
-        ) from e
+    except ImportError as e:
+        _retry_in_abi_mode_or_raise(e)
+        with _quiet_rpy2_probe():
+            from rpy2.robjects import default_converter, numpy2ri, pandas2ri
+            from rpy2.robjects.conversion import set_conversion
     cv = default_converter + numpy2ri.converter + pandas2ri.converter
     set_conversion(cv)
     _conversion_installed = True
@@ -107,6 +108,124 @@ def _install_conversion() -> None:
         except Exception:
             ver = "(version unknown)"
         print(f"[robstattm_py] R session ready: {ver}", flush=True)
+
+
+def _rpy2_is_installed() -> bool:
+    """True if rpy2 is importable at all, independently of whether R loads."""
+    import importlib.util
+
+    try:
+        return importlib.util.find_spec("rpy2") is not None
+    except (ImportError, ValueError):  # pragma: no cover - broken install
+        return False
+
+
+def _purge_rpy2_modules(modules: dict | None = None) -> None:
+    """Drop every partially-imported rpy2 module so a retry starts clean.
+
+    A failed ``from rpy2.robjects import ...`` leaves half-initialised modules
+    behind. Re-importing would find those in ``sys.modules`` and reuse them,
+    reproducing the original failure and making the retry look like proof that
+    the retry does not work.
+
+    ``modules`` exists so this can be tested without emptying the real
+    ``sys.modules``. It is not a stylistic seam: a test that called this against
+    the live mapping unloaded the rpy2 that the rest of the session had already
+    initialised, and 27 unrelated tests failed several files later with
+    ``module 'rpy2.rinterface_lib' has no attribute 'openrlib'``.
+    """
+    import sys as _sys
+
+    target = _sys.modules if modules is None else modules
+    for name in [n for n in list(target) if n == "rpy2" or n.startswith("rpy2.")]:
+        target.pop(name, None)
+
+
+def _retry_in_abi_mode_or_raise(original: ImportError) -> None:
+    """Re-arm rpy2 in ABI mode, or raise an error that names the real problem.
+
+    Importing ``rpy2.robjects`` does two very different things: it imports a
+    Python package, and it **loads R**. Both raise ``ImportError``. This used to
+    report every failure as "rpy2 is not installed", which on a machine where
+    rpy2 plainly *is* installed — Google Colab, for one, where ``doctor``
+    printed ``rpy2 version 3.6.7`` and then advised installing rpy2 — sends the
+    reader to fix something that is not broken, and throws away the message that
+    said what actually was.
+
+    When rpy2 is present, the usual cause is its **compiled** binding
+    (``_rinterface_cffi_api``) having been built against a different R than the
+    one we are loading — the normal situation wherever rpy2 arrived prebuilt and
+    the R is ours. rpy2 also ships an ABI binding that resolves symbols at run
+    time and does not care. Switching to it costs a little per-call dispatch and
+    nothing else, so it is worth one automatic attempt before giving up.
+
+    ``RPY2_CFFI_MODE`` is read when ``rpy2.rinterface_lib.openrlib`` is
+    imported, so this only works before that has happened — which is why the
+    modules are purged first.
+    """
+    import os as _os
+
+    if not _rpy2_is_installed():
+        raise RobStatTMSetupError(
+            "rpy2 is not installed. Install with `pip install rpy2>=3.6`."
+        ) from original
+
+    already_abi = _os.environ.get("RPY2_CFFI_MODE", "").upper() == "ABI"
+    if not already_abi:
+        _purge_rpy2_modules()
+        _os.environ["RPY2_CFFI_MODE"] = "ABI"
+        try:
+            with _quiet_rpy2_probe():
+                import rpy2.robjects  # noqa: F401
+        except Exception as retry_error:  # noqa: BLE001 - reported below
+            _os.environ.pop("RPY2_CFFI_MODE", None)
+            _purge_rpy2_modules()
+            raise _r_load_error(original, retry_error) from original
+        _warnings.warn(
+            "rpy2's compiled binding could not load this R, so RPY2_CFFI_MODE=ABI "
+            "was selected for this process. Results are unaffected; per-call "
+            "dispatch is slightly slower. Set RPY2_CFFI_MODE=ABI yourself before "
+            "starting Python to make this permanent and silent.",
+            RobStatTMWarning,
+            stacklevel=4,
+        )
+        return
+
+    raise _r_load_error(original, None)
+
+
+def _r_load_error(
+    original: ImportError, retry_error: Exception | None
+) -> RobStatTMSetupError:
+    """An error for 'rpy2 is here but cannot load R', quoting the real cause."""
+    from robstattm_py._renv import r_home_info
+
+    try:
+        where = str(r_home_info().path)
+    except Exception:  # pragma: no cover - discovery already succeeded to get here
+        where = "the R that was found"
+
+    detail = f"  rpy2 said: {original}"
+    if retry_error is not None:
+        detail += f"\n  and again in ABI mode: {retry_error}"
+
+    return RobStatTMSetupError(
+        "rpy2 is installed, but it could not load R.\n"
+        f"R was found at {where}.\n\n"
+        f"{detail}\n\n"
+        "This usually means rpy2's compiled binding was built against a "
+        "different R than the one being loaded — common wherever rpy2 came "
+        "prebuilt (a distribution package, a notebook image such as Google "
+        "Colab) and the R is one this package provisioned.\n\n"
+        "What to do:\n"
+        "  1. Force rpy2's compiler-free binding, before starting Python:\n"
+        "       export RPY2_CFFI_MODE=ABI\n"
+        "  2. Or reinstall rpy2 against this R:\n"
+        "       pip install --force-reinstall --no-binary rpy2 rpy2\n"
+        "  3. Or use the R that rpy2 was built for:\n"
+        "       robstattm-py setup --use-system-r\n"
+        "  4. `robstattm-py doctor` shows which R was chosen and why."
+    )
 
 
 def _harden_rpy2_windows_probe() -> None:

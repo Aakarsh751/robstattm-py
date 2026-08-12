@@ -45,6 +45,13 @@ def _windows_prefix(tmp_path: Path) -> Path:
     return prefix
 
 
+#: Stand-in for "some other R already on PATH". Deliberately free of `:` and
+#: `;` so it survives a split on either platform's `os.pathsep` — a real
+#: `C:\...` string does not, which is how the first version of these tests
+#: passed on Windows and failed everywhere else.
+OTHER_R_BIN = "OTHER_R_INSTALLATION_BIN"
+
+
 def _probe(**environ) -> Probe:
     return Probe(system="Windows", machine="AMD64", is_64bit=True, environ=environ)
 
@@ -146,14 +153,25 @@ class TestRunInEnvPutsEnvFirst:
             return __import__("subprocess").CompletedProcess(argv, 0, "", "")
 
         monkeypatch.setattr(provision.subprocess, "run", fake_run)
-        monkeypatch.setenv("PATH", r"C:\Program Files\R\R-4.5.2\bin\x64")
 
-        provision.run_in_env(tmp_path / "micromamba.exe", prefix, 'cat("hi")')
+        # Two things this test previously got wrong, both of which made it pass
+        # on Windows and fail on every Linux and macOS leg:
+        #
+        #  - the probe must be passed explicitly, or `run_in_env` falls back to
+        #    `Probe.current()` and the test describes the machine running it
+        #    rather than Windows;
+        #  - the stand-in for the inherited PATH must not contain the *running*
+        #    platform's `os.pathsep`. "C:\\Program Files\\..." contains a colon,
+        #    so on POSIX the split shattered it and `.index()` raised.
+        probe = _probe(PATH=OTHER_R_BIN)
+        provision.run_in_env(
+            tmp_path / "micromamba.exe", prefix, 'cat("hi")', probe=probe
+        )
 
         path_entries = captured["env"]["PATH"].split(os.pathsep)
         assert path_entries[0] == str(prefix)
         assert path_entries.index(str(prefix / "Library" / "bin")) < path_entries.index(
-            r"C:\Program Files\R\R-4.5.2\bin\x64"
+            OTHER_R_BIN
         )
 
     def test_inherited_path_is_not_discarded(self, tmp_path, monkeypatch):
@@ -166,10 +184,37 @@ class TestRunInEnvPutsEnvFirst:
             return __import__("subprocess").CompletedProcess(argv, 0, "", "")
 
         monkeypatch.setattr(provision.subprocess, "run", fake_run)
-        monkeypatch.setenv("PATH", r"C:\Windows\System32")
 
-        provision.run_in_env(tmp_path / "micromamba.exe", prefix, 'cat("hi")')
-        assert r"C:\Windows\System32" in captured["env"]["PATH"]
+        probe = _probe(PATH=OTHER_R_BIN)
+        provision.run_in_env(
+            tmp_path / "micromamba.exe", prefix, 'cat("hi")', probe=probe
+        )
+        assert OTHER_R_BIN in captured["env"]["PATH"].split(os.pathsep)
+
+    def test_posix_prefix_is_used_on_posix(self, tmp_path, monkeypatch):
+        """The same function on a POSIX probe must use lib/ and bin/, not Library/."""
+        prefix = tmp_path / "envs" / "r"
+        (prefix / "lib").mkdir(parents=True)
+        (prefix / "bin").mkdir(parents=True)
+        captured: dict[str, object] = {}
+
+        def fake_run(argv, **kwargs):
+            captured["env"] = kwargs["env"]
+            return __import__("subprocess").CompletedProcess(argv, 0, "", "")
+
+        monkeypatch.setattr(provision.subprocess, "run", fake_run)
+
+        probe = Probe(
+            system="Linux", machine="x86_64", is_64bit=True,
+            environ={"PATH": "/usr/bin"},
+        )
+        provision.run_in_env(
+            tmp_path / "micromamba", prefix, 'cat("hi")', probe=probe
+        )
+
+        entries = captured["env"]["PATH"].split(os.pathsep)
+        assert entries[0] == str(prefix / "lib")
+        assert "/usr/bin" in entries
 
 
 @pytest.mark.parametrize("returncode", sorted(provision._DLL_TROUBLE_RETURNCODES))

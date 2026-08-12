@@ -239,6 +239,22 @@ python first_fit.py
 
 You will see the first few rows of the data, then a table of coefficients.
 
+> **A warning on the first fit is normal.** The first time R starts you may see
+>
+> ```text
+> RobStatTMWarning: Registered S3 method overwritten by 'robustbase':
+>   method from hatvalues.lmrob RobStatTM
+> ```
+>
+> Both RobStatTM and `robustbase` define `hatvalues` for this kind of fit, so R
+> announces which one it kept. It happens once per session, says nothing about
+> your data, and a plain R session loading the same two packages prints it too.
+> Nothing to fix.
+>
+> RobStatTM-Py deliberately shows you everything R says rather than hiding it —
+> see [Seeing R warnings and errors](utilities.md). Warnings that *do* concern
+> your data read very differently ("algorithm did not converge", for example).
+
 ### What just happened, line by line
 
 - `import robstattm_py as rpm` — load the package, and call it `rpm` for short.

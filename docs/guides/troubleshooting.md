@@ -84,6 +84,32 @@ silently — every rejection appears in the trace with its reason.
 
 ## Common problems
 
+### `pip`: "No matching distribution found for robstattm-py"
+
+```text
+ERROR: Could not find a version that satisfies the requirement robstattm-py
+       (from versions: none)
+ERROR: No matching distribution found for robstattm-py
+```
+
+Nothing is wrong with your setup. **RobStatTM-Py is not on PyPI yet**, so there
+is nothing for `pip` to download by name. Install from the source repository
+instead:
+
+```bash
+git clone https://github.com/Aakarsh751/robstattm-py.git
+pip install ./robstattm-py
+```
+
+Everything after this point — `robstattm-py setup`, `doctor`, and the whole API
+— behaves identically. If you want the optional extras, name them the same way:
+`pip install "./robstattm-py[plots]"`.
+
+> This error is worth distinguishing from a genuine network or proxy failure,
+> which mentions a timeout or a connection, and from a Python-version mismatch,
+> which says *"Requires-Python"*. "from versions: none" specifically means the
+> index has no such project at all.
+
 ### "No usable R installation was found"
 
 The error lists every location that was checked. Read that list first: it often

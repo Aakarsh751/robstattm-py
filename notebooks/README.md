@@ -4,6 +4,22 @@ Reproductions of the RobStatTM textbook examples (Maronna, Martin, Yohai &
 Salibián-Barrera, *Robust Statistics: Theory and Methods*, 2019) and the
 package's example scripts, all built on `robstattm_py`.
 
+## Run it on Colab
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb)
+
+`colab_smoke_test.ipynb` installs the package on a fresh Google Colab runtime,
+provisions R, and exercises the whole surface — then prints a
+copy-pasteable report. It takes 6–10 minutes, most of it downloading R.
+
+It is a **test**, not a tutorial: every cell prints enough to diagnose a failure
+from the output alone, and several cells assert. It is deliberately excluded
+from `tests/test_notebooks.py` (see `_NOT_FOR_CI` there) because it clones the
+repository and downloads ~400 MB — the point of it is to check an environment CI
+does not resemble.
+
+Regenerate it from `_build_colab_smoke_test.py` rather than editing the JSON.
+
 > **Notebooks or [`examples/`](../examples/)?** Both cover the same 25 R
 > scripts, differently. `examples/` is **one Python script per R script** — go
 > there to port a specific R script, or to run one from a terminal. The

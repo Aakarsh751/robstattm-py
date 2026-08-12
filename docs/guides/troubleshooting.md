@@ -144,6 +144,113 @@ python -c "import platform; print(platform.machine())"
 
 Reinstall R so it matches your Python.
 
+### "rpy2 is installed, but it could not load R"
+
+> **On Colab?** There is a notebook that installs the package, provisions R,
+> exercises the whole surface and prints a copy-pasteable report:
+> [`colab_smoke_test.ipynb`](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb).
+> Run it and attach its final block to any issue you open.
+
+Typically on Google Colab, Kaggle, a Docker image, or any Linux box where rpy2
+arrived prebuilt — from `apt`, from the image, or as part of a notebook
+environment — and R came from `robstattm-py setup`.
+
+rpy2 ships two bindings to R. The **compiled** one (`_rinterface_cffi_api`) is
+built against the headers of whichever R was present when rpy2 was built; the
+**ABI** one resolves symbols at run time and does not care which R it gets. If
+rpy2 was built against one R and you point it at another, the compiled binding
+fails to load, usually with an undefined symbol or a missing shared library.
+
+Since 0.1.0 this is handled automatically: the ABI binding is selected and a
+warning is printed. To make it permanent and silent, set the variable **before**
+starting Python — rpy2 reads it when it first loads R, so setting it inside a
+notebook cell after importing anything is too late:
+
+```bash
+export RPY2_CFFI_MODE=ABI
+```
+
+In a Colab or Jupyter notebook, put this in the **first** cell, before any
+import:
+
+```python
+import os
+os.environ["RPY2_CFFI_MODE"] = "ABI"
+```
+
+The alternatives, if you prefer not to use ABI mode:
+
+```bash
+pip install --force-reinstall --no-binary rpy2 rpy2   # rebuild against this R
+robstattm-py setup --use-system-r                     # use the R rpy2 knows
+```
+
+> **If you are told "rpy2 is not installed" while `doctor` also reports an rpy2
+> version, that is a bug and it is fixed.** Before 0.1.0, every failure to load
+> R was reported as a missing rpy2, because importing `rpy2.robjects` both
+> imports a package *and* starts R, and both raise `ImportError`. The message
+> now distinguishes them and quotes the real error.
+
+### Windows: setup reaches "[4/4] Verifying" and then fails
+
+Symptoms — one of:
+
+```text
+robstattm-py: The provisioned R could not be started.
+
+Mingw-w64 runtime failure:
+32 bit pseudo relocation at 00007FFDF2815D45 out of range, targeting ...
+```
+
+```text
+The specified module could not be found.        (exit code 3221225781)
+```
+
+**Nothing is wrong with the download.** Steps 1–3 copied every file correctly;
+step 4 is simply the first moment anything actually starts R, so it is where a
+loading problem surfaces.
+
+Windows resolves a DLL by scanning `PATH` from left to right and loading the
+first matching *name*. R needs `R.dll`, `Rblas.dll` and a mingw runtime — names
+that a CRAN R installation, Rtools, MSYS2, Git's bundled mingw and other conda
+environments all also ship. If one of those is found first, the wrong copy is
+loaded into R. It then either fails outright (`0xC0000135`) or loads and dies on
+the pseudo-relocation message: a relocation that can only reach ±2 GB, asked to
+reach further, because the two images came from unrelated builds.
+
+Since 0.1.0 the environment's own directories are placed in front of `PATH`
+before R is started, so this should not occur. If you still hit it:
+
+```bash
+robstattm-py doctor            # shows which R was found and how
+```
+
+Then, in order of preference:
+
+1. **Use the R you already have** — skips the download entirely:
+   ```bash
+   robstattm-py setup --use-system-r
+   ```
+2. **Retry from a clean PATH**, in a new PowerShell window:
+   ```powershell
+   $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+   robstattm-py setup
+   ```
+3. Pin an R explicitly and skip discovery: set `ROBSTATTM_R_HOME` to its root.
+
+> **`--force` will not help here** and costs several minutes and a gigabyte. It
+> re-downloads bytes that were already correct. The problem is on the machine,
+> not in the package.
+
+To see exactly which `PATH` arrangement works, from a source checkout:
+
+```bash
+python dev/_diagnose_r_startup.py
+```
+
+It launches the provisioned R six times varying only `PATH` and reports which
+succeed.
+
 ### Windows: "LoadLibrary failure: The specified module could not be found"
 
 R's DLLs could not be located. The package puts every directory R needs onto the

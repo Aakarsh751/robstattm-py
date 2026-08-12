@@ -25,6 +25,17 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 _NB_DIR = _REPO_ROOT / "notebooks"
 
 
+#: Notebooks that must never run here, with the reason.
+#:
+#: `colab_smoke_test` is written to be run *by a person, on Google Colab*: it
+#: clones the repository, pip-installs it, and calls `robstattm-py setup`, which
+#: downloads roughly 400 MB. Running that inside the unit suite would take
+#: minutes, hit the network, and provision an R on top of whatever the machine
+#: already has. Its purpose is to test an environment CI does not resemble,
+#: which is exactly why CI must not be the thing that runs it.
+_NOT_FOR_CI = {"colab_smoke_test.ipynb"}
+
+
 def _discover_notebooks() -> list[Path]:
     if not _NB_DIR.is_dir():
         return []
@@ -36,6 +47,7 @@ def _discover_notebooks() -> list[Path]:
         for p in _NB_DIR.rglob("*.ipynb")
         if ".ipynb_checkpoints" not in p.parts
         and p.stat().st_size > 0
+        and p.name not in _NOT_FOR_CI
     )
 
 

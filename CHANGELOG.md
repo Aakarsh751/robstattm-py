@@ -6,7 +6,51 @@ Notable changes to RobStatTM-Py. Format based on
 
 ## [Unreleased]
 
-_Nothing yet._
+### Fixed
+
+- **Windows: `setup` could fail at "[4/4] Verifying" with a mingw
+  pseudo-relocation error.** Reported from a real machine. Steps 1–3 copy files
+  and succeed; step 4 is the first thing that actually *starts* R, so a DLL
+  loading problem surfaces there and looks like a bad download.
+
+  Windows resolves a DLL by scanning `PATH` left to right and taking the first
+  name match. R needs `R.dll`, `Rblas.dll` and a mingw runtime — names that a
+  CRAN R installation, Rtools, MSYS2, Git's bundled mingw and other conda
+  environments also ship. `run_in_env` had left `PATH` entirely to
+  `micromamba run`'s activation; it now puts the environment's own directories
+  in front itself, so an incomplete activation cannot cause this.
+
+  The same ordering bug existed on the *runtime* path:
+  `validate._bin_dirs_for` listed `Library/bin` before
+  `Library/mingw-w64/bin` (both can hold the same runtime DLL, and the first
+  match wins) and omitted `Scripts` entirely. Both now follow conda's own
+  activation order.
+
+  Verified by induction — with a CRAN R and Rtools ahead on `PATH`, a bare
+  `Rscript` launch exits `0xC0000135` and the shipped code loads all four R
+  packages against the same `PATH` (`dev/_verify_dll_fix.py`).
+- **"rpy2 is not installed" was reported on machines where rpy2 *was*
+  installed.** Reported from Google Colab, where one `doctor` run printed
+  `rpy2 version 3.6.7` and, below it, `could not be started: rpy2 is not
+  installed`. Importing `rpy2.robjects` both imports a package and *starts R*,
+  and both raise `ImportError`; the handler assumed the first, asserted it as
+  fact, and discarded the message that said what had actually failed.
+
+  It now checks whether rpy2 is importable before claiming it is missing, and
+  otherwise reports an R-loading failure quoting rpy2's own error.
+
+  The usual cause is rpy2's compiled binding having been built against a
+  different R than the one being loaded — normal wherever rpy2 arrives prebuilt
+  (Colab, a distro package) and the R is one we provisioned. rpy2's ABI binding
+  is immune, so `RPY2_CFFI_MODE=ABI` is now selected automatically, once, with a
+  warning, before giving up. Failing that, the error names three concrete
+  remedies instead of one wrong one.
+
+- **The advice for that failure was actively wrong.** It said to re-run with
+  `--force`, which re-downloads several minutes and a gigabyte of bytes that
+  were already correct, and fails identically. New `RStartupError` explains the
+  DLL mechanism and offers `--use-system-r`, a clean `PATH`, and
+  `ROBSTATTM_R_HOME` — and says plainly that `--force` will not help.
 
 ## [0.1.0] — 2026-08-12
 

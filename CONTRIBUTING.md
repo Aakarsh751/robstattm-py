@@ -67,6 +67,20 @@ return field — read the R source, not our notes:
 
 `project_memory/robstattm-py-planning-docs/research/*.md` are working notes and have been wrong before.
 
+## Licensing of contributions
+
+By submitting a contribution you agree that it is licensed under the same
+[MIT License](LICENSE) as the rest of the project, with no additional terms.
+
+This is spelled out because MIT — unlike Apache-2.0, whose §5 says it in the
+licence text itself — contains no inbound-contribution rule. There is no CLA to
+sign; this paragraph is the whole of it.
+
+If a contribution includes code you did not write, say so in the pull request
+and name its licence. Nothing GPL-licensed may be copied into this repository:
+the package's entire licensing position rests on it *calling* R rather than
+*containing* any of it (see [`NOTICE.md`](NOTICE.md)).
+
 ## Releasing
 
 Publishing to PyPI is documented step by step in

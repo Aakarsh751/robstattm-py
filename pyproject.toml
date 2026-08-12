@@ -1,7 +1,9 @@
 [build-system]
 # 77.0.3 is the floor for PEP 639 (`license` as an SPDX expression plus
 # `license-files`), which the metadata below uses.
-requires = ["setuptools>=77.0.3", "wheel"]
+# `wheel` is deliberately absent: modern setuptools builds wheels itself, and
+# listing it is a long-standing cargo cult that only pins an extra package.
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]

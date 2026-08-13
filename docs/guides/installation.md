@@ -31,7 +31,7 @@ and you do **not** need `robstattm-py setup` (that provisions a private R, which
 is only worth it off these platforms). One cell installs the package and the R
 packages against the R that is already there:
 
-```python
+```text
 # Cell 1 — install (about a minute; the R packages compile once)
 !pip install -q "git+https://github.com/Aakarsh751/robstattm-py.git"
 !python -m robstattm_py.cli install-r-packages RobStatTM pyinit robustbase rrcov

@@ -140,10 +140,19 @@ def _reconcile_with_loaded_rpy2(
 def _raise_not_found(result: DiscoveryResult, probe: Probe, *, allow_provision: bool) -> None:
     """Raise :class:`NoRFoundError` with the discovery trace and a tailored remedy."""
     no_provision = probe.environ.get(ENV_NO_PROVISION, "") == "1"
+    # On Windows (and often elsewhere) pip drops the `robstattm-py` script into a
+    # Scripts/ directory that is not on PATH, so the command in the remedy fails
+    # for exactly the user who most needs it. The module form always works.
+    path_independent = (
+        "\n  If `robstattm-py` is not recognised as a command (common on "
+        "Windows, where pip may install it off PATH), use the identical\n  "
+        "`python -m robstattm_py.cli setup` instead."
+    )
     if no_provision:
         remedy = (
             "Provisioning is disabled by ROBSTATTM_NO_PROVISION=1. Install R and "
             "set R_HOME, or unset that variable and run `robstattm-py setup`."
+            + path_independent
         )
     elif probe.subdir == "unknown":
         remedy = (
@@ -155,6 +164,7 @@ def _raise_not_found(result: DiscoveryResult, probe: Probe, *, allow_provision: 
         remedy = (
             "Run `robstattm-py setup` to download a private R (about 400 MB, "
             "a few minutes), or install R yourself and set R_HOME."
+            + path_independent
         )
     raise NoRFoundError(
         "No usable R installation was found.",

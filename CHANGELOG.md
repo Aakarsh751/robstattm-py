@@ -8,6 +8,23 @@ Notable changes to RobStatTM-Py. Format based on
 
 ### Fixed
 
+- **Colab/Kaggle: "rpy2 could not load R" on a fit, even though `doctor` was
+  green.** The automatic ABI-binding selection added earlier only fired when the
+  R had been provisioned by `robstattm-py setup` (i.e. a conda install). On
+  Google Colab and Kaggle, rpy2 is preinstalled and compiled against the image's
+  R, but that R is an `apt` install at `/usr/lib/R` with no conda prefix — so the
+  rule skipped it and left rpy2's compiled binding to fail against whatever R was
+  actually loaded. Colab/Kaggle are now detected (via their `COLAB_*` / `KAGGLE_*`
+  environment and the `google.colab` module) and get the ABI binding up front, so
+  a plain `pip install` + `import` + fit works there without any manual
+  `RPY2_CFFI_MODE` setting. Results are bit-identical; an ordinary system R on a
+  personal machine still keeps the faster compiled binding.
+- **"No usable R installation was found" pointed at a command that may not be on
+  PATH.** The remedy said to run `robstattm-py setup`, but pip frequently installs
+  that script into a directory Windows does not have on `PATH` — so the one user
+  who most needs it hits a second dead end. The message now also gives the
+  identical, always-available `python -m robstattm_py.cli setup`.
+
 - **Windows: `setup` could fail at "[4/4] Verifying" with a mingw
   pseudo-relocation error.** Reported from a real machine. Steps 1–3 copy files
   and succeed; step 4 is the first thing that actually *starts* R, so a DLL

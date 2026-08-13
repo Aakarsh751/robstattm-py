@@ -76,13 +76,62 @@ class TestSelectCffiMode:
         _r._select_cffi_mode(_Info(conda_prefix=Path("/opt/conda/envs/r")), modules={})
         assert os.environ["RPY2_CFFI_MODE"] == "ABI"
 
-    def test_system_r_is_left_alone(self):
+    def test_system_r_is_left_alone(self, monkeypatch):
         """A system R is plausibly the one rpy2 was compiled against; keep the
         faster compiled binding."""
         import os
 
+        # Guard against the host actually being a hosted notebook, so the test
+        # asserts the intended branch rather than the environment it runs in.
+        for key in list(os.environ):
+            if key.startswith(("COLAB_", "KAGGLE_")):
+                monkeypatch.delenv(key, raising=False)
         _r._select_cffi_mode(_Info(conda_prefix=None), modules={})
         assert "RPY2_CFFI_MODE" not in os.environ
+
+    def test_colab_system_r_gets_abi_via_env(self, monkeypatch):
+        """Colab ships rpy2 prebuilt against an R we may not be loading; its R is
+        an apt install with no conda prefix, so the marker is the env var."""
+        import os
+
+        monkeypatch.setenv("COLAB_RELEASE_TAG", "release-colab-20260101")
+        _r._select_cffi_mode(_Info(conda_prefix=None), modules={})
+        assert os.environ["RPY2_CFFI_MODE"] == "ABI"
+
+    def test_colab_system_r_gets_abi_via_module(self, monkeypatch):
+        """`google.colab` in the kernel is the other reliable Colab signal."""
+        import os
+
+        for key in list(os.environ):
+            if key.startswith(("COLAB_", "KAGGLE_")):
+                monkeypatch.delenv(key, raising=False)
+        _r._select_cffi_mode(_Info(conda_prefix=None), modules={"google.colab": object()})
+        assert os.environ["RPY2_CFFI_MODE"] == "ABI"
+
+    def test_kaggle_system_r_gets_abi(self, monkeypatch):
+        import os
+
+        monkeypatch.setenv("KAGGLE_KERNEL_RUN_TYPE", "Interactive")
+        _r._select_cffi_mode(_Info(conda_prefix=None), modules={})
+        assert os.environ["RPY2_CFFI_MODE"] == "ABI"
+
+    def test_explicit_setting_wins_even_on_colab(self, monkeypatch):
+        """A user who asked for API on Colab gets API, mismatch risk and all."""
+        import os
+
+        monkeypatch.setenv("COLAB_RELEASE_TAG", "x")
+        monkeypatch.setenv("RPY2_CFFI_MODE", "API")
+        _r._select_cffi_mode(_Info(conda_prefix=None), modules={})
+        assert os.environ["RPY2_CFFI_MODE"] == "API"
+
+    def test_hosted_host_detection_is_conservative(self, monkeypatch):
+        """An ordinary machine is not mistaken for a hosted notebook."""
+        for key in list(__import__("os").environ):
+            if key.startswith(("COLAB_", "KAGGLE_")):
+                monkeypatch.delenv(key, raising=False)
+        assert not _r._in_prebuilt_rpy2_host({"PATH": "/usr/bin", "HOME": "/root"}, {})
+        assert _r._in_prebuilt_rpy2_host({"COLAB_GPU": "0"}, {})
+        assert _r._in_prebuilt_rpy2_host({}, {"google.colab": object()})
 
     def test_an_explicit_setting_always_wins(self, monkeypatch):
         monkeypatch.setenv("RPY2_CFFI_MODE", "API")

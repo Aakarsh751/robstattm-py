@@ -126,12 +126,22 @@ def _select_cffi_mode(info: Any, modules: dict | None = None) -> None:
     resolves symbols at run time and does not care which R it gets. The compiled
     one is a little faster per call and fails outright against a different R.
 
-    When the R we are about to load is one **we** provisioned, rpy2 was almost
-    certainly not built against it — the common case being an environment where
-    rpy2 arrived prebuilt (Google Colab, Kaggle, a distro package, a notebook
-    image) and R came from ``robstattm-py setup``. Picking ABI up front costs a
-    little dispatch time and avoids a failure that cannot be recovered from
-    afterwards.
+    Two situations call for ABI, and both are ones where rpy2's compiled binding
+    was built against a *different* R than the one we are about to load:
+
+    * **The R is one we provisioned.** rpy2 was almost certainly not built
+      against an R that ``robstattm-py setup`` downloaded afterwards.
+    * **We are in a hosted notebook (Google Colab, Kaggle).** rpy2 arrives
+      preinstalled there, built against whatever R the image shipped — which is
+      frequently not the R actually present by the time a fit runs (the image's
+      R gets updated, or the user points us at another one). This is the exact
+      case the "rpy2 could not load R" reports came from, and the reason the
+      earlier ``conda_prefix``-only rule missed it: Colab's R is an apt install
+      at ``/usr/lib/R``, so it has no conda prefix.
+
+    Picking ABI up front costs a little dispatch time (the results are
+    bit-identical — ABI resolves the same symbols, just at run time) and avoids a
+    failure that cannot be recovered from afterwards.
 
     "Afterwards" is the crux, and the reason this is done here rather than as a
     retry. rpy2 embeds R as a **process-global singleton**: once an import has
@@ -162,10 +172,36 @@ def _select_cffi_mode(info: Any, modules: dict | None = None) -> None:
         return  # the user has decided; do not override
     if "rpy2.rinterface_lib.openrlib" in loaded:
         return  # too late — R is already bound
-    if getattr(info, "conda_prefix", None) is None:
+
+    provisioned = getattr(info, "conda_prefix", None) is not None
+    if not (provisioned or _in_prebuilt_rpy2_host(_os.environ, loaded)):
         return  # a system R that rpy2 was plausibly built against
 
     _os.environ["RPY2_CFFI_MODE"] = "ABI"
+
+
+def _in_prebuilt_rpy2_host(environ: Any, modules: Any) -> bool:
+    """True in environments that ship rpy2 prebuilt against their own R.
+
+    On Google Colab and Kaggle, rpy2 comes preinstalled and was compiled against
+    the image's R. That R is rarely the one a fit ends up loading — the image
+    updates it, or the user installs the RobStatTM dependencies into a different
+    one — so the compiled binding fails at import with an undefined-symbol or
+    missing-library error. ABI mode side-steps it entirely, at no cost to the
+    numbers (see :func:`_select_cffi_mode`).
+
+    Detection is deliberately conservative and env-driven: forcing ABI where it
+    was not strictly needed only costs a little dispatch time, but a false
+    *negative* is the failure we are trying to prevent.
+    """
+    # Colab exposes several COLAB_* variables and imports google.colab into the
+    # kernel; Kaggle sets KAGGLE_* variables in its notebook containers.
+    if "google.colab" in modules:
+        return True
+    for key in environ:
+        if key.startswith("COLAB_") or key.startswith("KAGGLE_"):
+            return True
+    return False
 
 
 def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:

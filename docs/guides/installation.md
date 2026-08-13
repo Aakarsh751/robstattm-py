@@ -24,6 +24,39 @@ copy-paste commands per OS, then [Verify](#5-verify-everything).
 
 ---
 
+## Google Colab / Kaggle (fastest path — no R download)
+
+Colab and Kaggle already ship R and `rpy2`, so you skip steps 1 and 3 entirely
+and you do **not** need `robstattm-py setup` (that provisions a private R, which
+is only worth it off these platforms). One cell installs the package and the R
+packages against the R that is already there:
+
+```python
+# Cell 1 — install (about a minute; the R packages compile once)
+!pip install -q "git+https://github.com/Aakarsh751/robstattm-py.git"
+!python -m robstattm_py.cli install-r-packages RobStatTM pyinit robustbase rrcov
+```
+
+```python
+# Cell 2 — use it
+import robstattm_py as rpm
+fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
+print(fit.summary())
+```
+
+> **About the "rpy2 could not load R" error you may have seen before:** on these
+> platforms `rpy2` is preinstalled and compiled against the image's R, which is
+> not always the R that actually gets loaded. RobStatTM-Py now detects Colab and
+> Kaggle and selects rpy2's run-time (ABI) binding automatically, so this works
+> with no `RPY2_CFFI_MODE` cell. If you ever pin it yourself, do it in the
+> **first** cell before any import: `import os; os.environ["RPY2_CFFI_MODE"] = "ABI"`.
+
+There is also a full end-to-end
+[Colab smoke-test notebook](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb)
+that installs, provisions, fits, and prints a copy-pasteable report.
+
+---
+
 ## 1. Install R
 
 ### Windows

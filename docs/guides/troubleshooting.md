@@ -161,17 +161,17 @@ built against the headers of whichever R was present when rpy2 was built; the
 rpy2 was built against one R and you point it at another, the compiled binding
 fails to load, usually with an undefined symbol or a missing shared library.
 
-Since 0.1.0 this is handled automatically in the two situations where it bites:
+Since 0.1.0, when the R came from `robstattm-py setup` the ABI binding is
+selected before rpy2 is imported, so the compiled binding is never given a
+chance to fail against an R it was not built for. A system R is left on its
+faster compiled binding, since that is plausibly the one rpy2 was built against.
 
-- **The R came from `robstattm-py setup`** — rpy2 was not built against an R we
-  downloaded afterwards.
-- **You are on Google Colab or Kaggle** — rpy2 comes preinstalled there, built
-  against the image's R, which is often not the R a fit ends up loading.
-
-In both, the ABI binding is selected before rpy2 is imported, so the compiled
-binding is never given a chance to fail. An ordinary system R on your own
-machine keeps the faster compiled binding, since that is plausibly the one rpy2
-was built against.
+**On Google Colab or Kaggle the simplest fix is to use the system R rather than
+provision a new one.** `pip` rebuilds rpy2 from source against that R (`/usr/lib/R`)
+when it installs, so the compiled binding matches it exactly. Install the R
+packages into it and skip `setup` entirely — see the
+[Colab / Kaggle quickstart](installation.md#google-colab--kaggle-fastest-path--no-r-download).
+Provisioning a separate R is the harder path there and is not needed.
 
 If you hit it anyway — an R that is neither, or an rpy2/R pairing we cannot
 predict — set the variable yourself. It must be set **before Python starts**;

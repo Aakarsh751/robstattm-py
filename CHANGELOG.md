@@ -8,17 +8,16 @@ Notable changes to RobStatTM-Py. Format based on
 
 ### Fixed
 
-- **Colab/Kaggle: "rpy2 could not load R" on a fit, even though `doctor` was
-  green.** The automatic ABI-binding selection added earlier only fired when the
-  R had been provisioned by `robstattm-py setup` (i.e. a conda install). On
-  Google Colab and Kaggle, rpy2 is preinstalled and compiled against the image's
-  R, but that R is an `apt` install at `/usr/lib/R` with no conda prefix — so the
-  rule skipped it and left rpy2's compiled binding to fail against whatever R was
-  actually loaded. Colab/Kaggle are now detected (via their `COLAB_*` / `KAGGLE_*`
-  environment and the `google.colab` module) and get the ABI binding up front, so
-  a plain `pip install` + `import` + fit works there without any manual
-  `RPY2_CFFI_MODE` setting. Results are bit-identical; an ordinary system R on a
-  personal machine still keeps the faster compiled binding.
+- **Colab/Kaggle: the documented path now works — use the system R.** A new
+  Colab/Kaggle quickstart installs the package and the R packages against the R
+  those platforms already ship (`/usr/lib/R`) and skips `robstattm-py setup`
+  entirely (no 400 MB download). `pip` rebuilds rpy2 from source against that R as
+  it installs, so rpy2's compiled binding matches it and a fit works with no
+  `RPY2_CFFI_MODE` cell. The automatic ABI selection remains scoped to a
+  *provisioned* R only; a system R is left on its matching compiled binding.
+  (An interim change that forced ABI on any Colab/Kaggle host was reverted: it
+  broke that working system-R path, failing at import with `cannot import name
+  'default_converter' from 'rpy2.robjects' (unknown location)`.)
 - **"No usable R installation was found" pointed at a command that may not be on
   PATH.** The remedy said to run `robstattm-py setup`, but pip frequently installs
   that script into a directory Windows does not have on `PATH` — so the one user

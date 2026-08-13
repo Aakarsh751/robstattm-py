@@ -44,12 +44,12 @@ fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 print(fit.summary())
 ```
 
-> **About the "rpy2 could not load R" error you may have seen before:** on these
-> platforms `rpy2` is preinstalled and compiled against the image's R, which is
-> not always the R that actually gets loaded. RobStatTM-Py now detects Colab and
-> Kaggle and selects rpy2's run-time (ABI) binding automatically, so this works
-> with no `RPY2_CFFI_MODE` cell. If you ever pin it yourself, do it in the
-> **first** cell before any import: `import os; os.environ["RPY2_CFFI_MODE"] = "ABI"`.
+> **Why this works, and why it beats provisioning here:** `pip` rebuilds `rpy2`
+> from source against Colab's own R (`/usr/lib/R`) as it installs, so rpy2's
+> compiled binding matches that R exactly — no `RPY2_CFFI_MODE` cell needed.
+> Provisioning a *separate* R with `robstattm-py setup` is the harder path on
+> these platforms and is not needed; stick with the two cells above and you avoid
+> the whole binding-mismatch question.
 
 There is also a full end-to-end
 [Colab smoke-test notebook](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb)

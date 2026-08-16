@@ -8,16 +8,23 @@ Notable changes to RobStatTM-Py. Format based on
 
 ### Fixed
 
-- **Colab/Kaggle: the documented path now works — use the system R.** A new
-  Colab/Kaggle quickstart installs the package and the R packages against the R
-  those platforms already ship (`/usr/lib/R`) and skips `robstattm-py setup`
-  entirely (no 400 MB download). `pip` rebuilds rpy2 from source against that R as
-  it installs, so rpy2's compiled binding matches it and a fit works with no
-  `RPY2_CFFI_MODE` cell. The automatic ABI selection remains scoped to a
-  *provisioned* R only; a system R is left on its matching compiled binding.
-  (An interim change that forced ABI on any Colab/Kaggle host was reverted: it
-  broke that working system-R path, failing at import with `cannot import name
-  'default_converter' from 'rpy2.robjects' (unknown location)`.)
+- **Colab/Kaggle: "cannot import name 'default_converter' from 'rpy2.robjects'
+  (unknown location)" is now diagnosed correctly.** The real cause, confirmed on
+  a live Colab, is **not** the rpy2 binding or which R loads: rpy2 3.6 is split
+  across three separately-versioned distributions (`rpy2`, `rpy2-rinterface`,
+  `rpy2-robjects`) and Colab/Kaggle sometimes ship them out of step (observed:
+  `3.6.7 / 3.6.6 / 3.6.5`), which turns `rpy2.robjects` into an empty namespace
+  package with no file. The setup error used to blame a binding/R mismatch and
+  send readers down `RPY2_CFFI_MODE=ABI` — a dead end for this. It now detects the
+  `(unknown location)` signature, prints the three installed versions as evidence,
+  and gives the fix: `pip install --force-reinstall --no-cache-dir rpy2` then
+  restart. The new Colab/Kaggle quickstart runs that reinstall up front, so a
+  plain install + import + fit works against the platform's own R (`/usr/lib/R`),
+  no `setup` and no 400 MB download.
+  (Supersedes two interim attempts this cycle that misread the failure as a
+  binding problem — one forcing ABI on hosted notebooks, since reverted, and one
+  gating ABI on a `find_spec` probe that proved unreliable. The automatic ABI
+  selection is unchanged from 0.1.0: it applies only to a *provisioned* R.)
 - **"No usable R installation was found" pointed at a command that may not be on
   PATH.** The remedy said to run `robstattm-py setup`, but pip frequently installs
   that script into a directory Windows does not have on `PATH` — so the one user

@@ -205,6 +205,32 @@ robstattm-py setup --use-system-r                     # use the R rpy2 knows
 > imports a package *and* starts R, and both raise `ImportError`. The message
 > now distinguishes them and quotes the real error.
 
+### "cannot import name 'default_converter' from 'rpy2.robjects' (unknown location)"
+
+This is **not** a binding or R-loading problem — `rpy2.robjects` cannot be
+imported at all. rpy2 3.6 is split across three separately-versioned
+distributions, and when they drift out of step `rpy2.robjects` resolves to an
+empty namespace package with no file. `doctor` now names the culprit directly:
+
+```text
+rpy2 is installed, but its components are at mismatched versions, so
+`rpy2.robjects` could not be imported:
+    rpy2             3.6.7
+    rpy2-rinterface  3.6.6
+    rpy2-robjects    3.6.5
+```
+
+Seen most often on **Google Colab and Kaggle**, whose preinstalled rpy2 is
+sometimes a mismatched set (a partial `pip` upgrade does the same). Reinstall a
+consistent set, then restart the runtime/kernel:
+
+```bash
+pip install --force-reinstall --no-cache-dir rpy2
+```
+
+> rpy2 embeds R as a process-global singleton, so the restart is required for the
+> repaired install to take effect. On Colab this is `Runtime → Restart runtime`.
+
 ### Windows: setup reaches "[4/4] Verifying" and then fails
 
 Symptoms — one of:

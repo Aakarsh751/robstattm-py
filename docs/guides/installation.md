@@ -28,11 +28,12 @@ copy-paste commands per OS, then [Verify](#5-verify-everything).
 
 Colab and Kaggle already ship R and `rpy2`, so you skip steps 1 and 3 entirely
 and you do **not** need `robstattm-py setup` (that provisions a private R, which
-is only worth it off these platforms). One cell installs the package and the R
-packages against the R that is already there:
+is only worth it off these platforms). One cell installs everything against the R
+that is already there:
 
 ```text
-# Cell 1 — install (about a minute; the R packages compile once)
+# Cell 1 — install (about 1–2 min; rpy2 and the R packages compile once)
+!pip install -q --force-reinstall --no-cache-dir rpy2
 !pip install -q "git+https://github.com/Aakarsh751/robstattm-py.git"
 !python -m robstattm_py.cli install-r-packages RobStatTM pyinit robustbase rrcov
 ```
@@ -44,12 +45,18 @@ fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 print(fit.summary())
 ```
 
-> **Why this works, and why it beats provisioning here:** `pip` rebuilds `rpy2`
-> from source against Colab's own R (`/usr/lib/R`) as it installs, so rpy2's
-> compiled binding matches that R exactly — no `RPY2_CFFI_MODE` cell needed.
+> **Why the `--force-reinstall rpy2` line:** rpy2 3.6 is split across three
+> separately-versioned packages (`rpy2`, `rpy2-rinterface`, `rpy2-robjects`), and
+> Colab/Kaggle sometimes ship them out of step (e.g. `3.6.7 / 3.6.6 / 3.6.5`).
+> A mismatched set makes `import rpy2.robjects` fail with
+> `cannot import name 'default_converter' … (unknown location)`. Reinstalling
+> pulls a consistent set, compiled from source against Colab's own R
+> (`/usr/lib/R`) — so rpy2's binding matches that R and no `RPY2_CFFI_MODE` cell
+> is needed. If a fit still reports mismatched versions, restart the runtime and
+> rerun Cell 1.
+>
 > Provisioning a *separate* R with `robstattm-py setup` is the harder path on
-> these platforms and is not needed; stick with the two cells above and you avoid
-> the whole binding-mismatch question.
+> these platforms and is not needed; the cell above uses the system R directly.
 
 There is also a full end-to-end
 [Colab smoke-test notebook](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb)

@@ -179,6 +179,18 @@ def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:
             "rpy2 is not installed. Install with `pip install rpy2>=3.6`."
         )
 
+    # rpy2 3.6 is split across three separately-versioned distributions (rpy2,
+    # rpy2-rinterface, rpy2-robjects). When their versions drift out of step —
+    # the state Google Colab and Kaggle sometimes ship, and which a partial pip
+    # upgrade reproduces — `rpy2.robjects` resolves to an empty namespace package
+    # with no __file__, and the import fails with "(unknown location)". That is a
+    # broken *install*, not a failure to load R; the remedy is entirely different,
+    # so it is detected and reported on its own terms rather than as a binding
+    # problem.
+    msg = str(original)
+    if "unknown location" in msg or ("rpy2.robjects" in msg and "cannot import name" in msg):
+        return _rpy2_inconsistent_install_error(original)
+
     import os as _os
 
     try:
@@ -208,6 +220,48 @@ def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:
         "       robstattm-py setup --use-system-r\n\n"
         "It cannot be switched after R has been loaded: rpy2 embeds R as a "
         "process-global singleton, so a restart is required."
+    )
+
+
+def _rpy2_components() -> dict[str, str]:
+    """Return the installed versions of rpy2's split distributions.
+
+    rpy2 3.6 ships as three separately-versioned packages; reading each version
+    is what turns "rpy2.robjects is broken" into the concrete evidence
+    ``rpy2 3.6.7 / rpy2-rinterface 3.6.6 / rpy2-robjects 3.6.5``.
+    """
+    from importlib.metadata import PackageNotFoundError, version
+
+    out: dict[str, str] = {}
+    for dist in ("rpy2", "rpy2-rinterface", "rpy2-robjects"):
+        try:
+            out[dist] = version(dist)
+        except PackageNotFoundError:
+            out[dist] = "(absent)"
+    return out
+
+
+def _rpy2_inconsistent_install_error(original: ImportError) -> RobStatTMSetupError:
+    """Report rpy2's split distributions being at mismatched versions.
+
+    This is the Colab/Kaggle "cannot import name 'default_converter' from
+    'rpy2.robjects' (unknown location)" failure. Its cause — mismatched rpy2 /
+    rpy2-rinterface / rpy2-robjects versions — and its fix are unrelated to which
+    R is loaded or which binding is used, so it gets a message of its own.
+    """
+    listed = "\n".join(f"    {dist:<16} {ver}" for dist, ver in _rpy2_components().items())
+    return RobStatTMSetupError(
+        "rpy2 is installed, but its components are at mismatched versions, so "
+        "`rpy2.robjects` could not be imported:\n"
+        f"{listed}\n"
+        f"  rpy2 reported:    {original}\n\n"
+        "rpy2 3.6 is split across three separately-versioned packages, and Google "
+        "Colab and Kaggle sometimes ship them out of step (a partial `pip` upgrade "
+        "does the same). Reinstall a consistent set:\n\n"
+        "    pip install --force-reinstall --no-cache-dir rpy2\n\n"
+        "then restart the runtime or kernel and run again. rpy2 embeds R as a "
+        "process-global singleton, so a restart is required for the new install to "
+        "take effect."
     )
 
 

@@ -143,6 +143,50 @@ class TestImportErrorMessage:
         assert "BEFORE Python starts" in text or "before any import" in text.lower()
 
 
+class TestInconsistentRpy2Install:
+    """The Colab/Kaggle failure: rpy2's split packages at mismatched versions.
+
+    `cannot import name 'default_converter' from 'rpy2.robjects' (unknown
+    location)` — observed with rpy2 3.6.7 / rpy2-rinterface 3.6.6 /
+    rpy2-robjects 3.6.5, fixed by `pip install --force-reinstall rpy2`.
+    """
+
+    def test_unknown_location_is_reported_as_an_inconsistent_install(self, monkeypatch):
+        monkeypatch.setattr(_r, "_rpy2_is_installed", lambda: True)
+        err = _r._rpy2_import_error(
+            ImportError(
+                "cannot import name 'default_converter' from 'rpy2.robjects' "
+                "(unknown location)"
+            )
+        )
+        text = str(err)
+        assert "mismatched versions" in text
+        assert "--force-reinstall" in text
+        # Must NOT misattribute this to the binding / R-loading path.
+        assert "could not load R" not in text
+
+    def test_it_lists_the_component_versions_as_evidence(self, monkeypatch):
+        monkeypatch.setattr(_r, "_rpy2_is_installed", lambda: True)
+        monkeypatch.setattr(
+            _r,
+            "_rpy2_components",
+            lambda: {"rpy2": "3.6.7", "rpy2-rinterface": "3.6.6", "rpy2-robjects": "3.6.5"},
+        )
+        text = str(_r._rpy2_import_error(ImportError("boom (unknown location)")))
+        assert "rpy2-rinterface" in text
+        assert "3.6.6" in text and "3.6.5" in text
+
+    def test_a_real_load_failure_is_still_a_binding_message(self, monkeypatch):
+        monkeypatch.setattr(_r, "_rpy2_is_installed", lambda: True)
+        text = str(_r._rpy2_import_error(ImportError("undefined symbol: R_tryCatch")))
+        assert "could not load R" in text
+        assert "mismatched versions" not in text
+
+    def test_components_reader_returns_all_three_keys(self):
+        comps = _r._rpy2_components()
+        assert set(comps) == {"rpy2", "rpy2-rinterface", "rpy2-robjects"}
+
+
 def test_no_in_process_retry_remains():
     """Guard against reintroducing the retry.
 

@@ -1,4 +1,4 @@
-"""Robust logistic regression — Bianco–Yohai family.
+"""Robust logistic regression, Bianco–Yohai family.
 
 Wraps ``RobStatTM::BYlogreg``, ``WBYlogreg``, ``WMLlogreg``. Maronna et al.
 (2019) §7.2.
@@ -7,7 +7,7 @@ BY/WBY return list names:
   convergence, objective, coefficients, standard.deviation, fitted.values,
   residual.deviances.
 
-WML return list names (different — no convergence/objective; has xweights/cov):
+WML return list names (different, no convergence/objective; has xweights/cov):
   xweights, coefficients, standard.deviation, fitted.values, cov,
   residual.deviances.
 
@@ -18,7 +18,7 @@ Python field map (R dotted -> Python snake_case):
 
 For BY/WBY, ``fitted.values`` and ``residual.deviances`` are returned as
 ``(1, n)`` row matrices in R; we ravel to ``(n,)`` per the Pythonic
-docs/user_interface.md contract. Numerical values are bit-identical.
+dev/design/user_interface.md contract. Numerical values are bit-identical.
 """
 from __future__ import annotations
 
@@ -126,7 +126,7 @@ def _call_logreg(
 
     # On (quasi-)separable or otherwise degenerate data, RobStatTM's logistic
     # routines can return a truncated, non-converged object whose names are only
-    # ``convergence``/``objective``/``coef`` — with no ``coefficients`` field.
+    # ``convergence``/``objective``/``coef`` - with no ``coefficients`` field.
     # Detect that here and raise a clear error, instead of letting the mandatory
     # extraction below fail with an opaque rpy2 ``ValueError: x not in list``
     # (see project_memory/blockers.md B-009).
@@ -135,7 +135,7 @@ def _call_logreg(
         converged = extract_bool(conv) if conv is not None else False
         raise RobStatTMRError(
             f"{rfun_name} did not produce a usable fit (converged={converged}). "
-            "R returned an incomplete result with no 'coefficients' — the response "
+            "R returned an incomplete result with no 'coefficients', the response "
             "is likely (quasi-)separable or the design is degenerate for robust "
             "logistic regression. Condition the data, drop collinear/over-powerful "
             "predictors, or try a different estimator.",

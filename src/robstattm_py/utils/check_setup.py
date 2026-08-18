@@ -2,7 +2,7 @@
 
 Prints a one-screen status table of the R + Python + CRAN-package versions and
 returns ``True`` if all *core* packages are available, ``False`` otherwise.
-See ``docs/user_interface.md §8``.
+See ``dev/design/user_interface.md §8``.
 
 ``robstattm-py doctor`` reports the same facts in more depth (including the
 R-discovery trace). This function stays because it is public API and works from

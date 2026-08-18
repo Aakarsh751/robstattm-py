@@ -1,7 +1,7 @@
 """Univariate robust M-scale estimator.
 
 Wraps ``RobStatTM::scaleM`` (also exposed as ``mscale``); see Maronna et al.
-(2019) §2.5–§2.6. Returns a single scalar — no dataclass needed.
+(2019) §2.5–§2.6. Returns a single scalar, no dataclass needed.
 
 R formals captured at implementation time (RobStatTM 1.0.11):
 
@@ -61,7 +61,7 @@ def m_scale(
     Notes
     -----
     The R name uses a dot (``max.it``); the Python name uses an underscore.
-    See ``docs/user_interface.md §5``.
+    See ``dev/design/user_interface.md §5``.
 
     References
     ----------
@@ -88,7 +88,7 @@ def m_scale(
         "family": family,
         "tol": float(tol),
     }
-    # R name has a dot — pass via kwargs map (rcall strips trailing _ already).
+    # R name has a dot - pass via kwargs map (rcall strips trailing _ already).
     kw["max.it"] = int(max_it)
     if tuning_chi is not None:
         kw["tuning.chi"] = float(tuning_chi)

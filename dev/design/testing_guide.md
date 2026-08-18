@@ -12,7 +12,7 @@ RobStatTM-Py is **not** a pure-Python reimplementation of robust statistics. Eve
 
 Therefore the golden rule of testing is:
 
-> **Python wrapper output must match a direct R call on the same data, with the same control object and the same random seed — field by field, with zero numerical tolerance.**
+> **Python wrapper output must match a direct R call on the same data, with the same control object and the same random seed, field by field, with zero numerical tolerance.**
 
 When a test passes, it means:
 
@@ -20,7 +20,7 @@ When a test passes, it means:
 - The test also ran `RobStatTM::lmrobdetMM(...)` in **embedded R** (via rpy2, same process).
 - Every compared number is **bit-identical** (`atol=0`, `rtol=0`).
 
-When a test fails, it usually means the wrapper dropped an argument, mis-converted a field name, lost the fit’s control object on refit, or mishandled an edge case — not that “statistics looks wrong.”
+When a test fails, it usually means the wrapper dropped an argument, mis-converted a field name, lost the fit’s control object on refit, or mishandled an edge case, not that “statistics looks wrong.”
 
 ---
 
@@ -57,7 +57,7 @@ def test_coefficients_match_r(R):
     np.testing.assert_array_equal(py.coefficients, r_coef)
 ```
 
-This is the same philosophy as the parity check you might run manually — it is just automated across hundreds of cases.
+This is the same philosophy as the parity check you might run manually, it is just automated across hundreds of cases.
 
 ### 2.2 Why embedded R instead of a separate R session?
 
@@ -90,7 +90,7 @@ Tests marked `@needs_r` are **skipped** (not failed) when R or RobStatTM is unav
 
 ## 3. Tolerance tiers
 
-Defined in `docs/validation_strategy.md`:
+Defined in `dev/design/validation_strategy.md`:
 
 | Tier | atol / rtol | When used |
 |------|-------------|-----------|
@@ -101,9 +101,9 @@ Defined in `docs/validation_strategy.md`:
 
 **Strict tier helpers** (`tests/conftest.py`):
 
-- `assert_scalar_equal(py, r_val)` — scalars; `NaN == NaN` counts as equal
-- `assert_array_equal(py, r_val)` — wraps `np.testing.assert_array_equal`
-- `assert_r_equal_dataclass(py_obj, r_list, field_map)` — field-by-field on dataclasses
+- `assert_scalar_equal(py, r_val)`, scalars; `NaN == NaN` counts as equal
+- `assert_array_equal(py, r_val)`, wraps `np.testing.assert_array_equal`
+- `assert_r_equal_dataclass(py_obj, r_list, field_map)`, field-by-field on dataclasses
 
 ---
 
@@ -116,7 +116,7 @@ Defined in `docs/validation_strategy.md`:
                     └─────────────────────────────────────┘
                                       │
                     ┌─────────────────────────────────────┐
-                    │  Notebooks (13) — execution only       │
+                    │  Notebooks (13), execution only       │
                     │  tests/test_notebooks.py             │
                     └─────────────────────────────────────┘
                                       │
@@ -151,7 +151,7 @@ Set `RPM_SKIP_NOTEBOOKS=1` to skip the 14 notebook executions during fast loops.
 
 ---
 
-## 5. Strict tier (`tests/`) — the CI gate
+## 5. Strict tier (`tests/`), the CI gate
 
 **Purpose:** Every shipped wrapper, S3 method, dataset loader, and ergonomic API must match R on textbook and representative inputs. These tests **block releases**.
 
@@ -185,11 +185,11 @@ Each wrapper returns a **frozen Python dataclass** (e.g. `LmrobdetMMResult`). Te
 | `step.anova_rfpe` | `step$anova$RFPE` | `assert_array_equal` |
 | `cov.center`, `cov.cov` | `fit$center`, `fit$cov` | `assert_array_equal` |
 
-**S3 methods** (summary, predict, hatvalues, drop1, rfpe) are tested by refitting in R-space and comparing the recomputed tables — including the case where the user passed a **custom `lmrobdet_control`** (regression bug D-021).
+**S3 methods** (summary, predict, hatvalues, drop1, rfpe) are tested by refitting in R-space and comparing the recomputed tables, including the case where the user passed a **custom `lmrobdet_control`** (regression bug D-021).
 
 ### 5.3 Validation matrix (cases 1–11)
 
-`docs/validation_strategy.md` defines 11 standard cases per wrapper (textbook golden, clean synthetic, contaminated, high-dimensional, bad inputs, seed repeatability, etc.). Strict tests map onto these across modules — not every file lists case numbers, but coverage is tracked in `docs/coverage_matrix.md`.
+`dev/design/validation_strategy.md` defines 11 standard cases per wrapper (textbook golden, clean synthetic, contaminated, high-dimensional, bad inputs, seed repeatability, etc.). Strict tests map onto these across modules, not every file lists case numbers, but coverage is tracked in `dev/design/coverage_matrix.md`.
 
 ### 5.4 Notable strict-tier bugs found by testing
 
@@ -203,10 +203,10 @@ Each wrapper returns a **frozen Python dataclass** (e.g. `LmrobdetMMResult`). Te
 
 ---
 
-## 5b. Plotting tests (`tests/plot/`) — native suite, R-free
+## 5b. Plotting tests (`tests/plot/`), native suite, R-free
 
 **Purpose:** The native plotting suite (`robstattm_py.plot`, decision D-023) is a
-*rendering* layer, not a numeric one — its inputs are the already-validated
+*rendering* layer, not a numeric one, its inputs are the already-validated
 arrays on the result dataclasses. So these tests check the **plotting contract**,
 not numbers, and they run **without R** (a duck-typed `fake_fit`/`fake_cov`/`fake_pca`
 fixture carries the same arrays a real fit exposes).
@@ -224,7 +224,7 @@ fixture carries the same arrays a real fit exposes).
 
 1. **No-refit guard.** Native renderers must never touch the R bridge. The tests
    monkeypatch `robstattm_py._r.{r,r_pkg,rcall}` to raise, then draw every native
-   plot — if any plot calls into R, the test fails. (`backend="r"` is the only
+   plot, if any plot calls into R, the test fails. (`backend="r"` is the only
    path allowed to refit.)
 2. **Composability.** Passing `ax=` must draw into that Axes and create **no**
    new figure; the library must not call `plt.show()` unless `show=True`.
@@ -234,7 +234,7 @@ fixture carries the same arrays a real fit exposes).
 just skips this layer instead of erroring.
 
 ```bash
-# fast, R-free — runs anywhere matplotlib is installed
+# fast, R-free, runs anywhere matplotlib is installed
 MPLBACKEND=Agg python -m pytest tests/plot/ -q       # 63 passed
 ```
 
@@ -244,16 +244,16 @@ PNG via `backend="r"`).
 
 ---
 
-## 6. Exploration tier (`exploration/`) — broader workflows
+## 6. Exploration tier (`exploration/`), broader workflows
 
-**Purpose:** Exercise realistic **Python-native workflows** (synthetic data, pandas pipelines, sklearn imports) that go beyond the minimal textbook paths in `tests/`. Exploration tests **still use strict R parity** — they are not “soft” tests.
+**Purpose:** Exercise realistic **Python-native workflows** (synthetic data, pandas pipelines, sklearn imports) that go beyond the minimal textbook paths in `tests/`. Exploration tests **still use strict R parity**, they are not “soft” tests.
 
 **Location:** `exploration/` (separate from `tests/` so new scenarios can be added without expanding the CI gate until promoted).
 
 **Shared infrastructure:**
 
-- `exploration/conftest.py` — re-exports `R`, `needs_r`, assert helpers from `tests/conftest.py`
-- `exploration/_synth.py` — data generators + `push_to_r` / `reval` / `rm_r` for R globalenv plumbing
+- `exploration/conftest.py`, re-exports `R`, `needs_r`, assert helpers from `tests/conftest.py`
+- `exploration/_synth.py`, data generators + `push_to_r` / `reval` / `rm_r` for R globalenv plumbing
 
 ### 6.1 Module breakdown
 
@@ -272,10 +272,10 @@ Full scenario catalog: **`exploration/DATA_PIPELINES.md`**.
 
 ### 6.2 Synthetic pipeline example (what happens step by step)
 
-1. **Generate data in Python** with `numpy.random.default_rng(seed)` — fixed array regardless of R RNG.
+1. **Generate data in Python** with `numpy.random.default_rng(seed)`, fixed array regardless of R RNG.
 2. **Push the same frame to R** via `push_to_r(df, "rpm_data")`.
-3. **Call Python wrapper** — e.g. `rpm.lmrobdet_mm("y ~ x0 + x1", data=df)`.
-4. **Call equivalent R** — e.g. `reval("lmrobdetMM(y ~ x0 + x1, data=rpm_data)")`.
+3. **Call Python wrapper**, e.g. `rpm.lmrobdet_mm("y ~ x0 + x1", data=df)`.
+4. **Call equivalent R**, e.g. `reval("lmrobdetMM(y ~ x0 + x1, data=rpm_data)")`.
 5. **Compare** `coefficients`, `scale`, `residuals`, `fitted.values`, `cov` with `assert_array_equal`.
 
 For **stochastic** estimators (MM, Rocke, pense), both sides call `rpm.set_seed(n)` and `set.seed(n)` before fitting so the R random stream matches.
@@ -329,7 +329,7 @@ These run as part of `pytest tests/` (strict tier).
 ## 8. Notebook testing
 
 **File:** `tests/test_notebooks.py`  
-**Policy:** D-019 in `project_memory/decisions.md` — a notebook is “done” only if it executes without error in CI.
+**Policy:** D-019 in `project_memory/decisions.md`, a notebook is “done” only if it executes without error in CI.
 
 **How it works:**
 
@@ -360,7 +360,7 @@ These run as part of `pytest tests/` (strict tier).
 
 ### 9.1 Runnable examples (`docs/examples/*.py`)
 
-23 hand-authored Python scripts — one per major wrapper. Each is a minimal runnable demo.
+23 hand-authored Python scripts, one per major wrapper. Each is a minimal runnable demo.
 
 ### 9.2 Doc validator (`docs/scripts/validate_docs.py`)
 
@@ -394,7 +394,7 @@ Not collected by pytest; useful before demos or mentor reviews.
 | **verify.py** | `python verify.py --quick` | Smoke: every wrapper family runs; `[OK]` lines |
 | **verify.py full** | `python verify.py` | Smoke + runs strict pytest subset |
 | **Coverage matrix** | `python verify.py --coverage` | R↔Python wrapper inventory table |
-| **Smoke scripts** | `python tests/_smoke_step_rlt.py` | step + linear test parity printout |
+| **Smoke check** | `python verify.py --quick` | every estimator family, end-to-end printout |
 | **Playground** | `python exploration/run_playground.py all` | 10 interactive scenarios |
 
 ---
@@ -441,9 +441,9 @@ python verify.py --quick
 745 passed, 14 skipped in 194s     # combined
 ```
 
-- **passed** — assertion succeeded (numeric match or expected exception).
-- **skipped** — R unavailable, optional package missing (`pense`/`GSE`), or `RPM_SKIP_NOTEBOOKS=1`.
-- **failed** — mismatch vs R, unexpected exception, or notebook cell error. Read the `assert_array_equal` diff or `RobStatTMRError` traceback.
+- **passed**, assertion succeeded (numeric match or expected exception).
+- **skipped**, R unavailable, optional package missing (`pense`/`GSE`), or `RPM_SKIP_NOTEBOOKS=1`.
+- **failed**, mismatch vs R, unexpected exception, or notebook cell error. Read the `assert_array_equal` diff or `RobStatTMRError` traceback.
 
 ### 12.2 Strict parity success example
 
@@ -459,7 +459,7 @@ OVERALL BIT-IDENTICAL: True
 ### 12.3 What tests do *not* guarantee
 
 - Identical **plot pixels** across machines (figures are visual-only in CI).
-- Reproduction of **out-of-scope** example scripts (time-series inline R, `robustvarComp`, etc.) — see `notebooks/README.md`.
+- Reproduction of **out-of-scope** example scripts (time-series inline R, `robustvarComp`, etc.), see `notebooks/README.md`.
 - Performance benchmarks (Phase 4 notebook not yet a hard gate).
 - Multi-platform parity on every OS×R version (CI matrix authored but not fully wired at monorepo root).
 
@@ -470,11 +470,11 @@ OVERALL BIT-IDENTICAL: True
 | Data source | Seed both sides? |
 |-------------|------------------|
 | Built-in datasets (`mineral`, `stackloss`) | Usually no (deterministic fits) |
-| Stochastic estimators (MM, Rocke, pense) | **Yes** — `rpm.set_seed(n)` + R `set.seed(n)` |
+| Stochastic estimators (MM, Rocke, pense) | **Yes**, `rpm.set_seed(n)` + R `set.seed(n)` |
 | Python-synthesized arrays | Data fixed by `default_rng`; seed estimators separately |
 | Peña–Yohai init only | Often reproducible without seed (documented in examples) |
 
-Always use **fixed integer seeds** in tests — never `time.time()` or unseeded RNG.
+Always use **fixed integer seeds** in tests, never `time.time()` or unseeded RNG.
 
 ---
 
@@ -482,9 +482,9 @@ Always use **fixed integer seeds** in tests — never `time.time()` or unseeded 
 
 | Document | Content |
 |----------|---------|
-| `docs/validation_strategy.md` | Formal tolerance policy, cases 1–11, CI plan |
-| `docs/quality_gates.md` | Per-wrapper Definition of Done checklist |
-| `docs/coverage_matrix.md` | Authoritative wrapper ↔ test file map |
+| `dev/design/validation_strategy.md` | Formal tolerance policy, cases 1–11, CI plan |
+| `dev/design/quality_gates.md` | Per-wrapper Definition of Done checklist |
+| `dev/design/coverage_matrix.md` | Authoritative wrapper ↔ test file map |
 | `exploration/TESTING.md` | Short command cheat sheet |
 | `exploration/DATA_PIPELINES.md` | Full synthetic/ingress/edge catalog |
 | `project_memory/robstattm-py-planning-docs/notebook_plan.md` | Notebook CI policy (D1–D4) |

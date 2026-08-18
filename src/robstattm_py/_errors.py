@@ -1,6 +1,6 @@
 """Exception hierarchy.
 
-See ``docs/architecture.md §3.2`` and ``docs/user_interface.md §7``.
+See ``dev/design/architecture.md §3.2`` and ``dev/design/user_interface.md §7``.
 """
 from __future__ import annotations
 

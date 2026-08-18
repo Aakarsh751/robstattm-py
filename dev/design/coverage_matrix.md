@@ -7,7 +7,7 @@ The R column is the **exact** R-side name from the `RobStatTM` `NAMESPACE`
 `export()` list (**47** callables, verified against
 `robstattm/RobStatTM-master/NAMESPACE`). The Python column is what you type
 after `import robstattm_py as rpm`. Note: `pyinit` lives in its own CRAN package
-(a RobStatTM *dependency*), not in RobStatTM's NAMESPACE — it is wrapped for
+(a RobStatTM *dependency*), not in RobStatTM's NAMESPACE, it is wrapped for
 convenience and reported separately by `check_setup()`.
 
 Status legend:
@@ -15,7 +15,7 @@ Status legend:
 | Symbol | Meaning |
 |---|---|
 | ✅ | Wrapped + tested strict-tier (`atol=0, rtol=0` against R) |
-| ✅ alias | Alternative R name for the same underlying R function — Python wrapper resolves to the same callable |
+| ✅ alias | Alternative R name for the same underlying R function, Python wrapper resolves to the same callable |
 | 🔒 | Intentionally not exposed (R-internal helper called by parent wrapper). See decision below. |
 
 ---
@@ -29,7 +29,7 @@ Status legend:
 | `scaleM` | `rpm.m_scale` | ✅ | `tests/univariate/test_m_scale.py` |
 | `mscale` | `rpm.m_scale` | ✅ alias | (covered above) |
 
-## Regression — main wrappers (5 / 5)
+## Regression, main wrappers (5 / 5)
 
 | R name | Python | Status | Tests |
 |---|---|---|---|
@@ -39,7 +39,7 @@ Status legend:
 | `pyinit` | `rpm.pyinit` | ✅ | `tests/regression/test_pyinit.py` |
 | `step.lmrobdetMM` | `rpm.step_lmrobdet` | ✅ | `tests/regression/test_step.py` |
 
-## Regression — companions (8 / 8)
+## Regression, companions (8 / 8)
 
 | R name | Python | Status | Tests |
 |---|---|---|---|
@@ -52,14 +52,14 @@ Status legend:
 | `lmrobdetMM.RFPE` | `fit.rfpe()` method | ✅ | `tests/regression/test_lmrobdet_mm_methods.py` |
 | `refine.sm` | `rpm.refine_sm` | ✅ | `tests/regression/test_refine_sm.py` |
 
-## Regression — internal helpers (4, not exposed)
+## Regression, internal helpers (4, not exposed)
 
 | R name | Python | Status | Why |
 |---|---|---|---|
-| `DCML` | — | 🔒 | Low-level core for `lmrobdetDCML`; takes pre-built `z, z0, control` arrays. End-users access via `lmrobdet_dcml`. |
-| `cov.dcml` | — | 🔒 | Internal covariance step inside DCML. |
-| `MMPY` | — | 🔒 | Internal MM-step inside `lmrobdetMM` (with CV split). |
-| `SMPY` | — | 🔒 | Internal S+M-step inside `lmrobdetMM` (requires `split$x1/$x2`). |
+| `DCML` |, | 🔒 | Low-level core for `lmrobdetDCML`; takes pre-built `z, z0, control` arrays. End-users access via `lmrobdet_dcml`. |
+| `cov.dcml` |, | 🔒 | Internal covariance step inside DCML. |
+| `MMPY` |, | 🔒 | Internal MM-step inside `lmrobdetMM` (with CV split). |
+| `SMPY` |, | 🔒 | Internal S+M-step inside `lmrobdetMM` (requires `split$x1/$x2`). |
 
 These are deliberately not exposed (see decisions.md). Wrapping them as
 public APIs would either require reimplementing the parent setup
@@ -115,7 +115,7 @@ public APIs would either require reimplementing the parent setup
 
 ## S3 methods (all 13 `S3method(...)` registrations in NAMESPACE)
 
-Every S3 method registered by RobStatTM is ported — as a dataclass method when
+Every S3 method registered by RobStatTM is ported, as a dataclass method when
 it computes something, or as the result object's `__repr__` for the `print.*`
 methods. `drop1.lmrobdetMM` was the last gap, closed 2026-06-14.
 
@@ -162,7 +162,7 @@ Returned as pandas DataFrames with R column names preserved in
 
 **Total unit test count: 454** (strict tier, atol=0, rtol=0 vs R), plus 13
 notebooks executed end-to-end by `tests/test_notebooks.py`. `drop1.lmrobdetMM`
-added 2026-06-14 (+15 tests, `tests/regression/test_drop1.py`) — it was the
+added 2026-06-14 (+15 tests, `tests/regression/test_drop1.py`), it was the
 final S3 gap, so **all 13 NAMESPACE S3 methods are now ported**. The
 2026-06-14 custom-control parity fix (D-021) added `TestCustomControlS3Methods`
 (+6 tests) confirming `summary`/`predict`/`hatvalues` reflect a non-default
@@ -170,7 +170,7 @@ control bit-for-bit vs R; the 2026-06-15 full-codebase audit (D-022) added
 `TestCovClassicNaActionAndArgs` (+5 tests) after making `cov_classic`'s
 `na_action` functional.
 
-## Stretch — external packages (DONE 2026-06-13)
+## Stretch, external packages (DONE 2026-06-13)
 
 These live in separate CRAN packages (not RobStatTM) but are recommended
 alongside it in Maronna et al. (2019). Wrapped per D-003 (user installs the
@@ -188,7 +188,7 @@ Result dataclasses: `PenseResult`, `PenseCVResult`, `GSEResult`, `TSGSResult`,
 all carrying the standard ergonomics (`to_dict` / `to_r` / `_repr_html_`).
 
 **Verification (pense 2.5.2 / GSE 4.2-4 installed locally):**
-- Both stochastic (PY initials / EMVE init) — `set_seed` Python+R parity
+- Both stochastic (PY initials / EMVE init), `set_seed` Python+R parity
   confirmed bit-for-bit.
 - `pense` coefficients pulled via R's own `coef(fit, lambda=...)` across the
   whole path; `pense_cv` via `coef(fit, lambda="min")`.
@@ -202,7 +202,7 @@ all carrying the standard ergonomics (`to_dict` / `to_r` / `_repr_html_`).
 **Updated coverage:** 46 / 46 RobStatTM-ecosystem callables now wrapped or
 documented-internal, **plus** the 4 external stretch functions.
 
-## Stretch — example-script externals (DONE 2026-06-21, D-024)
+## Stretch, example-script externals (DONE 2026-06-21, D-024)
 
 Wraps the remaining external packages that blocked example-script reproduction so
 **all 26/26** `robstattm/examples-scripts/` scripts reproduce from Python. Same
@@ -219,11 +219,11 @@ entry-points-only / optional-install / strict-tier policy as above. Closes B-007
 Result dataclasses: `ArimaRobResult`, `VarComprobResult`, `GlmrobResult`,
 `CubinfResult` (+ `VarComprobControl`), all carrying the standard ergonomics.
 
-**Verification (all installed locally — robustarima 0.2.7, robustvarComp 0.1-7,
+**Verification (all installed locally, robustarima 0.2.7, robustvarComp 0.1-7,
 robcbi 1.1.4 + robeth 2.7.8, robustbase 0.99-7):**
 - `arima_rob`: deterministic; strict-tier on resex (p=2 seasonal), ar3 (p=3),
   MA1-AO (q=1) and the auto-AR path. Model list carries `ar` and/or `ma`.
-- `var_comprob`: stochastic (`lmrob.S` / `TSGS` init) — `set_seed` parity
+- `var_comprob`: stochastic (`lmrob.S` / `TSGS` init), `set_seed` parity
   confirmed; strict-tier on the autism Composite-Tau + Classic-S fits. A plain
   `data.frame` gives results numerically identical to `nlme::groupedData`
   (verified diff = 0). Whole-frame pandas2ri conversion is fragile, so the test
@@ -239,7 +239,7 @@ robcbi 1.1.4 + robeth 2.7.8, robustbase 0.99-7):**
 
 ## Example-script coverage (updated 2026-08-11)
 
-The claim above — that every R example script reproduces from Python — was
+The claim above, that every R example script reproduces from Python, was
 carried by the gallery notebooks, which consolidate several scripts per chapter.
 It is now also carried **one-to-one** by [`examples/`](../examples/README.md):
 25 Python scripts, one per script in `system.file("scripts", package =
@@ -247,7 +247,7 @@ It is now also carried **one-to-one** by [`examples/`](../examples/README.md):
 `tests/test_examples.py`.
 
 `wineDougtest.R` appears in the local `robstattm/examples-scripts/` copy but not
-upstream, and is byte-identical to `wine.R` — hence 25 rather than 26.
+upstream, and is byte-identical to `wine.R`, hence 25 rather than 26.
 
 Writing them surfaced four defects the wrapper tests had not found: formula
 column names, `rob_linear_test`'s type guard, `cubinf` on an unnamed design

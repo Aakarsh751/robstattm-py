@@ -1,4 +1,4 @@
-"""Result-object ergonomics — promised by ``docs/user_interface.md §6 & §10``.
+"""Result-object ergonomics, promised by ``dev/design/user_interface.md §6 & §10``.
 
 Every wrapper returns a frozen ``@dataclass`` (call it ``X``). For uniform
 UX we want every such ``X`` to support::
@@ -10,7 +10,7 @@ UX we want every such ``X`` to support::
 
 Instead of editing 17 dataclass files, we install the methods once at
 import time. Frozen + slotted dataclasses still allow new methods on the
-class object — only ``__slots__`` blocks new *data* fields.
+class object, only ``__slots__`` blocks new *data* fields.
 """
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ def _result_to_r(self: Any) -> Any:
     if not hasattr(self, "_r_fit") or self._r_fit is None:
         raise RuntimeError(
             f"{type(self).__name__}._r_fit is unavailable (was the object "
-            "unpickled? The raw R handle is not pickled — see decisions.md "
+            "unpickled? The raw R handle is not pickled, see decisions.md "
             "D-007 on pickle safety)."
         )
     return self._r_fit
@@ -116,7 +116,7 @@ def _render_value_html(v: Any) -> str | None:
 
 # Plotting shortcuts delegate to the native suite ``robstattm_py.plot`` (D-023).
 # Default backend is native matplotlib (returns an Axes/Figure, per
-# docs/user_interface.md §6); pass ``backend="r"`` for the Path-A PNG.
+# dev/design/user_interface.md §6); pass ``backend="r"`` for the Path-A PNG.
 
 def _plot_residuals(self: Any, **kw):
     """Residuals-vs-fitted plot (R's ``plot(fit, which = 1)``). Returns an Axes."""
@@ -189,7 +189,7 @@ def _coef_df(self: Any) -> pd.Series:
     names = getattr(self, "coef_names", None)
     if coefs is None:
         raise AttributeError(
-            f"{type(self).__name__} has no `coefficients` field — "
+            f"{type(self).__name__} has no `coefficients` field, "
             "coef_df() is regression-only."
         )
     if names is None:

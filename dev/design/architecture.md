@@ -1,7 +1,7 @@
-# Architecture — RobStatTM-Py
+# Architecture, RobStatTM-Py
 
 **Status:** design (pre-implementation).
-**Constraints driving this design:** see `project_memory/robstattm-py-planning-docs/proposal_requirements.md §2` (see docs/RELOCATED.md).
+**Constraints driving this design:** see `project_memory/robstattm-py-planning-docs/proposal_requirements.md §2` (see dev/design/RELOCATED.md).
 
 ---
 
@@ -37,10 +37,10 @@
 
 Each layer has one responsibility:
 
-- **Public API** — argument parsing, NumPy-style docstrings, dataclass return.
-- **Converters** — NumPy/pandas → R; R lists → Python dataclasses. Single place to apply field-name remapping (R `r.squared` → Python `r_squared`).
-- **R-call helpers** — manage `set_conversion`, `set.seed`, deferred `importr`, error translation (`rpy2.rinterface.RRuntimeError` → `RobStatTMRError`).
-- **Result types** — frozen `@dataclass` per estimator family; one source of truth for what the wrapper returns.
+- **Public API**, argument parsing, NumPy-style docstrings, dataclass return.
+- **Converters**, NumPy/pandas → R; R lists → Python dataclasses. Single place to apply field-name remapping (R `r.squared` → Python `r_squared`).
+- **R-call helpers**, manage `set_conversion`, `set.seed`, deferred `importr`, error translation (`rpy2.rinterface.RRuntimeError` → `RobStatTMRError`).
+- **Result types**, frozen `@dataclass` per estimator family; one source of truth for what the wrapper returns.
 
 ---
 
@@ -100,7 +100,7 @@ robstattm_py/                          # importable package root
 ├── datasets/                         # thin loaders for vendored RobStatTM data
 │   └── __init__.py                   # mineral(), wine(), bus() etc.
 │
-├── benchmarks/                       # Phase 4 — keeps benchmark code out of the wrapper path
+├── benchmarks/                       # Phase 4, keeps benchmark code out of the wrapper path
 │   ├── timing.py
 │   └── synthetic.py
 │
@@ -145,7 +145,7 @@ tests/
 
 One frozen dataclass per estimator family. Field names are **snake_case** versions of the R names, with the original R name preserved in the docstring.
 
-Example (drafted — not implementation):
+Example (drafted, not implementation):
 
 ```python
 from dataclasses import dataclass
@@ -169,7 +169,7 @@ class LmrobdetMMResult:
     converged:     bool
     iter:          int
     control:       dict         # echo of the lmrobdet_control payload
-    # ... full field list determined per-function in the vendored R source (see docs/RELOCATED.md)
+    # ... full field list determined per-function in the vendored R source (see dev/design/RELOCATED.md)
 ```
 
 Why dataclass and not dict?
@@ -179,7 +179,7 @@ Why dataclass and not dict?
 - Easy to extend (`@dataclass` inheritance for `summary()` views).
 
 Why **frozen**?
-- Wrapper outputs reflect a single R call's results — they should not mutate.
+- Wrapper outputs reflect a single R call's results, they should not mutate.
 
 ### 3.2 Errors
 
@@ -224,7 +224,7 @@ Translation happens in `_r.py` so every wrapper inherits it.
 
 ## 5. Lazy R startup
 
-`from robstattm_py import lmrobdet_mm` must **not** start R — only `lmrobdet_mm(...)` does. Implementation: every wrapper's first line is `_r.RobStatTM` (a property that lazily calls `importr("RobStatTM")` once and caches it).
+`from robstattm_py import lmrobdet_mm` must **not** start R, only `lmrobdet_mm(...)` does. Implementation: every wrapper's first line is `_r.RobStatTM` (a property that lazily calls `importr("RobStatTM")` once and caches it).
 
 This keeps:
 - doc builds (Sphinx autodoc) fast and offline,
@@ -261,5 +261,5 @@ Aliases (`lmrobdetMM = lmrobdet_mm`, etc.) **may** be exposed at the top of each
 ## 8. Out of scope for this document
 
 - Plot rendering strategy → `project_memory/robstattm-py-planning-docs/plotting_strategy.md`.
-- Exact field-by-field field maps per function → `the vendored R source (see docs/RELOCATED.md)` (one report per function).
+- Exact field-by-field field maps per function → `the vendored R source (see dev/design/RELOCATED.md)` (one report per function).
 - CI workflow YAML → drafted during Community Bonding, not now.

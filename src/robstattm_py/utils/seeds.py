@@ -1,6 +1,6 @@
 """Cross-language seeding.
 
-Per ``docs/architecture.md §4`` and ``docs/validation_strategy.md §2``,
+Per ``dev/design/architecture.md §4`` and ``dev/design/validation_strategy.md §2``,
 ``set_seed`` is the only allowed way to seed randomness in tests and example
 notebooks; it sets both NumPy and R Mersenne-Twister states in one call.
 """
@@ -30,7 +30,7 @@ def set_seed(value: int) -> None:
     >>> from robstattm_py import set_seed
     >>> set_seed(20260601)
     """
-    # ``bool`` is a subclass of ``int`` — reject it explicitly so ``set_seed(True)``
+    # ``bool`` is a subclass of ``int`` - reject it explicitly so ``set_seed(True)``
     # doesn't silently seed with 1.
     if isinstance(value, bool) or not isinstance(value, (int, np.integer)) or value < 0:
         raise ValueError(f"seed must be a non-negative integer; got {value!r}")

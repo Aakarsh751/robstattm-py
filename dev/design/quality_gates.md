@@ -12,25 +12,25 @@ This file is the canonical Definition of Done. The PR template includes it verba
 Wrapper: <python_name>  (wraps R <RFUN>)
 PR:      #...
 
-[ ]  R source reviewed                              — file:line cited in PR description
-[ ]  R return structure captured                    — pasted into the vendored R source (see docs/RELOCATED.md)
-[ ]  Dependency chain documented                    — docs/dependency_map.md §3 row updated
-[ ]  the vendored R source (see docs/RELOCATED.md) written / refreshed      — all 7 required sections present
-[ ]  Wrapper implemented                            — src/robstattm_py/<module>/<file>.py
-[ ]  NumPy-style docstring                          — Parameters, Returns, Raises, Notes, References, Examples, See Also
-[ ]  Frozen dataclass return type                   — per docs/architecture.md §3
-[ ]  Argument validation before rpy2 boundary       — TypeError / ValueError raised pre-call
-[ ]  R-call helpers used (no raw importr)           — _r._get_pkg, _r._rcall
-[ ]  Unit tests pass                                — pytest tests/<module>/test_<file>.py -q
-[ ]  Output matches R field-by-field (strict tier)  — atol=0, rtol=0 unless documented
-[ ]  Coverage gate                                  — pytest --cov=src/robstattm_py/<module> --cov-fail-under=90
-[ ]  Validation matrix cases covered                — cases 1–11 from docs/validation_strategy.md §3 as applicable
-[ ]  Sphinx page builds without warnings            — sphinx-build -W -b html docs_sphinx/ _build/
-[ ]  Example notebook updated                       — notebooks/<chapter>.ipynb runs top-to-bottom
-[ ]  Plot helpers updated                           — project_memory/robstattm-py-planning-docs/plotting_strategy.md §3 row(s)
-[ ]  progress_log.md session block appended         — project_memory/
-[ ]  project_memory/robstattm-py-planning-docs/proposal_requirements.md §4 status updated     — wrapper/testing/doc columns set to ✅
-[ ]  Architecture docs updated if applicable        — docs/architecture.md (only if a new pattern was introduced)
+[ ]  R source reviewed                             , file:line cited in PR description
+[ ]  R return structure captured                   , pasted into the vendored R source (see dev/design/RELOCATED.md)
+[ ]  Dependency chain documented                   , dev/design/dependency_map.md §3 row updated
+[ ]  the vendored R source (see dev/design/RELOCATED.md) written / refreshed     , all 7 required sections present
+[ ]  Wrapper implemented                           , src/robstattm_py/<module>/<file>.py
+[ ]  NumPy-style docstring                         , Parameters, Returns, Raises, Notes, References, Examples, See Also
+[ ]  Frozen dataclass return type                  , per dev/design/architecture.md §3
+[ ]  Argument validation before rpy2 boundary      , TypeError / ValueError raised pre-call
+[ ]  R-call helpers used (no raw importr)          , _r._get_pkg, _r._rcall
+[ ]  Unit tests pass                               , pytest tests/<module>/test_<file>.py -q
+[ ]  Output matches R field-by-field (strict tier) , atol=0, rtol=0 unless documented
+[ ]  Coverage gate                                 , pytest --cov=src/robstattm_py/<module> --cov-fail-under=90
+[ ]  Validation matrix cases covered               , cases 1–11 from dev/design/validation_strategy.md §3 as applicable
+[ ]  Sphinx page builds without warnings           , sphinx-build -W -b html docs_sphinx/ _build/
+[ ]  Example notebook updated                      , notebooks/<chapter>.ipynb runs top-to-bottom
+[ ]  Plot helpers updated                          , project_memory/robstattm-py-planning-docs/plotting_strategy.md §3 row(s)
+[ ]  progress_log.md session block appended        , project_memory/
+[ ]  project_memory/robstattm-py-planning-docs/proposal_requirements.md §4 status updated    , wrapper/testing/doc columns set to ✅
+[ ]  Architecture docs updated if applicable       , dev/design/architecture.md (only if a new pattern was introduced)
 [ ]  No new files in archive/ moved or deleted
 [ ]  No edits inside robstattm/RobStatTM-master/
 ```
@@ -69,24 +69,24 @@ In addition to the per-wrapper checklist, each phase has an exit gate:
 - Install guide live; `robstattm_py.check_setup()` returns clean on at least one machine per OS.
 - All tutorial notebooks polished.
 
-> The full release procedure — creating the trusted publisher, rehearsing on
-> TestPyPI, tagging — is in [`RELEASING.md`](RELEASING.md).
+> The full release procedure, creating the trusted publisher, rehearsing on
+> TestPyPI, tagging, is in [`RELEASING.md`](RELEASING.md).
 >
 > **When PyPI publication actually happens, flip the install instructions back.**
 > Until then the docs deliberately say `git clone` + `pip install ./robstattm-py`,
 > because `pip install robstattm-py` fails with *"No matching distribution
-> found"* — and that was step 4 of a 7-step beginner guide, a dead end for
+> found"*, and that was step 4 of a 7-step beginner guide, a dead end for
 > exactly the reader least equipped to work around it.
 >
 > Files carrying the temporary wording: `README.md`,
 > `docs/guides/install-beginner.md`, `docs/guides/platform-support.md`,
 > `docs/guides/troubleshooting.md`, `docs/guides/plotting.md`,
-> `docs/user_interface.md`. Grep for `not on PyPI` and `./robstattm-py`.
+> `dev/design/user_interface.md`. Grep for `not on PyPI` and `./robstattm-py`.
 >
 > Verify the replacement the way the problem was found: run `pip install
 > robstattm-py` in a fresh venv on a machine that has never seen this repo.
 
-### End of Phase 6 (Week 22) — Final submission
+### End of Phase 6 (Week 22), Final submission
 - Stretch wrappers (whichever landed) all have their per-wrapper checklists complete.
 - Native-Python comparison documented in `notebooks/native_comparison.ipynb`.
 - Final report in `docs/final_report.md`.

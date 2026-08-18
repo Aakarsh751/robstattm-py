@@ -5,7 +5,7 @@ R names. Importing from this module gives them every wrapper under both
 its Python (snake_case) name AND its R-original name where the R name is
 a legal Python identifier.
 
-Per ``docs/user_interface.md §2.3``::
+Per ``dev/design/user_interface.md §2.3``::
 
     from robstattm_py.compat_r import *
     fit = lmrobdetMM("zinc ~ copper", data=data)  # works
@@ -15,7 +15,7 @@ R names with dots are not Python-legal, so each gets an
 underscore-replacement alias instead (e.g. ``lmrobdet.control`` →
 ``lmrobdet_control``, which is also the canonical Python name).
 
-The full R↔Python map lives in ``docs/user_interface.md §5``.
+The full R↔Python map lives in ``dev/design/user_interface.md §5``.
 """
 from __future__ import annotations
 
@@ -100,7 +100,7 @@ rho = _rpm.psi.rho
 rhoprime = _rpm.psi.rhoprime
 rhoprime2 = _rpm.psi.rhoprime2
 
-# Datasets — exposed via `data("mineral")`-style helper:
+# Datasets - exposed via `data("mineral")`-style helper:
 def data(name: str):
     """R-style ``data('mineral')`` loader. Equivalent to
     ``robstattm_py.datasets.<name>()``.

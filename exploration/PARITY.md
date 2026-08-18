@@ -18,7 +18,7 @@ parameters are tested for numerical equivalence. But the Python API is
 | ψ helpers | 9 | 9 in `rpm.psi` | |
 | Stretch | `pense`, `GSE`, `TSGS` | `rpm.pense`, `gse`, `tsgs` | Optional CRAN deps |
 
-Authoritative matrix: `docs/coverage_matrix.md`.
+Authoritative matrix: `dev/design/coverage_matrix.md`.
 
 ---
 
@@ -35,7 +35,7 @@ Authoritative matrix: `docs/coverage_matrix.md`.
 | `weights` | ✗ | Not exposed |
 | `na.action` | ✗ | Drop NAs in pandas first |
 
-**Control object (`lmrobdet.control`)** — all 25 R keys mapped to Python
+**Control object (`lmrobdet.control`)**, all 25 R keys mapped to Python
 snake_case (`max_it`, `refine_s_py`, `mscale_rho_fun`, …). See
 `src/robstattm_py/regression/control.py`.
 
@@ -141,5 +141,5 @@ rpm.prcomp_rob(rpm.datasets.bus().to_numpy())
 
 Use **`fit.to_r()`** or **`fit._r_fit`** when you need an unmapped R field.
 Use **pandas preprocessing** for `subset` / `weights` / `na.action`.
-For power-user access to internal R functions, call R directly via rpy2 —
+For power-user access to internal R functions, call R directly via rpy2,
 but that bypasses the tested wrapper layer.

@@ -2,7 +2,7 @@
 
 **Goal:** a Python user who knows zero R can use every RobStatTM function as naturally as they use scikit-learn or statsmodels. A Python user who is transcribing R code from the textbook can do it line-by-line, by name lookup, in under 10 seconds per function.
 
-This document is the **ergonomics specification** that complements `docs/architecture.md` (the engineering structure). Where architecture says "frozen dataclass," this says "and the user types this to get it."
+This document is the **ergonomics specification** that complements `dev/design/architecture.md` (the engineering structure). Where architecture says "frozen dataclass," this says "and the user types this to get it."
 
 ---
 
@@ -44,7 +44,7 @@ If any line in the story above is **not** obvious to a working Python data scien
 
 ## 2. Top-level API surface
 
-### 2.1 Flat re-exports — the user's default import
+### 2.1 Flat re-exports, the user's default import
 
 ```python
 import robstattm_py as rpm
@@ -71,7 +71,7 @@ rpm.benchmarks        # only loaded when needed; keeps top-level light
 
 **Rationale:** scikit-learn / statsmodels users expect a flat API. R users transcribing code recognize the names with snake_case translation.
 
-### 2.2 Submodule access — for users who prefer grouping
+### 2.2 Submodule access, for users who prefer grouping
 
 ```python
 from robstattm_py.regression import lmrobdet_mm, step_lmrobdet
@@ -81,7 +81,7 @@ from robstattm_py.pca import pca_rob_s
 
 Both forms work; both are documented; tutorial notebooks pick whichever is clearer in context.
 
-### 2.3 R-name aliases — optional, opt-in
+### 2.3 R-name aliases, optional, opt-in
 
 A Python user transcribing the textbook may want to keep the R name verbatim. We provide aliases gated behind a single import:
 
@@ -97,7 +97,7 @@ R dotted names that are not Python-legal get **two** aliases:
 - `lmrobdet_control` (canonical)
 - `lmrobdetcontrol` (no separator, last-resort)
 
-But not `lmrobdet.control` — that would require `getattr`. The R-to-Python name map (§5 below) is the single source of truth.
+But not `lmrobdet.control`, that would require `getattr`. The R-to-Python name map (§5 below) is the single source of truth.
 
 ---
 
@@ -245,7 +245,7 @@ Every result dataclass implements:
 - `.predict(...)` where applicable (regression, GLM)
 - `.plot_<diagnostic>()` shortcuts that delegate to `rpm.plot`
 
-These are **enforced by quality gate** — every wrapper PR ships with the appropriate methods or the gate fails.
+These are **enforced by quality gate**, every wrapper PR ships with the appropriate methods or the gate fails.
 
 ---
 
@@ -273,7 +273,7 @@ The "Hint:" line is a curated extension: the wrapper's argument-validation layer
 
 **R warnings are surfaced too, not just errors.** R defers warnings by default,
 so a long fit used to end with nothing but rpy2's opaque
-`There were 50 or more warnings` console line — the individual messages were
+`There were 50 or more warnings` console line, the individual messages were
 unrecoverable. Every R call now runs under a capture that forces immediate
 emission and re-raises each message through Python's `warnings` machinery as a
 `RobStatTMWarning`:
@@ -330,7 +330,7 @@ Exits with `True` (READY) if all core packages present, `False` otherwise; print
 
 - **Searchable API table** on RTD (the table in §5 above).
 - `rpm.help("lmrobdetMM")` returns the same docstring whether the user types R name or Python name.
-- `dir(rpm)` returns the flat re-export list — sorted, no `_private` noise.
+- `dir(rpm)` returns the flat re-export list, sorted, no `_private` noise.
 - Tab-completion in Jupyter/IPython surfaces submodules + functions cleanly because of the dataclass + flat re-export design.
 - Every wrapper's `See Also` section in the docstring cross-references related wrappers (e.g. `lmrobdet_mm` ↔ `lmrobdet_dcml` ↔ `step_lmrobdet`).
 
@@ -346,8 +346,8 @@ Exits with `True` (READY) if all core packages present, `False` otherwise; print
 
 ## 11. Performance ergonomics
 
-- `rpm.set_n_jobs(n)` — for the few wrappers that internally fan out (`pyinit` candidate evaluation, `KurtSDNew` random directions), control R-side parallelism without touching `options()`.
-- `rpm.bench.timer(fit)` — quick wrapper around `timeit`, returns Python and R time separately so users see bridge overhead.
+- `rpm.set_n_jobs(n)`, for the few wrappers that internally fan out (`pyinit` candidate evaluation, `KurtSDNew` random directions), control R-side parallelism without touching `options()`.
+- `rpm.bench.timer(fit)`, quick wrapper around `timeit`, returns Python and R time separately so users see bridge overhead.
 - **Lazy R startup is observable**: `rpm.r_started()` returns `True`/`False`; first wrapper call prints a one-line status message if `RPM_VERBOSE=1`.
 
 ---
@@ -362,14 +362,14 @@ Three tutorial notebooks targeting three personas:
 | `tutorials/02_from_textbook.ipynb` | "I'm reading Maronna et al. and want to reproduce Ch 5" | Chapter-by-chapter walkthrough using the textbook datasets; explicitly compares to base R `lm` |
 | `tutorials/03_from_R.ipynb` | "I have R scripts I want to port" | Side-by-side R / Python code blocks; references the §5 name table; covers formula handling and `data()` → `datasets` |
 
-Each notebook ends with the reproducibility cell (versions of everything) — see `docs/documentation_standards.md §8`.
+Each notebook ends with the reproducibility cell (versions of everything), see `dev/design/documentation_standards.md §8`.
 
 ---
 
 ## 13. What this design rules out
 
 - **No magic.** The user never has to call `set_conversion`, `importr`, or any rpy2 function directly.
-- **No silent fallbacks.** If R is missing, every wrapper raises `RobStatTMSetupError` with the install command — never returns garbage or a degraded "pure-Python emulation".
+- **No silent fallbacks.** If R is missing, every wrapper raises `RobStatTMSetupError` with the install command, never returns garbage or a degraded "pure-Python emulation".
 - **No mutation.** Results are frozen. Mutating wrapper outputs is an anti-pattern; we don't accommodate it.
 - **No global state outside of seed + lazy R handle.** No package-level "current control object" or "current dataset" globals.
 
@@ -377,9 +377,9 @@ Each notebook ends with the reproducibility cell (versions of everything) — se
 
 ## 14. Open questions
 
-1. Should `rpm.lmrobdet_mm` accept an existing rpy2 `Formula` object directly? Recommendation: **yes**, for power users — type-check `isinstance(formula, ro.Formula)`.
+1. Should `rpm.lmrobdet_mm` accept an existing rpy2 `Formula` object directly? Recommendation: **yes**, for power users, type-check `isinstance(formula, ro.Formula)`.
 2. Should we ship a `%load_ext robstattm_py` Jupyter extension that pre-warms R? Recommendation: **defer** to v0.2.0.
-3. Should `__repr__` truncate long coefficient vectors? Recommendation: **yes** — show first 5, last 5, with "…" middle marker (numpy `printoptions`-aware).
+3. Should `__repr__` truncate long coefficient vectors? Recommendation: **yes**, show first 5, last 5, with "…" middle marker (numpy `printoptions`-aware).
 4. Should `to_pandas()` be standard or `to_polars()` also? Recommendation: pandas standard; polars in v0.2.0.
 
 All four are tracked as open in `project_memory/blockers.md` if not resolved before Bonding.

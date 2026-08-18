@@ -6,8 +6,9 @@ publisher on PyPI. This page is the whole procedure, in order.
 
 > **Status:** `robstattm-py` is **not yet on PyPI**. Until step 4 completes,
 > `pip install robstattm-py` fails with *"No matching distribution found"*, and
-> the install docs deliberately say `git clone` instead — see
-> [`quality_gates.md`](quality_gates.md) for the list of files to flip back.
+> the install docs deliberately say `git clone` instead. See
+> [`../dev/design/quality_gates.md`](../dev/design/quality_gates.md) for the
+> list of files to flip back.
 
 ---
 
@@ -17,10 +18,10 @@ Four separate things, often conflated:
 
 | Thing | What it is |
 |---|---|
-| **The build** | Turning the source tree into a `.whl` (a zip installers can unpack) and a `.tar.gz` (an sdist — the source, for anyone who must rebuild). `python -m build` does both. |
+| **The build** | Turning the source tree into a `.whl` (a zip installers can unpack) and a `.tar.gz` (an sdist, the source, for anyone who must rebuild). `python -m build` does both. |
 | **The metadata** | Name, version, dependencies, licence, README. Baked into the artifacts at build time and **immutable once published**. |
 | **The index** | PyPI. Stores artifacts under a project name that is globally unique and first-come. |
-| **The authentication** | How PyPI knows the upload is really from you. Either a long-lived API token, or — better — a short-lived OIDC token issued to a specific GitHub workflow. |
+| **The authentication** | How PyPI knows the upload is really from you. Either a long-lived API token, or, better, a short-lived OIDC token issued to a specific GitHub workflow. |
 
 Two facts that shape everything else:
 
@@ -32,7 +33,7 @@ Two facts that shape everything else:
 
 ---
 
-## Step 0 — Decide the version
+## Step 0: Decide the version
 
 `pyproject.toml` says `version = "0.1.0"`. The release workflow refuses to
 publish if the git tag disagrees with it, so change the file first if you want a
@@ -41,7 +42,7 @@ different number.
 Semantic versioning: `MAJOR.MINOR.PATCH`. Below `1.0.0` the API is understood to
 be unstable, which is honest for a first release.
 
-## Step 1 — Confirm the tree is releasable
+## Step 1: Confirm the tree is releasable
 
 ```bash
 python -m pytest tests/ -q            # 1034 passed with notebooks
@@ -55,14 +56,14 @@ python dev/_check_metadata.py dist --assert
 The release workflow runs the last three itself, plus a wheel smoke-test in a
 clean venv. Running them locally first just shortens the feedback loop.
 
-## Step 2 — Create the TestPyPI publisher (rehearsal)
+## Step 2: Create the TestPyPI publisher (rehearsal)
 
 TestPyPI is a full, separate copy of PyPI for exactly this. Use it: a botched
 real release cannot be undone.
 
 1. Register at <https://test.pypi.org/account/register/> and verify the email.
-2. Enable 2FA — it is mandatory for uploading.
-3. Go to <https://test.pypi.org/manage/account/publishing/> — the **account**
+2. Enable 2FA, it is mandatory for uploading.
+3. Go to <https://test.pypi.org/manage/account/publishing/>, the **account**
    sidebar, not a project's, because the project does not exist yet. This
    creates a *pending* publisher.
 4. Fill in exactly:
@@ -79,7 +80,7 @@ real release cannot be undone.
    single most common failure and reports as `invalid-publisher`, which does not
    say which field is wrong.
 
-## Step 3 — Rehearse
+## Step 3: Rehearse
 
 Actions → **Release** → *Run workflow* → target `testpypi`.
 
@@ -88,7 +89,7 @@ workflow that references an environment that does not exist will create an
 environment with the referenced name"
 ([GitHub docs](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)).
 `release.yml` already names `testpypi` and `pypi`, so they appear on first run.
-Create them beforehand only if you want protection rules — a required reviewer
+Create them beforehand only if you want protection rules, a required reviewer
 on `pypi` is a reasonable thing to add later, since it makes an accidental tag
 push unable to publish on its own.
 
@@ -108,16 +109,16 @@ numpy and rpy2 must come from the real index.
 Check the project page renders: description, licence (should read **MIT**),
 links, classifiers.
 
-## Step 4 — Create the real publisher
+## Step 4: Create the real publisher
 
 Same as step 2, on <https://pypi.org/manage/account/publishing/>, with
 **Environment name: `pypi`**.
 
 The project name is reserved on first successful publish, not when the pending
-publisher is created — so nothing stops someone else taking `robstattm-py` in
+publisher is created, so nothing stops someone else taking `robstattm-py` in
 between. If that matters, do steps 4 and 5 close together.
 
-## Step 5 — Publish
+## Step 5: Publish
 
 ```bash
 git tag v0.1.0
@@ -130,16 +131,16 @@ The tag triggers `release.yml`, which:
 2. runs `twine check` and the licence-metadata assertion;
 3. verifies the tag matches `pyproject.toml`;
 4. installs the wheel in a clean venv and confirms it imports **without
-   starting R** — proof that R is only needed at call time;
+   starting R**, proof that R is only needed at call time;
 5. publishes to PyPI via OIDC (no token anywhere in this repository);
 6. builds and pushes the container image to ghcr.io;
 7. creates the GitHub release with the artifacts attached.
 
-## Step 6 — Afterwards
+## Step 6: Afterwards
 
 - `pip install robstattm-py` in a fresh venv on a machine that has never seen
   this repo. That is the only real proof.
-- **Flip the install docs back** — `docs/quality_gates.md` lists every file
+- **Flip the install docs back**, `dev/design/quality_gates.md` lists every file
   carrying the temporary `git clone` wording. Grep for `not on PyPI`.
 - Move the `[Unreleased]` section of `CHANGELOG.md` under the new version.
 - Consider `conda-forge` next: it is a separate ecosystem with its own
@@ -156,7 +157,7 @@ The tag triggers `release.yml`, which:
 | `Non-user identities cannot create new projects` | The pending publisher was not created, or was created for a different project name. |
 | Workflow has no OIDC token | The job is missing `permissions: id-token: write`. It must be on the *job*, not only the workflow. |
 | `File already exists` | That version was already uploaded. Bump the version; it cannot be replaced. |
-| README renders as plain text | `twine check` catches this before upload — read its output. |
+| README renders as plain text | `twine check` catches this before upload, read its output. |
 
 ## Why trusted publishing rather than an API token
 

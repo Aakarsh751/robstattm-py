@@ -47,7 +47,7 @@ curvature = psi.rhoprime2(r, family="bisquare", cc=cc)  # ψ′
 
 ## Choosing a family
 
-- **Bisquare** is the default for most estimators — strong outlier rejection.
+- **Bisquare** is the default for most estimators, strong outlier rejection.
 - **Huber** is a gentler, monotone choice when you prefer downweighting over
   outright rejection.
 - **opt / mopt** are the optimal bias-robust losses used by `lmrobdet_mm`; select

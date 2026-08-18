@@ -11,7 +11,7 @@ from robstattm_py._r import r
 def r_name_map(data: pd.DataFrame) -> dict[str, str]:
     """Return ``{python column name: R column name}`` for names that differ.
 
-    Populated only for frames carrying ``attrs['r_columns']`` — i.e. the ones
+    Populated only for frames carrying ``attrs['r_columns']``, i.e. the ones
     our dataset loaders produce, where ``copper.ppm`` became ``copper_ppm``.
     Empty for a frame the user built themselves, whose column names are already
     the only spelling there is.
@@ -31,7 +31,7 @@ def formula_to_r_names(formula: str, data: pd.DataFrame) -> str:
 
     The frame is pushed to R under its original R column names (see
     :func:`df_with_r_names`), so a formula must ultimately speak R's spelling.
-    But the frame the *caller* is holding shows the Python spelling — running
+    But the frame the *caller* is holding shows the Python spelling, running
     ``rpm.datasets.shock()`` yields a column called ``n_shocks``, and writing
     ``"time ~ n_shocks"`` is the only reasonable thing to do with that. Before
     this rewrite it failed with R's ``object 'n_shocks' not found``, which
@@ -90,10 +90,10 @@ def coef_names_for(
     return tuple(str(n) for n in ro.r(expr))
 
 
-# Back-compat alias — keep the public name stable for any callers.
+# Back-compat alias - keep the public name stable for any callers.
 def coef_names_from_fit(r_fit, *, formula: str | None = None,
                         data_var: str = "rpm_data") -> tuple[str, ...]:
-    """Compatibility shim — prefers the formula+data approach."""
+    """Compatibility shim, prefers the formula+data approach."""
     if formula is not None:
         return coef_names_for(formula, data_var=data_var)
     # Last-ditch fallback: try reading off the converted fit (often empty).
@@ -173,7 +173,7 @@ def xy_to_formula_and_data(
     """Convert (X, y) array form to (formula_str, DataFrame).
 
     Supports the ``X, y`` invocation style promised by
-    ``docs/user_interface.md §3``. Builds a frame whose columns are the
+    ``dev/design/user_interface.md §3``. Builds a frame whose columns are the
     response (``y_name``) followed by the predictors, then returns the
     formula ``"<y_name> ~ x1 + x2 + ..."``.
 

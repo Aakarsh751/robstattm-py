@@ -17,7 +17,7 @@ pip install ./robstattm-py
 
 ## 2. Get R
 
-RobStatTM-Py is a *bridge* to R, so R has to be present — but you do not have to
+RobStatTM-Py is a *bridge* to R, so R has to be present, but you do not have to
 install or configure it yourself:
 
 ```bash
@@ -27,7 +27,7 @@ robstattm-py setup
 That downloads a private R plus RobStatTM into a directory this package owns,
 leaving any R you already have untouched. It takes 3–6 minutes.
 
-**Already have R?** Skip the command — R is found automatically, from the
+**Already have R?** Skip the command, R is found automatically, from the
 Windows registry, `PATH`, a conda prefix, or the standard install locations.
 
 > **You do not need to set `R_HOME`, on any platform, including Windows.**
@@ -62,8 +62,8 @@ import robstattm_py as rpm
 rpm.check_setup()
 ```
 
-> If `robstattm-py` is "not found" — common on Windows, where pip puts scripts
-> outside `PATH` — use `python -m robstattm_py.cli doctor` instead. That
+> If `robstattm-py` is "not found", common on Windows, where pip puts scripts
+> outside `PATH`, use `python -m robstattm_py.cli doctor` instead. That
 > substitution works for every `robstattm-py ...` command.
 
 ## 4. Your first robust fit
@@ -89,12 +89,12 @@ fit.hatvalues()            # leverages
 
 ## 5. Where to go next
 
-- **[API reference](api/index.md)** — every function with a worked, runnable example.
-- **[Datasets](guides/datasets.md)** — the 20 built-in datasets and using your own.
-- **[Result methods](guides/result-methods.md)** — what you can do with a fit object.
-- **[The book's examples](guides/book-examples.md)** — a runnable Python script
+- **[API reference](api/index.md)**, every function with a worked, runnable example.
+- **[Datasets](guides/datasets.md)**, the 20 built-in datasets and using your own.
+- **[Result methods](guides/result-methods.md)**, what you can do with a fit object.
+- **[The book's examples](guides/book-examples.md)**, a runnable Python script
   for each of the 25 RobStatTM example scripts.
-- **[Troubleshooting](guides/troubleshooting.md)** — when something goes wrong.
+- **[Troubleshooting](guides/troubleshooting.md)**, when something goes wrong.
 
 ## The (X, y) array form
 

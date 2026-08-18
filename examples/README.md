@@ -5,9 +5,9 @@ R package (`system.file("scripts", package = "RobStatTM")`), written against
 `robstattm_py`'s public API.
 
 These are ports, not translations. Each script keeps its source's structure,
-section comments, example numbers and figure numbers so you can hold the book —
+section comments, example numbers and figure numbers so you can hold the book,
 Maronna, Martin, Yohai & Salibián-Barrera, *Robust Statistics: Theory and
-Methods (with R)*, 2nd ed. — open next to the terminal and follow along. Where a
+Methods (with R)*, 2nd ed., open next to the terminal and follow along. Where a
 result differs from the printed one, the script says so and why.
 
 ## Running them
@@ -20,7 +20,7 @@ python examples/ch05_mineral_lmrobdet_mm.py
 They can be run from anywhere; each is self-contained and prints to stdout.
 Figures are written to `examples/_figures/` rather than shown, so nothing
 blocks. Every script is executed end to end by
-[`tests/test_examples.py`](../tests/test_examples.py) — an example that does not
+[`tests/test_examples.py`](../tests/test_examples.py), an example that does not
 run is a failing test, not a stale file.
 
 A script needing an R package you do not have exits with status 77 and a line
@@ -47,7 +47,7 @@ telling you what to install. Nothing tracebacks.
 | `ch07_leukemia_logistic.py` | `leukemia.R` | 7.1, Fig 7.4, Table 7.1 | `logregBY`, `logregWBY`, `logregWML` |
 | `ch07_skin_logistic.py` | `skin.R` | 7.2, Fig 7.5 | `logregBY`, `logregWBY`, `logregWML` |
 | `ch07_epilepsy_poisson.py` | `epilepsy.R` | 7.3, Figs 7.6/7.7 | `glmrob`, `cubinf` |
-| `ch08_ar1_outlier_types.py` | `ar1.R` | 8, Fig 8.6 | — (contamination types) |
+| `ch08_ar1_outlier_types.py` | `ar1.R` | 8, Fig 8.6 |, (contamination types) |
 | `ch08_ar3_estimator_comparison.py` | `ar3.R` | 8, Table 8.1 | `arima.rob`, `lmrobdetMM` |
 | `ch08_identar2_identification.py` | `identAR2.R` | 8.3, Figs 8.7/8.8 | `arima.rob` |
 | `ch08_identma1_identification.py` | `identMA1.R` | 8.4, Figs 8.9/8.10 | `arima.rob` |
@@ -84,7 +84,7 @@ Install them with `robstattm-py install-r-packages <name> ...`.
 estimators this package wraps, so they are computed in `_common.py` with plain
 numpy rather than by adding wrappers or dependencies. `quantreg`,
 `rrcov::CovMcd`/`CovSest` and the `fit.models` framework are handled the same
-way — see each script's docstring for what was substituted.
+way, see each script's docstring for what was substituted.
 
 **Simulated data comes from R's RNG.** The Chapter 5 and 8 scripts that simulate
 draw through R under the same `set.seed` the R script uses, so the numbers are
@@ -97,8 +97,8 @@ printed values would not match.
 `lmrobdet.control` now defaults to `"mopt"` at 0.95. Where the difference
 matters, both are fitted and printed.
 
-**Reported, not narrated.** Where a result contradicts the obvious story — the
+**Reported, not narrated.** Where a result contradicts the obvious story, the
 robust scale that is *larger* than the least-squares one in `algae`, the
 automatic order selection that overshoots in `identAR2`, the robust correlation
-in `biochem` that only moves halfway — the script says so and explains it. The
+in `biochem` that only moves halfway, the script says so and explains it. The
 comment next to a number always describes the number that is actually printed.

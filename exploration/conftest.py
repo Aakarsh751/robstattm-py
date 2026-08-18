@@ -1,4 +1,4 @@
-"""Shared fixtures for exploration tests — delegates to the main test harness."""
+"""Shared fixtures for exploration tests, delegates to the main test harness."""
 from __future__ import annotations
 
 # Re-export so exploration tests can `from exploration.conftest import needs_r`

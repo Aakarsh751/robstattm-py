@@ -1,4 +1,4 @@
-"""Combinatorial / cross-product tests — permutations beyond unit tests.
+"""Combinatorial / cross-product tests, permutations beyond unit tests.
 
 These tests deliberately **multiply** dimensions the main ``tests/`` suite
 covers one-at-a-time:

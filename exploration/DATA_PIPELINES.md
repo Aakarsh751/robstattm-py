@@ -5,7 +5,7 @@ Catalog of every synthetic-data and alternate-source scenario in the
 compared. Every scenario pushes the **same** data to R and asserts bit-identical
 outputs (`atol=0, rtol=0`); stochastic estimators are seeded on both sides.
 
-Helpers: `exploration/_synth.py` — generators (`make_regression_df`,
+Helpers: `exploration/_synth.py`, generators (`make_regression_df`,
 `make_cov_data`, `make_binary_xy`, `make_univariate`) and R plumbing
 (`push_to_r`, `reval`, `rm_r`).
 
@@ -29,19 +29,19 @@ R's RNG, so the data is fixed regardless of any seeding).
 | 4 | scalar RR² + bisquare cc                                    | `invtr2`                                      | rr2 ∈ {0.3,0.5,0.75}              | scalar `INVTR2`                                    |
 | 5 | n=70, p=3 linear model + 10% vertical outliers             | `lmrobdet_mm`, `lmrobdet_dcml`, `lmrob_m`    | estimator                         | coef, scale, fitted.values, residuals, cov         |
 | 6 | n=80, p=2 + 15% outliers + leverage                        | `lmrobdet_mm` (custom control)               | family/eff ∈ {(bisquare,0.85),(mopt,0.95)} | coef, scale, fitted.values                |
-| 7 | n=60, p=3 + 8% outliers                                    | `lmrobdet_mm` (X/y vs formula vs R)          | —                                 | coef (3-way identity)                              |
+| 7 | n=60, p=3 + 8% outliers                                    | `lmrobdet_mm` (X/y vs formula vs R)          |,                                 | coef (3-way identity)                              |
 | 8 | n=90, p=5 correlated + 10% row contamination               | `cov_rob_mm`                                  | corr ∈ {False,True}               | center, cov, dist, (cor)                           |
-| 9 | n=120, p=12 correlated + 8% contamination                  | `cov_rob_rocke`                               | —                                 | center, cov, dist                                  |
+| 9 | n=120, p=12 correlated + 8% contamination                  | `cov_rob_rocke`                               |,                                 | center, cov, dist                                  |
 | 10| n∈{90,120}, p∈{6,12}                                       | `cov_rob` (auto dispatch)                     | p → MM vs Rocke                   | estimator_type, center, cov                        |
 | 11| n=70, p=4 correlated                                       | `cov_classic`                                 | corr ∈ {False,True}               | center, cov, (cor)                                 |
-| 12| n=80, p=4 + 5% contamination                               | `fastmve`                                     | —                                 | center, cov, scale                                 |
-| 13| n=85, p=5 + 6% contamination                               | `kurt_sd_new`                                 | —                                 | center, cova                                       |
+| 12| n=80, p=4 + 5% contamination                               | `fastmve`                                     |,                                 | center, cov, scale                                 |
+| 13| n=85, p=5 + 6% contamination                               | `kurt_sd_new`                                 |,                                 | center, cova                                       |
 | 14| n=100, p=6 + 7% contamination                              | `prcomp_rob`                                  | rank=4                            | sdev, rotation, center                             |
 | 15| n=110, p=6 + 5% contamination                              | `pca_rob_s`                                   | ncomp=3                           | eigvec, mu, propex, propSPC                        |
 | 16| binary GLM n=140, p=3 + 5% mislabelled outliers            | `by_logreg`, `wby_logreg`, `wml_logreg`      | method                            | coef, standard.deviation, fitted.values, residual.deviances |
 | 17| n=60, p=2 linear model (intercept design)                  | `refine_sm`                                   | family=bisquare, step=M           | beta.rw, scale.rw                                  |
 | 18| n=60, p=6 sparse-β linear model + 10% outliers             | `pense` (+ path coef via `coef()`)           | alpha ∈ {0.5,1.0}                 | lambda path, coefficient path                      |
-| 19| n=90, p=5 Gaussian + 5% MCAR missingness                   | `gse`                                         | —                                 | mu (`getLocation`), cov (`getScatter`)             |
+| 19| n=90, p=5 Gaussian + 5% MCAR missingness                   | `gse`                                         |,                                 | mu (`getLocation`), cov (`getScatter`)             |
 
 ## B. Data-ingress pipelines (`test_data_ingress.py`)
 
@@ -69,9 +69,9 @@ where R succeeds.
 | constant (zero-variance) column          | cov_rob_mm, cov_classic                     | clean `RobStatTMRError` (singular)                  |
 | single column (p=1)                      | cov_rob_mm, prcomp_rob                       | clean `RobStatTMRError`                             |
 | p > n                                    | cov_rob_mm                                   | clean `RobStatTMRError` (not positive definite)     |
-| exact collinear predictor (rank-deficient)| lmrobdet_mm                                 | **bit-parity** with R — dropped term is `NaN`       |
+| exact collinear predictor (rank-deficient)| lmrobdet_mm                                 | **bit-parity** with R, dropped term is `NaN`       |
 | perfect separation                       | by_logreg                                    | **bit-parity** with R (full field set)              |
-| perfect separation                       | wby_logreg                                   | raises (rough edge — **B-009**: R returns truncated object) |
+| perfect separation                       | wby_logreg                                   | raises (rough edge, **B-009**: R returns truncated object) |
 | bad `type=` / `delta` out of range / empty / X-y length / non-binary y / mixed invocation | various | clean `ValueError` / `TypeError`        |
 
 ---
@@ -81,5 +81,5 @@ where R succeeds.
 A scenario graduates from here into `tests/` when it is **stable, fast, and
 deterministic** (seeded on both sides), per `exploration/TESTING.md`. The
 synthetic full-field parity cases (A.5–A.16) are the strongest promotion
-candidates — they assert every numeric field, not just shapes. Hold until
+candidates, they assert every numeric field, not just shapes. Hold until
 blocker **B-009** is resolved before promoting any WBYlogreg-separation case.

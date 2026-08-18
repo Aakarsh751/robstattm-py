@@ -61,7 +61,7 @@ class LmrobdetControl:
     refine_tol: float = 1e-7
     rel_tol: float = 1e-7
     # R's ``refine.S.py`` is the *relative convergence tolerance* for the local
-    # improvement of the Pena-Yohai candidates (a float, default 1e-7) — NOT an
+    # improvement of the Pena-Yohai candidates (a float, default 1e-7) - NOT an
     # iteration count. Verified against R/lmrobdet.R:464.
     refine_s_py: float = 1e-7
     refine_py: int = 10
@@ -76,7 +76,7 @@ class LmrobdetControl:
     mscale_maxit: int = 50
     mscale_tol: float = 1e-6
     mscale_rho_fun: str = "bisquare"
-    # Echoed R list — populated only when we round-trip from R; users typically
+    # Echoed R list - populated only when we round-trip from R; users typically
     # do not set this directly.
     _r_list: Any = field(default=None, repr=False, compare=False)
 
@@ -84,7 +84,7 @@ class LmrobdetControl:
 def lmrobdet_control(**kwargs: Any) -> LmrobdetControl:
     """Build a control object by passing the same kwargs as R's ``lmrobdet.control``.
 
-    Unknown kwargs raise ``TypeError`` — this catches typos that would otherwise
+    Unknown kwargs raise ``TypeError``, this catches typos that would otherwise
     silently fall through to R defaults.
 
     Parameters
@@ -127,7 +127,7 @@ def _control_to_r(ctrl: LmrobdetControl):
         v = getattr(ctrl, f.name)
         d = getattr(default, f.name)
         # Skip None (means "use R's default") and skip values equal to our
-        # Python default that exactly match R's documented default — for the
+        # Python default that exactly match R's documented default - for the
         # few non-trivial defaults we pass through to be safe.
         if v is None:
             continue

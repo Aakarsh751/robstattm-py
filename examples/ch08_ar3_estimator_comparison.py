@@ -1,20 +1,20 @@
-"""Chapter 8, Table 8.1 — three estimators for an AR(3) under contamination.
+"""Chapter 8, Table 8.1, three estimators for an AR(3) under contamination.
 
 Python port of ``ar3.R``.
 
 A simulated AR(3) with known coefficients (4/3, -5/6, 1/6), fitted three ways at
 three contamination levels (0%, 5%, 10% equispaced additive outliers of size 4):
 
-* least squares on the lagged regression — the baseline;
-* ``lmrobdetMM`` on the same lagged regression — robust *regression*, which
+* least squares on the lagged regression - the baseline;
+* ``lmrobdetMM`` on the same lagged regression - robust *regression*, which
   handles outliers in the response but still uses contaminated lagged values as
   predictors;
-* ``arima.rob`` — the filtered tau estimator, which is built for the time-series
+* ``arima.rob`` - the filtered tau estimator, which is built for the time-series
   structure and cleans the predictors as well.
 
 That middle row is the interesting one. Robust regression helps, but a lagged
 regression feeds every outlier back in as a covariate, so it cannot fully
-recover — which is the argument for a time-series-specific estimator.
+recover, which is the argument for a time-series-specific estimator.
 
 R packages required: RobStatTM and ``robustarima``.
 """
@@ -35,7 +35,7 @@ SPIKE = 4.0
 
 
 def main() -> None:
-    section("Chapter 8, Table 8.1 — AR(3) under increasing contamination")
+    section("Chapter 8, Table 8.1, AR(3) under increasing contamination")
 
     require_r_packages("robustarima")
 
@@ -85,7 +85,7 @@ def main() -> None:
 
     print(
         "  Read the error column down each block. With no outliers all three\n"
-        "  agree. At 5% the ordering is the expected one — least squares worst,\n"
+        "  agree. At 5% the ordering is the expected one, least squares worst,\n"
         "  robust regression better, the tau estimator best.\n"
         "\n"
         "  At 10% the middle row is the one to look at: lmrobdetMM is no better\n"
@@ -93,7 +93,7 @@ def main() -> None:
         "  the lagged design defeating it. Every outlier appears three times as a\n"
         "  *predictor* as well as once as a response, and downweighting a bad\n"
         "  response cannot undo a bad covariate. Only the filtered estimator,\n"
-        "  which cleans the series before using it on either side, holds up —\n"
+        "  which cleans the series before using it on either side, holds up,\n"
         "  which is the argument for treating a time series as a time series\n"
         "  rather than as a regression that happens to have lags in it."
     )

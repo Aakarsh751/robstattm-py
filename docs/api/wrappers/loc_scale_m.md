@@ -25,7 +25,7 @@ def loc_scale_m(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `x` | — | *required* | a vector of univariate observations |
+| `x` | n/a | *required* | a vector of univariate observations |
 | `psi` | Literal['mopt', 'bisquare', 'huber', 'opt', 'moptv0', 'optv0'] | `"mopt"` | a string indicating which score function to use. Valid options are "bisquare", "huber", "opt" and "mopt". |
 | `eff` | float | `0.95` | desired asymptotic efficiency. Valid options are 0.85, 0.9 and 0.95 (default) when `psi` = "bisquare" or "huber", and 0.85, 0.9, 0.95 (default) and 0.99 when `psi` = "opt" or "mopt". |
 | `maxit` | int | `50` | maximum number of iterations allowed. |
@@ -110,5 +110,5 @@ R implementation by Ricardo Maronna, <rmaronna@retina.ar>. Python wrapper: RobSt
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `locScaleM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

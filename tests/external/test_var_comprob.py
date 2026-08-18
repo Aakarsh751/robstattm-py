@@ -85,7 +85,7 @@ def _build_inputs():
 @needs_robustvarcomp
 @needs_wwgbook
 class TestAutismCompositeTau:
-    """autism.R — Composite-Tau fit (default method)."""
+    """autism.R, Composite-Tau fit (default method)."""
 
     @pytest.fixture(scope="class")
     def setup(self, R):
@@ -146,7 +146,7 @@ class TestAutismCompositeTau:
 @needs_robustvarcomp
 @needs_wwgbook
 class TestAutismClassicS:
-    """autism.R — Classic-S fit (method='S', psi='rocke', cov.init='covOGK')."""
+    """autism.R, Classic-S fit (method='S', psi='rocke', cov.init='covOGK')."""
 
     @pytest.fixture(scope="class")
     def setup(self, R):

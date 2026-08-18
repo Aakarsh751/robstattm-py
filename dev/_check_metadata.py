@@ -1,4 +1,4 @@
-"""Show — and optionally assert — the licence metadata of a built wheel.
+"""Show, and optionally assert, the licence metadata of a built wheel.
 
     python dev/_check_metadata.py [dist_dir] [--assert]
 

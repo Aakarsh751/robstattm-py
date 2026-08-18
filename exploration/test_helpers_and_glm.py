@@ -10,7 +10,7 @@ from tests.conftest import assert_array_equal, assert_scalar_equal, needs_r
 
 @needs_r
 class TestPsiFamilies:
-    """Tuning constants and ρ/ψ evaluation — not in docs/examples."""
+    """Tuning constants and ρ/ψ evaluation, not in docs/examples."""
 
     @pytest.mark.parametrize("family", ["bisquare", "huber"])
     def test_tuning_constants_scalar_families(self, R, family):
@@ -34,7 +34,7 @@ class TestPsiFamilies:
 
 @needs_r
 class TestInvtr2:
-    """Robust R² helper — exported separately in R."""
+    """Robust R² helper, exported separately in R."""
 
     def test_matches_r(self, R):
         py = rpm.invtr2(0.82, family="mopt", cc=rpm.psi.mopt(0.95))
@@ -44,7 +44,7 @@ class TestInvtr2:
 
 @needs_r
 class TestGlmCustomizations:
-    """GLM wrappers with non-default tuning — beyond by_logreg.py example."""
+    """GLM wrappers with non-default tuning, beyond by_logreg.py example."""
 
     @pytest.fixture(scope="class")
     def skin_xy(self):
@@ -117,7 +117,7 @@ class TestLocScaleMGrid:
 
 @needs_r
 class TestCrossPackageDataset:
-    """``datasets.load()`` for non-RobStatTM data — not in examples."""
+    """``datasets.load()`` for non-RobStatTM data, not in examples."""
 
     def test_coleman_regression(self, R):
         coleman = rpm.datasets.load("robustbase", "coleman")

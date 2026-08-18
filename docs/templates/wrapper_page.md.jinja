@@ -22,7 +22,7 @@ from robstattm_py import {{ py_name }}
 | `{{ p.name }}` | {{ p.type }} | {{ p.default }} | {{ p.description }} |
 {% endfor %}
 {% if internal_args %}
-> **Note** — handled internally, not exposed in Python: {% for a in internal_args %}`{{ a.r_name }}`{% if not loop.last %}, {% endif %}{% endfor %}. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: {% for a in internal_args %}`{{ a.r_name }}`{% if not loop.last %}, {% endif %}{% endfor %}. These are constructed for you from the inputs above.
 {% endif %}
 {% endif %}
 ## Returns
@@ -36,7 +36,7 @@ A `{{ py_result_class }}` object. Its attributes mirror the fields of the R
 | `{{ v.py_name }}` | {{ v.r_name }} | {{ v.description }} |
 {% endfor %}
 {% if omitted_r_fields %}
-> **R fields not surfaced in Python** — the R `{{ r_name }}` list also contains
+> **R fields not surfaced in Python.** The R `{{ r_name }}` list also contains
 > {% for v in omitted_r_fields %}`{{ v.r_name }}`{% if not loop.last %}, {% endif %}{% endfor %}.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -78,7 +78,7 @@ The `{{ py_result_class }}` object also provides these methods:
 ## See also
 
 {% for ref in seealso -%}
-- {% if ref in r_to_py %}[`{{ r_to_py[ref] }}`]({{ r_to_py[ref] }}.md) — Python wrapper for R `{{ ref }}`{% else %}`{{ ref }}` (R-side helper; not a separate Python wrapper){% endif %}
+- {% if ref in r_to_py %}[`{{ r_to_py[ref] }}`]({{ r_to_py[ref] }}.md), Python wrapper for R `{{ ref }}`{% else %}`{{ ref }}` (R-side helper; not a separate Python wrapper){% endif %}
 {% endfor %}
 {% endif %}
 {% if references %}
@@ -96,5 +96,5 @@ R implementation by {{ author }}. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `{{ r_name }}`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

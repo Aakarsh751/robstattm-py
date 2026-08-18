@@ -2,7 +2,7 @@
 
 Native renderers consume **only** the arrays already on the frozen result
 dataclasses (validated bit-for-bit against R, strict tier). They never re-fit in
-R — that is the contract from decision D-023. The one documented exception is
+R, that is the contract from decision D-023. The one documented exception is
 leverage (``resid_vs_leverage``), which genuinely needs the hat matrix and is
 fetched via ``fit.hatvalues()`` only when the caller does not supply it.
 """
@@ -102,7 +102,7 @@ def chi2_quantile(p: float, df: int) -> float:
 
     Uses ``scipy.stats.chi2.ppf`` when SciPy is importable (exact); otherwise
     falls back to the Wilson–Hilferty approximation, which is accurate to a few
-    parts in 1e-3 for ``df >= 1`` — plenty for a reference-cutoff line.
+    parts in 1e-3 for ``df >= 1``, plenty for a reference-cutoff line.
     """
     try:
         from scipy.stats import chi2  # type: ignore

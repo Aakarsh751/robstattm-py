@@ -30,7 +30,7 @@ needs_r = pytest.mark.skipif(not HAS_R, reason="rpy2/R not available")
 
 
 class TestRestoreIntegerNa:
-    """No R required — the repair is a pure DataFrame transformation."""
+    """No R required, the repair is a pure DataFrame transformation."""
 
     def test_sentinel_becomes_missing(self):
         df = pd.DataFrame({"x": np.array([1, _R_INT_NA, 3], dtype="int32")})
@@ -40,7 +40,7 @@ class TestRestoreIntegerNa:
 
     def test_integrality_is_preserved(self):
         df = pd.DataFrame({"x": np.array([1, _R_INT_NA], dtype="int32")})
-        # Int64, not float64 — a count column should stay a count column.
+        # Int64, not float64 - a count column should stay a count column.
         assert str(_restore_integer_na(df.copy())["x"].dtype) == "Int64"
 
     def test_clean_integer_column_is_untouched(self):

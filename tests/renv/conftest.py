@@ -158,7 +158,7 @@ def make_probe(
     """Build a synthetic :class:`Probe`.
 
     ``path_exes`` maps an executable name to the path ``which`` should report,
-    letting a test place a working — or deliberately broken — ``R`` on ``PATH``.
+    letting a test place a working, or deliberately broken, ``R`` on ``PATH``.
 
     ``registry`` and ``system_roots`` both default to *empty* rather than
     ``None``, which is the important part: ``None`` would mean "look at the real

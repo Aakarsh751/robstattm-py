@@ -1,9 +1,9 @@
-"""Chapter 4, Example 4.2 — robust ANOVA on the oats data (Figures 4.2, 4.4).
+"""Chapter 4, Example 4.2, robust ANOVA on the oats data (Figures 4.2, 4.4).
 
 Python port of ``oats.R``.
 
 A two-factor agricultural trial: yield by variety and block. The data set ships
-two responses — ``response1`` as recorded, and ``response2``, the same
+two responses, ``response1`` as recorded, and ``response2``, the same
 experiment with a few values altered. Fitting both under classical and robust
 ANOVA gives a 2x4 table of p-values, and the interesting cell is the one where
 altering a handful of observations flips a classical conclusion while the
@@ -59,9 +59,9 @@ def classical_f_test(
 
 
 def main() -> None:
-    section("Chapter 4, Example 4.2 — oats data, classical vs robust ANOVA")
+    section("Chapter 4, Example 4.2, oats data, classical vs robust ANOVA")
 
-    # scipy only for the classical F distribution — the robust half of this
+    # scipy only for the classical F distribution - the robust half of this
     # example needs nothing beyond the package itself.
     require_python_packages("scipy")
 
@@ -91,14 +91,14 @@ def main() -> None:
             scale = full.sigma()
             std_resid = full.resid().to_numpy() / scale
             flagged = np.flatnonzero(np.abs(std_resid) > 2.5) + 1
-            section("Figure 4.4 — standardized robust residuals, altered response")
+            section("Figure 4.4, standardized robust residuals, altered response")
             table(
                 "beyond 2.5 robust scales (1-based)",
                 {"observations": list(flagged), "robust scale": scale},
             )
             rpm.plot.qq(
                 full,
-                title="Oats (altered response) — robust residual Q-Q (Figure 4.4)",
+                title="Oats (altered response), robust residual Q-Q (Figure 4.4)",
                 save=figure("ch04_oats_qq"),
             )
 
@@ -110,7 +110,7 @@ def main() -> None:
 
     print(
         "\n  Read down each pair of columns. Altering a few observations moves the\n"
-        "  classical p-values much further than the robust ones — which is the\n"
+        "  classical p-values much further than the robust ones, which is the\n"
         "  whole claim being made: the robust test's conclusion is a property of\n"
         "  the experiment, not of its worst few measurements."
     )

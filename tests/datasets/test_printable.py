@@ -1,6 +1,6 @@
 """Strings meant for the console must survive a cp1252 console.
 
-On Windows, ``sys.stdout.encoding`` is cp1252 whenever stdout is a pipe — which
+On Windows, ``sys.stdout.encoding`` is cp1252 whenever stdout is a pipe, which
 is what happens under ``|``, under CI log capture, and under most tooling. A
 character outside cp1252 does not print as a question mark there; it raises
 ``UnicodeEncodeError`` and takes the program with it.

@@ -1,4 +1,4 @@
-"""Bench / performance helpers — UI doc §11.
+"""Bench / performance helpers, UI doc §11.
 
 Provides ``rpm.set_n_jobs(n)``, ``rpm.bench.timer(fit)``, and
 ``rpm.r_started()`` (re-exported from ``_r``).
@@ -22,7 +22,7 @@ class TimerResult:
         Approximate R-side time (Sys.time before/after the call), captured
         from R when possible. Falls back to ``total_seconds`` when not.
     py_overhead_seconds : float
-        ``total_seconds - r_seconds`` — bridge / conversion overhead.
+        ``total_seconds - r_seconds``, bridge / conversion overhead.
     """
 
     total_seconds: float
@@ -88,7 +88,7 @@ def timer(callable_: Callable[[], object], *, repeat: int = 1) -> TimerResult:
 def set_n_jobs(n: int) -> int:
     """Set the R-side ``options(mc.cores=n)`` for parallel wrappers.
 
-    Affects estimators that fan out internally — currently only
+    Affects estimators that fan out internally, currently only
     ``pyinit`` candidate evaluation. Returns the previous value (or 1).
 
     Parameters

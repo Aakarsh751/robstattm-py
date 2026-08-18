@@ -1,16 +1,16 @@
-"""Chapter 7, Example 7.3 — robust Poisson regression on the Breslow data.
+"""Chapter 7, Example 7.3, robust Poisson regression on the Breslow data.
 
 Python port of ``epilepsy.R`` (Figures 7.6, 7.7, Table 7.3).
 
 59 epilepsy patients, seizure counts before and during treatment with
 progabide. Count data with a couple of extreme responses, fitted four ways:
 
-* ML — ``glm(family = poisson)``;
-* CUBIF — conditionally unbiased bounded-influence (``robcbi::cubinf``);
-* MT and RQL — the two ``robustbase::glmrob`` methods.
+* ML - ``glm(family = poisson)``;
+* CUBIF - conditionally unbiased bounded-influence (``robcbi::cubinf``);
+* MT and RQL - the two ``robustbase::glmrob`` methods.
 
 ``epilepsy.R`` carries two notes worth preserving. First, the MLE values in
-Table 7.3 of the book are incorrect — the ones computed here are right. Second,
+Table 7.3 of the book are incorrect, the ones computed here are right. Second,
 there is no R implementation of the MP estimator, so the book's MP coefficients
 were produced in MATLAB; they are hard-coded in the R script and reproduced
 here as constants rather than recomputed.
@@ -28,7 +28,7 @@ import robstattm_py as rpm
 
 TERMS = ("intercept", "Age10", "Base4", "Progabide", "Base4:Progabide")
 
-#: Book's MP coefficients, computed in MATLAB — see the module docstring.
+#: Book's MP coefficients, computed in MATLAB - see the module docstring.
 MP_COEFFICIENTS = np.array([2.0078, 0.0707, 0.1346, -0.4898, 0.0476])
 
 
@@ -52,7 +52,7 @@ def build_design(breslow: pd.DataFrame) -> tuple[pd.DataFrame, np.ndarray]:
 
 
 def main() -> None:
-    section("Chapter 7, Example 7.3 — Breslow epilepsy data")
+    section("Chapter 7, Example 7.3, Breslow epilepsy data")
 
     require_r_packages("robustbase", "robcbi")
 
@@ -76,7 +76,7 @@ def main() -> None:
     cubif = rpm.cubinf(design, y, family="poisson", null_dev=False, ufact=1.1)
     ml_coef = _ml_poisson(design, y)
 
-    section("Table 7.3 — coefficients")
+    section("Table 7.3, coefficients")
     print(f"\n  {'estimator':<12}" + "".join(f"{t:>18}" for t in TERMS))
     for label, coef in (
         ("ML", ml_coef),
@@ -87,7 +87,7 @@ def main() -> None:
     ):
         print(f"  {label:<12}" + "".join(f"{float(c):>18.4f}" for c in coef))
 
-    section("Figures 7.6 / 7.7 — absolute deviance residuals")
+    section("Figures 7.6 / 7.7, absolute deviance residuals")
     deviances = {
         "ML": np.abs(_poisson_deviance_residuals(y, np.exp(design @ ml_coef))),
         "CUBIF": np.abs(
@@ -114,12 +114,12 @@ def main() -> None:
 
     print(
         "\n  This is Figure 7.6's boxplot as a table. The robust estimators give\n"
-        "  the *smaller* median and quartile — they describe the bulk better —\n"
+        "  the *smaller* median and quartile, they describe the bulk better,\n"
         "  while their maxima are larger, because the two extreme patients are\n"
         "  left standing out rather than fitted."
     )
 
-    section("Figure 7.7 — the 48 smallest residuals, MT against ML")
+    section("Figure 7.7, the 48 smallest residuals, MT against ML")
     mt_sorted = np.sort(deviances["MT"])[:48]
     ml_sorted = np.sort(deviances["ML"])[:48]
     table(
@@ -130,13 +130,13 @@ def main() -> None:
     rpm.plot.location_scale(
         rpm.loc_scale_m(deviances["MT"]),
         deviances["MT"],
-        title="Epilepsy — MT absolute deviance residuals (Figure 7.6)",
+        title="Epilepsy, MT absolute deviance residuals (Figure 7.6)",
         save=figure("ch07_epilepsy_deviances"),
     )
 
 
 def _ml_poisson(design: np.ndarray, y: np.ndarray, *, tol: float = 1e-12) -> np.ndarray:
-    """Maximum-likelihood Poisson regression by IRLS — R's ``glm(poisson)``."""
+    """Maximum-likelihood Poisson regression by IRLS, R's ``glm(poisson)``."""
     beta = np.zeros(design.shape[1])
     beta[0] = np.log(max(y.mean(), 1e-6))
     for _ in range(200):

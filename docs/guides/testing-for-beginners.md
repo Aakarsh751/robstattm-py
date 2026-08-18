@@ -21,7 +21,7 @@ The last line is the answer: **`Result: READY`** or **`Result: NOT READY`**.
 If it is NOT READY, the `Problems` section lists what is wrong and the command
 that fixes each one. You do not have to interpret anything.
 
-> `robstattm-py: command not found`? Use `python -m robstattm_py.cli doctor` —
+> `robstattm-py: command not found`? Use `python -m robstattm_py.cli doctor`,
 > identical, and always available. On Windows `pip` frequently installs commands
 > to a folder outside your `PATH`.
 
@@ -52,7 +52,7 @@ You should get:
 ```
 
 Those exact digits. This dataset and model are deterministic, so any difference
-means something is wrong — and is worth reporting.
+means something is wrong, and is worth reporting.
 
 ---
 
@@ -117,7 +117,7 @@ The summary at the bottom is what matters:
 
 ### Skips are usually fine
 
-`s` means a test decided it could not run — nearly always a missing *optional* R
+`s` means a test decided it could not run, nearly always a missing *optional* R
 package. The reason is printed:
 
 ```text
@@ -141,10 +141,10 @@ tests/regression/test_lmrobdet_mm.py:88: AssertionError
 
 Read it bottom-up:
 
-1. **Last line** — the file and line number.
-2. **`E` lines** — what actually went wrong.
-3. **`>` line** — the assertion that failed.
-4. **Top** — which test.
+1. **Last line**, the file and line number.
+2. **`E` lines**, what actually went wrong.
+3. **`>` line**, the assertion that failed.
+4. **Top**, which test.
 
 Useful flags:
 
@@ -158,7 +158,7 @@ python -m pytest tests/... --tb=long    # more context on a failure
 ### If many tests fail at once
 
 Almost always a setup problem, not a code problem. Run `robstattm-py doctor`
-first — a missing R package fails everything that touches it.
+first, a missing R package fails everything that touches it.
 
 ---
 
@@ -208,7 +208,7 @@ R warnings appear as Python warnings and do not stop anything:
 RobStatTMWarning: algorithm did not converge in 50 iterations
 ```
 
-Worth reading — that one means the estimate may be unreliable — but the code
+Worth reading, that one means the estimate may be unreliable, but the code
 continues. To collect them:
 
 ```python
@@ -232,7 +232,7 @@ for w in caught:
 
 ## Reporting a problem
 
-Include this — it captures Python, rpy2, R, the full search trace and every
+Include this, it captures Python, rpy2, R, the full search trace and every
 installed R package version in one go:
 
 ```bash
@@ -244,5 +244,5 @@ Then open an issue at
 
 ## See also
 
-- [Troubleshooting](troubleshooting.md) — symptom-by-symptom fixes.
-- [Install in 10 minutes](install-beginner.md) — the setup walkthrough.
+- [Troubleshooting](troubleshooting.md), symptom-by-symptom fixes.
+- [Install in 10 minutes](install-beginner.md), the setup walkthrough.

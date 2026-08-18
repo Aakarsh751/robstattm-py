@@ -86,7 +86,7 @@ class TestSkinDatasetVsR:
         X, y = inputs
         py = getattr(rpm, py_fn)(X, y)
         # BY/WBY return (1,n) row matrix in R; WML same. Python ravels to (n,)
-        # per the user-facing API contract — values still bit-identical.
+        # per the user-facing API contract - values still bit-identical.
         r_fv = np.asarray(R(f"{r_var}$fitted.values"), dtype=float).ravel()
         np.testing.assert_array_equal(py.fitted_values, r_fv)
         # probabilities check

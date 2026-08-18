@@ -8,7 +8,7 @@ rpy2 does two things at ``rpy2.rinterface_lib.openrlib`` import time: it
 resolves ``R_HOME``, and it adds **one** directory to the DLL search path via
 :func:`os.add_dll_directory`. That is not enough. ``add_dll_directory`` only
 influences resolution for libraries loaded through Python's own loader with
-``LOAD_LIBRARY_SEARCH_*`` flags — but once R is running, ``library(stats)``
+``LOAD_LIBRARY_SEARCH_*`` flags, but once R is running, ``library(stats)``
 performs a plain ``LoadLibrary("stats.dll")`` from inside R, and *that* search
 order consults ``PATH`` and ignores the added directories entirely. R's own
 DLLs also link against runtime libraries (OpenBLAS, gfortran, zlib) that, in a
@@ -129,7 +129,7 @@ def prepend_r_libs(library: Path) -> None:
 
     ``R_LIBS`` is used deliberately in preference to ``R_LIBS_USER``. R
     *appends* ``R_LIBS`` entries ahead of the default library set, whereas
-    setting ``R_LIBS_USER`` **replaces** the user's personal library — which
+    setting ``R_LIBS_USER`` **replaces** the user's personal library, which
     would silently hide packages they installed themselves. Since our directory
     ends up first on ``.libPaths()``, a bare ``install.packages()`` inside the
     embedded session also defaults to it, so the user's system library is

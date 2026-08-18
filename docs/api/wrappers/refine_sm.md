@@ -38,7 +38,7 @@ def refine_sm(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | ndarray | *required* | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
+| `X` | ndarray | *required* | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
 | `y` | ndarray | *required* | vector of responses |
 | `initial_beta` | Sequence[float] \| ndarray | *required* | vector of initial regression estimates |
 | `initial_scale` | float | *required* | initial residual scale estimate. If missing the (scaled) median of the absolute residuals is used. |
@@ -51,7 +51,7 @@ def refine_sm(
 | `tol` | float | `1e-07` | tolerance to detect convergence (relative difference of consecutive vectors of parameters) |
 
 
-> **Note** — handled internally, not exposed in Python: `x`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `x`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -61,13 +61,13 @@ A `RefineSMResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `beta` | — | Refined regression coefficients (R: `beta.rw`). |
-| `scale` | — | Refined scale estimate (R: `scale.rw`). |
+| `beta` | n/a | Refined regression coefficients (R: `beta.rw`). |
+| `scale` | n/a | Refined scale estimate (R: `scale.rw`). |
 | `converged` | converged | A logical value indicating whether the algorithm converged |
-| `iterations` | — | Number of iterations actually used. |
+| `iterations` | n/a | Number of iterations actually used. |
 
 
-> **R fields not surfaced in Python** — the R `refine.sm` list also contains
+> **R fields not surfaced in Python.** The R `refine.sm` list also contains
 > `beta.rw`, `scale.rw`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -122,5 +122,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>.. Python wrapp
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `refine.sm`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

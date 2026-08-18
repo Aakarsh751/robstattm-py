@@ -45,7 +45,7 @@ class TestLmrobMControl:
 
     def test_frozen(self):
         c = rpm.lmrobm_control()
-        # FrozenInstanceError specifically — a blind `Exception` would also pass
+        # FrozenInstanceError specifically - a blind `Exception` would also pass
         # if the assignment failed for some unrelated reason.
         with pytest.raises(FrozenInstanceError):
             c.bb = 0.7  # frozen dataclass
@@ -55,7 +55,7 @@ class TestLmrobMControl:
 class TestLmrobMControlVsRFormals:
     """Guard the control *surface* against drift from R's ``lmrobM.control``.
 
-    Parallels ``tests/regression/test_control.py`` for ``lmrobdet.control`` — it
+    Parallels ``tests/regression/test_control.py`` for ``lmrobdet.control``, it
     is the D-022-class safety net: it would flag a Python default or argument
     name that silently diverged from R (which ``_control_m_to_r``'s
     skip-when-equal-default logic relies on being correct).

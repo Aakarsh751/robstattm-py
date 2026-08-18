@@ -1,4 +1,4 @@
-"""Chapter 8, Example 8.3 — model identification under contamination (Figs 8.7-8.8).
+"""Chapter 8, Example 8.3, model identification under contamination (Figs 8.7-8.8).
 
 Python port of ``identAR2.R``.
 
@@ -6,7 +6,7 @@ Before you can fit a time-series model you have to choose its order, and that
 choice is usually made by reading the sample ACF and PACF. This example shows
 that step failing: an AR(2) series with about 10% additive outliers has a sample
 ACF that no longer looks like an AR(2)'s, so the usual identification procedure
-picks the wrong model — before any estimator is involved.
+picks the wrong model, before any estimator is involved.
 
 ``arima.rob(auto.ar = True)`` selects the order from the *filtered* series
 instead, which is what makes the choice recoverable.
@@ -30,7 +30,7 @@ LAGS = 10
 
 
 def main() -> None:
-    section("Chapter 8, Example 8.3 — identifying an AR(2) with 10% outliers")
+    section("Chapter 8, Example 8.3, identifying an AR(2) with 10% outliers")
 
     require_r_packages("robustarima")
 
@@ -39,7 +39,7 @@ def main() -> None:
     print(f"  true order: AR(2), phi = ({PHI[0]:.4f}, {PHI[1]:.4f})")
     print(f"  {n_outliers} additive outliers planted in {N} observations")
 
-    section("Figure 8.8 — sample autocorrelations")
+    section("Figure 8.8, sample autocorrelations")
     clean_acf = acf(clean, LAGS)
     dirty_acf = acf(contaminated, LAGS)
 
@@ -62,7 +62,7 @@ def main() -> None:
         },
     )
     print(
-        "\n  The contaminated ACF is uniformly shrunk toward zero — additive\n"
+        "\n  The contaminated ACF is uniformly shrunk toward zero, additive\n"
         "  outliers add variance without adding correlation, so every\n"
         "  autocorrelation is divided by a larger number. Reading an order off\n"
         "  that column would understate the dependence in the series. Filtering\n"
@@ -87,7 +87,7 @@ def main() -> None:
             "  worth being clear about that rather than rounding it off. What it\n"
             f"  selects is an AR({len(ar)}) whose first two coefficients are close to\n"
             f"  the truth and whose remaining ones are near zero (largest\n"
-            f"  {extra:.4f}) — an over-parameterised model of the right process,\n"
+            f"  {extra:.4f}), an over-parameterised model of the right process,\n"
             "  not the wrong process. identAR2.R notes the same thing: the\n"
             "  optimiser reports non-convergence and the conclusions still hold.\n"
             "  The claim this example supports is about the ACF above, which is\n"

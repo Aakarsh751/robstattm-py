@@ -31,8 +31,8 @@ def pyinit(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | *required* | response vector of length n. |
+| `X` | n/a | *required* | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | *required* | response vector of length n. |
 | `intercept` | bool | `True` | whether to add an intercept column to the design matrix (default True). |
 | `delta` | float | `0.5` |  |
 | `cc` | float | `1.5476` |  |
@@ -47,7 +47,7 @@ def pyinit(
 | `mscale_rho_fun` | Literal['bisquare', 'huber', 'gauss'] | `"bisquare"` |  |
 
 
-> **Note** — handled internally, not exposed in Python: `x`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `x`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -59,7 +59,7 @@ A `PyinitResult` object. Its attributes mirror the fields of the R
 |---|---|---|
 | `coefficients` | coefficients | matrix whose columns are the candidate coefficient vectors (one robust starting point per column). |
 | `objective` | objective | value of the robust objective for each candidate. |
-| `best` | — | Column of `coefficients` with the smallest objective. Convenience. |
+| `best` | n/a | Column of `coefficients` with the smallest objective. Convenience. |
 
 
 
@@ -97,7 +97,7 @@ print("first candidate:", res.coefficients[:, 0].round(4))
 
 ## See also
 
-- [`lmrobdet_mm`](lmrobdet_mm.md) — Python wrapper for R `lmrobdetMM`
+- [`lmrobdet_mm`](lmrobdet_mm.md), Python wrapper for R `lmrobdetMM`
 
 
 
@@ -115,5 +115,5 @@ R implementation by the pyinit package authors. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `pyinit`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

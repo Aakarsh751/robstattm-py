@@ -67,7 +67,7 @@ Optional, installed only if you ask for them:
 These are installed by `pip` as ordinary dependencies and are likewise not
 redistributed here.
 
-> **Note on rpy2.** rpy2 is licensed **GPL-2.0-or-later** — one licence, not a
+> **Note on rpy2.** rpy2 is licensed **GPL-2.0-or-later**, one licence, not a
 > choice of several, and the same licence R itself uses. It is a normal `pip`
 > dependency rather than something bundled here. If your organisation has
 > policies about GPL dependencies, that is the component to review. The MIT
@@ -80,14 +80,14 @@ redistributed here.
 ## If you build a container or a conda package
 
 Everything above rests on this package **not distributing** R or any R package.
-GPL obligations attach to distribution, not to use — GPLv2 §0: *"The act of
+GPL obligations attach to distribution, not to use, GPLv2 §0: *"The act of
 running the Program is not restricted."*
 
 An artifact that **contains** R and RobStatTM is a different matter. The
 `Dockerfile` in this repository builds exactly such an image, and so does a
 conda package built from `environment.yml`. Publishing one means distributing a
 combined work, and the GPL terms of the bundled components apply to that
-artifact — including the obligation to offer corresponding source. That is a
+artifact, including the obligation to offer corresponding source. That is a
 normal and legitimate thing to do; it simply is not covered by this package's
 MIT licence, and is worth deciding deliberately rather than discovering
 afterwards.

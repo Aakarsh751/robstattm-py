@@ -42,8 +42,8 @@ def lmrob_m(
 |---|---|---|---|
 | `formula` | str \| None | `None` | a symbolic description of the model to be fit. |
 | `data` | DataFrame \| None | `None` | an optional data frame, list or environment containing the variables in the model. If not found in `data`, model variables are taken from `environment(formula)`, which usually is the root environment of the current R session. |
-| `X` | — | `None` | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | `None` | Response vector of length `n` — used together with `X`. |
+| `X` | n/a | `None` | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | `None` | Response vector of length `n`, used together with `X`. |
 | `control` | LmrobMControl \| None | `None` | a list specifying control parameters as returned by the function `lmrobM.control`. |
 | `bb` | float \| None | `None` |  |
 | `family` | Literal['opt', 'mopt', 'bisquare', 'huber', 'moptv0', 'optv0'] \| None | `None` | Robust loss-function family shortcut (e.g. `"mopt"`, `"bisquare"`); sets the corresponding field on `control`. |
@@ -51,7 +51,7 @@ def lmrob_m(
 | `max_it` | int \| None | `None` |  |
 
 
-> **Note** — handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -62,10 +62,10 @@ A `LmrobMResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
+| `coef_names` | n/a | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `scale` | scale | The estimated scale of the residuals |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
-| `loss` | — | Value of the objective function at the final M-estimator. |
+| `loss` | n/a | Value of the objective function at the final M-estimator. |
 | `converged` | converged | Logical value indicating whether IRWLS iterations for the MM-estimator have converged |
 | `iter` | iter | Number of IRWLS iterations for the MM-estimator |
 | `fitted_values` | fitted.values | Fitted values associated with the robust fit |
@@ -73,12 +73,12 @@ A `LmrobMResult` object. Its attributes mirror the fields of the R
 | `rank` | rank | Numeric rank of the fitted linear model |
 | `cov` | cov | The estimated covariance matrix of the regression estimates |
 | `df_residual` | df.residual | The residual degrees of freedom |
-| `degree_freedom` | — | The residual degrees of freedom. |
-| `r_squared` | — | The robust multiple correlation coefficient (robust R²). |
-| `formula` | — | The model formula used for the fit (echoes the input). |
+| `degree_freedom` | n/a | The residual degrees of freedom. |
+| `r_squared` | n/a | The robust multiple correlation coefficient (robust R²). |
+| `formula` | n/a | The model formula used for the fit (echoes the input). |
 
 
-> **R fields not surfaced in Python** — the R `lmrobM` list also contains
+> **R fields not surfaced in Python.** The R `lmrobM` list also contains
 > `contrasts`, `xlevels`, `call`, `model`, `x`, `y`, `na.action`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -95,6 +95,9 @@ The `LmrobMResult` object also provides these methods:
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
 | `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `hatvalues()` | Hat-matrix diagonal computed via QR of ``sqrt(rweights) * X``. |
+| `plot_diagnostics(kw)` | Four-panel diagnostic figure: residuals, Q-Q, scale-location, weights. |
+| `plot_qq(kw)` | Normal Q-Q plot of standardized residuals (R's ``plot(fit, which = 2)``). |
+| `plot_residuals(kw)` | Residuals-vs-fitted plot (R's ``plot(fit, which = 1)``). |
 | `predict(newdata)` | Predictions on ``data`` (or ``newdata`` if given). |
 | `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
 | `sigma()` | Robust residual scale (R's ``sigma()``). |
@@ -154,5 +157,5 @@ R implementation by Victor Yohai, <vyohai@gmail.com>, based on `lmrob`. Python w
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lmrobM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

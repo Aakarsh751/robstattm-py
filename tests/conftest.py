@@ -31,7 +31,7 @@ def _r_pkg_available(name: str) -> bool:
     """True if the named external R package is installed.
 
     Uses ``requireNamespace`` (loads the namespace only) rather than
-    ``importr``/``r_pkg`` (which *attaches* the package — and any ``Depends:`` —
+    ``importr``/``r_pkg`` (which *attaches* the package, and any ``Depends:``,
     to the R search path). Attaching ``robustarima``/``robustvarComp``/``robcbi``
     would pull in ``robustbase``, whose ``BYlogreg``/``Mscale``/… then mask
     RobStatTM's own versions for unqualified R calls in other tests.
@@ -68,7 +68,7 @@ def _r_dataset_available(name: str, package: str) -> bool:
 
 
 _WWGBOOK_OK = _r_dataset_available("autism", "WWGbook")
-# breslow.dat lives in the `robust` package, not in robustbase/robcbi — the
+# breslow.dat lives in the `robust` package, not in robustbase/robcbi - the
 # estimator package being present says nothing about the data being present.
 _BRESLOW_OK = _r_dataset_available("breslow.dat", "robust")
 
@@ -238,7 +238,7 @@ def require_working_child_interpreter() -> None:
 
     This is an environment defect, not something this package can influence, and
     nothing about our behaviour can be observed through a child that cannot
-    start. Skipping is the honest outcome — and the check is deliberately
+    start. Skipping is the honest outcome, and the check is deliberately
     narrow, so any *other* subprocess failure still fails the test.
     """
     import pytest

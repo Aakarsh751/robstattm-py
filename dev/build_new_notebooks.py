@@ -44,7 +44,7 @@ def write(nb, path):
 def build_ch8():
     cells = [
         new_markdown_cell(
-            "# Chapter 8 gallery — robust ARIMA (`arima_rob`)\n\n"
+            "# Chapter 8 gallery, robust ARIMA (`arima_rob`)\n\n"
             "Reproduces the six Chapter-8 time-series scripts via "
             "`rpm.arima_rob` → `robustarima::arima.rob` (the *filtered "
             "tau-estimate*):\n\n"
@@ -62,7 +62,7 @@ def build_ch8():
         new_code_cell(BOOT),
         # --- resex ---
         new_markdown_cell(
-            "## RESEX — robust seasonal ARIMA (Example 8.6, Figs 8.12–8.13, Table 8.5)"
+            "## RESEX, robust seasonal ARIMA (Example 8.6, Figs 8.12–8.13, Table 8.5)"
         ),
         new_code_cell(
             'resex = rpm.datasets.resex()["resex"].to_numpy()\n'
@@ -84,20 +84,20 @@ def build_ch8():
             'ax.plot(np.arange(1, 90), resex, "-", color="0.5", label="RESEX")\n'
             'ax.plot(np.arange(1, 90), fit.y_robust, "o", ms=3, label="y.robust")\n'
             'ax.set_xlabel("index"); ax.set_ylabel("RESEX"); ax.legend()\n'
-            'ax.set_title("RESEX — observed vs robustly cleaned")\n'
+            'ax.set_title("RESEX, observed vs robustly cleaned")\n'
             'fig.savefig(FIG_DIR / "ch8_resex.png", dpi=110, bbox_inches="tight"); plt.close(fig)\n'
             '# Figure 8.13 analogue: sorted |innovations| (TAU) vs LS\n'
             'innov_tau = np.sort(np.abs(fit.innov[14:89]))\n'
             'fig, ax = plt.subplots(figsize=(6, 4))\n'
             'ax.plot((np.arange(1, 73)-0.5)/72, innov_tau[:72], "-", label="TAU")\n'
             'ax.set_xlabel("probability"); ax.set_ylabel("quantiles"); ax.legend()\n'
-            'ax.set_title("RESEX — sorted |innovations| (TAU)")\n'
+            'ax.set_title("RESEX, sorted |innovations| (TAU)")\n'
             'fig.savefig(FIG_DIR / "ch8_resex_innov.png", dpi=110, bbox_inches="tight"); plt.close(fig)\n'
             'print("figures saved")'
         ),
         # --- ar3 ---
         new_markdown_cell(
-            "## AR(3) — robust vs LS/MM comparison (Table 8.1)\n\n"
+            "## AR(3), robust vs LS/MM comparison (Table 8.1)\n\n"
             "Simulated AR(3) (`set.seed(600)`), true φ = (4/3, −5/6, 1/6). We "
             "reproduce the seeded series in R, then fit `arima.rob(., p=3)` and "
             "compare to `lm` / `lmrobdetMM` (already wrapped)."
@@ -168,14 +168,14 @@ def build_ch8():
             'ax.plot(np.arange(1, 201), fma.y_robust, "-", lw=1.2, label="y.robust")\n'
             'ax.plot(np.arange(20, 201, 20), mac[np.arange(19, 200, 20)], "o", ms=4)\n'
             'ax.set_xlabel("index"); ax.set_ylabel("series"); ax.legend()\n'
-            'ax.set_title("MA(1) with additive outliers — robust filtering (Fig 8.11)")\n'
+            'ax.set_title("MA(1) with additive outliers, robust filtering (Fig 8.11)")\n'
             'fig.savefig(FIG_DIR / "ch8_ma1ao.png", dpi=110, bbox_inches="tight"); plt.close(fig)\n'
             'print("figure saved")'
         ),
         # --- ar1 simulation ---
         new_markdown_cell(
-            "## AR(1) with AO and IO — simulation only (Fig 8.6)\n\n"
-            "`ar1.R` loads `robustarima` but only *simulates* and plots — no "
+            "## AR(1) with AO and IO, simulation only (Fig 8.6)\n\n"
+            "`ar1.R` loads `robustarima` but only *simulates* and plots, no "
             "`arima.rob` fit. We reproduce the three-panel figure."
         ),
         new_code_cell(
@@ -193,7 +193,7 @@ def build_ch8():
             'axes[1].plot(xAO); axes[1].plot(tt, xAO[tt-1], "o"); axes[1].set_title("AR(1) with 10% additive outliers")\n'
             'axes[2].plot(xIO); axes[2].plot(50, xIO[49], "o"); axes[2].set_title("AR(1) with one innovation outlier")\n'
             'fig.tight_layout(); fig.savefig(FIG_DIR / "ch8_ar1.png", dpi=110, bbox_inches="tight"); plt.close(fig)\n'
-            'print("Fig 8.6 saved — all six Chapter-8 scripts reproduced.")'
+            'print("Fig 8.6 saved, all six Chapter-8 scripts reproduced.")'
         ),
     ]
     nb = new_notebook(cells=cells)
@@ -251,7 +251,7 @@ print(f"autism: {autism_df.shape[0]} obs, {p} time-points x {n} children")'''
 def build_ch6_autism():
     cells = [
         new_markdown_cell(
-            "# Chapter 6 — robust variance components (`var_comprob`)\n\n"
+            "# Chapter 6, robust variance components (`var_comprob`)\n\n"
             "Reproduces `autism.R` (Example 6.7, Tables 6.8–6.9): a robust "
             "linear mixed / variance-component model for autism `vsae` growth "
             "across `childid` groups, via `rpm.var_comprob` → "
@@ -301,7 +301,7 @@ def build_ch6_autism():
             'ro.r("ctrlSR <- varComprob.control(method=\'S\', psi=\'rocke\', cov.init=\'covOGK\', lower=c(0.01,0.01,0.01,-Inf,-Inf,-Inf))")\n'
             'ro.r(f"set.seed(2468L); rS <- varComprob({FIXED}, groups=groups, data=autism.updated, varcov=K, control=ctrlSR)")\n'
             'assert np.array_equal(cs.beta, np.asarray(ro.r("as.numeric(rS$beta)"), float))\n'
-            'print("\\nstrict-tier vs R: OK — autism.R reproduced.")'
+            'print("\\nstrict-tier vs R: OK, autism.R reproduced.")'
         ),
     ]
     nb = new_notebook(cells=cells)
@@ -316,7 +316,7 @@ def extend_ch7():
     nb = nbf.read(str(path), as_version=4)
     new_cells = [
         new_markdown_cell(
-            "## epilepsy — robust Poisson GLM (Example 7.3, Breslow data)\n\n"
+            "## epilepsy, robust Poisson GLM (Example 7.3, Breslow data)\n\n"
             "`epilepsy.R` fits the seizure-count model with several robust "
             "estimators. We reproduce **RQL/Mqle** and **MT** "
             "(`robustbase::glmrob`) and **CUBIF** (`robcbi::cubinf`), plus the ML "
@@ -358,7 +358,7 @@ def extend_ch7():
             '    "ML": ml_coef, "CUBIF": cub.coefficients, "MT": mt.coefficients,\n'
             '    "RQL": rql.coefficients, "MP(MATLAB)": mp_coef,\n'
             '}, index=["intercept","Age10","Base4","Progabide","Base4:Prog"])\n'
-            'print("Table 7.3 — coefficient estimates:"); print(table.round(4))'
+            'print("Table 7.3, coefficient estimates:"); print(table.round(4))'
         ),
         new_code_cell(
             '# strict-tier checks vs direct R\n'
@@ -380,9 +380,9 @@ def extend_ch7():
             '        "QL": dev_resid(yy, rql.fitted_values), "MP": dev_resid(yy, mp_fitted)}\n'
             'fig, ax = plt.subplots(figsize=(6, 4))\n'
             'ax.boxplot([np.abs(v) for v in devs.values()], labels=list(devs.keys()))\n'
-            'ax.set_ylabel("Absolute deviance residuals"); ax.set_title("epilepsy — robust GLM deviances (Fig 7.6)")\n'
+            'ax.set_ylabel("Absolute deviance residuals"); ax.set_title("epilepsy, robust GLM deviances (Fig 7.6)")\n'
             'fig.savefig(FIG_DIR / "ch7_epilepsy_dev.png", dpi=110, bbox_inches="tight"); plt.close(fig)\n'
-            'print("Figure 7.6 saved — epilepsy.R reproduced.")'
+            'print("Figure 7.6 saved, epilepsy.R reproduced.")'
         ),
     ]
     nb["cells"].extend(new_cells)

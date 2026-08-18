@@ -1,4 +1,4 @@
-"""``refine.sm`` wrapper — concentrated-likelihood refinement step.
+"""``refine.sm`` wrapper, concentrated-likelihood refinement step.
 
 Wraps ``RobStatTM::refine.sm``. Given a candidate initial estimate
 ``(beta0, sigma0)``, ``refine.sm`` runs a short IRWLS / weighted-least-
@@ -7,7 +7,7 @@ and returns the refined coefficients and scale.
 
 This is a **low-level building block** used inside the deterministic
 initial estimator of ``lmrobdetMM``. End users normally don't call it
-directly — they call :func:`lmrobdet_mm` and get the polished result.
+directly, they call :func:`lmrobdet_mm` and get the polished result.
 We expose it here for parity with R's NAMESPACE.
 
 R formals (RobStatTM 1.0.11)::
@@ -72,7 +72,7 @@ def refine_sm(
 ) -> RefineSMResult:
     """Refine an initial regression estimate via IRWLS.
 
-    Wraps ``RobStatTM::refine.sm``. **Low-level helper** — most users
+    Wraps ``RobStatTM::refine.sm``. **Low-level helper**, most users
     want :func:`lmrobdet_mm`, which calls this internally.
 
     Parameters
@@ -88,7 +88,7 @@ def refine_sm(
     b : float
         Tuning constant for the M-scale (``mscale``).
     cc : float or array-like
-        Tuning constant for ``family`` — shape depends on the family
+        Tuning constant for ``family``, shape depends on the family
         (see :func:`robstattm_py.invtr2` for the family-shape table).
     family : str
         Name of the ρ family.
@@ -161,7 +161,7 @@ def refine_sm(
         ro.globalenv["rpm_refine_y"] = np.ascontiguousarray(y_arr)
         ro.globalenv["rpm_refine_b0"] = np.ascontiguousarray(beta0)
         # numpy2ri pushes a 1-D array as a *dim-attributed* R "array", not a
-        # plain atomic vector — which breaks refine.sm's ``y - x %*% beta``
+        # plain atomic vector - which breaks refine.sm's ``y - x %*% beta``
         # (array-vs-matrix dim mismatch -> "non-conformable"). Reshape X into a
         # real matrix and strip the dim attribute off the vectors via as.numeric.
         setup = (

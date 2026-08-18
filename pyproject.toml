@@ -15,7 +15,7 @@ requires-python = ">=3.10"
 # PEP 639: an SPDX expression, not a table, and the licence file listed
 # explicitly so it is carried in the distribution metadata. The older
 # `{ text = "MIT" }` form and the `License :: OSI Approved ::` classifier are
-# both deprecated — setuptools removes them on 2027-02-18 — and package metadata
+# both deprecated (setuptools removes them on 2027-02-18), and package metadata
 # cannot be edited after release, so this is fixed before the first publish
 # rather than after.
 license = "MIT"
@@ -127,12 +127,12 @@ ignore = ["E501"]
 # (E402); they are grouped by statistical domain rather than alphabetically,
 # which is the order the API reference presents them in (I001).
 "src/robstattm_py/__init__.py" = ["E402", "I001"]
-# This module exists to expose the R spellings — `lmrobdetMM`, `covRobMM`,
+# This module exists to expose the R spellings: `lmrobdetMM`, `covRobMM`,
 # `BYlogreg`. Renaming them to snake_case would delete its reason to exist.
 "src/robstattm_py/compat_r.py" = ["N816"]
 # Wrapper signatures mirror the R functions they call, so a design matrix is
 # `X` and a scatter matrix is `Sigma`. Matching R is the contract (see
-# docs/architecture.md); renaming to `x`/`sigma` would turn the mapping from
+# dev/design/architecture.md); renaming to `x`/`sigma` would turn the mapping from
 # the R documentation to these wrappers into guesswork.
 "src/robstattm_py/**" = ["N803", "N806"]
 # Tests and examples deliberately reuse the book's variable names so a reader

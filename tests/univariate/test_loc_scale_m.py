@@ -10,7 +10,7 @@ from tests.conftest import (
     needs_r,
 )
 
-# Deterministic golden input (no Python randomness — R and Py see identical bits)
+# Deterministic golden input (no Python randomness - R and Py see identical bits)
 GOLDEN_X = np.array(
     [
         1.2, -0.4, 0.7, 2.1, -1.0, 0.3, 1.8, -2.5, 0.9, 0.0,
@@ -20,7 +20,7 @@ GOLDEN_X = np.array(
 
 
 # ---------------------------------------------------------------------------
-# Case 7 — argument validation (do not require R)
+# Case 7 - argument validation (do not require R)
 # ---------------------------------------------------------------------------
 
 class TestInputValidation:
@@ -57,7 +57,7 @@ class TestInputValidation:
 
 
 # ---------------------------------------------------------------------------
-# Strict-tier R comparison — all family × eff combos
+# Strict-tier R comparison - all family × eff combos
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -85,7 +85,7 @@ class TestStrictTierVsR:
 
     @pytest.mark.parametrize("psi", ["mopt", "opt", "optv0", "moptv0"])
     def test_eff_099_opt_family_matches_r(self, R, psi):
-        """The opt/mopt families additionally support eff=0.99 — verify the
+        """The opt/mopt families additionally support eff=0.99, verify the
         validation lets it through AND the result is strict-tier identical to R.
         """
         py = rpm.loc_scale_m(GOLDEN_X, psi=psi, eff=0.99)

@@ -10,7 +10,7 @@ These require their R package to be installed separately:
 ```r
 install.packages(c("pense", "GSE", "robustarima", "robustvarComp", "WWGbook"))
 # robcbi is CRAN-archived and needs its Fortran dependency 'robeth' (Rtools on
-# Windows); install both from the CRAN Archive — see the cubinf section below.
+# Windows); install both from the CRAN Archive, see the cubinf section below.
 # robustbase (for glmrob) is already a RobStatTM dependency.
 ```
 
@@ -21,12 +21,12 @@ clear `RobStatTMSetupError` if you call one whose package is missing.
 
 | Function | R original | Package | What it does |
 |---|---|---|---|
-| [`pense`](#pense) | `pense::pense` | `pense` | Robust elastic-net S-estimator — full regularization path. |
+| [`pense`](#pense) | `pense::pense` | `pense` | Robust elastic-net S-estimator, full regularization path. |
 | [`pense_cv`](#pense_cv) | `pense::pense_cv` | `pense` | Robust elastic-net with k-fold cross-validation. |
 | [`gse`](#gse) | `GSE::GSE` | `GSE` | Generalized S-estimator of location/scatter with **missing data**. |
 | [`tsgs`](#tsgs) | `GSE::TSGS` | `GSE` | Two-step GSE for **cell-wise** outliers. |
 
-**Example-script reproduction (D-024) — these unblock the remaining textbook scripts:**
+**Example-script reproduction (D-024), these unblock the remaining textbook scripts:**
 
 | Function | R original | Package | Script(s) | What it does |
 |---|---|---|---|---|
@@ -94,7 +94,7 @@ print(cv.coef_min.round(3))
 ## `gse`
 
 Generalized S-estimator of multivariate location and scatter that handles
-**missing entries** (`NaN`) natively — the point of the GSE family.
+**missing entries** (`NaN`) natively, the point of the GSE family.
 
 ```python
 def gse(X, *, tol=1e-4, maxiter=150, method="bisquare") -> GSEResult
@@ -111,7 +111,7 @@ X[::10, 0] = np.nan                      # introduce some missingness
 rpm.set_seed(7)
 g = rpm.gse(X)
 print(g.mu.shape, g.cov.shape)           # (5,) (5, 5)
-print(np.isfinite(g.ximp).all())         # True — missing cells imputed
+print(np.isfinite(g.ximp).all())         # True, missing cells imputed
 ```
 
 ## `tsgs`
@@ -136,7 +136,7 @@ print(np.isnan(t.xf).any())              # cells the filter flagged are NaN
 
 Robust ARIMA estimation via the *filtered tau-estimate* (`robustarima::arima.rob`),
 resistant to additive outliers. Reproduces the Chapter-8 time-series scripts.
-`arima.rob` is **deterministic** given its input series — no seeding needed (the
+`arima.rob` is **deterministic** given its input series, no seeding needed (the
 example scripts seed `arima.sim` upstream).
 
 ```python
@@ -171,9 +171,9 @@ print(fit.regcoef)     # mean of the differenced series
 
 Robust variance-component / linear-mixed-model estimation
 (`robustvarComp::varComprob`). Reproduces the autism growth-model example.
-**Stochastic** (default `fixed.init="lmrob.S"`, `cov.init="TSGS"`) — call
+**Stochastic** (default `fixed.init="lmrob.S"`, `cov.init="TSGS"`), call
 `rpm.set_seed(n)` before. A plain `data.frame` is accepted (no `nlme::groupedData`
-needed — the `groups` matrix drives the grouping).
+needed, the `groups` matrix drives the grouping).
 
 ```python
 def var_comprob_control(*, method=None, psi=None, lower=None, upper=None,
@@ -207,7 +207,7 @@ print(fit.sigma2)      # error variance
 
 Robust generalized linear models (`robustbase::glmrob`) for Poisson and binomial
 responses. Reproduces the epilepsy RQL/Mqle and MT fits. **`method="Mqle"` (RQL)
-is deterministic; `method="MT"` is stochastic but seed-reproducible** — seed before
+is deterministic; `method="MT"` is stochastic but seed-reproducible**, seed before
 an MT fit.
 
 ```python
@@ -234,7 +234,7 @@ mt = rpm.glmrob(formula, df, family="poisson", method="MT")
 
 ## `cubinf`
 
-CUBIF — Conditionally Unbiased Bounded-Influence GLM estimates (`robcbi::cubinf`,
+CUBIF, Conditionally Unbiased Bounded-Influence GLM estimates (`robcbi::cubinf`,
 Künsch et al. 1989). Reproduces the epilepsy CUBIF fit. **Deterministic.**
 
 > **Install:** `robcbi` is CRAN-archived and imports the Fortran package `robeth`
@@ -266,5 +266,5 @@ print(fit.coefficients, fit.std_errors)
 
 ## See also
 
-- [API reference](../api/index.md) — the core (non-external) wrappers.
-- [Setup & utilities](utilities.md) — `check_setup()` reports external-package availability.
+- [API reference](../api/index.md), the core (non-external) wrappers.
+- [Setup & utilities](utilities.md), `check_setup()` reports external-package availability.

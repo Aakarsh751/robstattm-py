@@ -33,18 +33,21 @@ estimate when test *T0* has been used.
 ```python
 from robstattm_py import rob_linear_test
 
-def rob_linear_test(object1: 'LmrobdetMMResult', object2: 'LmrobdetMMResult'):
+def rob_linear_test(
+                    object1: 'LmrobdetMMResult | LmrobMResult',
+                    object2: 'LmrobdetMMResult | LmrobMResult',
+)
 ```
 
 ## Parameters
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `object1` | LmrobdetMMResult | *required* |  |
-| `object2` | LmrobdetMMResult | *required* |  |
+| `object1` | LmrobdetMMResult \| LmrobMResult | *required* |  |
+| `object2` | LmrobdetMMResult \| LmrobMResult | *required* |  |
 
 
-> **Note** — handled internally, not exposed in Python: `object`, `test`, `...`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `object`, `test`, `...`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -54,10 +57,10 @@ A `RobLinearTestResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `test` | — | Test statistic. |
-| `chisq_pvalue` | — | χ² approximation p-value. |
-| `f_pvalue` | — | F approximation p-value. |
-| `df` | — | (numerator, denominator) degrees of freedom. |
+| `test` | n/a | Test statistic. |
+| `chisq_pvalue` | n/a | χ² approximation p-value. |
+| `f_pvalue` | n/a | F approximation p-value. |
+| `df` | n/a | (numerator, denominator) degrees of freedom. |
 
 
 
@@ -122,5 +125,5 @@ R implementation by Kjell Konis. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lsRobTestMM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

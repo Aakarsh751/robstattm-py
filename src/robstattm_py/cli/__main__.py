@@ -1,6 +1,6 @@
 """Allow ``python -m robstattm_py.cli`` as well as the ``robstattm-py`` script.
 
-Useful when the console script is not on ``PATH`` — a common situation on
+Useful when the console script is not on ``PATH``, a common situation on
 Windows, and exactly the kind of thing someone hits while trying to diagnose a
 broken install.
 """

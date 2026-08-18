@@ -101,7 +101,7 @@ For **every** wrapper, the following test cases exist:
 | 4 | Medium synthetic contaminated (n=1000, p=20, 5%) | Strict-tier match vs. fresh R call |
 | 5 | High-dimensional (n=500, p=50) | Strict-tier match; smoke-test for `covRobRocke` regime change |
 | 6 | Missing values (NaN in inputs) | Either raises the same R error message (regression) or imputes identically (covariance with GSE/TSGS stretch) |
-| 7 | Invalid input (wrong shape, string in numeric column) | Raises `TypeError` / `ValueError` **before** crossing rpy2 — caught with `pytest.raises` |
+| 7 | Invalid input (wrong shape, string in numeric column) | Raises `TypeError` / `ValueError` **before** crossing rpy2, caught with `pytest.raises` |
 | 8 | Empty input | Raises `ValueError` cleanly |
 | 9 | Boundary tuning parameters (efficiency=0.85, 0.90, 0.95; bisquare, huber, mopt) | Each combination matches R |
 | 10 | Repeatability under fixed seed (call twice → identical output) | Determinism check |
@@ -115,7 +115,7 @@ Phase-3 wrappers (covariance, PCA) add:
 |---|------|-----------------|
 | 12 | Symmetry of covariance return | `assert_array_equal(C, C.T)` |
 | 13 | Positive-semidefiniteness | All eigenvalues ≥ −1e-12 |
-| 14 | Mahalanobis distance distribution under clean Gaussian | smoke-test only — not a hard assertion |
+| 14 | Mahalanobis distance distribution under clean Gaussian | smoke-test only, not a hard assertion |
 
 Phase-6 GLM wrappers add:
 
@@ -130,7 +130,7 @@ Phase-6 GLM wrappers add:
 
 - Tool: `pytest --cov=robstattm_py --cov-fail-under=90`.
 - Branch coverage on. Coverage is enforced in CI on every push to `main` and every PR.
-- The 90% figure is **per module** (univariate, regression, covariance, pca, glm) — averaging hides under-tested modules.
+- The 90% figure is **per module** (univariate, regression, covariance, pca, glm), averaging hides under-tested modules.
 
 ---
 
@@ -169,4 +169,4 @@ tests/fixtures/
 
 - Plot-image regression (covered separately in `project_memory/robstattm-py-planning-docs/plotting_strategy.md` and the `pytest-mpl` config).
 - Benchmark *performance* targets (Phase 4 evaluates speed; no pass/fail gate other than "must complete within CI timeout").
-- Native-Python (Phase 6 stretch) tests use the **Algorithmic** tier and live in `tests/native/` — they are not part of the ≥ 90 % coverage gate for the wrapper code.
+- Native-Python (Phase 6 stretch) tests use the **Algorithmic** tier and live in `tests/native/`, they are not part of the ≥ 90 % coverage gate for the wrapper code.

@@ -1,6 +1,6 @@
 # Documentation Standards
 
-Production-grade. Every wrapper must comply before its quality gate (see `docs/quality_gates.md`) is met.
+Production-grade. Every wrapper must comply before its quality gate (see `dev/design/quality_gates.md`) is met.
 
 ---
 
@@ -141,7 +141,7 @@ Long examples belong in tutorial notebooks (`notebooks/tutorials/`), not in docs
 
 - `conf.py` enables: `sphinx.ext.autodoc`, `sphinx.ext.napoleon` (or `numpydoc`), `sphinx.ext.intersphinx`, `sphinx.ext.viewcode`, `sphinx.ext.autosummary`, `sphinx_rtd_theme`.
 - `intersphinx_mapping` points at NumPy, pandas, SciPy, scikit-learn.
-- `nitpicky = True` and `-W` flag in CI — warnings fail the build.
+- `nitpicky = True` and `-W` flag in CI, warnings fail the build.
 
 API pages are generated via `sphinx-apidoc` + `autosummary`. The user does not hand-write per-function `.rst` files.
 
@@ -174,8 +174,8 @@ API pages are generated via `sphinx-apidoc` + `autosummary`. The user does not h
 ## 9. Templates
 
 See `templates/`:
-- `templates/wrapper.py.tmpl` — module + function skeleton.
-- `templates/test_wrapper.py.tmpl` — pytest skeleton.
-- `templates/docstring.md.tmpl` — a fill-in form for the docstring sections above.
+- `templates/wrapper.py.tmpl`, module + function skeleton.
+- `templates/test_wrapper.py.tmpl`, pytest skeleton.
+- `templates/docstring.md.tmpl`, a fill-in form for the docstring sections above.
 
 Copy and edit; do not import.

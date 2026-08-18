@@ -1,4 +1,4 @@
-"""Multivariate wrappers — dispatcher, Rocke, fastmve, PCA variants.
+"""Multivariate wrappers, dispatcher, Rocke, fastmve, PCA variants.
 
 None of these parameter combinations appear in ``docs/examples/`` except
 ``cov_rob_mm`` and ``prcomp_rob`` at default settings.
@@ -43,7 +43,7 @@ class TestCovRobDispatcher:
 
 @needs_r
 class TestCovClassicBaseline:
-    """Classical Pearson baseline — side-by-side with robust."""
+    """Classical Pearson baseline, side-by-side with robust."""
 
     def test_wine_classical_vs_robust(self):
         rpm.set_seed(5)

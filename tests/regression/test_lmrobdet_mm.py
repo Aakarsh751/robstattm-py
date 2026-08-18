@@ -47,7 +47,7 @@ class TestControl:
 
 
 # ---------------------------------------------------------------------------
-# Strict-tier comparison vs direct R — flagship test on `mineral`
+# Strict-tier comparison vs direct R - flagship test on `mineral`
 # ---------------------------------------------------------------------------
 
 @needs_r

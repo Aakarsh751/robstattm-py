@@ -6,11 +6,11 @@ If anything is not working, run this first:
 robstattm-py doctor
 ```
 
-It checks every layer the package depends on — Python, rpy2, R, and the R
-packages — and prints what is wrong along with the command that fixes it.
+It checks every layer the package depends on, Python, rpy2, R, and the R
+packages, and prints what is wrong along with the command that fixes it.
 
 > **Can't run `robstattm-py`?** On Windows, `pip` often installs command-line
-> tools into a folder that is not on your `PATH`. Use this instead — it always
+> tools into a folder that is not on your `PATH`. Use this instead, it always
 > works, and does exactly the same thing:
 >
 > ```bash
@@ -52,7 +52,7 @@ R packages
 Result: READY
 ```
 
-The line that matters most when something is wrong is **`found via`** — it names
+The line that matters most when something is wrong is **`found via`**, it names
 which of the search locations R was found in. The full list is under
 `Where we looked`, which is printed automatically when no R is found, and with
 `-v` otherwise.
@@ -78,7 +78,7 @@ searches these locations in order and uses the first R that works:
 | 10 | Linux | `/usr/lib/R`, `/usr/local/lib/R`, `/opt/R/*`. |
 
 A candidate that fails is recorded and the search continues. Nothing is skipped
-silently — every rejection appears in the trace with its reason.
+silently, every rejection appears in the trace with its reason.
 
 ---
 
@@ -101,8 +101,8 @@ git clone https://github.com/Aakarsh751/robstattm-py.git
 pip install ./robstattm-py
 ```
 
-Everything after this point — `robstattm-py setup`, `doctor`, and the whole API
-— behaves identically. If you want the optional extras, name them the same way:
+Everything after this point, `robstattm-py setup`, `doctor`, and the whole API
+, behaves identically. If you want the optional extras, name them the same way:
 `pip install "./robstattm-py[plots]"`.
 
 > This error is worth distinguishing from a genuine network or proxy failure,
@@ -117,10 +117,10 @@ shows R *was* found somewhere but was rejected for a specific reason.
 
 If you genuinely have no R, install it:
 
-- **Windows** — <https://cran.r-project.org/bin/windows/base/>
-- **macOS** — <https://cran.r-project.org/bin/macosx/> (match your CPU: arm64 for
+- **Windows**, <https://cran.r-project.org/bin/windows/base/>
+- **macOS**, <https://cran.r-project.org/bin/macosx/> (match your CPU: arm64 for
   Apple Silicon, x86_64 for Intel)
-- **Linux** — `sudo apt-get install r-base r-base-dev`, or
+- **Linux**, `sudo apt-get install r-base r-base-dev`, or
   `sudo dnf install R R-devel`
 
 Then install the R packages:
@@ -152,8 +152,8 @@ Reinstall R so it matches your Python.
 > Run it and attach its final block to any issue you open.
 
 Typically on Google Colab, Kaggle, a Docker image, or any Linux box where rpy2
-arrived prebuilt — from `apt`, from the image, or as part of a notebook
-environment — and R came from `robstattm-py setup`.
+arrived prebuilt, from `apt`, from the image, or as part of a notebook
+environment, and R came from `robstattm-py setup`.
 
 rpy2 ships two bindings to R. The **compiled** one (`_rinterface_cffi_api`) is
 built against the headers of whichever R was present when rpy2 was built; the
@@ -169,12 +169,12 @@ faster compiled binding, since that is plausibly the one rpy2 was built against.
 **On Google Colab or Kaggle the simplest fix is to use the system R rather than
 provision a new one.** `pip` rebuilds rpy2 from source against that R (`/usr/lib/R`)
 when it installs, so the compiled binding matches it exactly. Install the R
-packages into it and skip `setup` entirely — see the
-[Colab / Kaggle quickstart](installation.md#google-colab--kaggle-fastest-path--no-r-download).
+packages into it and skip `setup` entirely, see the
+[Colab / Kaggle quickstart](installation.md#google-colab--kaggle-fastest-path-no-r-download).
 Provisioning a separate R is the harder path there and is not needed.
 
-If you hit it anyway — an R that is neither, or an rpy2/R pairing we cannot
-predict — set the variable yourself. It must be set **before Python starts**;
+If you hit it anyway, an R that is neither, or an rpy2/R pairing we cannot
+predict, set the variable yourself. It must be set **before Python starts**;
 rpy2 reads it when it first loads R, and by the time you can run a cell in an
 already-started kernel it may be too late:
 
@@ -183,7 +183,7 @@ export RPY2_CFFI_MODE=ABI
 ```
 
 In a Colab or Jupyter notebook, put this in the **first** cell, before any
-import — and if you have already imported anything that loads R, restart the
+import, and if you have already imported anything that loads R, restart the
 runtime first. rpy2 embeds R as a process-global singleton, so the binding
 cannot be changed once R is loaded:
 
@@ -207,7 +207,7 @@ robstattm-py setup --use-system-r                     # use the R rpy2 knows
 
 ### "cannot import name 'default_converter' from 'rpy2.robjects' (unknown location)"
 
-This is **not** a binding or R-loading problem — `rpy2.robjects` cannot be
+This is **not** a binding or R-loading problem, `rpy2.robjects` cannot be
 imported at all. rpy2 3.6 is split across three separately-versioned
 distributions, and when they drift out of step `rpy2.robjects` resolves to an
 empty namespace package with no file. `doctor` now names the culprit directly:
@@ -233,7 +233,7 @@ pip install --force-reinstall --no-cache-dir rpy2
 
 ### Windows: setup reaches "[4/4] Verifying" and then fails
 
-Symptoms — one of:
+Symptoms, one of:
 
 ```text
 robstattm-py: The provisioned R could not be started.
@@ -251,7 +251,7 @@ step 4 is simply the first moment anything actually starts R, so it is where a
 loading problem surfaces.
 
 Windows resolves a DLL by scanning `PATH` from left to right and loading the
-first matching *name*. R needs `R.dll`, `Rblas.dll` and a mingw runtime — names
+first matching *name*. R needs `R.dll`, `Rblas.dll` and a mingw runtime, names
 that a CRAN R installation, Rtools, MSYS2, Git's bundled mingw and other conda
 environments all also ship. If one of those is found first, the wrong copy is
 loaded into R. It then either fails outright (`0xC0000135`) or loads and dies on
@@ -267,7 +267,7 @@ robstattm-py doctor            # shows which R was found and how
 
 Then, in order of preference:
 
-1. **Use the R you already have** — skips the download entirely:
+1. **Use the R you already have**, skips the download entirely:
    ```bash
    robstattm-py setup --use-system-r
    ```
@@ -321,7 +321,7 @@ variable RPY2_CFFI_MODE=ABI
 ```
 
 This is the chicken-and-egg case on **Linux**: rpy2 ships no Linux wheels, so
-pip compiles it, and its default mode wants R at build time — but you were
+pip compiles it, and its default mode wants R at build time, but you were
 going to let `robstattm-py setup` install R. Do as the message says:
 
 ```bash
@@ -341,9 +341,9 @@ then uses whichever R you end up with. Results are identical.
 `pip install rpy2` may try to compile against R and fail if R headers or a C
 compiler are missing.
 
-- **Linux** — install the toolchain: `sudo apt-get install r-base-dev build-essential`
-- **macOS** — `xcode-select --install`
-- **Any platform** — rpy2 also ships a pure-Python binding that needs no
+- **Linux**, install the toolchain: `sudo apt-get install r-base-dev build-essential`
+- **macOS**, `xcode-select --install`
+- **Any platform**, rpy2 also ships a pure-Python binding that needs no
   compiler. Force it with:
 
   ```bash
@@ -428,10 +428,10 @@ robstattm-py doctor --json
 ```
 
 That single command captures your Python, rpy2, R, the full search trace, and
-every installed R package version — which is almost always enough to diagnose
+every installed R package version, which is almost always enough to diagnose
 the problem without any back-and-forth.
 
 ## See also
 
-- [Installation & setup](installation.md) — the full cross-OS setup guide.
-- [Getting started](../getting-started.md) — your first robust fit.
+- [Installation & setup](installation.md), the full cross-OS setup guide.
+- [Getting started](../getting-started.md), your first robust fit.

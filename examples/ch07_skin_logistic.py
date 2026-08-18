@@ -1,9 +1,9 @@
-"""Chapter 7, Example 7.2 — robust logistic regression on the skin data (Fig 7.5).
+"""Chapter 7, Example 7.2, robust logistic regression on the skin data (Fig 7.5).
 
 Python port of ``skin.R``.
 
 39 observations of vasoconstriction against log volume and log rate of air
-inspired. The data are almost perfectly separable — two observations, 4 and 18,
+inspired. The data are almost perfectly separable, two observations, 4 and 18,
 sit on the wrong side of the boundary the other 37 define. Near-separation is
 the pathological case for maximum likelihood: coefficients drift toward
 infinity to fit those two points, and the resulting fit describes them at the
@@ -33,7 +33,7 @@ LABELLED = (4, 18)
 
 
 def main() -> None:
-    section("Chapter 7, Example 7.2 — skin data")
+    section("Chapter 7, Example 7.2, skin data")
 
     skin = rpm.datasets.skin()
     x = skin[["logVOL", "logRATE"]].to_numpy(dtype=float)
@@ -61,13 +61,13 @@ def main() -> None:
         f"\n  The Bianco-Yohai slopes are about {ratio:.1f}x the ML ones, which is\n"
         "  the opposite of what one might expect from 'robust = more\n"
         "  conservative'. It is the right direction here: observations 4 and 18\n"
-        "  sit on the wrong side of the boundary the other 37 define, and ML —\n"
-        "  which cannot discount any observation — settles on a flatter boundary\n"
+        "  sit on the wrong side of the boundary the other 37 define, and ML,\n"
+        "  which cannot discount any observation, settles on a flatter boundary\n"
         "  that partly accommodates them. Declining to do that makes the fitted\n"
         "  boundary steeper, not shallower."
     )
 
-    section("Figure 7.5 — sorted absolute deviance residuals")
+    section("Figure 7.5, sorted absolute deviance residuals")
     wby = fits["WBY (weighted BY)"]
     wby_dev = np.abs(np.asarray(wby.residual_deviances, dtype=float))
     ml_dev = np.abs(ml_deviance_residuals(x, y, ml_coef))
@@ -87,14 +87,14 @@ def main() -> None:
     if set(LABELLED) <= set(int(i) for i in ranked):
         print(
             f"\n  Both of the book's labelled points, {LABELLED[0]} and "
-            f"{LABELLED[1]}, are in the robust\n  fit's top four — found rather "
+            f"{LABELLED[1]}, are in the robust\n  fit's top four, found rather "
             "than assumed."
         )
 
     rpm.plot.location_scale(
         rpm.loc_scale_m(wby_dev),
         wby_dev,
-        title="Skin — WBY absolute deviance residuals (Figure 7.5)",
+        title="Skin, WBY absolute deviance residuals (Figure 7.5)",
         save=figure("ch07_skin_deviances"),
     )
 

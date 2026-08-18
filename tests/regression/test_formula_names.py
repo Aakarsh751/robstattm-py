@@ -2,8 +2,8 @@
 
 Our dataset loaders rename R's dotted columns for Python (``n.shocks`` becomes
 ``n_shocks``), but the frame is pushed to R under its original names. Before
-``formula_to_r_names`` the obvious call — read the frame, look at
-``df.columns``, write a formula using what you saw — failed with R's
+``formula_to_r_names`` the obvious call, read the frame, look at
+``df.columns``, write a formula using what you saw, failed with R's
 ``object 'n_shocks' not found``, naming something the caller never typed.
 
 Both spellings must work, and must give the same fit.
@@ -88,12 +88,12 @@ class TestBothSpellingsFitIdentically:
 
     def test_dot_formula_still_expands(self):
         # `.` must reach R intact. algae has factor columns, so the expanded
-        # coefficient count exceeds the column count — the point is only that
+        # coefficient count exceeds the column count - the point is only that
         # the dot expanded at all rather than being mangled by the rewrite.
         algae = rpm.datasets.algae()
         fit = rpm.lmrobdet_mm("V12 ~ .", data=algae)
         assert fit.coef_names[0] == "(Intercept)"
         assert len(fit.coef_names) >= algae.shape[1]
         # (Don't assert the response is absent from the names: algae's factor
-        # columns expand to level-suffixed labels — V1 level 2 is "V12" — which
+        # columns expand to level-suffixed labels - V1 level 2 is "V12", which
         # collides with the response name by coincidence.)

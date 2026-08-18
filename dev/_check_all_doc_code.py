@@ -5,7 +5,7 @@ wrapper pages. This one covers the hand-written prose: getting-started, the
 README, and every guide.
 
 The rule the project holds itself to is that a documented example works. A block
-that cannot run is either a bug in the docs or a fragment that should say so —
+that cannot run is either a bug in the docs or a fragment that should say so,
 see ``SKIP_MARKER`` for the explicit opt-out, which exists so that
 "needs an optional R package" is recorded in the page rather than showing up
 here forever as an unexplained failure.

@@ -31,7 +31,7 @@ Python name.
 
 ```python
 rpm.help("lmrobdetMM")     # by R name
-rpm.help("lmrobdet_mm")    # by Python name — same output
+rpm.help("lmrobdet_mm")    # by Python name, same output
 ```
 
 ## `list_names()`
@@ -56,7 +56,7 @@ standard [`warnings`](https://docs.python.org/3/library/warnings.html) machinery
 as a `RobStatTMWarning`. There are three ways to see them:
 
 **1. They print automatically.** In a script or notebook the messages appear
-inline, one per warning — no setup required.
+inline, one per warning, no setup required.
 
 **2. Record them programmatically** with `warnings.catch_warnings`:
 
@@ -134,7 +134,7 @@ print(f"{t.total_seconds * 1000:.1f} ms")
 ## Plotting (R graphics)
 
 `rpm.plotting.r_plot(r_code, path=...)` renders any R graphics expression to a
-PNG via R's own graphics device — pixel-equivalent to the textbook figures.
+PNG via R's own graphics device, pixel-equivalent to the textbook figures.
 
 ```python
 rpm.plotting.r_plot(

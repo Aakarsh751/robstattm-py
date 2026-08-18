@@ -2,7 +2,7 @@
 
 Runs the real ``verify_environment`` twice against the provisioned environment:
 
-  1. with a PATH deliberately poisoned the way a real machine is — a CRAN R
+  1. with a PATH deliberately poisoned the way a real machine is, a CRAN R
      installation and Rtools ahead of everything else, and the environment's own
      directories absent;
   2. with the same poisoned PATH, but through the shipped code, which puts the
@@ -109,7 +109,7 @@ def main() -> int:
         print("           survives it.")
         return 0
     else:
-        print("THE FIX DID NOT HOLD — do not ship.")
+        print("THE FIX DID NOT HOLD, do not ship.")
         return 1
     return 0
 

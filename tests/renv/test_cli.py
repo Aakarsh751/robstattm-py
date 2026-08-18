@@ -2,7 +2,7 @@
 
 Mostly R-free: ``info`` never starts R, and ``doctor --no-start-r`` stops before
 it would. The point of these tests is that the CLI stays *usable when things are
-broken* — that is the only time anyone runs it.
+broken*, that is the only time anyone runs it.
 """
 from __future__ import annotations
 
@@ -167,7 +167,7 @@ def test_doctor_json_stays_parseable_when_something_prints(
         Trying to import in ABI mode.
 
     That landed in front of the JSON and made `doctor --json` unparseable for
-    anything consuming it — which is how CI found it.
+    anything consuming it, which is how CI found it.
     """
     import robstattm_py.cli._doctor as doctor_module
 

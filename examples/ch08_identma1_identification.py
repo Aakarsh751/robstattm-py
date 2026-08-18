@@ -1,11 +1,11 @@
-"""Chapter 8, Example 8.4 — identifying an MA(1) under contamination (Figs 8.9-8.10).
+"""Chapter 8, Example 8.4, identifying an MA(1) under contamination (Figs 8.9-8.10).
 
 Python port of ``identMA1.R``.
 
 The MA counterpart of ``ch08_identar2_identification.py``, and a harder case:
 an MA(1)'s signature is a single non-zero autocorrelation at lag 1 and nothing
 beyond it. Additive outliers shrink that one informative value toward zero,
-which is precisely the direction that makes the series look like white noise —
+which is precisely the direction that makes the series look like white noise,
 so the failure mode is not choosing the wrong order but concluding there is no
 structure at all.
 
@@ -31,7 +31,7 @@ LAGS = 10
 
 
 def main() -> None:
-    section("Chapter 8, Example 8.4 — identifying an MA(1) with 10% outliers")
+    section("Chapter 8, Example 8.4, identifying an MA(1) with 10% outliers")
 
     require_r_packages("robustarima")
 
@@ -43,7 +43,7 @@ def main() -> None:
     fit = rpm.arima_rob("x ~ 1", data=pd.DataFrame({"x": contaminated}), auto_ar=True)
     filtered = np.asarray(fit.y_robust, dtype=float)
 
-    section("Figure 8.10 — sample autocorrelations")
+    section("Figure 8.10, sample autocorrelations")
     clean_acf = acf(clean, LAGS)
     dirty_acf = acf(contaminated, LAGS)
     filtered_acf = acf(filtered, LAGS)
@@ -55,7 +55,7 @@ def main() -> None:
             f"{dirty_acf[k]:>16.4f}{filtered_acf[k]:>12.4f}"
         )
 
-    section("The lag-1 autocorrelation — the whole signature of an MA(1)")
+    section("The lag-1 autocorrelation, the whole signature of an MA(1)")
     # For an MA(1) the theoretical lag-1 autocorrelation is theta / (1 + theta^2).
     theoretical = THETA / (1 + THETA**2)
     table(
@@ -73,7 +73,7 @@ def main() -> None:
         f"\n  Contamination retains only {retained:.0%} of the clean lag-1\n"
         f"  autocorrelation; filtering recovers {recovered:.0%} of it. An MA(1)\n"
         "  carries all of its structure in this one number, so shrinking it is\n"
-        "  the same as erasing the model — the contaminated column would be read\n"
+        "  the same as erasing the model, the contaminated column would be read\n"
         "  as 'no meaningful dependence'."
     )
 

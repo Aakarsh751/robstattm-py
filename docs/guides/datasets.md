@@ -49,7 +49,7 @@ skin    = rpm.datasets.load("RobStatTM", "skin")
 ## R column names
 
 R column names containing dots (`stack.loss`, `Air.Flow`) are **renamed** on the
-way in — a dot is not usable in a Python attribute. Dots become underscores, and
+way in, a dot is not usable in a Python attribute. Dots become underscores, and
 the originals are kept on the frame:
 
 ```python
@@ -73,7 +73,7 @@ when transcribing a formula out of the textbook or porting an R script. The
 frame is handed to R under its original names, so coefficient labels come back
 in R's spelling either way.
 
-> Until recently only the dotted form worked. The underscored one — the spelling
-> `df.columns` shows you, and therefore the one everybody tries first — failed
+> Until recently only the dotted form worked. The underscored one, the spelling
+> `df.columns` shows you, and therefore the one everybody tries first, failed
 > with R's `object 'stack_loss' not found`, naming something you could not see
 > anywhere.

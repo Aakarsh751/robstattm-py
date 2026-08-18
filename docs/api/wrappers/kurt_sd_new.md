@@ -20,7 +20,7 @@ def kurt_sd_new(X, muldirand: 'int' = 20, muldifix: 'int' = 10, dirmin: 'int' = 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | a data matrix with observations in rows. |
+| `X` | n/a | *required* | a data matrix with observations in rows. |
 | `muldirand` | int | `20` | used to determine the number of random directions (candidates), which is `max(p*muldirand, dirmin)`, where `p` is the number of columns in `X`. |
 | `muldifix` | int | `10` | used to determine the number of random directions (candidates), which is `min(n, 2*muldifix*p)`. |
 | `dirmin` | int | `1000` | minimum number of random directions |
@@ -39,7 +39,7 @@ A `KurtSDResult` object. Its attributes mirror the fields of the R
 | `center` | center | Robust mean estimate |
 | `cova` | cova | Robust covariance matrix estimate |
 | `t` | t | Outlyingness of data points |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
 
@@ -101,5 +101,5 @@ by D. Pen~a and J. Prieto. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `initPP`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

@@ -35,6 +35,6 @@ cat("hatvalues match identical?\n")
 print(identical(as.numeric(hv_mm), hv_manual))
 print(all.equal(as.numeric(hv_mm), hv_manual))
 
-cat("\n===== summary.lmrobdetMM source — how r.squared is computed =====\n")
+cat("\n===== summary.lmrobdetMM source, how r.squared is computed =====\n")
 # This is the relevant source from RobStatTM:
 print(getFromNamespace("summary.lmrobdetMM", "RobStatTM"))

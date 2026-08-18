@@ -1,9 +1,9 @@
-"""RobStatTM-Py — Python wrappers for the RobStatTM R package.
+"""RobStatTM-Py, Python wrappers for the RobStatTM R package.
 
-Public flat re-exports (see docs/user_interface.md §2.1). Submodule access is
+Public flat re-exports (see dev/design/user_interface.md §2.1). Submodule access is
 also supported: ``from robstattm_py.univariate import loc_scale_m``.
 
-Importing this module is cheap — R is not started until the first wrapper call
+Importing this module is cheap, R is not started until the first wrapper call
 (see ``_r.py`` for the lazy ``importr`` pattern, and ``decisions.md`` D-009).
 """
 from __future__ import annotations
@@ -12,7 +12,7 @@ def _detect_version() -> str:
     """Return the installed distribution's version.
 
     Read from installed metadata rather than hardcoded here, so the number can
-    never drift from what pip actually installed — a discrepancy that makes bug
+    never drift from what pip actually installed, a discrepancy that makes bug
     reports impossible to interpret. The fallback covers running from a source
     checkout that was never installed.
     """
@@ -86,7 +86,7 @@ from robstattm_py.external.cubinf import CubinfResult, cubinf
 from robstattm_py import datasets, plot, plotting, psi, bench, external
 
 # Attach to_dict / to_r / _repr_html_ / coef_df to every result dataclass
-# (see docs/user_interface.md §6 and src/robstattm_py/_result_mixins.py).
+# (see dev/design/user_interface.md §6 and src/robstattm_py/_result_mixins.py).
 from robstattm_py._result_mixins import install_result_mixins as _install_mixins
 
 _install_mixins()

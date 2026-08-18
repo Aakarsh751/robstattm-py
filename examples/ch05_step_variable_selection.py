@@ -1,4 +1,4 @@
-"""Chapter 5, Example 5.3 — robust variable selection by RFPE (Table 5.2).
+"""Chapter 5, Example 5.3, robust variable selection by RFPE (Table 5.2).
 
 Python port of ``step.R``.
 
@@ -46,7 +46,7 @@ def simulate() -> pd.DataFrame:
     y = x @ BETA + 1.0 + noise
 
     # Six gross outliers in y, with a matching ramp planted in the three noise
-    # columns — so a non-robust criterion is actively tempted to keep them.
+    # columns - so a non-robust criterion is actively tempted to keep them.
     y[:N_OUTLIERS] = np.arange(30, 30 + 5 * N_OUTLIERS, 5, dtype=float)
     for i in range(N_OUTLIERS):
         x[i, 3:] = (i + 1) / 2
@@ -57,7 +57,7 @@ def simulate() -> pd.DataFrame:
 
 
 def main() -> None:
-    section("Chapter 5, Example 5.3 — robust stepwise selection")
+    section("Chapter 5, Example 5.3, robust stepwise selection")
 
     data = simulate()
     signal = [c for c, b in zip(data.columns[1:], BETA, strict=True) if b != 0]
@@ -71,7 +71,7 @@ def main() -> None:
     section("Full model")
     print(full.summary())
 
-    section("Table 5.2 — backward elimination by RFPE")
+    section("Table 5.2, backward elimination by RFPE")
     result = rpm.step_lmrobdet(full, direction="backward")
     print(f"  selected model: {result.final_formula}")
     print(f"  robust scale of the selected fit: {result.scale:.4f}")
@@ -90,11 +90,11 @@ def main() -> None:
         },
     )
     if set(kept) == set(signal):
-        print("\n  Exactly the three real predictors — the planted pattern did not fool it.")
+        print("\n  Exactly the three real predictors, the planted pattern did not fool it.")
 
     rpm.plot.diagnostics(
         full,
-        title="Stepwise example — full-model diagnostics",
+        title="Stepwise example, full-model diagnostics",
         save=figure("ch05_step_diagnostics"),
     )
 

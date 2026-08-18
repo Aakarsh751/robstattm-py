@@ -46,14 +46,14 @@ Relevant properties:
 
 Note that conda packages may run install scripts, which is inherent to
 installing software this way. If that is unacceptable in your environment,
-install R through your own trusted channel — RobStatTM-Py will find it
+install R through your own trusted channel, RobStatTM-Py will find it
 automatically and `setup` is never required.
 
 ### It executes R code
 
 The wrappers pass arguments into an embedded R interpreter. Some paths build R
 expressions as strings. **Do not pass untrusted input as formulas, package
-names, or file paths** — the same caution that applies to any `eval`-like
+names, or file paths**, the same caution that applies to any `eval`-like
 interface. This library is intended for analysing your own data, not as a
 service boundary.
 

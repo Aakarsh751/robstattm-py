@@ -1,4 +1,4 @@
-"""Regression wrappers — parameter sweeps and less-documented workflows.
+"""Regression wrappers, parameter sweeps and less-documented workflows.
 
 Covers combinations NOT shown in ``docs/examples/``:
   - full ``lmrobdet_control`` customisation (book defaults: bisquare @ 0.85)
@@ -81,7 +81,7 @@ class TestControlCustomizations:
 
 @needs_r
 class TestLmrobM:
-    """M-regression on shock data (Example 4.1) — not in docs/examples."""
+    """M-regression on shock data (Example 4.1), not in docs/examples."""
 
     def test_shock_vs_r(self, R):
         shock = rpm.datasets.shock()
@@ -99,7 +99,7 @@ class TestLmrobM:
 
 @needs_r
 class TestLmrobdetDCML:
-    """DCML regression — alternative to MM, not demoed in examples."""
+    """DCML regression, alternative to MM, not demoed in examples."""
 
     def test_mineral_vs_r(self, R):
         df = rpm.datasets.mineral()

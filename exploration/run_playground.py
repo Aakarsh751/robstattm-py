@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Interactive playground — run individual exploration workflows without pytest.
+"""Interactive playground, run individual exploration workflows without pytest.
 
 Usage (from repo root)::
 
@@ -26,7 +26,7 @@ def _header(name: str) -> None:
 
 
 def mineral() -> None:
-    _header("mineral — flagship MM regression")
+    _header("mineral, flagship MM regression")
     df = rpm.datasets.mineral()
     fit = rpm.lmrobdet_mm("zinc ~ copper", data=df)
     print(fit)
@@ -34,14 +34,14 @@ def mineral() -> None:
 
 
 def algae() -> None:
-    _header("algae — dot formula (Example 5.4)")
+    _header("algae, dot formula (Example 5.4)")
     df = rpm.datasets.algae()
     fit = rpm.lmrobdet_mm("V12 ~ .", data=df, control=BOOK)
     print(f"scale={fit.scale:.4f}  rank={fit.rank}  R²={fit.r_squared:.4f}")
 
 
 def shock() -> None:
-    _header("shock — M regression (Example 4.1)")
+    _header("shock, M regression (Example 4.1)")
     df = rpm.datasets.shock()
     ctrl = rpm.lmrobm_control(bb=0.5, efficiency=0.85, family="bisquare")
     fit = rpm.lmrob_m("time ~ n.shocks", data=df, control=ctrl)
@@ -49,7 +49,7 @@ def shock() -> None:
 
 
 def stackloss_step() -> None:
-    _header("stackloss — stepwise RFPE")
+    _header("stackloss, stepwise RFPE")
     df = rpm.datasets.stackloss()
     full = rpm.lmrobdet_mm(
         "stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.", data=df
@@ -61,7 +61,7 @@ def stackloss_step() -> None:
 
 
 def wine_cov() -> None:
-    _header("wine — robust vs classical covariance")
+    _header("wine, robust vs classical covariance")
     rpm.set_seed(42)
     X = rpm.datasets.wine().to_numpy()
     rob = rpm.cov_rob_mm(X)
@@ -71,7 +71,7 @@ def wine_cov() -> None:
 
 
 def bus_pca() -> None:
-    _header("bus — prcomp_rob with rank=5")
+    _header("bus, prcomp_rob with rank=5")
     rpm.set_seed(42)
     pc = rpm.prcomp_rob(rpm.datasets.bus().to_numpy(), rank=5)
     print(f"sdev[:5] = {pc.sdev[:5].round(3)}")
@@ -79,7 +79,7 @@ def bus_pca() -> None:
 
 
 def skin_glm() -> None:
-    _header("skin — BY / WBY / WML logistic")
+    _header("skin, BY / WBY / WML logistic")
     df = rpm.datasets.skin()
     X = df[["logVOL", "logRATE"]].to_numpy(float)
     y = df["vasoconst"].to_numpy(float)
@@ -93,7 +93,7 @@ def skin_glm() -> None:
 
 
 def bisquare_sweep() -> None:
-    _header("mineral — ψ-family sweep @ 85% efficiency")
+    _header("mineral, ψ-family sweep @ 85% efficiency")
     df = rpm.datasets.mineral()
     for fam in ("mopt", "bisquare", "huber", "opt"):
         fit = rpm.lmrobdet_mm(
@@ -103,13 +103,13 @@ def bisquare_sweep() -> None:
 
 
 def dcml() -> None:
-    _header("mineral — DCML regression")
+    _header("mineral, DCML regression")
     fit = rpm.lmrobdet_dcml("zinc ~ copper", data=rpm.datasets.mineral())
     print(f"scale={fit.scale:.4f}  converged={fit.converged}")
 
 
 def coleman() -> None:
-    _header("coleman — cross-package dataset + dot formula")
+    _header("coleman, cross-package dataset + dot formula")
     df = rpm.datasets.load("robustbase", "coleman")
     fit = rpm.lmrobdet_mm("Y ~ .", data=df)
     print(fit)
@@ -134,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "scenarios",
         nargs="*",
-        help=f"One of: {', '.join(SCENARIOS)} — or 'all'",
+        help=f"One of: {', '.join(SCENARIOS)}, or 'all'",
     )
     parser.add_argument("--list", action="store_true", help="List scenario names")
     args = parser.parse_args(argv)

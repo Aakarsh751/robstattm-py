@@ -19,7 +19,7 @@ A `LmrobMControl` object. Its attributes mirror the fields of the R
 `lmrobM.control` result, converted to NumPy / pandas / native Python types:
 
 Defaults below mirror R's `lmrobM.control` (RobStatTM 1.0.11) field-for-field.
-Note `lmrobM` uses a smaller control surface than `lmrobdet_control` — it does
+Note `lmrobM` uses a smaller control surface than `lmrobdet_control`; it does
 not run the deterministic-initial / Peña–Yohai / pyinit cascade.
 
 | Attribute | R name | Default | Notes |
@@ -81,5 +81,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>. Python wrappe
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lmrobM.control`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

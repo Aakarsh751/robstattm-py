@@ -1,4 +1,4 @@
-"""``robstattm-py doctor`` — diagnose the environment.
+"""``robstattm-py doctor``, diagnose the environment.
 
 The section that earns its keep is the discovery trace. "R not found" tells a
 user nothing; a list of the nine places we looked, with the specific reason each

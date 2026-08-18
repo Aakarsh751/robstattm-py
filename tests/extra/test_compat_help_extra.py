@@ -18,7 +18,7 @@ class TestCompatCompleteness:
             assert getattr(compat_r, name) is not None
 
     def test_import_star_exposes_all(self):
-        """`from robstattm_py.compat_r import *` must bring every __all__ name —
+        """`from robstattm_py.compat_r import *` must bring every __all__ name,
         a name defined but absent from __all__ would silently not be exported."""
         ns: dict = {}
         exec("from robstattm_py.compat_r import *", ns)
@@ -51,7 +51,7 @@ class TestCompatCompleteness:
 class TestHelpCompleteness:
     def test_help_runs_for_every_mapped_name(self, capsys):
         """`help(name)` must print for every R→Python name in the map, including
-        the external (pense/GSE/TSGS) entries — none may raise."""
+        the external (pense/GSE/TSGS) entries, none may raise."""
         for r_name in rpm.list_names():
             rpm.help(r_name)
             out = capsys.readouterr().out

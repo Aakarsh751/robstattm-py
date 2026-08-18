@@ -1,11 +1,11 @@
-"""Chapter 6, Example 6.7 — robust variance components on the autism data.
+"""Chapter 6, Example 6.7, robust variance components on the autism data.
 
 Python port of ``autism.R`` (Tables 6.8, 6.9).
 
 41 children measured at five ages, modelling VSAE score against age, age² and
-socialisation group. The interest is in the *variance components* — how much
+socialisation group. The interest is in the *variance components*, how much
 variation belongs to the intercept, the linear age term and the quadratic term,
-and how they covary — not just the fixed effects.
+and how they covary, not just the fixed effects.
 
 Two estimators from ``robustvarComp``: composite-tau, and a classical S fit with
 Rocke's psi for comparison.
@@ -28,7 +28,7 @@ N_CHILDREN = 41
 
 
 def main() -> None:
-    section("Chapter 6, Example 6.7 — autism data, robust variance components")
+    section("Chapter 6, Example 6.7, autism data, robust variance components")
 
     require_r_packages("robustvarComp", "nlme", "WWGbook")
 
@@ -49,7 +49,7 @@ def main() -> None:
     ]
     names = ("Int", "age", "age2", "Int:age", "Int:age2", "age:age2")
 
-    # Column 1 indexes the occasion, column 2 the child — the layout
+    # Column 1 indexes the occasion, column 2 the child - the layout
     # varComprob expects, and the order autism.R builds it in.
     groups = np.column_stack(
         [
@@ -65,7 +65,7 @@ def main() -> None:
     # The variance components are non-negative; the fixed effects are not.
     lower = [0.01, 0.01, 0.01, -np.inf, -np.inf, -np.inf]
 
-    section("Table 6.8 — composite tau")
+    section("Table 6.8, composite tau")
     tau = rpm.var_comprob(
         formula,
         data,
@@ -76,7 +76,7 @@ def main() -> None:
     )
     _report(tau, names)
 
-    section("Table 6.9 — classical S with Rocke psi")
+    section("Table 6.9, classical S with Rocke psi")
     s_fit = rpm.var_comprob(
         formula,
         data,
@@ -142,7 +142,7 @@ def _prepare():
     autism["age_2"] = autism["age"] - 2
     # Recode so group 3 becomes the reference (0), as autism.R does. The levels
     # are stringified because rpy2 can only build an R factor from string
-    # categories — an integer-valued category silently falls back to a
+    # categories - an integer-valued category silently falls back to a
     # character column, which changes the contrasts R fits.
     recode = {3: "0", 2: "2", 1: "1"}
     autism["sicdegp2_f"] = autism["sicdegp"].map(recode).astype("category")

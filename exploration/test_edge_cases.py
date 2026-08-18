@@ -1,4 +1,4 @@
-"""Edge cases — degenerate inputs must fail cleanly or match R exactly.
+"""Edge cases, degenerate inputs must fail cleanly or match R exactly.
 
 A robust wrapper layer should never segfault, hang, or return silent garbage on
 pathological data. These tests pin down the behavior on:
@@ -109,7 +109,7 @@ def test_highdim_p_greater_than_n_covariance_raises_clean():
 
 
 # ===========================================================================
-# 3. Rank-deficient regression: R returns NaN coef — assert bit-parity
+# 3. Rank-deficient regression: R returns NaN coef - assert bit-parity
 # ===========================================================================
 
 
@@ -140,7 +140,7 @@ def test_rank_deficient_regression_matches_r():
 
 @needs_r
 def test_glm_separation_by_logreg_matches_r():
-    """BYlogreg returns a (possibly non-converged) fit on separable data — and
+    """BYlogreg returns a (possibly non-converged) fit on separable data, and
     it must match R field-for-field."""
     rng = np.random.default_rng(3)
     X = rng.normal(size=(40, 1))

@@ -18,7 +18,7 @@ def cov_rob_mm(X, maxit: 'int' = 50, tolpar: 'float' = 0.0001, corr: 'bool' = Fa
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | a data matrix with observations in rows. |
+| `X` | n/a | *required* | a data matrix with observations in rows. |
 | `maxit` | int | `50` | Maximum number of iterations. |
 | `tolpar` | float | `0.0001` | Tolerance to decide converngence. |
 | `corr` | bool | `False` | A logical value. If `TRUE` a correlation matrix is included in the element `cor` of the returned object. Defaults to `FALSE`. |
@@ -39,11 +39,11 @@ A `CovRobMMResult` object. Its attributes mirror the fields of the R
 | `wts` | wts | weights |
 | `mu` | mu | The location estimate. Same as `center` above. |
 | `v` | V | The scatter or correlation matrix estimate, scaled for consistency at the normal distribution |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
-| `classical` | — | Always False; helpers use this to distinguish from CovClassicResult. |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `classical` | n/a | Always False; helpers use this to distinguish from CovClassicResult. |
 
 
-> **R fields not surfaced in Python** — the R `covRobMM` list also contains
+> **R fields not surfaced in Python.** The R `covRobMM` list also contains
 > `call`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -68,7 +68,7 @@ The `CovRobMMResult` object also provides these methods:
 import numpy as np
 import robstattm_py as rpm
 
-# Italian wine cultivar — 59 obs of 13 chemical measurements.
+# Italian wine cultivar  -  59 obs of 13 chemical measurements.
 wine = rpm.datasets.wine()
 X = wine.to_numpy()
 
@@ -113,5 +113,5 @@ R implementation by Ricardo Maronna, <rmaronna@retina.ar>. Python wrapper: RobSt
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `covRobMM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

@@ -4,17 +4,17 @@ RobStatTM-Py is a **bridge to R**: it calls the original RobStatTM routines
 through [`rpy2`](https://rpy2.github.io/). So a working setup has four layers,
 installed in this order:
 
-1. **R** (the language) — 4.2 or newer.
-2. **The R packages** — `RobStatTM` + its dependencies (and, optionally, the
+1. **R** (the language), 4.2 or newer.
+2. **The R packages**, `RobStatTM` + its dependencies (and, optionally, the
    stretch packages `pense` / `GSE`).
-3. **Python** — 3.10 or newer, ideally in a virtual environment.
-4. **`rpy2` + RobStatTM-Py** — the Python side, which finds and drives R.
+3. **Python**, 3.10 or newer, ideally in a virtual environment.
+4. **`rpy2` + RobStatTM-Py**, the Python side, which finds and drives R.
 
 > **At a glance**
 >
 > | Layer | Requirement | How RobStatTM-Py finds it |
 > |---|---|---|
-> | R | ≥ 4.2 (tested on 4.5.2) | found automatically — registry, `PATH`, conda, and the standard install locations |
+> | R | ≥ 4.2 (tested on 4.5.2) | found automatically, registry, `PATH`, conda, and the standard install locations |
 > | R packages | `RobStatTM`, `pyinit`, `robustbase`, `rrcov` (core); `pense`, `GSE` (optional) | `library()` search path |
 > | Python | ≥ 3.10 | the interpreter you `pip install` into |
 > | rpy2 | ≥ 3.6 | installed from PyPI; links against R at import |
@@ -24,7 +24,7 @@ copy-paste commands per OS, then [Verify](#5-verify-everything).
 
 ---
 
-## Google Colab / Kaggle (fastest path — no R download)
+## Google Colab / Kaggle (fastest path, no R download)
 
 Colab and Kaggle already ship R and `rpy2`, so you skip steps 1 and 3 entirely
 and you do **not** need `robstattm-py setup` (that provisions a private R, which
@@ -32,14 +32,14 @@ is only worth it off these platforms). One cell installs everything against the 
 that is already there:
 
 ```text
-# Cell 1 — install (about 1–2 min; rpy2 and the R packages compile once)
+# Cell 1, install (about 1–2 min; rpy2 and the R packages compile once)
 !pip install -q --force-reinstall --no-cache-dir rpy2
 !pip install -q "git+https://github.com/Aakarsh751/robstattm-py.git"
 !python -m robstattm_py.cli install-r-packages RobStatTM pyinit robustbase rrcov
 ```
 
 ```python
-# Cell 2 — use it
+# Cell 2, use it
 import robstattm_py as rpm
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
 print(fit.summary())
@@ -51,7 +51,7 @@ print(fit.summary())
 > A mismatched set makes `import rpy2.robjects` fail with
 > `cannot import name 'default_converter' … (unknown location)`. Reinstalling
 > pulls a consistent set, compiled from source against Colab's own R
-> (`/usr/lib/R`) — so rpy2's binding matches that R and no `RPY2_CFFI_MODE` cell
+> (`/usr/lib/R`), so rpy2's binding matches that R and no `RPY2_CFFI_MODE` cell
 > is needed. If a fit still reports mismatched versions, restart the runtime and
 > rerun Cell 1.
 >
@@ -69,7 +69,7 @@ that installs, provisions, fits, and prints a copy-pasteable report.
 ### Windows
 
 Download the installer from <https://cran.r-project.org/bin/windows/base/> and
-run it. Accept the defaults — there is nothing to note down.
+run it. Accept the defaults, there is nothing to note down.
 
 > The Windows installer records R in the registry, and RobStatTM-Py reads it
 > from there, so R does **not** need to be on your `PATH` and you do **not**
@@ -80,7 +80,7 @@ run it. Accept the defaults — there is nothing to note down.
 ### macOS
 
 - **Recommended:** download the `.pkg` from
-  <https://cran.r-project.org/bin/macosx/> — pick the **arm64** build on Apple
+  <https://cran.r-project.org/bin/macosx/>, pick the **arm64** build on Apple
   Silicon (M1/M2/M3) or the **x86_64** build on Intel. Installing the wrong
   architecture is the #1 cause of `rpy2` import failures on Mac.
 - **Or via Homebrew:** `brew install r`.
@@ -115,13 +115,13 @@ sudo dnf install -y R R-devel
 
 ## 2. Install the R packages
 
-You can do this from your normal terminal after [step 3](#3-install-python-rpy2-and-robstattm-py) —
+You can do this from your normal terminal after [step 3](#3-install-python-rpy2-and-robstattm-py),
 no R knowledge, and no R console, required:
 
 ```bash
 robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
 
-# optional — only for the external "stretch" estimators
+# optional, only for the external "stretch" estimators
 # (pense / pense_cv / gse / tsgs):
 robstattm-py install-r-packages pense GSE
 ```
@@ -192,9 +192,26 @@ pip install -e "robstattm-py/[dev]"         # the test/lint toolchain
 > ships as a prebuilt wheel; on macOS/Linux it may build from source, which
 > needs R already installed (step 1) and a C compiler.
 
+### Using uv, pipx, or conda instead of pip
+
+`pip` is not required. RobStatTM-Py is a standard PEP 621 / setuptools package
+with a `robstattm-py` command entry point, so any modern Python installer works.
+
+| Installer | Command | Notes |
+|---|---|---|
+| [**uv**](https://docs.astral.sh/uv/) | `uv venv && uv pip install -e .` | The fast, increasingly common choice. `uv build` and `uv pip install` both work against this package with no special flags. `uv run robstattm-py doctor` runs the CLI without activating the venv. |
+| [**pipx**](https://pipx.pypa.io/) | `pipx install .` | Best when you mainly want the `robstattm-py` **command** (setup / doctor / install-r-packages) on your PATH in its own isolated environment. |
+| **pip** | `pip install -e .` | The default shown above. |
+| **conda** | `conda install -c conda-forge robstattm-py` | Planned, not yet available; see [`packaging/conda/`](https://github.com/Aakarsh751/robstattm-py/tree/main/packaging/conda). conda-forge is the easiest route on Linux because it ships prebuilt `rpy2` and R. |
+
+The same R rule applies whichever installer you use: `rpy2` needs a matching R,
+and on macOS/Linux without a prebuilt `rpy2` wheel it compiles against the R
+from step 1. If that compile is a problem (for example on a minimal Linux box),
+set `RPY2_CFFI_MODE=ABI` before installing to use rpy2's compiler-free binding.
+
 ---
 
-## 4. Point Python at R — nothing to do
+## 4. Point Python at R (nothing to do)
 
 RobStatTM-Py locates R by itself, on every OS. It searches, in order:
 
@@ -219,7 +236,7 @@ Python, and if the search comes up empty the error lists every location that was
 checked and why each was ruled out.
 
 > **Setting `R_HOME` yourself still works** and takes priority over
-> auto-detection — useful when you have several R versions installed. Prefer
+> auto-detection, useful when you have several R versions installed. Prefer
 > `ROBSTATTM_R_HOME`, which pins R for this package only and leaves your other R
 > tooling alone.
 
@@ -229,8 +246,8 @@ To see which R was chosen:
 robstattm-py doctor
 ```
 
-If that command is not found — common on Windows, where `pip` often installs
-scripts to a folder outside your `PATH` — use this instead, which always works:
+If that command is not found, common on Windows, where `pip` often installs
+scripts to a folder outside your `PATH`, use this instead, which always works:
 
 ```bash
 python -m robstattm_py.cli doctor
@@ -281,7 +298,7 @@ pip install -e "robstattm-py/[notebooks]"   # installs ipykernel + plotting deps
 python -m ipykernel install --user --name robstattm-py
 ```
 
-No R configuration cell is needed — notebooks just `import robstattm_py as rpm`
+No R configuration cell is needed, notebooks just `import robstattm_py as rpm`
 like any other script.
 
 ---
@@ -308,11 +325,11 @@ The most common ones:
 | `R package 'RobStatTM' is not installed` | `robstattm-py install-r-packages RobStatTM`. The message names exactly which package is missing. |
 | rpy2 fails to build (`R.h: No such file`) on Linux | Install R headers + toolchain: `apt-get install r-base-dev build-essential` (or `dnf install R-devel gcc-gfortran`). Or set `RPY2_CFFI_MODE=ABI` to use rpy2's compiler-free binding. |
 | `R package 'pense'/'GSE' is not installed` | Only needed for `pense`/`gse`/`tsgs`: `robstattm-py install-r-packages pense GSE`. |
-| `RobStatTMRError: … (quasi-)separable …` from `*_logreg` | Not a setup issue — the binary response is perfectly separable. Condition the data or drop over-powerful predictors. |
+| `RobStatTMRError: … (quasi-)separable …` from `*_logreg` | Not a setup issue, the binary response is perfectly separable. Condition the data or drop over-powerful predictors. |
 | Conda picks the wrong R | Set `ROBSTATTM_R_MODE=system`, or `ROBSTATTM_R_HOME` to the R you intend to use. |
-| Results aren't reproducible across runs | The covariance/PCA/external estimators use random subsampling — call `rpm.set_seed(n)` immediately before the fit. (Regression estimators are deterministic.) |
+| Results aren't reproducible across runs | The covariance/PCA/external estimators use random subsampling, call `rpm.set_seed(n)` immediately before the fit. (Regression estimators are deterministic.) |
 
-Still stuck? Open an issue with the output of `robstattm-py doctor --json` — it
+Still stuck? Open an issue with the output of `robstattm-py doctor --json`, it
 captures your Python, rpy2, R, the full search trace, and every R package
 version in one go.
 
@@ -341,10 +358,10 @@ robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
 robstattm-py doctor
 ```
 
-No `R_HOME` in either — the package finds R on its own.
+No `R_HOME` in either, the package finds R on its own.
 
 ## See also
 
-- [Getting started](../getting-started.md) — your first robust fit.
-- [External estimators](external.md) — installing `pense` / `GSE`.
-- `rpm.check_setup()` — the built-in environment diagnostic.
+- [Getting started](../getting-started.md), your first robust fit.
+- [External estimators](external.md), installing `pense` / `GSE`.
+- `rpm.check_setup()`, the built-in environment diagnostic.

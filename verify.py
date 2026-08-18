@@ -1,4 +1,4 @@
-"""Top-level verification harness — answers the question
+"""Top-level verification harness, answers the question
 'how do I test everything and verify all outputs against R?'
 
 Usage::
@@ -8,7 +8,7 @@ Usage::
     python verify.py --coverage   # print the R↔Python coverage matrix
     python verify.py --help-all   # print the full wrapper inventory
 
-The harness is *not* a replacement for the pytest suite — it's a fast,
+The harness is *not* a replacement for the pytest suite, it's a fast,
 human-readable confidence check you can run before showing the project
 to a reviewer.
 """
@@ -42,7 +42,7 @@ def run_smoke() -> int:
 
     import robstattm_py as rpm
 
-    banner("SMOKE — every wrapper family runs end-to-end")
+    banner("SMOKE, every wrapper family runs end-to-end")
     failures = 0
     df = rpm.datasets.mineral()
     wine = rpm.datasets.wine()
@@ -122,7 +122,7 @@ def run_smoke() -> int:
 
     failures += not check("compat_r.lmrobdetMM", lmrobdetMM is rpm.lmrobdet_mm)
     failures += not check("compat_r.covRobMM", covRobMM is rpm.cov_rob_mm)
-    # BYlogreg was imported here but never asserted — the alias went unchecked.
+    # BYlogreg was imported here but never asserted, the alias went unchecked.
     failures += not check("compat_r.BYlogreg", BYlogreg is rpm.by_logreg)
 
     banner(f"SMOKE RESULT: {failures} failure(s)" if failures
@@ -132,7 +132,7 @@ def run_smoke() -> int:
 
 def run_pytest() -> int:
     """Run the full pytest suite and report."""
-    banner("PYTEST — full strict-tier suite (atol=0, rtol=0 vs R)")
+    banner("PYTEST, full strict-tier suite (atol=0, rtol=0 vs R)")
     # The `--ignore=tests/_smoke_*.py` flags that used to be here named files
     # that moved to dev/ long ago, so they had been silently ignoring nothing.
     cmd = [sys.executable, "-m", "pytest", "tests/", "-q", "--tb=line"]
@@ -148,13 +148,13 @@ def run_pytest() -> int:
 
 def print_coverage() -> int:
     """Display the R↔Python coverage matrix."""
-    banner("COVERAGE — see docs/coverage_matrix.md for the full table")
+    banner("COVERAGE - see dev/design/coverage_matrix.md for the full table")
     from pathlib import Path
-    p = Path("docs/coverage_matrix.md")
+    p = Path("dev/design/coverage_matrix.md")
     if p.exists():
         print(p.read_text(encoding="utf-8"))
     else:
-        print("(missing — run from project root)")
+        print("(missing, run from project root)")
     return 0
 
 

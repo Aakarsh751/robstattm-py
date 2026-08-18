@@ -1,4 +1,4 @@
-"""Chapter 6, Example 6.1 — one point moves a correlation (Figs 6.1-6.2, Table 6.1).
+"""Chapter 6, Example 6.1, one point moves a correlation (Figs 6.1-6.2, Table 6.1).
 
 Python port of ``biochem.R``.
 
@@ -9,7 +9,7 @@ watch: one point out of twelve is enough to change it substantially, and
 nothing in the classical summary warns you.
 
 This is the simplest possible statement of the problem the rest of Chapter 6
-solves, so the robust estimator is shown here too — as a contrast with the
+solves, so the robust estimator is shown here too, as a contrast with the
 "delete and recompute" approach, which only works when you already know what to
 delete.
 
@@ -26,7 +26,7 @@ OUTLIER = 3  # 1-based, as the book numbers it
 
 
 def classical_summary(x: np.ndarray) -> dict[str, float]:
-    """Means, variances and the correlation — R's ``colMeans``/``var``/``cor``."""
+    """Means, variances and the correlation, R's ``colMeans``/``var``/``cor``."""
     cov = np.cov(x, rowvar=False, ddof=1)
     return {
         "mean Phosphate": float(x[:, 0].mean()),
@@ -38,7 +38,7 @@ def classical_summary(x: np.ndarray) -> dict[str, float]:
 
 
 def main() -> None:
-    section("Chapter 6, Example 6.1 — biochem data")
+    section("Chapter 6, Example 6.1, biochem data")
 
     biochem = rpm.datasets.biochem()
     biochem.columns = ["Phosphate", "Chloride"]
@@ -47,7 +47,7 @@ def main() -> None:
     keep = np.ones(len(x), dtype=bool)
     keep[OUTLIER - 1] = False
 
-    section("Table 6.1 — classical summaries, with and without observation 3")
+    section("Table 6.1, classical summaries, with and without observation 3")
     table("all 12 observations", classical_summary(x))
     table(f"observation {OUTLIER} deleted", classical_summary(x[keep]))
 
@@ -76,7 +76,7 @@ def main() -> None:
     )
     print(
         "\n  Be careful how you read this. The robust correlation moves only part\n"
-        "  of the way toward the deleted-observation value — with twelve points in\n"
+        "  of the way toward the deleted-observation value, with twelve points in\n"
         "  two dimensions there is not much data left to work with once one is\n"
         "  discounted, and the MM estimator moderates observation 3 rather than\n"
         "  rejecting it. Where the robust fit is unambiguous is in the distances\n"
@@ -85,7 +85,7 @@ def main() -> None:
         "  correlation is not."
     )
 
-    section("Figure 6.1 / 6.2 — which observation is furthest out?")
+    section("Figure 6.1 / 6.2, which observation is furthest out?")
     distances = np.asarray(rob.dist, dtype=float)
     order = np.argsort(distances)[::-1][:3]
     table(
@@ -95,7 +95,7 @@ def main() -> None:
 
     rpm.plot.mahalanobis_panel(
         rob,
-        title="Biochem — robust distances (Figures 6.1, 6.2)",
+        title="Biochem, robust distances (Figures 6.1, 6.2)",
         save=figure("ch06_biochem_distances"),
     )
 

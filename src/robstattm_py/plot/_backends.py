@@ -53,7 +53,7 @@ def resolve_backend(
         if has_plotnine and have_plotnine():
             return "plotnine"
         raise ImportError(
-            "no plotting backend available — install matplotlib via "
+            "no plotting backend available, install matplotlib via "
             'pip install "robstattm-py[plots]", or use backend="r" with R set up.'
         )
 
@@ -83,7 +83,7 @@ def r_kwargs(kw: dict) -> dict:
 
 
 def get_ax(ax: Any, style: PlotStyle):
-    """Return ``(figure, axes, created)`` — create a figure if ``ax`` is None."""
+    """Return ``(figure, axes, created)``, create a figure if ``ax`` is None."""
     plt = require_pyplot()
     if ax is not None:
         return ax.figure, ax, False

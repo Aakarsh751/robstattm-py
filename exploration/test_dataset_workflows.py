@@ -38,7 +38,7 @@ def _make_workflows() -> list[DatasetWorkflow]:
     return [
         DatasetWorkflow(
             "alcohol",
-            "MM regression — log(Solubility) vs molecular descriptors (Ch.2)",
+            "MM regression, log(Solubility) vs molecular descriptors (Ch.2)",
             lambda: _last_col_mm("alcohol"),
         ),
         DatasetWorkflow(
@@ -55,7 +55,7 @@ def _make_workflows() -> list[DatasetWorkflow]:
         ),
         DatasetWorkflow(
             "breslow_dat",
-            "MM on epilepsy counts — Ysum vs baseline covariates",
+            "MM on epilepsy counts, Ysum vs baseline covariates",
             lambda: rpm.lmrobdet_mm("Ysum ~ Base + Age10 + Base4", data=rpm.datasets.breslow_dat()),
         ),
         DatasetWorkflow(
@@ -151,7 +151,7 @@ def _make_workflows() -> list[DatasetWorkflow]:
         ),
         DatasetWorkflow(
             "waste",
-            "MM regression — solid waste vs land-use predictors",
+            "MM regression, solid waste vs land-use predictors",
             lambda: _last_col_mm("waste"),
         ),
         DatasetWorkflow(

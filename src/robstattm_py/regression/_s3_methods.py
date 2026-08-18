@@ -110,7 +110,7 @@ class LmrobdetMMPrediction:
 class Drop1Result:
     """Result of ``.drop1()`` on an :class:`LmrobdetMMResult`.
 
-    Port of R's ``drop1.lmrobdetMM`` — the single-term-deletion table that
+    Port of R's ``drop1.lmrobdetMM``, the single-term-deletion table that
     reports the Robust Final Prediction Error (RFPE) for the full model and
     for each sub-model obtained by dropping one term.
 
@@ -179,7 +179,7 @@ def _refit_in_globalenv(
 
     When ``r_control`` is given (the live R control list the original fit
     used), it is passed through as ``control=`` so the refit reproduces the
-    *same* model — not a default-control one.  This is essential for
+    *same* model, not a default-control one.  This is essential for
     parity: ``.summary()`` / ``.predict()`` / ``.hatvalues()`` on a fit built
     with a non-default control must reflect that control, not R's defaults.
 
@@ -337,7 +337,7 @@ def hatvalues_of(formula: str, data: pd.DataFrame, rfn_name: str, r_control=None
 # ---------------------------------------------------------------------------
 #
 # Background (2026-06-11): ``lmrobM`` fits have class
-# ``c("lmrobM", "lmrobdetMM")`` — they do NOT inherit from ``lmrob``, so
+# ``c("lmrobM", "lmrobdetMM")`` - they do NOT inherit from ``lmrob``, so
 # robustbase's ``predict.lmrob`` and ``hatvalues.lmrob`` refuse to dispatch
 # ("no applicable method"). RobStatTM also ships no replacement methods.
 #
@@ -426,7 +426,7 @@ def r_squared_classic(formula: str, data: pd.DataFrame, rfn_name: str, r_control
 
     Used by ``LmrobdetDCMLResult.r_squared_classic`` because R's
     ``lmrobdetDCML`` does not populate ``$r.squared`` on the fit (the
-    DCML algorithm has no natural robust-R² statistic — see
+    DCML algorithm has no natural robust-R² statistic, see
     ``project_memory/discoveries.md`` 2026-06-11).
 
     This returns the **classical** statistic
@@ -461,7 +461,7 @@ def rfpe_of(
 ):
     """Run R's ``lmrobdetMM.RFPE()`` on a freshly refit ``lmrobdetMM`` model.
 
-    Only valid for lmrobdetMM fits — DCML and lmrobM are not RFPE-scored.
+    Only valid for lmrobdetMM fits, DCML and lmrobM are not RFPE-scored.
     """
     ro = r()
     _refit_in_globalenv(formula, data, "lmrobdetMM", "rpm_methods_fit", r_control)

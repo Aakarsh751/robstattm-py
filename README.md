@@ -2,8 +2,8 @@
 
 **Python wrappers for the [RobStatTM](https://cran.r-project.org/package=RobStatTM) robust-statistics R package.**
 
-RobStatTM-Py brings RobStatTM's robust estimators — MM-regression, robust
-covariance, robust PCA, robust GLM, M-estimators of location/scale, and more —
+RobStatTM-Py brings RobStatTM's robust estimators, MM-regression, robust
+covariance, robust PCA, robust GLM, M-estimators of location/scale, and more,
 to Python users with no R knowledge required. It calls the original R routines
 through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 **bit-identical to R** (the test suite compares at `atol=0, rtol=0`).
@@ -17,7 +17,7 @@ through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 
 > **Not on PyPI yet.** `pip install robstattm-py` will fail with *"No matching
 > distribution found"* until the package is published. Install from source
-> meanwhile — it is one extra command, and everything afterwards is identical.
+> meanwhile, it is one extra command, and everything afterwards is identical.
 
 | | Command | R installed for you? |
 |---|---|---|
@@ -26,7 +26,7 @@ through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 | **Docker** | `docker build -t robstattm-py .` then `docker run --rm -it robstattm-py` | Already inside |
 
 All three end with a working R that you never had to install or configure. If
-you already have R, the plain `pip install` finds it automatically — no `R_HOME`,
+you already have R, the plain `pip install` finds it automatically, no `R_HOME`,
 no configuration.
 
 > **New to Python or to the terminal?** Start with
@@ -41,12 +41,12 @@ no configuration.
 ## Requirements
 
 - **Python** ≥ 3.10
-- **R** ≥ 4.2 — [install it from CRAN](https://cran.r-project.org/) if you don't
+- **R** ≥ 4.2, [install it from CRAN](https://cran.r-project.org/) if you don't
   already have it.
 
-You do **not** need to configure R. RobStatTM-Py finds it on its own — via the
+You do **not** need to configure R. RobStatTM-Py finds it on its own, via the
 Windows registry, `PATH`, an active conda environment, or the standard install
-location for your OS — and rejects an R built for the wrong CPU architecture
+location for your OS, and rejects an R built for the wrong CPU architecture
 before it can crash Python.
 
 ## Install
@@ -60,9 +60,9 @@ cd robstattm-py && pip install -e .
 > **Linux, and no R installed yet?** Prefix the command with
 > `RPY2_CFFI_MODE=ABI`. rpy2 ships no Linux wheels, so pip compiles it, and its
 > default mode refuses to build without R already present. ABI mode binds to R
-> at run time instead — see [platform support](docs/guides/platform-support.md).
+> at run time instead, see [platform support](docs/guides/platform-support.md).
 
-Then the R packages, from your normal terminal — no R console required:
+Then the R packages, from your normal terminal, no R console required:
 
 ```bash
 robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov
@@ -78,7 +78,7 @@ Optional Python extras: `pip install -e ".[notebooks,plots,dev,docs,benchmarks]"
 robstattm-py doctor
 ```
 
-Reports Python, rpy2, R, and every R package — and when something is wrong, the
+Reports Python, rpy2, R, and every R package, and when something is wrong, the
 exact command that fixes it.
 
 > **`robstattm-py: command not found`?** On Windows, `pip` often installs
@@ -104,7 +104,7 @@ import robstattm_py as rpm
 # 1. Load a textbook dataset (returned as a pandas DataFrame)
 mineral = rpm.datasets.mineral()
 
-# 2. Robust MM-regression — formula interface, just like R
+# 2. Robust MM-regression, formula interface, just like R
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=mineral)
 print(fit.coefficients)         # numpy array, bit-equal to R
 print(fit.summary())            # coefficients table, scale, R², ...
@@ -144,7 +144,7 @@ executes; `python verify.py --coverage` prints the R↔Python coverage matrix.
 ## Examples
 
 [`examples/`](examples/) holds a runnable Python script for **every** example
-script that ships with the RobStatTM R package — 25 of them, covering Chapters
+script that ships with the RobStatTM R package, 25 of them, covering Chapters
 2 and 4–8 of Maronna et al. plus both vignettes.
 
 ```bash

@@ -38,14 +38,14 @@ def lmrobdet_dcml(
 |---|---|---|---|
 | `formula` | str \| None | `None` | a symbolic description of the model to be fit. |
 | `data` | DataFrame \| None | `None` | an optional data frame, list or environment containing the variables in the model. If not found in `data`, model variables are taken from `environment(formula)`, which usually is the root environment of the current R session. |
-| `X` | — | `None` | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | `None` | Response vector of length `n` — used together with `X`. |
+| `X` | n/a | `None` | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | `None` | Response vector of length `n`, used together with `X`. |
 | `control` | LmrobdetControl \| None | `None` | a list specifying control parameters as returned by the function `lmrobdet.control`. |
 | `family` | str \| None | `None` | Robust loss-function family shortcut (e.g. `"mopt"`, `"bisquare"`); sets the corresponding field on `control`. |
 | `efficiency` | float \| None | `None` | Target Gaussian efficiency shortcut (e.g. `0.95`); sets the corresponding field on `control`. |
 
 
-> **Note** — handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -56,22 +56,22 @@ A `LmrobdetDCMLResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
+| `coef_names` | n/a | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `cov` | cov | The estimated covariance matrix of the regression estimates |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
 | `fitted_values` | fitted.values | Fitted values associated with the robust fit |
 | `scale` | scale | The estimated scale of the residuals |
-| `t0` | — | The mixing proportion between the least-squares and robust regression estimators (DCML combines them as `t0·β_LS + (1−t0)·β_robust`). |
+| `t0` | n/a | The mixing proportion between the least-squares and robust regression estimators (DCML combines them as `t0·β_LS + (1−t0)·β_robust`). |
 | `rank` | rank | Numeric rank of the fitted linear model |
 | `converged` | converged | Logical value indicating whether IRWLS iterations for the MM-estimator have converged |
 | `df_residual` | df.residual | The residual degrees of freedom |
 | `iter` | iter | Number of IRWLS iterations for the MM-estimator |
-| `rweights_mm` | — | Robustness weights from the MM step (R `rweightsMM`), used by the DCML estimator. |
-| `formula` | — | The model formula used for the fit (echoes the input). |
-| `control` | — | The control object used for the fit (echoes the input). |
+| `rweights_mm` | n/a | Robustness weights from the MM step (R `rweightsMM`), used by the DCML estimator. |
+| `formula` | n/a | The model formula used for the fit (echoes the input). |
+| `control` | n/a | The control object used for the fit (echoes the input). |
 
 
-> **R fields not surfaced in Python** — the R `lmrobdetDCML` list also contains
+> **R fields not surfaced in Python.** The R `lmrobdetDCML` list also contains
 > `rweightsMM`, `contrasts`, `xlevels`, `call`, `model`, `x`, `y`, `na.action`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -88,6 +88,9 @@ The `LmrobdetDCMLResult` object also provides these methods:
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
 | `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `hatvalues()` | Port of R's ``hatvalues.lmrob`` on an ``lmrobdetDCML`` fit. |
+| `plot_diagnostics(kw)` | Four-panel diagnostic figure: residuals, Q-Q, scale-location, weights. |
+| `plot_qq(kw)` | Normal Q-Q plot of standardized residuals (R's ``plot(fit, which = 2)``). |
+| `plot_residuals(kw)` | Residuals-vs-fitted plot (R's ``plot(fit, which = 1)``). |
 | `predict(newdata, se_fit)` | Port of R's ``predict.lmrob`` on an ``lmrobdetDCML`` fit. |
 | `r_squared_classic()` | Classical (least-squares) R² for the DCML fit. |
 | `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
@@ -155,5 +158,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>, based on `lmr
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lmrobdetDCML`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

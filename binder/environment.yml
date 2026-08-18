@@ -5,7 +5,7 @@
 #
 # Kept separate from the repository-root environment.yml because Binder pins
 # what it needs for the notebook server, and because this file must stay small
-# — Binder builds are slow and time out.
+#, Binder builds are slow and time out.
 
 channels:
   - conda-forge

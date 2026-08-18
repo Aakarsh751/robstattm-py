@@ -41,7 +41,7 @@ def step_lmrobdet(
 | `steps` | int | `1000` | maximum number of steps to be performed. Defaults to 1000, which should mean as many as needed. |
 
 
-> **Note** — handled internally, not exposed in Python: `object`, `scope`, `keep`, `whole.path`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `object`, `scope`, `keep`, `whole.path`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -51,11 +51,11 @@ A `StepResult` object. Its attributes mirror the fields of the R
 
 | Attribute | R name | Description |
 |---|---|---|
-| `final_formula` | — | Formula of the selected model. |
-| `anova_rfpe` | — | RFPE trace across steps (column of the R `anova` table). |
-| `coefficients` | — | Coefficients of the selected fit. |
-| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
-| `scale` | — | Robust scale of the selected fit. |
+| `final_formula` | n/a | Formula of the selected model. |
+| `anova_rfpe` | n/a | RFPE trace across steps (column of the R `anova` table). |
+| `coefficients` | n/a | Coefficients of the selected fit. |
+| `coef_names` | n/a | Names of the estimated coefficients, aligned positionally with `coefficients`. |
+| `scale` | n/a | Robust scale of the selected fit. |
 
 
 
@@ -83,7 +83,7 @@ import robstattm_py as rpm
 # step_lmrobdet runs robust *backward* model selection, dropping terms by their
 # Robust Final Prediction Error (RFPE). This mirrors the R man-page example: a
 # 6-column design where only the first three columns carry signal
-# (beta = [1, 1, 1, 0, 0, 0]) and rows 1-6 are gross outliers — so a good robust
+# (beta = [1, 1, 1, 0, 0, 0]) and rows 1-6 are gross outliers  -  so a good robust
 # selector should drop the three noise terms (V5, V6, V7).
 #
 # The data is generated with R's RNG so the fit matches R bit-for-bit; for your
@@ -98,8 +98,8 @@ Z <- as.data.frame(cbind(y, X))
 Z = pd.DataFrame(np.asarray(ro.r('as.matrix(Z)'), dtype=float),
                  columns=['y', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'])
 
-# Tuning knobs — breakdown point `bb`, target Gaussian `efficiency`, and the loss
-# `family` — go through lmrobdet_control, the Python equivalent of R's
+# Tuning knobs  -  breakdown point `bb`, target Gaussian `efficiency`, and the loss
+# `family`  -  go through lmrobdet_control, the Python equivalent of R's
 # lmrobdet.control(). Pass it to lmrobdet_mm via `control=`.
 ctrl = rpm.lmrobdet_control(bb=0.5, efficiency=0.85, family="bisquare")
 full = rpm.lmrobdet_mm("y ~ .", data=Z, control=ctrl)
@@ -151,5 +151,5 @@ R implementation by Victor Yohai, <victoryohai@gmail.com>, Matias Salibian-Barre
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `step.lmrobdetMM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

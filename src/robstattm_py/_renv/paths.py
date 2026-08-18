@@ -13,7 +13,7 @@ uninstall`` can remove it all and nothing outside it is ever touched::
       .lock                    held for the duration of a setup
 
 The root defaults to the platform user-data directory and is overridable with
-``ROBSTATTM_HOME`` — needed when the default path contains a space or
+``ROBSTATTM_HOME``, needed when the default path contains a space or
 non-ASCII character (both common on Windows, where the default contains the
 username), or when the user's home directory is on a small or network drive.
 
@@ -47,7 +47,7 @@ def root(probe: Probe | None = None) -> Path:
     ==========  =========================================================
 
     Computed entirely from ``probe``, deliberately. This used to delegate to
-    ``platformdirs``, which reads the *real* process environment — so a
+    ``platformdirs``, which reads the *real* process environment, so a
     synthetic probe describing another platform was silently ignored, and the
     seam that is supposed to make this testable did not actually cover the one
     function everything else is built on. The conventions below are the same

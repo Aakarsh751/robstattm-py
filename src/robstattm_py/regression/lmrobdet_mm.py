@@ -84,12 +84,12 @@ class LmrobdetMMResult:
     iters_const: int | None
     r_squared: float
     adj_r_squared: float
-    # Echo of inputs / R-side state — useful for downstream methods (summary,
+    # Echo of inputs / R-side state - useful for downstream methods (summary,
     # predict) but not part of strict numerical comparison.
     formula: str
     control: LmrobdetControl
     _r_fit: Any = field(default=None, repr=False, compare=False)
-    # Original data — used by step_lmrobdet / rob_linear_test to re-evaluate
+    # Original data - used by step_lmrobdet / rob_linear_test to re-evaluate
     # the R-side fit (the converted _r_fit loses its S3 class on the rpy2
     # boundary, so we re-fit when downstream functions need the live R object).
     _data: Any = field(default=None, repr=False, compare=False)
@@ -147,11 +147,11 @@ class LmrobdetMMResult:
         )
 
     def hatvalues(self) -> np.ndarray:
-        """Port of R's ``hatvalues.lmrob`` — leverages of the fitted model."""
+        """Port of R's ``hatvalues.lmrob``, leverages of the fitted model."""
         return hatvalues_of(self.formula, self._data, "lmrobdetMM", r_control=self._r_control)
 
     def rfpe(self, *, both_vals: bool = False) -> float | tuple[float, float]:
-        """Port of R's ``lmrobdetMM.RFPE`` — robust final prediction error.
+        """Port of R's ``lmrobdetMM.RFPE``, robust final prediction error.
 
         Parameters
         ----------
@@ -164,7 +164,7 @@ class LmrobdetMMResult:
         )
 
     def drop1(self, scope=None, *, scale: float | None = None) -> Drop1Result:
-        """Port of R's ``drop1.lmrobdetMM`` — single-term-deletion RFPE table.
+        """Port of R's ``drop1.lmrobdetMM``, single-term-deletion RFPE table.
 
         Recomputes the MM fit dropping each candidate term in turn and reports
         the Robust Final Prediction Error (RFPE) of the full model and of each
@@ -279,7 +279,7 @@ def lmrobdet_mm(
     # Push data to R as a data.frame. R rejects names starting with '_', so use 'rpm_data'.
     # When the DataFrame carries R column names in .attrs['r_columns'] (set by
     # robstattm_py.datasets loaders), restore them so the user can write the
-    # formula in either Python or R column names — both work.
+    # formula in either Python or R column names - both work.
     data_for_r = data
     r_cols = data.attrs.get("r_columns") if hasattr(data, "attrs") else None
     if r_cols is not None and len(r_cols) == data.shape[1]:
@@ -305,14 +305,14 @@ def lmrobdet_mm(
                 data=ro.globalenv["rpm_data"], control=r_control,
                 _hint="check data dtypes and column names",
             )
-        # Extract coef names while rpm_data is still in globalenv —
+        # Extract coef names while rpm_data is still in globalenv,
         # model.matrix(formula, data=rpm_data) needs the data to
         # resolve dot formulas like "Y ~ .".
         coef_names = coef_names_for(formula)
     finally:
         ro.r('rm(rpm_data)')
 
-    # Pull fields — handle NamedList / ListVector uniformly via rx2()
+    # Pull fields - handle NamedList / ListVector uniformly via rx2()
     coef_arr = extract_array(rx2(r_fit, "coefficients")).astype(float).ravel()
 
     return LmrobdetMMResult(

@@ -1,4 +1,4 @@
-"""``robstattm-py uninstall`` — remove everything the package installed.
+"""``robstattm-py uninstall``, remove everything the package installed.
 
 Deliberately conservative. It only ever deletes paths inside the directory this
 package owns, and by default it keeps the downloaded package cache so that

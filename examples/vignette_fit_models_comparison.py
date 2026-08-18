@@ -1,11 +1,11 @@
-"""Vignette — comparing a classical and a robust fit side by side.
+"""Vignette, comparing a classical and a robust fit side by side.
 
 Python port of ``fitmodelsRobStatTM.R``.
 
 The R script uses the ``fit.models`` framework, which bundles two fits of the
 same data into one object so that ``coef``, ``summary`` and ``plot`` show them
 together. There is no ``fit.models`` here, and wrapping it is out of scope for
-this package — a separate project, ``fitmodels-py``, does that.
+this package, a separate project, ``fitmodels-py``, does that.
 
 What this package provides instead is direct: fit each model, read the same
 accessors off both, and use ``plot.compare_fits`` to draw them on one set of
@@ -26,7 +26,7 @@ import robstattm_py as rpm
 
 
 def main() -> None:
-    section("Vignette part 1 — LS against MM on the mineral data")
+    section("Vignette part 1, LS against MM on the mineral data")
 
     mineral = rpm.datasets.mineral()
     copper = mineral["copper"].to_numpy(dtype=float)
@@ -34,11 +34,11 @@ def main() -> None:
 
     ls_coef = ols(copper, zinc)
     # The vignette's control is "mopt" at 0.95 efficiency, which is also the
-    # default — so this is the same fit as lmrobdet_mm("zinc ~ copper", ...).
+    # default - so this is the same fit as lmrobdet_mm("zinc ~ copper", ...).
     control = rpm.lmrobdet_control(family="mopt", efficiency=0.95)
     rob = rpm.lmrobdet_mm("zinc ~ copper", data=mineral, control=control)
 
-    section("coef(fmLSrob) — both fits' coefficients")
+    section("coef(fmLSrob), both fits' coefficients")
     print(f"\n  {'':<14}{'(Intercept)':>14}{'copper':>12}")
     print(f"  {'LS':<14}{ls_coef[0]:>14.3f}{ls_coef[1]:>12.3f}")
     print(
@@ -46,7 +46,7 @@ def main() -> None:
         f"{float(rob.coefficients[1]):>12.3f}"
     )
 
-    section("summary(fmLSrob) — the robust half")
+    section("summary(fmLSrob), the robust half")
     print(rob.summary())
 
     section("The accessors the fit.models object exposes")
@@ -68,17 +68,17 @@ def main() -> None:
         rob,
         x="copper",
         show_ols=True,
-        title="Mineral — robust and least-squares fits together",
+        title="Mineral, robust and least-squares fits together",
         save=figure("vignette_mineral_compare"),
     )
     rpm.plot.diagnostics(
         rob,
-        title="Mineral — lmrobdetMM diagnostics",
+        title="Mineral, lmrobdetMM diagnostics",
         save=figure("vignette_mineral_diagnostics"),
     )
 
     # -- Part 2 ------------------------------------------------------------
-    section("Vignette part 2 — covClassic against covRob on wine[, 1:3]")
+    section("Vignette part 2, covClassic against covRob on wine[, 1:3]")
 
     wine3 = rpm.datasets.wine().iloc[:, :3]
     classic = rpm.cov_classic(wine3.to_numpy(dtype=float))
@@ -104,13 +104,13 @@ def main() -> None:
     rpm.plot.cov_heatmap(
         robust,
         classic,
-        title="Wine[, 1:3] — robust vs classical covariance",
+        title="Wine[, 1:3], robust vs classical covariance",
         save=figure("vignette_wine3_covariance"),
     )
     rpm.plot.distance_distance(
         robust,
         classic,
-        title="Wine[, 1:3] — distance-distance plot",
+        title="Wine[, 1:3], distance-distance plot",
         save=figure("vignette_wine3_distances"),
     )
 

@@ -1,6 +1,6 @@
 # Plotting
 
-RobStatTM-Py ships a native Python plotting suite — `robstattm_py.plot` — for
+RobStatTM-Py ships a native Python plotting suite, `robstattm_py.plot`, for
 publication-quality, fully customizable robust-statistics figures, plus a
 pixel-faithful **R graphics** path for when you want exactly what the textbook
 prints.
@@ -17,7 +17,7 @@ ax  = plot.residuals(fit, backend="r")       # R's own graphics → PNG path
 fig = fit.plot_diagnostics()                  # shortcut on the result object
 ```
 
-> **Install:** the native engine needs the optional plotting extra —
+> **Install:** the native engine needs the optional plotting extra,
 > `pip install "./robstattm-py[plots]"` from a clone (matplotlib; plotnine is
 > optional). Once the package is on PyPI this becomes
 > `pip install "robstattm-py[plots]"`. The `backend="r"` path needs a working R
@@ -34,13 +34,13 @@ Every plot function takes `backend=`:
 | `"plotnine"` | plotnine | `ggplot` | all plot families (grammar of graphics) |
 | `"r"` | R graphics (Path A) | `pathlib.Path` (PNG) | bit-faithful to the book |
 
-Native plots **never re-fit** — they read the arrays already on the (strict-tier
+Native plots **never re-fit**, they read the arrays already on the (strict-tier
 validated) result objects. `backend="r"` re-fits in R and is the fidelity
 reference. Every plot function also has a **plotnine** (`ggplot`) renderer for
-grammar-of-graphics users — `plot.<fn>(..., backend="plotnine")`. The whole suite is composable: pass `ax=`, build subplot grids, and
+grammar-of-graphics users, `plot.<fn>(..., backend="plotnine")`. The whole suite is composable: pass `ax=`, build subplot grids, and
 nothing calls `plt.show()` unless you ask (`show=True`).
 
-## Native vs R — side by side
+## Native vs R, side by side
 
 The native renderer reproduces the textbook diagnostics while adding robust-weight
 colouring and automatic outlier labelling; `backend="r"` gives the exact R panel.
@@ -111,7 +111,7 @@ plot.compare_fits({"MM": fit, "DCML": dcml_fit})
 ## Multivariate (robust covariance & PCA)
 
 The **distance–distance** plot contrasts robust vs classical Mahalanobis
-distances — robust estimation unmasks the outliers the classical fit hides
+distances, robust estimation unmasks the outliers the classical fit hides
 (wine data: points above the χ² cutoff):
 
 ```python
@@ -124,7 +124,7 @@ plot.mahalanobis_panel(rob)            # distances vs index, χ² cutoff
 
 ![Distance-distance](../_static/plots/distance_distance.png)
 
-Robust PCA — scree, scores (flag outliers via companion robust distances),
+Robust PCA, scree, scores (flag outliers via companion robust distances),
 loadings heatmap, and biplot:
 
 ```python
@@ -167,7 +167,7 @@ working with the data directly in Python:
 
 `````{tab-set}
 ````{tab-item} Residual vs leverage
-Robust influence diagnostic — standardized residual against hat-value leverage.
+Robust influence diagnostic, standardized residual against hat-value leverage.
 
 ![Residual vs leverage](../_static/plots/resid_vs_leverage.png)
 ````
@@ -194,7 +194,7 @@ plot.cov_heatmap(rob, cl)              # robust − classical correlation delta
 | `scree` / `scores` / `loadings` / `biplot` | `pca_rob_s` / `prcomp_rob` | Fig 6.10, PCA |
 | `cov_heatmap` | `cov_*` (+ optional second) | correlation structure (new) |
 | `location_scale` | `loc_scale_m` + sample | Ch 2 location/scale |
-| `set_theme` / `get_theme` / `PlotStyle` | — | theming |
+| `set_theme` / `get_theme` / `PlotStyle` |, | theming |
 
 > **Regenerating the gallery images:** the figures on this page are produced by
 > `docs/scripts/render_plots.py` (needs R + the `[plots]` extra). The Sphinx

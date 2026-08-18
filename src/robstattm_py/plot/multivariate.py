@@ -1,4 +1,4 @@
-"""Native multivariate plots — robust covariance & robust PCA.
+"""Native multivariate plots, robust covariance & robust PCA.
 
 Renderers read only the extracted arrays on the covariance / PCA result
 dataclasses (``dist``, ``cov``, ``cor``, ``repre``/``scores``,
@@ -380,7 +380,7 @@ def cov_heatmap(
 ):
     """Correlation heatmap from a covariance result.
 
-    If ``other`` is given, plot the *difference* ``corr(cov) − corr(other)`` —
+    If ``other`` is given, plot the *difference* ``corr(cov) − corr(other)``,
     e.g. robust minus classical, showing how outliers distort the classical
     correlation structure (a new analytical view, not in the example notebooks).
     """

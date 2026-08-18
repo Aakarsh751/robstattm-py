@@ -44,7 +44,7 @@ class TestResultErgonomics:
 
     def test_to_r_returns_r_object(self, fit):
         r_obj = fit.to_r()
-        # rpy2 NamedList / ListVector — either is acceptable
+        # rpy2 NamedList / ListVector - either is acceptable
         assert hasattr(r_obj, "__class__")
         assert "rpy2" in type(r_obj).__module__ or "rlike" in type(r_obj).__module__
 

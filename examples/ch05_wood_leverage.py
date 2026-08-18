@@ -1,11 +1,11 @@
-"""Chapter 5, Example 5.2 — high-leverage outliers in the wood data (Figs 5.8-5.12).
+"""Chapter 5, Example 5.2, high-leverage outliers in the wood data (Figs 5.8-5.12).
 
 Python port of ``wood.R``.
 
 The modified wood-specific-gravity data from ``robustbase``: 20 observations,
 5 predictors, of which four (4, 6, 8 and 19) were altered to create
 *high-leverage* outliers. Leverage is what makes this case harder than the
-mineral data — the bad points sit far out in predictor space, so least squares
+mineral data, the bad points sit far out in predictor space, so least squares
 can pass close to them while missing the other sixteen, and its residuals give
 almost no warning.
 
@@ -26,9 +26,9 @@ ALTERED = (4, 6, 8, 19)
 
 
 def main() -> None:
-    section("Chapter 5, Example 5.2 — wood data")
+    section("Chapter 5, Example 5.2, wood data")
 
-    # `wood` lives in robustbase, not RobStatTM — guard the dataset, not just
+    # `wood` lives in robustbase, not RobStatTM - guard the dataset, not just
     # the package, because a package can be installed without its data.
     require_r_dataset("robustbase", "wood")
     wood = rpm.datasets.load("robustbase", "wood")
@@ -48,7 +48,7 @@ def main() -> None:
     section("Fit summary")
     print(mm.summary())
 
-    section("Figures 5.9 / 5.11 — what each fit's residuals reveal")
+    section("Figures 5.9 / 5.11, what each fit's residuals reveal")
     mm_resid = mm.resid().to_numpy()
     ls_flagged = sorted(np.flatnonzero(np.abs(ls_resid) > 2.5 * ls_sigma) + 1)
     mm_flagged = sorted(np.flatnonzero(np.abs(mm_resid) > 2.5 * mm.sigma()) + 1)
@@ -64,12 +64,12 @@ def main() -> None:
     print(
         f"\n  The MM fit recovers {len(found)} of the {len(ALTERED)} altered "
         f"observations;\n  least squares flags {len(ls_flagged)}. High leverage is "
-        "precisely the case\n  where a least-squares residual is least informative — "
+        "precisely the case\n  where a least-squares residual is least informative, "
         "the fit bends\n  toward the bad point, so the residual it leaves behind is "
         "small."
     )
 
-    section("Figure 5.10 — leverage")
+    section("Figure 5.10, leverage")
     hat = mm.hatvalues()
     order = np.argsort(hat)[::-1][: len(ALTERED)]
     table(
@@ -84,11 +84,11 @@ def main() -> None:
         "\n  Worth noticing: these are *classical* hat values, computed from the\n"
         "  design matrix alone, and they do not single the altered points out.\n"
         "  Leverage says where a point sits in predictor space, not whether it\n"
-        "  is wrong — which is why the robust residuals above, and not this\n"
+        "  is wrong, which is why the robust residuals above, and not this\n"
         "  table, are what identifies them."
     )
 
-    section("Figure 5.12 — sorted |residual|, LS vs MM, outliers removed")
+    section("Figure 5.12, sorted |residual|, LS vs MM, outliers removed")
     drop = np.abs(mm_resid) > 2.5 * mm.sigma()
     table(
         "largest 5 of the retained points",
@@ -99,9 +99,9 @@ def main() -> None:
         fmt="{:.5f}",
     )
 
-    rpm.plot.qq(mm, title="Wood — robust residual Q-Q (Figure 5.11)",
+    rpm.plot.qq(mm, title="Wood, robust residual Q-Q (Figure 5.11)",
                 save=figure("ch05_wood_qq_robust"))
-    rpm.plot.resid_vs_leverage(mm, title="Wood — residual vs leverage (Figure 5.10)",
+    rpm.plot.resid_vs_leverage(mm, title="Wood, residual vs leverage (Figure 5.10)",
                                save=figure("ch05_wood_leverage"))
 
 

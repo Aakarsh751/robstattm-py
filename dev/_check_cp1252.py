@@ -1,8 +1,8 @@
 """Report any string literal in the package that a cp1252 console cannot print.
 
 Windows' default console encoding is cp1252 when stdout is a pipe. Printing a
-character outside it raises UnicodeEncodeError — not a garbled character, an
-exception — so a user-facing message containing one is a crash waiting for the
+character outside it raises UnicodeEncodeError, not a garbled character, an
+exception, so a user-facing message containing one is a crash waiting for the
 first Windows user who redirects output.
 
 Only *runtime output* matters: docstrings and comments are never encoded to the

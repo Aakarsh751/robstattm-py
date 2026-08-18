@@ -1,9 +1,9 @@
-"""Conditionally Unbiased Bounded-Influence GLM estimates — wraps ``robcbi``.
+"""Conditionally Unbiased Bounded-Influence GLM estimates, wraps ``robcbi``.
 
 Maronna et al. (2019) §7.x (epilepsy example, CUBIF estimator). Künsch,
 Stefanski & Carroll (1989). Bounded-influence estimates for Bernoulli, Binomial
 and Poisson GLMs. Requires the CRAN-archived package ``robcbi`` (which imports
-the Fortran package ``robeth`` — see ``docs/research/cubinf.md`` for install).
+the Fortran package ``robeth``, see ``docs/research/cubinf.md`` for install).
 
 Single entry point:
 
@@ -11,7 +11,7 @@ Single entry point:
 
 ``cubinf`` takes a *design matrix* ``X`` (variables in columns) and a response
 ``y``; with ``intercept=False`` (the default) the caller supplies the intercept
-column — exactly as ``epilepsy.R`` does. We fit *inside* R-space (push ``X``/``y``,
+column, exactly as ``epilepsy.R`` does. We fit *inside* R-space (push ``X``/``y``,
 build the family + control) so the result equals R exactly.
 """
 from __future__ import annotations
@@ -40,12 +40,12 @@ class CubinfResult:
     cov : ndarray, shape (p, p)
         Estimated coefficient covariance.
     std_errors : ndarray, shape (p,)
-        ``sqrt(diag(cov))`` — convenience.
+        ``sqrt(diag(cov))``, convenience.
     fitted_values : ndarray, shape (n,)
     residuals : ndarray, shape (n,)
         Working residuals.
     deviance_residuals : ndarray, shape (n,)
-        ``rsdev`` — deviance residuals.
+        ``rsdev``, deviance residuals.
     linear_predictors : ndarray, shape (n,)
     rank : int
     df_residual : float
@@ -170,7 +170,7 @@ def cubinf(
         if cov.ndim == 1:
             cov = cov.reshape(coef.shape[0], coef.shape[0])
         # `names()` on an unnamed vector returns R NULL, which rpy2 hands back as
-        # a NULLType — not Python None, and not sized. Testing `is not None`
+        # a NULLType - not Python None, and not sized. Testing `is not None`
         # alone let it reach len() and raise. A design matrix built from a plain
         # numpy array has no dimnames, so this is the common case, not the edge
         # case: it made cubinf unusable from the (X, y) form entirely.

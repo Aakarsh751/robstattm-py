@@ -1,4 +1,4 @@
-# Dependency Map — RobStatTM and Friends
+# Dependency Map, RobStatTM and Friends
 
 **Audited against:** `robstattm/RobStatTM-master/` (RobStatTM 1.0.12, dated 2025-03-11)
 **Method:** read `DESCRIPTION`, `NAMESPACE`, and `grep` for `::` namespace calls and `library()` / `require()` in `R/*.R`.
@@ -11,10 +11,10 @@
 Depends:  R (>= 3.5.0)
 Imports:  stats, pyinit, rrcov, robustbase
 Suggests: R.rsp
-LinkingTo: (none — C/Fortran built in-tree under src/)
+LinkingTo: (none, C/Fortran built in-tree under src/)
 ```
 
-`NAMESPACE` declares only `import(stats)` — everything else is reached through `::` qualified calls (good, because it lets us see exactly where each import is used).
+`NAMESPACE` declares only `import(stats)`, everything else is reached through `::` qualified calls (good, because it lets us see exactly where each import is used).
 
 ---
 
@@ -25,7 +25,7 @@ Grep over `R/*.R` produces:
 | External R package | Used inside RobStatTM at | Why |
 |--------------------|--------------------------|-----|
 | **`pyinit`** | `DCML.R:165`, `DCML.R:333` | Peña–Yohai highly robust initial estimator for `lmrobdetDCML` (and indirectly for `lmrobdetMM` when initialization defers to pyinit) |
-| **`robustbase`** | `BYlogreg.R:86`, `WBYlogreg.R:87`, `WMLlogreg.R:80` (all three: `covMcd` for initial covariance); `lmrob.MM.R:962` (uses `robustbase::lmrob` to fit a τ-correction model); `lmrobdet.R` lines 259/345/1007/1093 (`robustbase::robMD` — robust Mahalanobis distance for leverage diagnostics) | MM-fit τ correction and robust leverage diagnostics for `lmrobdetMM` / `lmrobM`; MCD initial covariance for GLM wrappers |
+| **`robustbase`** | `BYlogreg.R:86`, `WBYlogreg.R:87`, `WMLlogreg.R:80` (all three: `covMcd` for initial covariance); `lmrob.MM.R:962` (uses `robustbase::lmrob` to fit a τ-correction model); `lmrobdet.R` lines 259/345/1007/1093 (`robustbase::robMD`, robust Mahalanobis distance for leverage diagnostics) | MM-fit τ correction and robust leverage diagnostics for `lmrobdetMM` / `lmrobM`; MCD initial covariance for GLM wrappers |
 | **`rrcov`** | `RobPCA_SM.R:47` (`rrcov::PcaLocantore`) | Spherical-PCA initialization for `pcaRobS` |
 | **`stats`** | everywhere | Base R linear algebra, `lm.fit`, distribution functions |
 
@@ -126,7 +126,7 @@ The package itself enforces the minimums at runtime in `check_setup()`; CI verif
 | Risk | Severity | Mitigation |
 |------|----------|------------|
 | **`pyinit` Windows binary** sometimes lags CRAN source releases | High for Phase 2 | Document fallback: install from source via Rtools; CI uses macOS + Linux for `pyinit`-dependent jobs first; skip `pyinit`-requiring tests on Windows with a clearly emitted `pytest.skip` when unavailable |
-| **`pense` install size and compile time** | Medium | Make stretch — not required for Phase 1–5 deliverables; cache CI build artifacts |
+| **`pense` install size and compile time** | Medium | Make stretch, not required for Phase 1–5 deliverables; cache CI build artifacts |
 | **`rpy2` 3.6 conversion context lost across Jupyter async boundaries** | Medium | Patch at package import: `from rpy2.robjects.conversion import set_conversion; set_conversion(default_converter + numpy2ri.converter + pandas2ri.converter)` |
 | **R 4.5 deprecations / behavior shifts** between matrix tiers | Low-Medium | CI matrix forces all three R minors; lock RobStatTM upstream to 1.0.12 even if newer CRAN appears mid-project |
 | **CRAN package version drift during the GSoC window** | Low | Use `renv`-style lockfile in CI (`renv.lock`) recording exact versions per CI run |
@@ -151,6 +151,6 @@ This is the language the eventual install guide must convey (drafted here for re
 
 ## 8. Open questions
 
-1. Should `check_setup()` **auto-install** missing CRAN packages? Recommendation: **No** — print the exact `install.packages(c(…))` command instead. Avoids surprising network calls on import.
+1. Should `check_setup()` **auto-install** missing CRAN packages? Recommendation: **No**, print the exact `install.packages(c(…))` command instead. Avoids surprising network calls on import.
 2. Should we vendor a minimal `renv.lock` to pin exact CRAN versions used in CI? **Recommendation: yes** for reproducibility.
 3. Mentor decision needed on whether `pense` / `GSE` make it into the v0.1.0 PyPI release or wait for v0.2.0. Tracked in `project_memory/blockers.md`.

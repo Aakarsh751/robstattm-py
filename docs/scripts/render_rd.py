@@ -53,6 +53,17 @@ HAND_AUTHORED_PY = {"lmrobdet_control", "lmrobm_control"}
 
 # ---------------------------------------------------------------- helpers
 
+def _normalize_dashes(text: str) -> str:
+    """Replace em dashes with a spaced hyphen in rendered page text.
+
+    All hand-authored strings in this module already use plain punctuation;
+    this is a safety net so that em dashes appearing in upstream R man-page
+    text (``docs/_rd_json``) cannot slip into the generated Markdown, which
+    the ``no-em-dash`` house-style guard would then reject.
+    """
+    return text.replace(chr(0x2014), " - ")
+
+
 def _py_signature(fn) -> str:
     """One-line ``def f(...)`` reconstruction with sensible wrapping."""
     sig = inspect.signature(fn)
@@ -110,7 +121,7 @@ def _r_to_py_arg_map(r_args: list[dict], fn) -> list[dict]:
         if name in seen_py or name in ("self",):
             continue
         rows.append({
-            "r": "—",
+            "r": "n/a",
             "py": name,
             "note": f"Python-only convenience (default `{p.default!r}`)"
                     if p.default is not p.empty else "Python-only",
@@ -147,9 +158,9 @@ def _format_default(p) -> str:
 # top of the R surface (the (X, y) array form and the regression shortcuts).
 # Used only when the R man page has no matching argument.
 _PY_PARAM_DESC: dict[str, str] = {
-    "X": "Design matrix of predictors with shape `(n, p)` — the array-input "
+    "X": "Design matrix of predictors with shape `(n, p)`, the array-input "
          "alternative to the `formula` + `data` form.",
-    "y": "Response vector of length `n` — used together with `X`.",
+    "y": "Response vector of length `n`, used together with `X`.",
     "family": "Robust loss-function family shortcut (e.g. `\"mopt\"`, "
               "`\"bisquare\"`); sets the corresponding field on `control`.",
     "efficiency": "Target Gaussian efficiency shortcut (e.g. `0.95`); sets the "
@@ -202,7 +213,7 @@ def _parameters(r_args: list[dict], fn) -> tuple[list[dict], list[dict]]:
     sig = inspect.signature(fn)
     # In the regression wrappers that expose BOTH a formula/data form and an
     # (X, y) array form, R's own `x`/`y` are logical return-flags (kept as
-    # internal args) — so Python `X`/`y` must use the array-input description,
+    # internal args), so Python `X`/`y` must use the array-input description,
     # not R's flag text. Detect that case by the presence of a `formula` param.
     dual_form = "formula" in sig.parameters
     params: list[dict] = []
@@ -217,7 +228,7 @@ def _parameters(r_args: list[dict], fn) -> tuple[list[dict], list[dict]]:
         type_str = _format_annotation(p.annotation).replace("|", r"\|")
         params.append({
             "name": name,
-            "type": type_str or "—",
+            "type": type_str or "n/a",
             "default": _format_default(p),
             "description": desc.replace("|", r"\|"),
         })
@@ -237,7 +248,7 @@ def _attr_descriptions(cls) -> dict[str, str]:
 
     Returns ``{field_name: one_line_description}``.  This is the fallback
     source for result fields that the R man page's ``\value{}`` block does
-    not document — RobStatTM's Rd files frequently list only a subset of the
+    not document. RobStatTM's Rd files frequently list only a subset of the
     returned list, so without this the Returns table degrades to a generic
     placeholder.  The dataclass docstrings encode the real R-list semantics
     (e.g. which fields are ``None`` for which estimator), so they are the
@@ -337,7 +348,7 @@ def _py_return_desc(fn, rec: dict) -> str:
     rd_value = rec.get("value", [])
     if rd_value:
         bits = "; ".join(
-            f"`{v['r_name']}` — {v['description'].replace(chr(10), ' ').strip()}"
+            f"`{v['r_name']}`: {v['description'].replace(chr(10), ' ').strip()}"
             for v in rd_value
         )
         prefix = f"Returns `{type_str}`. " if type_str else "Returns: "
@@ -351,7 +362,7 @@ def _r_example(rec: dict, py_name: str) -> str:
     """Return the 'Equivalent R code' block for ``py_name``.
 
     Preference order:
-      1. ``docs/examples/<py_name>.R`` (hand-authored) — used verbatim. Provide
+      1. ``docs/examples/<py_name>.R`` (hand-authored), used verbatim. Provide
          this when the hand-authored Python example uses a different dataset or
          workflow than the R man page, so the two blocks are genuinely
          equivalent (same data, same calls).
@@ -372,7 +383,7 @@ def _python_example(rec: dict, py_name: str) -> str:
       3. A bare "(no example)" placeholder
 
     Hand-authored examples are validated by
-    ``docs/scripts/validate_docs.py`` — every page must execute.
+    ``docs/scripts/validate_docs.py``: every page must execute.
     """
     override = EXAMPLES_DIR / f"{py_name}.py"
     if override.exists():
@@ -380,7 +391,7 @@ def _python_example(rec: dict, py_name: str) -> str:
 
     r_src = rec.get("examples_r") or ""
     if not r_src:
-        return f"# (no R example available — see ``tests/`` for usage)"
+        return "# (no R example available; see ``tests/`` for usage)"
 
     s = r_src
     s = re.sub(r"data\(([^,)]+),\s*package\s*=\s*['\"]([^'\"]+)['\"]\s*\)",
@@ -429,7 +440,7 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
                 break
         else:
             raise FileNotFoundError(
-                f"no JSON for R name {r_name!r} — run extract_rd.py first"
+                f"no JSON for R name {r_name!r}; run extract_rd.py first"
             )
     rec = json.loads(rd_path.read_text(encoding="utf-8"))
 
@@ -469,11 +480,11 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
                 field_r_name = rd["r_name"]
                 description = rd["description"].replace("\n", " ").replace("|", r"\|")
             else:
-                field_r_name = "—"
+                field_r_name = "n/a"
                 fallback = attr_desc.get(f.name) or _WRAPPER_FIELD_DESC.get(f.name, "")
                 description = (
                     fallback.replace("|", r"\|") if fallback
-                    else "Python wrapper field — see the result class docstring."
+                    else "Python wrapper field; see the result class docstring."
                 )
             py_fields.append({
                 "py_name": f.name,
@@ -524,7 +535,7 @@ def render_one(r_name: str, env: jinja2.Environment) -> Path:
     template = env.get_template("wrapper_page.md.jinja")
     out = OUT_DIR / f"{py_name}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(template.render(**ctx), encoding="utf-8")
+    out.write_text(_normalize_dashes(template.render(**ctx)), encoding="utf-8")
     return out
 
 

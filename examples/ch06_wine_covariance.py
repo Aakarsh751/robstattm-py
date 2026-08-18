@@ -1,4 +1,4 @@
-"""Chapter 6, Example 6.2 — masking in the wine data (Figure 6.3).
+"""Chapter 6, Example 6.2, masking in the wine data (Figure 6.3).
 
 Python port of ``wine.R``. The flagship multivariate example.
 
@@ -8,7 +8,7 @@ covariance, and an inflated covariance is exactly what makes a large distance
 look ordinary. This is *masking*, and it gets worse with dimension, which is why
 13 variables is enough to hide what 2 variables could not.
 
-Robust distances — from ``covRobMM`` and from the Rocke S-estimator — are
+Robust distances, from ``covRobMM`` and from the Rocke S-estimator, are
 computed against a scatter matrix the outliers did not get to influence, so the
 same points stand out clearly.
 
@@ -26,7 +26,7 @@ LEVEL = 0.999
 
 
 def main() -> None:
-    section("Chapter 6, Example 6.2 — wine data")
+    section("Chapter 6, Example 6.2, wine data")
 
     wine = rpm.datasets.wine()
     x = wine.to_numpy(dtype=float)
@@ -38,7 +38,7 @@ def main() -> None:
     rocke = rpm.cov_rob_rocke(x)
 
     cutoff = chisq_quantile(LEVEL, p)
-    section(f"Figure 6.3 — points beyond the {LEVEL:.1%} chi-squared cutoff")
+    section(f"Figure 6.3, points beyond the {LEVEL:.1%} chi-squared cutoff")
     print(f"  cutoff (chi-squared, {p} df): {cutoff:.4f}")
 
     flags: dict[str, list[int]] = {}
@@ -62,7 +62,7 @@ def main() -> None:
     print(
         f"\n  Classical distances flag {len(flags['classical'])} points; the robust\n"
         f"  estimators flag {len(flags['covRobMM'])} and {len(flags['covRobRocke'])}.\n"
-        "  The data did not change between those three rows — only whether the\n"
+        "  The data did not change between those three rows, only whether the\n"
         "  yardstick was allowed to be set by the points being measured."
     )
 
@@ -80,12 +80,12 @@ def main() -> None:
     rpm.plot.distance_distance(
         mm,
         classical,
-        title="Wine — robust vs classical distances (Figure 6.3)",
+        title="Wine, robust vs classical distances (Figure 6.3)",
         save=figure("ch06_wine_distance_distance"),
     )
     rpm.plot.mahalanobis_panel(
         mm,
-        title="Wine — robust Mahalanobis distances (Figure 6.3)",
+        title="Wine, robust Mahalanobis distances (Figure 6.3)",
         save=figure("ch06_wine_distances"),
     )
 

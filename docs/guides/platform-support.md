@@ -1,6 +1,6 @@
 # Platform support
 
-What works where, stated plainly — including the places where it does not.
+What works where, stated plainly, including the places where it does not.
 
 Two things can vary by platform: whether RobStatTM-Py can **install R for you**,
 and whether the **wrappers** work once R is present. The second is the same
@@ -13,9 +13,9 @@ everywhere. Only the first differs.
 | Platform | Wrappers | `robstattm-py setup` | Notes |
 |---|---|---|---|
 | **Windows** (64-bit) | Fully supported | Prebuilt, ~4 min | Use a short install path; see below |
-| **Linux** (x86-64) | Fully supported | Prebuilt, ~3 min | — |
+| **Linux** (x86-64) | Fully supported | Prebuilt, ~3 min |, |
 | **Linux** (ARM64) | Fully supported | **Compiles from source, ~10-15 min** | Same conda-forge gap as Apple Silicon |
-| **macOS Intel** | Fully supported | Prebuilt, ~3 min | — |
+| **macOS Intel** | Fully supported | Prebuilt, ~3 min |, |
 | **macOS Apple Silicon** | Fully supported | **Compiles from source, ~10-15 min** | Needs Xcode command line tools; verified in CI |
 | Linux ppc64le | Fully supported | **Compiles from source** | Same gap; rarely tested |
 | Windows on ARM | Fully supported *if you install R yourself* | **Not available** | No conda-forge R build |
@@ -33,7 +33,7 @@ against R at zero tolerance.
 Everything works on these, but the first setup takes longer.
 
 conda-forge publishes `r-base`, `r-robustbase`, `r-rrcov` and `r-robust` for
-all of them, but **not** `r-robstattm` or `r-pyinit` — those exist only for
+all of them, but **not** `r-robstattm` or `r-pyinit`, those exist only for
 `linux-64`, `osx-64` and `win-64` (verified 2026-08-11). They are therefore
 compiled from CRAN source during `robstattm-py setup`.
 
@@ -58,7 +58,7 @@ penalty.
 
 > **Where it gets installed.** On macOS the private R goes in
 > `~/.robstattm-py`, not the usual `~/Library/Application Support`. R's own
-> launcher script cannot cope with the space in "Application Support" — it
+> launcher script cannot cope with the space in "Application Support", it
 > expands its path unquoted and fails to start. Any path you choose with
 > `ROBSTATTM_HOME` must likewise contain no spaces; `setup` checks this
 > before downloading anything.
@@ -77,7 +77,7 @@ otherwise. Two alternatives, in order of preference:
    robstattm-py doctor
    ```
 
-   No further configuration — RobStatTM-Py finds it automatically.
+   No further configuration, RobStatTM-Py finds it automatically.
 
 2. **Point at an existing R** you already have:
 
@@ -130,7 +130,7 @@ Two smaller Windows notes:
 **Fully supported**, with one wrinkle at install time if you do not already
 have R.
 
-`rpy2` — the bridge this package is built on — publishes prebuilt wheels for
+`rpy2`, the bridge this package is built on, publishes prebuilt wheels for
 Windows and macOS but **not for Linux**, so on Linux `pip` compiles it. Its
 default build mode refuses to compile unless R is already present, which is a
 chicken-and-egg problem if you were relying on `robstattm-py setup` to install
@@ -196,7 +196,7 @@ across Linux, Windows and macOS.
 
 Your Python must be **64-bit**, and on macOS its architecture must match R's.
 A mismatch is detected and refused with a clear message rather than crashing the
-interpreter — which is what would otherwise happen.
+interpreter, which is what would otherwise happen.
 
 ---
 
@@ -206,7 +206,7 @@ Not by assertion:
 
 - Every push runs the full suite on Linux, Windows and macOS with a system R,
   and asserts that R was found by **auto-detection**, not by configuration.
-- A nightly job provisions R on machines with **none** — a bare
+- A nightly job provisions R on machines with **none**, a bare
   `python:3.12-slim` container, plus Windows and both macOS architectures with
   the preinstalled R removed and the job failing if any trace remains. It then
   asserts the provisioned R is the one in use and runs a real fit against pinned

@@ -22,23 +22,23 @@ Mandatory ordering for every wrapper. **Do not skip steps.** Skipping leads to w
    names(fit)
    sapply(fit, class)
    ```
-   Capture this into the function's `the vendored R source (see docs/RELOCATED.md)` "R return structure" section. Field names here are authoritative for the Python dataclass.
+   Capture this into the function's `the vendored R source (see dev/design/RELOCATED.md)` "R return structure" section. Field names here are authoritative for the Python dataclass.
 
 3. **Identify dependencies.**
-   Cross-check against `docs/dependency_map.md §3`. If a new external package is needed that the map does not list, **update the map first** in the same PR.
+   Cross-check against `dev/design/dependency_map.md §3`. If a new external package is needed that the map does not list, **update the map first** in the same PR.
 
-4. **Write/refresh `the vendored R source (see docs/RELOCATED.md)`.**
+4. **Write/refresh `the vendored R source (see dev/design/RELOCATED.md)`.**
    The research doc must answer all of: statistical purpose, theory pointer, R location, inputs, outputs, deps, helper functions, Python API design, edge cases, validation strategy. If the doc already exists, verify and amend.
 
 5. **Write the test first** (TDD).
    - Use `templates/test_wrapper.py.tmpl`.
-   - Cover all applicable cases from `docs/validation_strategy.md §3`.
-   - Run pytest — it must fail for the right reason (wrapper not implemented).
+   - Cover all applicable cases from `dev/design/validation_strategy.md §3`.
+   - Run pytest, it must fail for the right reason (wrapper not implemented).
 
 6. **Write the wrapper.**
    - Use `templates/wrapper.py.tmpl`.
-   - Conform to `docs/architecture.md §3` (dataclass, frozen, slots).
-   - Conform to `docs/documentation_standards.md` (NumPy docstring with all required sections).
+   - Conform to `dev/design/architecture.md §3` (dataclass, frozen, slots).
+   - Conform to `dev/design/documentation_standards.md` (NumPy docstring with all required sections).
 
 7. **Iterate until strict-tier green.**
    No tolerance loosening without a `decisions.md` entry.
@@ -58,7 +58,7 @@ Mandatory ordering for every wrapper. **Do not skip steps.** Skipping leads to w
 - **No `from rpy2 import *`-style imports.** Use explicit `from rpy2 import robjects as ro`.
 - **No silent type coercion.** If input is a list instead of an array, accept it via `np.asarray`; if input is the wrong dtype, raise `TypeError` with a clear message.
 - **No catching `Exception`** at the wrapper level. Only catch the specific R/conversion errors you intend to translate.
-- **Frozen dataclass — no mutation.** If a downstream caller needs to modify a field, they construct a new dataclass via `dataclasses.replace`.
+- **Frozen dataclass, no mutation.** If a downstream caller needs to modify a field, they construct a new dataclass via `dataclasses.replace`.
 
 ---
 

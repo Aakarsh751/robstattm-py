@@ -2,17 +2,17 @@
 
 For each MyST page in ``docs/api/wrappers/``, check three claims:
 
-1. **Import** — the line ``from robstattm_py import <py_name>`` works.
-2. **Example** — the Python code block under "Examples" runs to completion
+1. **Import**, the line ``from robstattm_py import <py_name>`` works.
+2. **Example**, the Python code block under "Examples" runs to completion
    without raising.
-3. **Returns** — every R field listed in the "Returns" table is reachable
+3. **Returns**, every R field listed in the "Returns" table is reachable
    on the actual Python result object via the documented R↔Python field
    convention (dots → underscores, snake_case).  We also detect Python
    fields that are *not* documented (under-documented surface).
 
 Then, for the "Equivalent R code" overrides:
 
-4. **R examples** — every ``docs/examples/*.R`` file (the R block paired with a
+4. **R examples**, every ``docs/examples/*.R`` file (the R block paired with a
    page's Python example) is executed under RobStatTM via ``Rscript`` and must
    run without error, so the published R code is genuinely runnable.
 
@@ -40,7 +40,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 
 # Python attribute names that exist on every wrapper result and are
-# not part of the R return list — don't flag these as undocumented.
+# not part of the R return list, don't flag these as undocumented.
 _INTERNAL_FIELDS = frozenset({
     "formula", "control", "coef_names",
 })
@@ -233,7 +233,7 @@ def validate_r_examples() -> int:
     print(f"\nvalidating {len(r_files)} R example override(s)...\n")
     rscript = _find_rscript()
     if rscript is None:
-        print("[WARN] Rscript not found (set R_HOME) — skipping .R validation")
+        print("[WARN] Rscript not found (set R_HOME), skipping .R validation")
         return 0
     rc = 0
     for rf in r_files:

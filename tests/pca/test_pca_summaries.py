@@ -1,4 +1,4 @@
-"""Strict-tier tests for ``PrcompRobResult.summary()`` — port of R's
+"""Strict-tier tests for ``PrcompRobResult.summary()``, port of R's
 ``summary.prcompRob``."""
 from __future__ import annotations
 

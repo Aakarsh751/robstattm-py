@@ -1,4 +1,4 @@
-"""``check_setup()`` — the first thing a new user runs.
+"""``check_setup()``, the first thing a new user runs.
 
 It had no test coverage at all, which is how two defects survived in it:
 ``rpy2.__version__`` was removed in rpy2 3.6 so the version always printed as
@@ -46,7 +46,7 @@ def test_reports_a_real_rpy2_version_not_unknown(capsys):
     """Regression: rpy2 3.6 dropped ``rpy2.__version__``.
 
     The old attribute lookup silently degraded to "unknown" on every current
-    install, which is worse than useless in a diagnostic — it makes a working
+    install, which is worse than useless in a diagnostic, it makes a working
     setup look broken.
     """
     mod.check_setup()

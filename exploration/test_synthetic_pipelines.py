@@ -1,9 +1,9 @@
-"""Synthetic-data pipelines — Python-synthesized data, strict parity vs R.
+"""Synthetic-data pipelines, Python-synthesized data, strict parity vs R.
 
 Every test here **builds data in NumPy/pandas**, pushes the *same* array to R's
 globalenv, runs the Python wrapper and the equivalent direct R call, and asserts
 **bit-identical** outputs (``atol=0, rtol=0``) on the substantive numeric fields
-— not just shapes. Stochastic estimators are seeded on both sides
+, not just shapes. Stochastic estimators are seeded on both sides
 (``rpm.set_seed`` / ``set.seed``) so the R RNG streams coincide.
 
 Test matrix
@@ -17,14 +17,14 @@ Test matrix
 | lmrobdet_mm / dcml / lmrob_m  | n×p linear model + 10% vertical outliers | estimator, family/eff       | coef, scale, residuals, fitted.values, cov     |
 | cov_rob_mm / rocke / cov_rob  | n×p correlated Gaussian + row contam.    | corr on/off, dispatcher     | center, cov, dist                              |
 | cov_classic                   | n×p correlated Gaussian                  | corr on/off                 | center, cov                                    |
-| fastmve                       | n×p correlated Gaussian                  | —                           | center, cov, scale                             |
-| kurt_sd_new                   | n×p correlated Gaussian                  | —                           | center, cova                                   |
+| fastmve                       | n×p correlated Gaussian                  |,                           | center, cov, scale                             |
+| kurt_sd_new                   | n×p correlated Gaussian                  |,                           | center, cova                                   |
 | prcomp_rob                    | n×p correlated Gaussian                  | rank                        | sdev, rotation, center                         |
 | pca_rob_s                     | n×p correlated Gaussian                  | ncomp                       | eigvec, mu, propex, propSPC                    |
 | by/wby/wml_logreg             | binary GLM, mislabelled outliers         | method                      | coef, standard.deviation, fitted.values, dev.  |
 | refine_sm                     | n×p linear model                         | family bisquare             | beta.rw, scale.rw                              |
 | pense / pense_cv              | sparse-beta linear model                 | alpha                       | lambda path, coef path / coef(min)            |
-| gse / tsgs                    | n×p Gaussian with MCAR missingness       | —                           | mu, cov (slots)                                |
+| gse / tsgs                    | n×p Gaussian with MCAR missingness       |,                           | mu, cov (slots)                                |
 
 Run::
 
@@ -110,7 +110,7 @@ def test_psi_rho_family_synth_vs_r(family):
     u = np.sort(rng.uniform(-4.0, 4.0, size=37)).astype(np.float64)
     cc = getattr(rpm.psi, family)(0.95)  # tuning constant(s) at 95% efficiency
     push_to_r("syn_u", u)
-    # atleast_1d: numpy2ri cannot convert a 0-d array (scalar bisquare cc) —
+    # atleast_1d: numpy2ri cannot convert a 0-d array (scalar bisquare cc),
     # it raises "'dims' cannot be of length 0". A length-1 R vector is an
     # identical `cc` argument to a scalar in R.
     push_to_r("syn_cc", np.atleast_1d(np.asarray(cc, dtype=float)))
@@ -138,7 +138,7 @@ def test_invtr2_bisquare_synth_vs_r(rr2):
 
 
 # ===========================================================================
-# 3. Regression — MM / DCML / M, full-field strict parity on contaminated data
+# 3. Regression - MM / DCML / M, full-field strict parity on contaminated data
 # ===========================================================================
 
 # (python_fn, r_fn, builds_control)
@@ -219,7 +219,7 @@ def test_regression_xy_path_matches_formula_and_r():
 
 
 # ===========================================================================
-# 4. Covariance — MM / Rocke / dispatcher / classic / fastmve / kurt_sd_new
+# 4. Covariance - MM / Rocke / dispatcher / classic / fastmve / kurt_sd_new
 # ===========================================================================
 
 
@@ -327,7 +327,7 @@ def test_kurt_sd_new_synth_vs_r():
 
 
 # ===========================================================================
-# 5. PCA — prcomp_rob (prcomp shape) and pca_rob_s (M-scale)
+# 5. PCA - prcomp_rob (prcomp shape) and pca_rob_s (M-scale)
 # ===========================================================================
 
 
@@ -363,7 +363,7 @@ def test_pca_rob_s_synth_vs_r():
 
 
 # ===========================================================================
-# 6. GLM — robust logistic regression on a synthetic binary design
+# 6. GLM - robust logistic regression on a synthetic binary design
 # ===========================================================================
 
 _GLM_METHODS = [
@@ -408,7 +408,7 @@ def test_glm_synth_vs_r(py_fn, r_fn):
 
 
 # ===========================================================================
-# 7. refine_sm — deterministic low-level refinement, parity on identical inputs
+# 7. refine_sm - deterministic low-level refinement, parity on identical inputs
 # ===========================================================================
 
 

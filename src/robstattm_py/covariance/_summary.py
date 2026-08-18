@@ -1,4 +1,4 @@
-"""Cov-side ``.summary()`` port — shared by ``covRob`` and ``covClassic``.
+"""Cov-side ``.summary()`` port, shared by ``covRob`` and ``covClassic``.
 
 R's ``summary.covRob`` and ``summary.covClassic`` have identical bodies
 (verified): both return ``(call, cov, center, evals, dist)`` when the
@@ -8,7 +8,7 @@ present), labelled ``"Eval. 1"`` … ``"Eval. p"``.
 
 Per decision D-012 we expose this through a Python dataclass method
 ``.summary()`` on the result objects. Implementation strategy: delegate
-to R via the stored ``_r_fit`` — strict-tier parity by construction.
+to R via the stored ``_r_fit``, strict-tier parity by construction.
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ class CovSummary:
         Location estimate.
     evals : ndarray, shape (p,)
         Eigenvalues of ``cov`` (or of ``cor`` if a correlation matrix was
-        requested) — sorted by R from largest to smallest. R labels them
+        requested), sorted by R from largest to smallest. R labels them
         ``"Eval. 1"`` … ``"Eval. p"``; the labels are exposed as
         :attr:`eval_names`.
     eval_names : tuple[str, ...]

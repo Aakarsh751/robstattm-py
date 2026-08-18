@@ -11,7 +11,7 @@ nb = new_notebook()
 cells = []
 
 cells.append(new_markdown_cell(
-    "# External robust estimators — `pense`, `gse`, `tsgs`\n"
+    "# External robust estimators, `pense`, `gse`, `tsgs`\n"
     "\n"
     "The three *stretch* wrappers in `robstattm_py.external` bring estimators that live in "
     "**separate CRAN packages** (`pense`, `GSE`) but are recommended alongside RobStatTM in "
@@ -24,7 +24,7 @@ cells.append(new_markdown_cell(
     "| `rpm.tsgs` | `GSE::TSGS` | Two-step GSE for **cell-wise** outliers | §6.13 |\n"
     "\n"
     "Every numeric result below is **bit-for-bit identical** to the underlying R call "
-    "(`atol=0, rtol=0`) — these wrappers fit in R-space and read back the values, they do not "
+    "(`atol=0, rtol=0`), these wrappers fit in R-space and read back the values, they do not "
     "re-implement anything. All three are stochastic, so we call `rpm.set_seed(...)` first for "
     "reproducibility (it seeds Python and R together).\n"
     "\n"
@@ -45,10 +45,10 @@ cells.append(new_code_cell(
 
 # --- pense ---------------------------------------------------------------
 cells.append(new_markdown_cell(
-    "## 1. `pense` — robust elastic-net regression\n"
+    "## 1. `pense`, robust elastic-net regression\n"
     "\n"
     "Penalized S-estimation does variable selection *and* resists outliers. We use a sparse "
-    "design — only 3 of 12 predictors are real signal — and inject 5 gross outliers in the "
+    "design, only 3 of 12 predictors are real signal, and inject 5 gross outliers in the "
     "response. A non-robust lasso would chase those outliers; `pense` should recover the sparse "
     "signal regardless."
 ))
@@ -109,7 +109,7 @@ cells.append(new_code_cell(
 
 # --- gse -----------------------------------------------------------------
 cells.append(new_markdown_cell(
-    "## 2. `gse` — robust scatter with missing data\n"
+    "## 2. `gse`, robust scatter with missing data\n"
     "\n"
     "The Generalized S-Estimator handles `NaN` entries natively (most robust covariance "
     "estimators cannot). We load the textbook **wine** dataset (n=59, p=13), knock out 8% of the "
@@ -143,7 +143,7 @@ cells.append(new_code_cell(
 
 # --- tsgs ----------------------------------------------------------------
 cells.append(new_markdown_cell(
-    "## 3. `tsgs` — two-step GSE for cell-wise outliers\n"
+    "## 3. `tsgs`, two-step GSE for cell-wise outliers\n"
     "\n"
     "Cell-wise contamination corrupts *individual entries* (not whole rows). `TSGS` first flags "
     "and filters bad cells, then runs a GSE on the rest. We contaminate 5% of wine's cells with "
@@ -188,7 +188,7 @@ cells.append(new_markdown_cell(
     "\n"
     "All three return frozen dataclasses carrying the standard ergonomics (`.to_dict()`, "
     "`.to_r()`, `_repr_html_`) and the raw R fit in `_r_fit`. Numbers match the underlying R "
-    "packages exactly — see `tests/external/test_pense.py` and `tests/external/test_gse.py`."
+    "packages exactly, see `tests/external/test_pense.py` and `tests/external/test_gse.py`."
 ))
 
 nb["cells"] = cells

@@ -1,4 +1,4 @@
-"""Robust variance-component / mixed-model estimation — wraps ``robustvarComp``.
+"""Robust variance-component / mixed-model estimation, wraps ``robustvarComp``.
 
 Maronna et al. (2019) §6.x (autism growth-model example). Composite robust
 S/Tau/MM estimators for linear mixed / variance-component models. Requires the
@@ -16,8 +16,8 @@ reproducibility. We fit *inside* R-space (push the data frame, ``groups`` matrix
 ``varcov`` kernels and control to ``globalenv``) so the result equals R exactly.
 
 Note: a plain ``data.frame`` produces results numerically identical to an
-``nlme::groupedData`` object (verified, diff = 0) — the ``groups`` matrix drives
-the grouping — so this wrapper does not require ``nlme``.
+``nlme::groupedData`` object (verified, diff = 0), the ``groups`` matrix drives
+the grouping, so this wrapper does not require ``nlme``.
 """
 from __future__ import annotations
 
@@ -258,7 +258,7 @@ def var_comprob(
 
     Notes
     -----
-    Stochastic — call :func:`robstattm_py.set_seed` before for reproducibility.
+    Stochastic, call :func:`robstattm_py.set_seed` before for reproducibility.
     """
     require_r_pkg("robustvarComp")  # ensure installed (namespace only; no attach)
     ro = r()
@@ -303,7 +303,7 @@ def var_comprob(
         # Extract fields one at a time via `$` access. Converting the *whole*
         # fit object (`ro.r("rpm_vc_fit")`) would push its embedded `model`
         # data.frame / `terms` through the active pandas2ri converter and crash
-        # ("Per-column arrays must each be 1-dimensional") — same fragility as
+        # ("Per-column arrays must each be 1-dimensional") - same fragility as
         # the pense cvfit (see pense.py / discoveries.md).
         beta = extract_array(ro.r("rpm_vc_fit$beta")).astype(float).ravel()
         eta = extract_array(ro.r("rpm_vc_fit$eta")).astype(float).ravel()

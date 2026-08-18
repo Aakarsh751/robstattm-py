@@ -1,4 +1,4 @@
-"""Tests for ``robstattm_py.compat_r`` — R-name alias layer."""
+"""Tests for ``robstattm_py.compat_r``, R-name alias layer."""
 from __future__ import annotations
 
 import pytest

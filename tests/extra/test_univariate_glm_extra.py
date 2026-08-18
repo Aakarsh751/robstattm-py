@@ -71,7 +71,7 @@ class TestMScale:
         assert rpm.m_scale(np.zeros(40)) == 0.0
 
     def test_not_centred_constant_is_scale_equivariant(self):
-        # GOTCHA: scaleM does NOT centre — a constant c is treated as residual c,
+        # GOTCHA: scaleM does NOT centre - a constant c is treated as residual c,
         # so the scale is positive and proportional to |c| (not 0).
         s7 = rpm.m_scale(np.full(40, 7.0))
         s14 = rpm.m_scale(np.full(40, 14.0))
@@ -86,7 +86,7 @@ class TestMScale:
 def _binary_data(n=80, seed=0):
     rng = np.random.default_rng(seed)
     X = rng.standard_normal((n, 2))
-    # noisy logistic response — non-separable so the robust fits converge
+    # noisy logistic response - non-separable so the robust fits converge
     p = 1.0 / (1.0 + np.exp(-(0.8 * X[:, 0] - 0.5 * X[:, 1])))
     y = (rng.random(n) < p).astype(float)
     return X, y

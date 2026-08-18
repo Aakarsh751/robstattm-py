@@ -6,7 +6,7 @@ length-1 array, or an already-native scalar, depending on the call path. These
 helpers absorb that variation so wrappers can state the type they want.
 
 The R-field-name map for any given wrapper lives next to that wrapper, not
-here — this module only provides the primitives.
+here, this module only provides the primitives.
 """
 from __future__ import annotations
 

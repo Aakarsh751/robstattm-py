@@ -1,9 +1,9 @@
-"""Native univariate plot — robust location & scale.
+"""Native univariate plot, robust location & scale.
 
 Visualises a :class:`~robstattm_py.univariate.loc_scale_m.LocScaleMResult` over
 the sample it was computed from: a histogram/density with the robust location
 band (μ ± dispersion) and, optionally, the classical mean ± sd band for
-contrast. Reads only the result's scalars (``mu``, ``disper``) — no re-fit.
+contrast. Reads only the result's scalars (``mu``, ``disper``), no re-fit.
 """
 from __future__ import annotations
 

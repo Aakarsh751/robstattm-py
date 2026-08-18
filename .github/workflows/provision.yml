@@ -55,7 +55,7 @@ jobs:
           python-version: "3.12"
 
       # --no-deps, then everything except rpy2. Solving exercises only
-      # robstattm_py._renv, which never imports rpy2 — but reaching it runs the
+      # robstattm_py._renv, which never imports rpy2, but reaching it runs the
       # package's __init__, which does import numpy and pandas. Installing the
       # full dependency set instead would try to build rpy2, and rpy2 cannot be
       # built without R, which is exactly the situation this runner is in.
@@ -91,7 +91,7 @@ jobs:
           - os: macos-latest
             label: osx-arm64
           # Intel macOS. NOT macos-13: that image was retired in December 2025,
-          # so the job simply never received a runner — it sat queued until the
+          # so the job simply never received a runner, it sat queued until the
           # job timeout, on every single run, while reporting nothing useful.
           # macos-15-intel is the supported Intel label and is available until
           # August 2027, after which GitHub drops hosted x86_64 macOS entirely.
@@ -156,7 +156,7 @@ jobs:
       #
       # RPY2_CFFI_MODE=ABI is the crux of this job on Linux. rpy2 publishes
       # wheels only for Windows and macOS, so on Linux pip must compile
-      # rpy2-rinterface — and its API mode refuses to build without R, which is
+      # rpy2-rinterface, and its API mode refuses to build without R, which is
       # precisely what this machine does not have. ABI mode resolves R's symbols
       # at run time instead, so it builds with no R present and then binds to
       # whichever R `setup` installs. Setting it here proves the instruction we

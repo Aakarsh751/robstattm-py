@@ -1,7 +1,7 @@
 """``import robstattm_py`` must be inert.
 
 Run in a subprocess with a scrubbed environment, because the checks are about
-what happens at interpreter start — by the time an in-process test runs, the
+what happens at interpreter start, by the time an in-process test runs, the
 package has already been imported by the collector.
 
 Why this is worth a dedicated test: the package can download and install a

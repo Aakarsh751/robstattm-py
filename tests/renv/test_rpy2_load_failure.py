@@ -19,7 +19,7 @@ that reported success and then failed on the very next line with
 
     cannot import name 'default_converter' from 'rpy2.robjects' (unknown location)
 
-`(unknown location)` is a module with no `__file__` — a half-initialised import.
+`(unknown location)` is a module with no `__file__`, a half-initialised import.
 rpy2 embeds R as a **process-global singleton**, so once an import has tried to
 load R the attempt cannot be undone; clearing `sys.modules` clears Python's view
 and not the C state.
@@ -52,7 +52,7 @@ def _clean_env():
     Done by hand rather than with `monkeypatch.delenv`, because the code under
     test *sets* the variable itself. monkeypatch only restores what it changed,
     so a value written by `_select_cffi_mode` would survive into the rest of the
-    session — and a stray `RPY2_CFFI_MODE=ABI` silently changes which rpy2
+    session, and a stray `RPY2_CFFI_MODE=ABI` silently changes which rpy2
     binding every later test uses.
     """
     import os
@@ -79,7 +79,7 @@ class TestSelectCffiMode:
     def test_system_r_is_left_alone(self):
         """A system R is plausibly the one rpy2 was compiled against; keep the
         faster compiled binding. On Colab/Kaggle `pip` rebuilds rpy2 against the
-        system R, so forcing ABI there broke a working path — hence this stays a
+        system R, so forcing ABI there broke a working path, hence this stays a
         no-op for a system R, and a broader hosted-notebook rule was reverted."""
         import os
 
@@ -147,7 +147,7 @@ class TestInconsistentRpy2Install:
     """The Colab/Kaggle failure: rpy2's split packages at mismatched versions.
 
     `cannot import name 'default_converter' from 'rpy2.robjects' (unknown
-    location)` — observed with rpy2 3.6.7 / rpy2-rinterface 3.6.6 /
+    location)`, observed with rpy2 3.6.7 / rpy2-rinterface 3.6.6 /
     rpy2-robjects 3.6.5, fixed by `pip install --force-reinstall rpy2`.
     """
 
@@ -190,7 +190,7 @@ class TestInconsistentRpy2Install:
 def test_no_in_process_retry_remains():
     """Guard against reintroducing the retry.
 
-    It looked like it worked — the fallback warning printed — and then the next
+    It looked like it worked, the fallback warning printed, and then the next
     import failed with "(unknown location)". Anyone tempted to add it back
     should read `_select_cffi_mode`'s docstring first.
     """

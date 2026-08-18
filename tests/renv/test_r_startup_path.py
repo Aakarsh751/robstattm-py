@@ -6,7 +6,7 @@ everything, then died at "[4/4] Verifying" with
     Mingw-w64 runtime failure: 32 bit pseudo relocation at ... out of range
 
 Windows resolves a DLL by scanning PATH left to right and taking the first name
-match. The provisioned R needs `R.dll`, `Rblas.dll` and a mingw runtime — names
+match. The provisioned R needs `R.dll`, `Rblas.dll` and a mingw runtime, names
 that a CRAN R installation, Rtools, MSYS2 and Git's bundled mingw all also ship.
 Loading a foreign copy into conda's R fails either as a missing module
 (0xC0000135) or, when it loads but came from a different toolchain, as the
@@ -46,7 +46,7 @@ def _windows_prefix(tmp_path: Path) -> Path:
 
 
 #: Stand-in for "some other R already on PATH". Deliberately free of `:` and
-#: `;` so it survives a split on either platform's `os.pathsep` — a real
+#: `;` so it survives a split on either platform's `os.pathsep` - a real
 #: `C:\...` string does not, which is how the first version of these tests
 #: passed on Windows and failed everywhere else.
 OTHER_R_BIN = "OTHER_R_INSTALLATION_BIN"
@@ -72,7 +72,7 @@ class TestEnvPathPrefix:
             assert str(prefix.joinpath(*parts)) in entries, parts
 
     def test_mingw_runtime_comes_before_library_bin(self, tmp_path):
-        """Ordering is not cosmetic — it decides which copy of a DLL wins."""
+        """Ordering is not cosmetic, it decides which copy of a DLL wins."""
         prefix = _windows_prefix(tmp_path)
         entries = provision.env_path_prefix(prefix, _probe()).split(os.pathsep)
         assert entries.index(str(prefix / "Library" / "mingw-w64" / "bin")) < entries.index(

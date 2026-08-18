@@ -1,11 +1,11 @@
 # RobStatTM-Py
 
-**Robust statistics for Python — backed bit-for-bit by R's RobStatTM.**
+**Robust statistics for Python, backed bit-for-bit by R's RobStatTM.**
 
 RobStatTM-Py gives Python users the robust estimators from the
-[RobStatTM](https://cran.r-project.org/package=RobStatTM) R package —
-MM-regression, robust covariance, robust PCA, robust GLM, and M-estimators of
-location and scale — through a clean, Pythonic API. Every function calls the
+[RobStatTM](https://cran.r-project.org/package=RobStatTM) R package
+(MM-regression, robust covariance, robust PCA, robust GLM, and M-estimators of
+location and scale) through a clean, Pythonic API. Every function calls the
 original, peer-reviewed R routine through `rpy2`, so results are **byte-identical
 to R** (validated at `atol=0, rtol=0`). No reimplementation, no surprises.
 
@@ -16,7 +16,7 @@ mineral = rpm.datasets.mineral()                 # a built-in textbook dataset
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=mineral)   # robust MM-regression
 
 print(fit.summary())          # coefficient table with robust std errors
-print(fit.coefficients)       # numpy array — bit-identical to R
+print(fit.coefficients)       # numpy array, bit-identical to R
 ```
 
 ## Why robust statistics?

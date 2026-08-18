@@ -7,7 +7,7 @@ regenerates them; it needs a working R bridge (for the live fits and the Path-A
 
 Run from the package root (``robstattm-py/``)::
 
-    # Windows (PowerShell) — set the R env first:
+    # Windows (PowerShell), set the R env first:
     $env:R_HOME = "C:\\Program Files\\R\\R-4.5.2"
     $env:PATH   = "C:\\Program Files\\R\\R-4.5.2\\bin\\x64;" + $env:PATH
     python docs/scripts/render_plots.py

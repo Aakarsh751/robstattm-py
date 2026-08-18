@@ -1,7 +1,7 @@
-"""``rpm.help(name)`` — single help lookup that accepts either the
+"""``rpm.help(name)``, single help lookup that accepts either the
 R-original name or the Python (snake_case) name.
 
-Per ``docs/user_interface.md §9``.
+Per ``dev/design/user_interface.md §9``.
 """
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ import inspect
 import textwrap
 from typing import Any
 
-# R-name → Python attribute name. Single source of truth — keep in sync
-# with the table in docs/user_interface.md §5 and with compat_r.py.
+# R-name → Python attribute name. Single source of truth - keep in sync
+# with the table in dev/design/user_interface.md §5 and with compat_r.py.
 _R_TO_PY: dict[str, str] = {
     # univariate
     "locScaleM": "loc_scale_m", "MLocDis": "loc_scale_m",

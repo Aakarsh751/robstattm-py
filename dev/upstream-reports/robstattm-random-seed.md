@@ -53,7 +53,7 @@ initPP <- KurtSDNew <- function(X, muldirand=20, muldifix=10, dirmin=1000) {
 The `get()` has no `exists()` guard. `covRob` and `covRobRocke` reach it via
 `R/Multirobu.R:123` and `R/Multirobu.R:359`.
 
-The same save-and-restore is done correctly elsewhere in the package —
+The same save-and-restore is done correctly elsewhere in the package,
 `R/lmrob.MM.R:690`:
 
 ```r
@@ -84,7 +84,7 @@ session touches the RNG. It shows up reliably in two situations:
 
 We found it in [robstattm-py](https://github.com/Aakarsh751/robstattm-py), a
 Python interface to RobStatTM via rpy2, where every user session starts clean.
-`cov_rob()` failed for *every* user whose first call it was — including the
+`cov_rob()` failed for *every* user whose first call it was, including the
 example in our own README.
 
 Our test suite had missed it, because the covariance tests call `set.seed()`

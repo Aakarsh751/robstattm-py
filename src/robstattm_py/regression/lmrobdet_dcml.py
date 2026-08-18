@@ -117,7 +117,7 @@ class LmrobdetDCMLResult:
         """Classical (least-squares) R² for the DCML fit.
 
         R's ``lmrobdetDCML`` does NOT populate ``$r.squared`` on the fit
-        (verified — the DCML algorithm has no canonical robust-R²
+        (verified, the DCML algorithm has no canonical robust-R²
         statistic). Therefore ``self.summary().r_squared`` is ``None``
         for DCML fits, matching R.
 
@@ -184,7 +184,7 @@ def lmrobdet_dcml(
     r_control = None if is_default else _control_to_r(base)
     try:
         if r_control is None:
-            # Let R fill defaults — building a partial control list and
+            # Let R fill defaults - building a partial control list and
             # passing it has triggered "non-conformable arrays" in DCML.
             rfit = rcall(
                 pkg.lmrobdetDCML, rformula,
@@ -217,7 +217,7 @@ def lmrobdet_dcml(
         formula=formula,
         control=base,
         _r_fit=rfit,
-        # Defensive copy — see LmrobdetMMResult: the refit-based S3 methods
+        # Defensive copy - see LmrobdetMMResult: the refit-based S3 methods
         # read this frame back, so snapshot it against later caller mutation.
         _data=data.copy(),
         _r_control=r_control,

@@ -37,14 +37,14 @@ def lmrobdet_mm(
 |---|---|---|---|
 | `formula` | str \| None | `None` | a symbolic description of the model to be fit. |
 | `data` | DataFrame \| None | `None` | an optional data frame, list or environment containing the variables in the model. If not found in `data`, model variables are taken from `environment(formula)`, which usually is the root environment of the current R session. |
-| `X` | — | `None` | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | `None` | Response vector of length `n` — used together with `X`. |
+| `X` | n/a | `None` | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | `None` | Response vector of length `n`, used together with `X`. |
 | `control` | LmrobdetControl \| None | `None` | a list specifying control parameters as returned by the function `lmrobdet.control`. |
 | `family` | str \| None | `None` | Robust loss-function family shortcut (e.g. `"mopt"`, `"bisquare"`); sets the corresponding field on `control`. |
 | `efficiency` | float \| None | `None` | Target Gaussian efficiency shortcut (e.g. `0.95`); sets the corresponding field on `control`. |
 
 
-> **Note** — handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `subset`, `weights`, `na.action`, `model`, `x`, `singular.ok`, `contrasts`, `offset`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -55,7 +55,7 @@ A `LmrobdetMMResult` object. Its attributes mirror the fields of the R
 | Attribute | R name | Description |
 |---|---|---|
 | `coefficients` | coefficients | The estimated vector of regression coefficients |
-| `coef_names` | — | Names of the estimated coefficients, aligned positionally with `coefficients`. |
+| `coef_names` | n/a | Names of the estimated coefficients, aligned positionally with `coefficients`. |
 | `scale` | scale | The robust residual M-scale estimate using the final residuals from the converged iterated weighted least square (IRWLS) algorithm final estimate |
 | `residuals` | residuals | The vector of residuals associated with the robust fit |
 | `loss` | loss | Value of the objective function at the final MM-estimator |
@@ -71,11 +71,11 @@ A `LmrobdetMMResult` object. Its attributes mirror the fields of the R
 | `iters_const` | iters.const | The number of refinement iterations used to compute the estimator without covariates (to calculate the robust R^2). |
 | `r_squared` | r.squared | The robust multiple correlation coefficient |
 | `adj_r_squared` | adj.r.squared | The adjusted robust multiple correlation coefficient taking into account the degrees of freedom of each term |
-| `formula` | — | The model formula used for the fit (echoes the input). |
-| `control` | — | The control object used for the fit (echoes the input). |
+| `formula` | n/a | The model formula used for the fit (echoes the input). |
+| `control` | n/a | The control object used for the fit (echoes the input). |
 
 
-> **R fields not surfaced in Python** — the R `lmrobdetMM` list also contains
+> **R fields not surfaced in Python.** The R `lmrobdetMM` list also contains
 > `contrasts`, `xlevels`, `call`, `model`, `x`, `y`, `terms`, `iters.py`, `assign`, `na.action`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -90,12 +90,15 @@ The `LmrobdetMMResult` object also provides these methods:
 |---|---|
 | `coef()` | Return coefficients as a named pandas Series. |
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
-| `drop1(scope, scale)` | Port of R's ``drop1.lmrobdetMM`` — single-term-deletion RFPE table. |
+| `drop1(scope, scale)` | Port of R's ``drop1.lmrobdetMM``  -  single-term-deletion RFPE table. |
 | `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
-| `hatvalues()` | Port of R's ``hatvalues.lmrob`` — leverages of the fitted model. |
+| `hatvalues()` | Port of R's ``hatvalues.lmrob``  -  leverages of the fitted model. |
+| `plot_diagnostics(kw)` | Four-panel diagnostic figure: residuals, Q-Q, scale-location, weights. |
+| `plot_qq(kw)` | Normal Q-Q plot of standardized residuals (R's ``plot(fit, which = 2)``). |
+| `plot_residuals(kw)` | Residuals-vs-fitted plot (R's ``plot(fit, which = 1)``). |
 | `predict(newdata, se_fit)` | Port of R's ``predict.lmrobdetMM`` (dispatched via ``robustbase``). |
 | `resid()` | Robust residuals as a pandas Series (R's ``resid()``/``residuals()``). |
-| `rfpe(both_vals)` | Port of R's ``lmrobdetMM.RFPE`` — robust final prediction error. |
+| `rfpe(both_vals)` | Port of R's ``lmrobdetMM.RFPE``  -  robust final prediction error. |
 | `sigma()` | Robust residual scale (R's ``sigma()``). |
 | `summary()` | Port of R's ``summary.lmrobdetMM``. |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
@@ -129,7 +132,7 @@ and "Optimal Bias Robust Regression Psi and Rho".
 ```python
 import robstattm_py as rpm
 
-# Load Coleman's school data — 20 obs of school outcomes vs predictors.
+# Load Coleman's school data  -  20 obs of school outcomes vs predictors.
 coleman = rpm.datasets.load("robustbase", "coleman")
 
 # Fit a robust MM-regression.  ``Y ~ .`` means "regress Y on every
@@ -178,5 +181,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>, based on `lmr
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lmrobdetMM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

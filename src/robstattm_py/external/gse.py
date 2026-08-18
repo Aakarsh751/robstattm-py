@@ -2,12 +2,12 @@
 
 Wraps the external ``GSE`` CRAN package (Maronna et al. 2019 §6.12.2, §6.13):
 
-* :func:`gse`  → ``GSE::GSE``  — robust location/scatter with missing data
-* :func:`tsgs` → ``GSE::TSGS`` — two-step GSE for cell-wise outliers
+* :func:`gse`  → ``GSE::GSE``  - robust location/scatter with missing data
+* :func:`tsgs` → ``GSE::TSGS`` - two-step GSE for cell-wise outliers
 
 Both R functions return S4 objects; we read their slots directly via rpy2's
 ``.slots[...]`` (the public accessors ``getLocation`` / ``getScatter`` /
-``getDist`` return the same slot values — verified in
+``getDist`` return the same slot values, verified in
 ``tests/external/test_gse.py``).
 """
 from __future__ import annotations
@@ -137,7 +137,7 @@ def gse(
     Parameters
     ----------
     X : ndarray or pandas.DataFrame, shape (n, p)
-        May contain NaN (missing) entries — that is the point of GSE.
+        May contain NaN (missing) entries, that is the point of GSE.
     tol : float, default 1e-4
     maxiter : int, default 150
     method : {"bisquare", "rocke"}, default "bisquare"
@@ -154,7 +154,7 @@ def gse(
 
     Notes
     -----
-    Uses a stochastic EMVE initial estimate — call
+    Uses a stochastic EMVE initial estimate, call
     :func:`robstattm_py.set_seed` before for reproducibility.
     """
     arr, col_names = validate_2d_numeric(X, name="X", allow_nan=True)
@@ -211,7 +211,7 @@ def tsgs(
 
     Notes
     -----
-    Stochastic — use :func:`robstattm_py.set_seed` before for reproducibility.
+    Stochastic, use :func:`robstattm_py.set_seed` before for reproducibility.
     """
     arr, col_names = validate_2d_numeric(X, name="X", allow_nan=True)
     pkg = r_pkg("GSE")

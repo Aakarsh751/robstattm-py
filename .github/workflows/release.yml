@@ -74,6 +74,13 @@ jobs:
       # The wheel must be usable, not merely well-formed. R is absent on this
       # runner, so this also re-confirms that importing the package needs no R.
       - name: Smoke-test the wheel
+        # rpy2 ships no manylinux wheel, so pip compiles it from source, and its
+        # API-mode build needs R on the runner (which the release job has not
+        # installed). ABI mode is rpy2's compiler-free binding and needs no R at
+        # install time; the package is never actually run against R here (the
+        # checks below start no R), so this only unblocks the dependency install.
+        env:
+          RPY2_CFFI_MODE: ABI
         run: |
           python -m venv /tmp/smoke
           /tmp/smoke/bin/pip install --quiet dist/*.whl

@@ -6,6 +6,29 @@ Notable changes to RobStatTM-Py. Format based on
 
 ## [Unreleased]
 
+### Added
+
+- **`setup` now asks what you want instead of always downloading.** On a real
+  terminal it shows a short numbered menu: if an R is already installed it
+  offers to *use that R* (the recommended default, nothing to download) or to
+  download a private R anyway; if no R is found it offers to download one or to
+  point at an R you have elsewhere. Non-interactive use (scripts, CI, `--yes`,
+  `--dry-run`, `--force`) is unchanged and still provisions without prompting.
+- **Installer coverage for uv, pipx, and conda.** The install guide documents
+  installing with `uv` and `pipx` alongside `pip` (the package is a standard
+  PEP 621 / setuptools project, so `uv build` and `uv pip install` work with no
+  special flags), and `packaging/conda/` holds a draft conda-forge recipe.
+- **House-style guard against em dashes** (`dev/_check_no_emdash.py`), run in CI.
+
+### Changed
+
+- **Repo layout: contributor-facing design docs moved from `docs/` to
+  `dev/design/`,** so the docs tree holds only user-facing pages. The six
+  per-family `_smoke_*.py` scripts and `_ui_demo.py` were removed; `verify.py`
+  already covers every estimator family end to end.
+- **Em dashes removed repo-wide** in favour of ordinary punctuation, including
+  at the source of the generated API pages.
+
 ### Fixed
 
 - **Colab/Kaggle: "cannot import name 'default_converter' from 'rpy2.robjects'

@@ -9,8 +9,9 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from robstattm_py._renv import discover_only, paths, provision, state
+from robstattm_py._renv import discover_only, paths, provision, state, validate_r_home
 from robstattm_py._renv.errors import EXIT_CONFIRM_REQUIRED, EXIT_OK, RenvError
+from robstattm_py._renv.probe import Probe
 
 
 def add_parser(subparsers) -> None:
@@ -102,17 +103,114 @@ def _use_system_r(args) -> int:
     return EXIT_OK
 
 
-def run(args) -> int:
-    """Execute ``setup``."""
-    if args.use_system_r:
-        return _use_system_r(args)
+def _can_prompt(args) -> bool:
+    """Whether to show the interactive menu rather than the scripted flow.
 
+    Only when we can genuinely ask: a real terminal, and no flag that already
+    states the intent (``--yes``, ``--dry-run``, ``--force``). Scripts, CI, and
+    Dockerfiles fall through to the unchanged non-interactive path, so their
+    behaviour does not change.
+    """
+    return sys.stdin.isatty() and not (args.yes or args.dry_run or args.force)
+
+
+def _prompt_choice(options: list[str], default: int) -> int:
+    """Show a numbered menu and return the chosen 1-based index."""
+    for i, text in enumerate(options, 1):
+        marker = "   (default)" if i == default else ""
+        print(f"  [{i}] {text}{marker}")
+    print()
+    while True:
+        raw = input(f"Enter a number [1-{len(options)}, default {default}]: ").strip()
+        if not raw:
+            return default
+        if raw.isdigit() and 1 <= int(raw) <= len(options):
+            return int(raw)
+        print(f"Please enter a number between 1 and {len(options)}.")
+
+
+def _cancelled() -> int:
+    print("Cancelled. Nothing was changed.")
+    return EXIT_OK
+
+
+def _pin_r_at_path() -> int:
+    """Ask for a path to an existing R and pin it."""
+    raw = input(
+        "Path to your R installation root (the folder with library/ and etc/): "
+    ).strip()
+    if not raw:
+        return _cancelled()
+    info = validate_r_home(Path(raw).expanduser(), probe=Probe.current(), source="user")
+    state.State(
+        status="ready",
+        spec_hash="system",
+        r_home=str(info.path),
+        r_version=info.version_string,
+        subdir="system",
+    ).save()
+    print(f"Pinned the R at {info.path} (version {info.version_string}).")
+    print("robstattm-py will use this R from now on.")
+    print("\nRun `robstattm-py doctor` to check the R packages are present.")
+    return EXIT_OK
+
+
+def _interactive_setup(args) -> int:
+    """Act on the professor's guidance: prefer an existing R, otherwise ask.
+
+    If R is already installed we recommend using it (a private download is
+    heavy and pointless then); if it is not, we ask whether to download one or
+    point at an R the user has elsewhere.
+    """
+    existing = discover_only().info
+    print(f"robstattm-py setup   ->   {paths.root()}")
+    print()
+
+    if existing is not None:
+        print("An R installation is already available on this machine:")
+        print(f"    {existing.path}   (version {existing.version_string})")
+        print()
+        print("What would you like to do?")
+        choice = _prompt_choice(
+            [
+                "Use this R (recommended; nothing to download)",
+                "Download a separate private R (~400 MB) anyway",
+                "Cancel",
+            ],
+            default=1,
+        )
+        if choice == 1:
+            return _use_system_r(args)
+        if choice == 2:
+            return _provision_flow(args, already_confirmed=True)
+        return _cancelled()
+
+    print("No R installation was found on this machine.")
+    print()
+    print("What would you like to do?")
+    choice = _prompt_choice(
+        [
+            "Download a private R now (~400 MB; recommended if you have no R)",
+            "Use an R you already have elsewhere (enter its path)",
+            "Cancel",
+        ],
+        default=1,
+    )
+    if choice == 1:
+        return _provision_flow(args, already_confirmed=True)
+    if choice == 2:
+        return _pin_r_at_path()
+    return _cancelled()
+
+
+def _provision_flow(args, *, already_confirmed: bool = False) -> int:
+    """Download and provision a private R (the original, unchanged behaviour)."""
     print(f"robstattm-py setup   ->   {paths.root()}")
     print()
     print(provision.licence_notice())
     print()
 
-    if not _confirm(args):
+    if not (already_confirmed or _confirm(args)):
         return EXIT_CONFIRM_REQUIRED
 
     result = provision.provision(
@@ -136,6 +234,15 @@ def run(args) -> int:
         print("Try it:")
         print("  python -c \"import robstattm_py as rpm; print(rpm.check_setup())\"")
     return EXIT_OK
+
+
+def run(args) -> int:
+    """Execute ``setup``."""
+    if args.use_system_r:
+        return _use_system_r(args)
+    if _can_prompt(args):
+        return _interactive_setup(args)
+    return _provision_flow(args)
 
 
 __all__ = ["add_parser", "run"]

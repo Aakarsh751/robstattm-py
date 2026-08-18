@@ -164,11 +164,19 @@ You do not need to download R yourself. Run:
 robstattm-py setup
 ```
 
-It will tell you what it is about to download and ask you to confirm. Type `y`
-and press Enter.
+`setup` first checks whether you already have R and then asks what you want to
+do, as a short numbered menu:
 
-This takes **3 to 6 minutes** and downloads about **400 MB**. It needs roughly
-**4 GB of free disk space** on Windows while it works.
+- **If you already have R**, it offers to **use that R** (the recommended
+  default, nothing to download) or to download a separate private R anyway.
+- **If you do not have R**, it offers to **download a private R** (~400 MB) or
+  to point it at an R you have somewhere else.
+
+Press Enter to take the recommended default, or type the number you want.
+
+Downloading takes **3 to 6 minutes** and is about **400 MB**. It needs roughly
+**4 GB of free disk space** on Windows while it works. (Using an R you already
+have is instant.)
 
 You will see progress like:
 

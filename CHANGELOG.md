@@ -4,7 +4,9 @@ Notable changes to RobStatTM-Py. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.0], 2026-08-18
+
+First release published to PyPI.
 
 ### Added
 
@@ -108,13 +110,11 @@ Notable changes to RobStatTM-Py. Format based on
   DLL mechanism and offers `--use-system-r`, a clean `PATH`, and
   `ROBSTATTM_R_HOME`, and says plainly that `--force` will not help.
 
-## [0.1.0], 2026-08-12
+### Earlier 0.1.0 work (2026-08-10 to 08-12)
 
-First release published to PyPI.
-
-> Version 0.1.0 was prepared on 2026-08-10 but never tagged or published. The
-> entries below are therefore all part of it: the production audit first, then
-> the release engineering that preceded it.
+> Prepared on 2026-08-10 but never tagged or published, so these entries are part
+> of the same 0.1.0 release above: the production audit first, then the release
+> engineering that preceded it.
 
 ### Added
 

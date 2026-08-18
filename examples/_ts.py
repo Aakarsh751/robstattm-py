@@ -7,7 +7,7 @@ with the R scripts line by line, and an independently drawn sample from the same
 distribution would support the same conclusions while printing different
 numbers.
 
-``arima.sim`` is called through R for the same reason — it is the exact
+``arima.sim`` is called through R for the same reason, it is the exact
 generator the scripts use, including its burn-in convention.
 """
 from __future__ import annotations
@@ -29,7 +29,7 @@ def arima_sim(
 
     Mirrors the Chapter-8 scripts' call shape: draw ``n_innov`` innovations
     first, then hand them to ``arima.sim`` with ``n.start = n_innov - n``. The
-    order matters — the innovations are consumed from the same stream.
+    order matters, the innovations are consumed from the same stream.
     """
     rpm.set_seed(seed)
     from robstattm_py._r import r
@@ -81,7 +81,7 @@ def additive_outliers(series: np.ndarray, *, every: int, size: float) -> np.ndar
 
 
 def acf(series: np.ndarray, lag_max: int) -> np.ndarray:
-    """Sample autocorrelations at lags 1..``lag_max`` — R's ``acf``."""
+    """Sample autocorrelations at lags 1..``lag_max``, R's ``acf``."""
     x = np.asarray(series, dtype=float)
     centred = x - x.mean()
     denominator = np.dot(centred, centred)

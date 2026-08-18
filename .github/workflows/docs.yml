@@ -2,7 +2,7 @@ name: Docs
 
 # Builds the Sphinx site and publishes it to GitHub Pages on every push to main.
 # The docs build does NOT import robstattm_py (no autodoc) and is fully R-free, so
-# we install only the Sphinx tooling — never the package or rpy2/R.
+# we install only the Sphinx tooling, never the package or rpy2/R.
 
 on:
   push:

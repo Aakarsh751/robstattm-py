@@ -1,11 +1,11 @@
-"""Validate a candidate ``R_HOME`` — cheaply, and without risking a crash.
+"""Validate a candidate ``R_HOME``, cheaply, and without risking a crash.
 
 Two properties drive the design.
 
 **No subprocess, no ``dlopen``.** Validation reads files only. Spawning
 ``R RHOME`` or ``R CMD config`` is slow (tens of milliseconds each, times a
 dozen candidates), hangs when the R install is broken, and pops a console
-window on Windows. Everything we need — the version and the architecture — is
+window on Windows. Everything we need, the version and the architecture, is
 readable directly from ``library/base/DESCRIPTION`` and from the first bytes of
 R's shared library.
 
@@ -54,7 +54,7 @@ class RHomeInfo:
     Attributes
     ----------
     path : Path
-        ``R_HOME`` — the installation root containing ``library/`` and ``etc/``.
+        ``R_HOME``, the installation root containing ``library/`` and ``etc/``.
     version : tuple[int, int, int]
         Parsed R version, zero-padded to three components.
     version_string : str
@@ -83,7 +83,7 @@ class RHomeInfo:
 
     @property
     def minor(self) -> str:
-        """R's ``major.minor`` version, e.g. ``"4.5"`` — the ABI key."""
+        """R's ``major.minor`` version, e.g. ``"4.5"``, the ABI key."""
         return f"{self.version[0]}.{self.version[1]}"
 
     @property
@@ -126,7 +126,7 @@ def probe_arch(shared_lib: Path) -> str:
     str
         A normalised architecture name, or ``"unknown"`` if the format is not
         recognised. ``"unknown"`` is deliberately *not* treated as a mismatch by
-        callers — refusing to run because we could not parse an exotic binary
+        callers, refusing to run because we could not parse an exotic binary
         would be worse than trying and letting the loader decide.
     """
     try:
@@ -189,7 +189,7 @@ def _probe_macho(head: bytes) -> str:
     """Parse a thin or fat Mach-O header.
 
     For a fat (universal) binary, every slice is inspected and the *preferred*
-    architecture returned — arm64 ahead of x86_64, matching what the macOS
+    architecture returned, arm64 ahead of x86_64, matching what the macOS
     loader picks on Apple Silicon.
     """
     try:
@@ -245,7 +245,7 @@ def _probe_macho_fat(head: bytes, endian: str) -> str:
 def read_r_version(r_home: Path) -> tuple[tuple[int, int, int], str] | None:
     """Read R's version from ``library/base/DESCRIPTION``.
 
-    Every R installation — CRAN, conda, distro-packaged — ships this file, so it
+    Every R installation, CRAN, conda, distro-packaged, ships this file, so it
     is a reliable version source that costs one small file read instead of an
     ``R --version`` subprocess.
 
@@ -278,7 +278,7 @@ def find_shared_lib(r_home: Path, probe: Probe) -> tuple[Path | None, str | None
     tuple
         ``(path, None)`` on success, or ``(None, reason)`` describing why it
         could not be found. When the only library present is for a different
-        architecture, ``reason`` says so — that distinction is what turns a
+        architecture, ``reason`` says so, that distinction is what turns a
         baffling ``LoadLibrary failure`` into an actionable message.
     """
     name = probe.shared_lib_name
@@ -324,7 +324,7 @@ def _bin_dirs_for(r_home: Path, shared_lib: Path, probe: Probe,
 
     On Windows this is the crux of the ``LoadLibrary`` fix. rpy2 adds exactly
     one directory, and only via :func:`os.add_dll_directory`
-    (``openrlib.py``) — but R's own ``library(stats)`` calls plain
+    (``openrlib.py``), but R's own ``library(stats)`` calls plain
     ``LoadLibrary("stats.dll")``, whose default search order consults ``PATH``
     and ignores ``add_dll_directory`` entries. We therefore collect *every*
     relevant directory and :mod:`~robstattm_py._renv.activate` applies them to

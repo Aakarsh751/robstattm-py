@@ -1,4 +1,4 @@
-"""Chapter 5, Example 5.4 — multiple regression on the algae data (Figs 5.14-5.15).
+"""Chapter 5, Example 5.4, multiple regression on the algae data (Figs 5.14-5.15).
 
 Python port of ``algae.R``.
 
@@ -6,8 +6,8 @@ Python port of ``algae.R``.
 there is no single obvious outlier to point at; the contamination only becomes
 visible in the residual Q-Q plot, and only once the fit itself has stopped being
 dragged by it. That is the point of comparing Figure 5.14 (least-squares
-residuals — outliers partly absorbed into the fit) with Figure 5.15 (robust
-residuals — outliers stand clear at 2.5 robust scales).
+residuals, outliers partly absorbed into the fit) with Figure 5.15 (robust
+residuals, outliers stand clear at 2.5 robust scales).
 
 Uses a dot formula, ``V12 ~ .``, which R expands against the data frame; the
 factor columns expand further into level indicators, so there are more
@@ -24,7 +24,7 @@ import robstattm_py as rpm
 
 
 def main() -> None:
-    section("Chapter 5, Example 5.4 — algae data")
+    section("Chapter 5, Example 5.4, algae data")
 
     algae = rpm.datasets.algae()
     print(f"  {algae.shape[0]} observations, {algae.shape[1] - 1} predictors")
@@ -35,8 +35,8 @@ def main() -> None:
     rob = rpm.lmrobdet_mm("V12 ~ .", data=algae, control=cont)
 
     # Least squares on the same model. V1-V3 are categorical, so they have to
-    # be expanded the way R's model.matrix does — one indicator per level after
-    # the first — or the two fits would not be comparable.
+    # be expanded the way R's model.matrix does - one indicator per level after
+    # the first - or the two fits would not be comparable.
     y = algae["V12"].to_numpy(dtype=float)
     ls_resid, ls_sigma = _least_squares(algae, y)
 
@@ -53,11 +53,11 @@ def main() -> None:
         "  automatically smaller: the least-squares figure is the usual RSS/df,\n"
         "  minimised by construction, while the robust figure is an M-scale of\n"
         "  residuals from a fit that declined to chase the outliers. What the\n"
-        "  robust scale buys is not a smaller number but a *stable* one — it is\n"
+        "  robust scale buys is not a smaller number but a *stable* one, it is\n"
         "  the yardstick the flags below are measured against."
     )
 
-    section("Figures 5.14 / 5.15 — residuals beyond 2.5 scales")
+    section("Figures 5.14 / 5.15, residuals beyond 2.5 scales")
     rob_resid = rob.resid().to_numpy()
     ls_flagged = np.flatnonzero(np.abs(ls_resid) > 2.5 * ls_sigma) + 1
     rob_flagged = np.flatnonzero(np.abs(rob_resid) > 2.5 * rob.sigma()) + 1
@@ -76,12 +76,12 @@ def main() -> None:
 
     rpm.plot.qq(
         rob,
-        title="Algae — robust residual Q-Q (Figure 5.15)",
+        title="Algae, robust residual Q-Q (Figure 5.15)",
         save=figure("ch05_algae_qq_robust"),
     )
     rpm.plot.diagnostics(
         rob,
-        title="Algae — MM diagnostics",
+        title="Algae, MM diagnostics",
         save=figure("ch05_algae_diagnostics"),
     )
 
@@ -90,7 +90,7 @@ def _least_squares(data, y: np.ndarray) -> tuple[np.ndarray, float]:
     """Return ``(residuals, residual scale)`` for ``lm(V12 ~ .)``.
 
     ``drop_first=True`` reproduces R's default treatment contrasts, so this
-    design matrix has the same 16 columns as the robust fit's — check
+    design matrix has the same 16 columns as the robust fit's, check
     ``fit.coef_names`` if you want to confirm the correspondence.
     """
     import pandas as pd

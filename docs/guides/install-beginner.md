@@ -14,7 +14,7 @@ By the end you will have run a robust regression on real data.
 
 RobStatTM-Py is a Python package that runs statistical methods originally
 written in **R**, a different programming language. It does this so the numbers
-you get are exactly the ones the textbook authors produced — nothing is
+you get are exactly the ones the textbook authors produced, nothing is
 reimplemented and no results are approximated.
 
 That means two things have to be on your computer:
@@ -29,20 +29,20 @@ command does that for you.
 
 ---
 
-## Step 1 — Open a terminal
+## Step 1: Open a terminal
 
 A terminal is a window where you type commands instead of clicking.
 
-- **Windows** — press the Start button, type `powershell`, press Enter.
-- **macOS** — press `Cmd + Space`, type `terminal`, press Enter.
-- **Linux** — press `Ctrl + Alt + T`.
+- **Windows**, press the Start button, type `powershell`, press Enter.
+- **macOS**, press `Cmd + Space`, type `terminal`, press Enter.
+- **Linux**, press `Ctrl + Alt + T`.
 
 You will see a window with a blinking cursor. Everything below gets typed there,
 one line at a time, pressing Enter after each.
 
 ---
 
-## Step 2 — Check you have Python
+## Step 2: Check you have Python
 
 Type this and press Enter:
 
@@ -57,7 +57,7 @@ fine.
 <summary>If that printed an error, or a version below 3.10</summary>
 
 Install Python from <https://www.python.org/downloads/>. Download the installer,
-run it, and — **this part matters on Windows** — tick the box that says
+run it, and, **this part matters on Windows**, tick the box that says
 **"Add python.exe to PATH"** on the first screen before clicking Install.
 
 Then close the terminal, open a new one, and try `python --version` again.
@@ -69,7 +69,7 @@ guide.
 
 ---
 
-## Step 3 — Make a project folder and a virtual environment
+## Step 3: Make a project folder and a virtual environment
 
 A *virtual environment* is a private, self-contained copy of Python for one
 project. It keeps this project's packages from interfering with anything else on
@@ -107,15 +107,15 @@ active.
 > weaken anything else.
 
 > You must activate the environment **every time** you come back to this project
-> — just the last line above.
+>, just the last line above.
 
 ---
 
-## Step 4 — Install RobStatTM-Py
+## Step 4: Install RobStatTM-Py
 
 > **Not yet on PyPI.** RobStatTM-Py has not been published to the Python Package
 > Index yet, so `pip install robstattm-py` will fail with *"No matching
-> distribution found"*. Install from the source repository instead — the two
+> distribution found"*. Install from the source repository instead, the two
 > commands below. Everything after this step is identical either way.
 
 You need `git` for this. If `git --version` prints an error, install it from
@@ -137,7 +137,7 @@ python -c "import robstattm_py; print(robstattm_py.__version__)"
 ```
 
 That should print a version number such as `0.1.0`. It is fine that R is not
-installed yet — importing the package does not start R.
+installed yet, importing the package does not start R.
 
 > **On Linux, and you do not have R yet?** Use this instead for the second
 > command:
@@ -147,7 +147,7 @@ installed yet — importing the package does not start R.
 > ```
 >
 > One of the pieces underneath (`rpy2`) publishes ready-made packages for
-> Windows and macOS but not for Linux, so on Linux it gets compiled — and by
+> Windows and macOS but not for Linux, so on Linux it gets compiled, and by
 > default it refuses to compile unless R is already there. `RPY2_CFFI_MODE=ABI`
 > tells it to connect to R when it *runs* rather than when it is built, which
 > is what you want here. Everything works the same afterwards.
@@ -156,7 +156,7 @@ installed yet — importing the package does not start R.
 
 ---
 
-## Step 5 — Install R
+## Step 5: Install R
 
 You do not need to download R yourself. Run:
 
@@ -183,7 +183,7 @@ R 4.5.3 is ready at .../envs/r/lib/R
 ```
 
 > **`robstattm-py: command not found`?** This is common on Windows: `pip` puts
-> commands in a folder your terminal does not look in. Use this instead — it
+> commands in a folder your terminal does not look in. Use this instead, it
 > always works, and does exactly the same thing:
 >
 > ```bash
@@ -193,14 +193,14 @@ R 4.5.3 is ready at .../envs/r/lib/R
 > The same substitution works for every `robstattm-py ...` command in these
 > guides.
 
-> **Already have R installed?** You can skip this step entirely — RobStatTM-Py
+> **Already have R installed?** You can skip this step entirely, RobStatTM-Py
 > finds an existing R automatically. Run `robstattm-py doctor` to check, and if
 > it reports missing R packages run
 > `robstattm-py install-r-packages RobStatTM pyinit robustbase rrcov`.
 
 ---
 
-## Step 6 — Check everything works
+## Step 6: Check everything works
 
 ```bash
 robstattm-py doctor
@@ -214,7 +214,7 @@ The [troubleshooting guide](troubleshooting.md) covers each case in detail.
 
 ---
 
-## Step 7 — Your first robust regression
+## Step 7: Your first robust regression
 
 Create a file called `first_fit.py` in your project folder with this content:
 
@@ -251,20 +251,20 @@ You will see the first few rows of the data, then a table of coefficients.
 > your data, and a plain R session loading the same two packages prints it too.
 > Nothing to fix.
 >
-> RobStatTM-Py deliberately shows you everything R says rather than hiding it —
+> RobStatTM-Py deliberately shows you everything R says rather than hiding it,
 > see [Seeing R warnings and errors](utilities.md). Warnings that *do* concern
 > your data read very differently ("algorithm did not converge", for example).
 
 ### What just happened, line by line
 
-- `import robstattm_py as rpm` — load the package, and call it `rpm` for short.
-- `rpm.datasets.mineral()` — load a built-in dataset as a pandas DataFrame
+- `import robstattm_py as rpm`, load the package, and call it `rpm` for short.
+- `rpm.datasets.mineral()`, load a built-in dataset as a pandas DataFrame
   (a table). There are [20 built-in datasets](datasets.md).
-- `"zinc ~ copper"` — a *formula*: "explain zinc using copper". This is R's
+- `"zinc ~ copper"`, a *formula*: "explain zinc using copper". This is R's
   notation, kept because it is compact and widely known.
-- `lmrobdet_mm` — an **MM-estimator**: a regression that is not thrown off by a
+- `lmrobdet_mm`, an **MM-estimator**: a regression that is not thrown off by a
   few unusual points.
-- `fit.summary()` — the coefficient table.
+- `fit.summary()`, the coefficient table.
 
 ### Why "robust"?
 
@@ -295,11 +295,11 @@ The two slopes differ by a wide margin. That gap is the outlier's influence.
 
 ## Where to go next
 
-- [Your first analysis](../getting-started.md) — a fuller walkthrough.
-- [Coming from R?](for-r-users.md) — every R name mapped to its Python one.
-- [Datasets](datasets.md) — the 20 built-in textbook datasets.
-- [Plotting](plotting.md) — diagnostic plots.
-- [Checking your install](testing-for-beginners.md) — how to verify things and
+- [Your first analysis](../getting-started.md), a fuller walkthrough.
+- [Coming from R?](for-r-users.md), every R name mapped to its Python one.
+- [Datasets](datasets.md), the 20 built-in textbook datasets.
+- [Plotting](plotting.md), diagnostic plots.
+- [Checking your install](testing-for-beginners.md), how to verify things and
   read an error when one appears.
 
 ## A short glossary
@@ -311,6 +311,6 @@ The two slopes differ by a wide margin. That gap is the outlier's influence.
 | **virtual environment** | A private copy of Python for one project. |
 | **PATH** | The list of folders your terminal searches for commands. "Not on PATH" means it could not find the program. |
 | **package** | A bundle of reusable code. RobStatTM-Py is one. |
-| **DataFrame** | A table of data, from the pandas library — rows and named columns. |
+| **DataFrame** | A table of data, from the pandas library, rows and named columns. |
 | **estimator** | A procedure that computes a number from data, e.g. a slope. |
 | **outlier** | An observation far from the rest, which can distort ordinary methods. |

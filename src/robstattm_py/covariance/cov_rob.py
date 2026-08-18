@@ -1,4 +1,4 @@
-"""Robust covariance dispatcher — ``RobStatTM::covRob`` / ``Multirobu``.
+"""Robust covariance dispatcher, ``RobStatTM::covRob`` / ``Multirobu``.
 
 The two R names are aliases for the *same* function (verified via
 ``identical(covRob, Multirobu)``). The dispatcher selects between MM (for
@@ -54,7 +54,7 @@ class CovRobResult:
     v : ndarray, shape (p, p)
         Initial covariance / shape matrix.
     estimator_type : str
-        ``"MM"`` or ``"Rocke"`` — which sub-estimator R chose / was forced.
+        ``"MM"`` or ``"Rocke"``, which sub-estimator R chose / was forced.
     column_names : tuple[str, ...] or None
     """
 
@@ -98,7 +98,7 @@ def _infer_type(p: int) -> str:
 
     Used purely for the returned ``estimator_type`` label when R does the
     selection internally. This reproduces ``covRob``'s own branch
-    (``if (p >= 10) RockeMulti(...) else MMultiSHR(...)`` — R/Multirobu.R:56);
+    (``if (p >= 10) RockeMulti(...) else MMultiSHR(...)``, R/Multirobu.R:56);
     keep it in sync if RobStatTM ever changes that threshold.
     """
     return "MM" if p < 10 else "Rocke"
@@ -112,7 +112,7 @@ def cov_rob(
     tol: float = 1e-4,
     corr: bool = False,
 ) -> CovRobResult:
-    """Robust covariance dispatcher — port of ``RobStatTM::covRob`` / ``Multirobu``.
+    """Robust covariance dispatcher, port of ``RobStatTM::covRob`` / ``Multirobu``.
 
     Auto-selects between MM (``p < 10``) and Rocke (``p >= 10``) when
     ``type="auto"``.

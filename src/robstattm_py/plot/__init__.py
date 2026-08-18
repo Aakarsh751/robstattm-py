@@ -1,4 +1,4 @@
-"""``robstattm_py.plot`` — native Python plotting suite.
+"""``robstattm_py.plot``, native Python plotting suite.
 
 Publication-quality, themable, composable figures that complement the Path-A
 (R-via-rpy2) layer in :mod:`robstattm_py.plotting`. See ``docs/plotting_suite_plan.md``

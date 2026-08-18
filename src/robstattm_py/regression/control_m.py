@@ -1,4 +1,4 @@
-"""``lmrobM.control`` wrapper — companion to ``lmrobdet.control``.
+"""``lmrobM.control`` wrapper, companion to ``lmrobdet.control``.
 
 Wraps ``RobStatTM::lmrobM.control``. Parallel structure to
 :class:`LmrobdetControl` but with the smaller key set used by
@@ -27,7 +27,7 @@ _R_KEY_MAP = {
     "rel_tol": "rel.tol",
     "trace_lev": "trace.lev",
     # mscale_tol / mscale_maxit already use underscores in R (yes, R is
-    # inconsistent here — these are the exact spellings from the formals).
+    # inconsistent here - these are the exact spellings from the formals).
 }
 
 
@@ -42,7 +42,7 @@ class LmrobMControl:
     All fields mirror ``RobStatTM::lmrobM.control`` (RobStatTM 1.0.11).
     Note that ``lmrobM`` uses a much smaller control surface than
     ``lmrobdetMM`` because it doesn't run the deterministic-initial /
-    refine / pyinit cascade — it's the simpler MM regression core.
+    refine / pyinit cascade, it's the simpler MM regression core.
 
     See ``RobStatTM::lmrobM.control`` for parameter meanings.
     """

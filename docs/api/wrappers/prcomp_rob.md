@@ -22,13 +22,13 @@ def prcomp_rob(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
+| `X` | n/a | *required* | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
 | `rank` | int \| None | `None` |  |
 | `delta_scale` | float | `0.5` | "delta" parametor of the scale M-estimator (default = 0.5) |
 | `max_iter` | int | `100` | maximum number of iterations (default = 100) |
 
 
-> **Note** — handled internally, not exposed in Python: `x`, `rank.`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `x`, `rank.`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -41,12 +41,12 @@ A `PrcompRobResult` object. Its attributes mirror the fields of the R
 | `sdev` | sdev | the standard deviation of the principal components |
 | `rotation` | rotation | matrix containing the factor loadings |
 | `center` | center | the centering used |
-| `scores` | — | Component scores (R: `x` — renamed for clarity). |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
-| `component_names` | — | Names of the principal components (`PC1`, `PC2`, …). |
+| `scores` | n/a | Component scores (R: `x`  -  renamed for clarity). |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `component_names` | n/a | Names of the principal components (`PC1`, `PC2`, …). |
 
 
-> **R fields not surfaced in Python** — the R `prcompRob` list also contains
+> **R fields not surfaced in Python.** The R `prcompRob` list also contains
 > `x`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -70,7 +70,7 @@ The `PrcompRobResult` object also provides these methods:
 ```python
 import robstattm_py as rpm
 
-# Bus silhouettes — 218 obs, 18 image-shape features.
+# Bus silhouettes  -  218 obs, 18 image-shape features.
 bus = rpm.datasets.bus()
 
 # Robust principal-components decomposition.
@@ -108,5 +108,5 @@ R implementation by Gregory Brownson, <gregory.brownson@gmail.com>. Python wrapp
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `prcompRob`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

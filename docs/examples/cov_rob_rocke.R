@@ -1,6 +1,6 @@
 data(wine)
 
-# Rocke's S-estimator of multivariate location and scatter — designed to stay
+# Rocke's S-estimator of multivariate location and scatter, designed to stay
 # efficient in higher dimensions where other robust estimators lose power.
 set.seed(42)
 fit <- covRobRocke(wine)

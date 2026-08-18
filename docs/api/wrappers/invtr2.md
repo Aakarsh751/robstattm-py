@@ -27,7 +27,7 @@ def invtr2(rr2: 'float', family: 'str', cc: 'float | Sequence[float] | np.ndarra
 | `cc` | float \| Sequence[float] \| ndarray | *required* | tuning parameters to be computed according to efficiency and / or breakdown considerations. See `lmrobdet.control`, `bisquare`, `mopt` and `opt`. |
 
 
-> **Note** — handled internally, not exposed in Python: `RR2`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `RR2`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -64,5 +64,5 @@ R implementation by Victor Yohai, <victoryohai@gmail.com>. Python wrapper: RobSt
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `INVTR2`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

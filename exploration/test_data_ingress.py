@@ -1,11 +1,11 @@
-"""Data-ingress pipelines — alternate sources + pandas preprocessing, parity vs R.
+"""Data-ingress pipelines, alternate sources + pandas preprocessing, parity vs R.
 
 These tests model how a *real* Python user gets data into a wrapper: read a CSV,
 pull a scikit-learn dataset, load a dataset from another R package, or wrangle a
 messy frame with pandas (rename / dropna / filter / astype / merge). In every
 case the **fully preprocessed** frame is pushed to R and the wrapper's output is
 asserted bit-identical (``atol=0, rtol=0``) to a direct R call on that same frame
-— so "data that arrived via path X behaves exactly like native R".
+, so "data that arrived via path X behaves exactly like native R".
 
 Test matrix
 -----------
@@ -220,7 +220,7 @@ def test_messy_pandas_clean_pipeline_vs_r():
 
 @needs_r
 def test_pandas_merge_then_fit_vs_r():
-    """Two frames joined on a key column, then fit — a common ETL shape."""
+    """Two frames joined on a key column, then fit, a common ETL shape."""
     n = 70
     rng = np.random.default_rng(303)
     keys = np.arange(n)

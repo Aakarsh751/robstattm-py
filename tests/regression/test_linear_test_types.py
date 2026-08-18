@@ -68,7 +68,7 @@ class TestAcceptsLmrobM:
         # environment. Neither is fussiness: `oats` is also a dataset in MASS
         # and in nlme, both of which other tests in this suite pull in
         # transitively, so a bare `data(oats)` picked up whichever package
-        # happened to be attached — this test passed alone and failed in the
+        # happened to be attached - this test passed alone and failed in the
         # full run with "object 'response1' not found". Same masking hazard
         # that datasets.load() documents for MASS::huber.
         ro.r(
@@ -106,6 +106,6 @@ class TestAcceptsLmrobM:
 
 class TestRejectsOtherResults:
     def test_a_non_regression_result_is_refused(self):
-        # No R needed — the type guard runs before anything is pushed to R.
+        # No R needed - the type guard runs before anything is pushed to R.
         with pytest.raises(TypeError, match="lmrobdet_mm or lmrob_m"):
             rpm.rob_linear_test("not a fit", "also not a fit")

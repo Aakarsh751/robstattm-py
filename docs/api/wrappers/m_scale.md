@@ -40,7 +40,7 @@ def m_scale(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `u` | — | *required* | vector of residuals |
+| `u` | n/a | *required* | vector of residuals |
 | `delta` | float | `0.5` | the right hand side of the M-scale equation |
 | `family` | Literal['bisquare', 'huber', 'mopt', 'opt', 'moptv0', 'optv0'] | `"bisquare"` | string specifying the name of the family of loss function to be used (current valid options are "bisquare", "opt" and "mopt"). |
 | `max_it` | int | `100` | maximum number of iterations allowed |
@@ -48,7 +48,7 @@ def m_scale(
 | `tuning_chi` | float \| None | `None` | the tuning object as returned by ``lmrobdet.control``, ``bisquare``, ``mopt``, or ``opt``. It defaults to the value that results in a consistent scale estimator for the specified `family`  of loss functions and breakdown point as set by `delta`. |
 
 
-> **Note** — handled internally, not exposed in Python: `tolerancezero`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `tolerancezero`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -104,5 +104,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>. Python wrappe
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `scaleM`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

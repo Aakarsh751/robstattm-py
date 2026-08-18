@@ -12,7 +12,7 @@ these objects carry **methods** that mirror R's S3 generics (`summary`,
 | `to_dict()` | `dict` | Plain-Python view of all fields (JSON-friendly). |
 | `to_r()` | rpy2 object | The underlying R object, for an `rpy2` round-trip. |
 | `coef_df()` | `pandas.Series` | Coefficients indexed by name (regression/GLM results). |
-| `_repr_html_()` | `str` | Rich HTML table — renders automatically in Jupyter. |
+| `_repr_html_()` | `str` | Rich HTML table, renders automatically in Jupyter. |
 
 ```python
 import robstattm_py as rpm
@@ -37,7 +37,7 @@ fit.coef_df()        # (Intercept)  ...   copper  ...
 | `sigma()` | Robust residual scale as a `float` (R's `sigma()`). |
 | `rfpe(both_vals=False)` | Robust Final Prediction Error (`lmrobdet_mm` only). |
 | `drop1(scope=None, scale=None)` | Single-term-deletion RFPE table (`lmrobdet_mm` only). |
-| `r_squared_classic()` | Classical least-squares R² (`lmrobdet_dcml` only — DCML has no robust R²). |
+| `r_squared_classic()` | Classical least-squares R² (`lmrobdet_dcml` only, DCML has no robust R²). |
 
 ```python
 fit = rpm.lmrobdet_mm("zinc ~ copper", data=rpm.datasets.mineral())
@@ -48,10 +48,10 @@ fit.hatvalues()               # leverages
 fit.rfpe()                    # robust final prediction error
 ```
 
-> **Note** — `lmrob_m` results inherit a class that does not derive from R's
+> **Note**, `lmrob_m` results inherit a class that does not derive from R's
 > `lmrob`, so its `predict()` / `hatvalues()` are computed from R primitives
 > (bit-equal to the S3 path). Its `predict()` takes only `newdata` (no
-> `se_fit` — the fit carries no QR decomposition for prediction standard
+> `se_fit`, the fit carries no QR decomposition for prediction standard
 > errors), and it does not provide `rfpe()` or `drop1()`.
 
 ## Covariance & PCA results

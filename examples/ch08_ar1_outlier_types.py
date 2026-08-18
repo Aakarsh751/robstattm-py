@@ -1,4 +1,4 @@
-"""Chapter 8 — additive versus innovation outliers in an AR(1) series (Fig 8.6).
+"""Chapter 8, additive versus innovation outliers in an AR(1) series (Fig 8.6).
 
 Python port of ``ar1.R``.
 
@@ -6,12 +6,12 @@ Two kinds of contamination look similar on a plot and behave completely
 differently:
 
 * an **additive outlier** perturbs the observation only. The underlying process
-  is untouched, so the series returns to normal immediately — but the
+  is untouched, so the series returns to normal immediately, but the
   *estimated* AR coefficient is badly biased, because each spike creates a pair
   of consecutive observations that look uncorrelated.
 * an **innovation outlier** perturbs the process itself. The shock propagates
   forward through the AR recursion, so the visible disturbance is longer-lived,
-  yet the estimated coefficient is barely affected — the observation is
+  yet the estimated coefficient is barely affected, the observation is
   unusual, but it is a genuine draw from the model.
 
 This example only generates and characterises the three series (Figure 8.6);
@@ -37,7 +37,7 @@ IO_AT = 50  # 1-based index of the innovation outlier
 
 
 def main() -> None:
-    section("Chapter 8, Figure 8.6 — additive vs innovation outliers, AR(1)")
+    section("Chapter 8, Figure 8.6, additive vs innovation outliers, AR(1)")
 
     clean = arima_sim(seed=SEED, n=N, n_innov=N_INNOV, ar=(PHI,))
     with_ao = additive_outliers(clean, every=EVERY, size=SPIKE)
@@ -59,7 +59,7 @@ def main() -> None:
     )
     print(
         "\n  Ten additive outliers in a hundred observations move the estimate\n"
-        "  far more than one innovation outlier does — even though the additive\n"
+        "  far more than one innovation outlier does, even though the additive\n"
         "  spikes leave the underlying process intact and the innovation shock\n"
         "  does not. Visual size is a poor guide to how much damage an outlier\n"
         "  does; what matters is whether it breaks the model's correlation\n"

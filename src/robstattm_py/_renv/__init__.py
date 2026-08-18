@@ -7,7 +7,7 @@ Design constraint worth keeping in mind when editing anything here: **importing
 robstattm_py must stay free of side effects.** No network access, no directory
 creation, no subprocesses, and above all no provisioning. A user who types
 ``import robstattm_py`` on a machine without R gets a clear exception telling
-them to run ``robstattm-py setup`` — they do not get a silent multi-gigabyte
+them to run ``robstattm-py setup``, they do not get a silent multi-gigabyte
 install.
 ``tests/renv/test_no_import_side_effects.py`` enforces this in a subprocess.
 """
@@ -82,7 +82,7 @@ def ensure_r_environment(
 
         probe = probe or Probe.current()
 
-        # If rpy2 is already up, its R wins — the binding is immutable at this
+        # If rpy2 is already up, its R wins - the binding is immutable at this
         # point, so the only honest options are to agree or to say so plainly.
         already = rpy2_already_loaded_r_home()
 
@@ -185,7 +185,7 @@ def _existing_private_lib(info: RHomeInfo, probe: Probe):
 def r_home_info() -> RHomeInfo | None:
     """Return the resolved R without triggering a search.
 
-    Cheap and side-effect free — returns ``None`` if nothing has resolved R
+    Cheap and side-effect free, returns ``None`` if nothing has resolved R
     yet. Use :func:`ensure_r_environment` when you actually need R.
     """
     return _resolved

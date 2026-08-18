@@ -1,4 +1,4 @@
-"""``robstattm-py install-r-packages`` — install R packages without an R console.
+"""``robstattm-py install-r-packages``, install R packages without an R console.
 
 This is the command every "package X is not installed" message points at. It
 matters most for users who never installed R themselves and so have no R prompt
@@ -8,7 +8,7 @@ Two deliberate choices:
 
 **It runs in a subprocess.** ``Rscript`` is invoked rather than the embedded
 interpreter, so a compiler crash or a package that calls ``q()`` cannot take
-down the Python process — and it works even when the embedded session is in a
+down the Python process, and it works even when the embedded session is in a
 bad state, which is exactly when you need it.
 
 **It installs into a private library by default.** Writing into the user's own R
@@ -91,7 +91,7 @@ def _resolve_lib(choice: str, info, probe: Probe):
 def _r_expression(names: list[str], repos: str, library) -> str:
     """Build the ``install.packages`` call.
 
-    ``repos`` is always explicit so R never stops to ask for a mirror — an
+    ``repos`` is always explicit so R never stops to ask for a mirror, an
     interactive prompt in a subprocess would simply hang.
     """
     quoted = ", ".join(f'"{n}"' for n in names)

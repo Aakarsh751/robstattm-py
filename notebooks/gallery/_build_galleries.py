@@ -49,11 +49,11 @@ def write(name, cells, title_md):
 
 
 # =====================================================================
-# Ch 2 — location & scale (flour.R, Table 2.4)
+# Ch 2 - location & scale (flour.R, Table 2.4)
 # =====================================================================
 ch2 = [
     new_markdown_cell(
-        "## flour — bisquare location M-estimator (Table 2.4)\n"
+        "## flour, bisquare location M-estimator (Table 2.4)\n"
         "\n"
         "`flour.R` compares the sample mean, the bisquare M-estimator "
         "(`locScaleM`, efficiency 0.95) and the 25% trimmed mean on the flour "
@@ -86,11 +86,11 @@ ch2 = [
 ]
 
 # =====================================================================
-# Ch 4 — M regression (shock.R Ex 4.1, oats.R Ex 4.2)
+# Ch 4 - M regression (shock.R Ex 4.1, oats.R Ex 4.2)
 # =====================================================================
 ch4 = [
     new_markdown_cell(
-        "## shock — robust M regression (Example 4.1)\n"
+        "## shock, robust M regression (Example 4.1)\n"
         "\n"
         "`shock.R` fits LS, LS-without-outliers, L1 and a robust M-estimator "
         "(`lmrobM`) of average reaction `time` on `n.shocks`. Observations "
@@ -141,7 +141,7 @@ ch4 = [
         "print('coefficients bit-equal to R:', np.array_equal(mfit_chk.coefficients, r_coef))"
     ),
     new_markdown_cell(
-        "## oats — robust M regression + robust ANOVA (Example 4.2)\n"
+        "## oats, robust M regression + robust ANOVA (Example 4.2)\n"
         "\n"
         "`oats.R` fits `lmrobM` models for two responses and compares nested "
         "models with `rob.linear.test` (robust analogue of the F-test). Our "
@@ -168,11 +168,11 @@ ch4 = [
 ]
 
 # =====================================================================
-# Ch 5 — MM regression (algae Ex5.4, ExactFit Ex5.5, wood Ex5.2, step Ex5.3)
+# Ch 5 - MM regression (algae Ex5.4, ExactFit Ex5.5, wood Ex5.2, step Ex5.3)
 # =====================================================================
 ch5 = [
     new_markdown_cell(
-        "## algae — MM regression with a dot formula (Example 5.4)\n"
+        "## algae, MM regression with a dot formula (Example 5.4)\n"
         "\n"
         "`algae.R` fits `lmrobdetMM(V12 ~ .)` on the algae-bloom data (90×12) "
         "and contrasts it with LS. We reproduce the robust fit and its "
@@ -195,7 +195,7 @@ ch5 = [
         "for h in (-2.5, 0, 2.5):\n"
         "    ax.axhline(h, ls='--', c='gray')\n"
         "ax.set_xlabel('index'); ax.set_ylabel('standardized robust residual')\n"
-        "ax.set_title('algae — Fig 5.15 analogue')\n"
+        "ax.set_title('algae, Fig 5.15 analogue')\n"
         "fig.savefig(FIG_DIR / 'ch5_algae_resid.png', dpi=110, bbox_inches='tight'); plt.close(fig)\n"
         "print('robust residuals expose the outliers LS hides')"
     ),
@@ -209,7 +209,7 @@ ch5 = [
         "print('coefficients bit-equal to R:', np.array_equal(rob_chk.coefficients, r_coef))"
     ),
     new_markdown_cell(
-        "## ExactFit — MM vs LS on a 1/3-contaminated line (Example 5.5)\n"
+        "## ExactFit, MM vs LS on a 1/3-contaminated line (Example 5.5)\n"
         "\n"
         "`ExactFit.R` builds 100 'good' points on `y = x` plus 50 outliers on "
         "`y = -2x`, then fits LS and MM. The MM line locks onto the majority; "
@@ -234,12 +234,12 @@ ch5 = [
         "ax.scatter(xe, ye, c='gray', s=14)\n"
         "ax.plot(grid, ls[0] + ls[1]*grid, 'b-', lw=2, label='LS')\n"
         "ax.plot(grid, mm.coefficients[0] + mm.coefficients[1]*grid, 'r-', lw=2, label='MM')\n"
-        "ax.set_xlabel('x'); ax.set_ylabel('y'); ax.legend(); ax.set_title('ExactFit — Fig 5.16 analogue')\n"
+        "ax.set_xlabel('x'); ax.set_ylabel('y'); ax.legend(); ax.set_title('ExactFit, Fig 5.16 analogue')\n"
         "fig.savefig(FIG_DIR / 'ch5_exactfit.png', dpi=110, bbox_inches='tight'); plt.close(fig)\n"
         "print('done')"
     ),
     new_markdown_cell(
-        "## wood — MM regression on the robustbase wood data (Example 5.2)\n"
+        "## wood, MM regression on the robustbase wood data (Example 5.2)\n"
         "\n"
         "`wood.R` loads `wood` from **robustbase** (cross-package) and fits "
         "`lmrobdetMM(y ~ .)`. We use `rpm.datasets.load('robustbase', 'wood')`."
@@ -255,7 +255,7 @@ ch5 = [
         "print('outlying rows (|resid| > 2.5*scale):', (flagged + 1).tolist())"
     ),
     new_markdown_cell(
-        "## step — robust stepwise model selection (Example 5.3)\n"
+        "## step, robust stepwise model selection (Example 5.3)\n"
         "\n"
         "`step.R` builds a 6-predictor design with planted outliers, fits the "
         "full `lmrobdetMM`, then runs `step.lmrobdetMM` (robust backward "
@@ -278,14 +278,14 @@ ch5 = [
 ]
 
 # =====================================================================
-# Ch 6 — multivariate (biochem Ex6.1, vehicle Ex6.3, bus Ex6.4, wine1 Ex6.5/6)
+# Ch 6 - multivariate (biochem Ex6.1, vehicle Ex6.3, bus Ex6.4, wine1 Ex6.5/6)
 # =====================================================================
 ch6 = [
     new_markdown_cell(
-        "## biochem — classical location/scatter motivation (Example 6.1)\n"
+        "## biochem, classical location/scatter motivation (Example 6.1)\n"
         "\n"
         "`biochem.R` uses only classical statistics (mean, var, correlation) to "
-        "show how a single observation (#3) distorts them — motivating the "
+        "show how a single observation (#3) distorts them, motivating the "
         "robust estimators in the rest of the chapter. No RobStatTM estimator is "
         "called here; it is the classical baseline."
     ),
@@ -304,7 +304,7 @@ ch6 = [
         "print('=> one point flips the correlation: classical stats are not robust')"
     ),
     new_markdown_cell(
-        "## vehicle — Rocke S-estimator vs classical distances (Example 6.3)\n"
+        "## vehicle, Rocke S-estimator vs classical distances (Example 6.3)\n"
         "\n"
         "`vehicle.R` compares classical and `covRobRocke` Mahalanobis distances "
         "on the vehicle-silhouette data (217×18). The robust distances expose "
@@ -346,7 +346,7 @@ ch6 = [
         "print('cov    bit-equal to R:', np.array_equal(rk.cov, np.asarray(ro.r('rr$cov'), dtype=float)))"
     ),
     new_markdown_cell(
-        "## bus — robust PCA via M-scale (Example 6.4)\n"
+        "## bus, robust PCA via M-scale (Example 6.4)\n"
         "\n"
         "`bus.R` drops column 9, standardizes by median/MAD, then compares "
         "classical PCA reconstruction error to `pcaRobS` (3 components)."
@@ -378,11 +378,11 @@ ch6 = [
         "print('fit bit-equal to R:', np.array_equal(rr.fit, np.asarray(ro.r('rp$fit'), dtype=float)))"
     ),
     new_markdown_cell(
-        "## wine1 — MM covariance under independent contamination (Examples 6.5–6.6)\n"
+        "## wine1, MM covariance under independent contamination (Examples 6.5–6.6)\n"
         "\n"
         "`wine1.R` flags multivariate outliers with `covRobMM` distances on the "
         "wine data. (The missing-data and cell-wise parts of `wine1.R` use "
-        "`GSE::GSE` / `GSE::TSGS` — those are reproduced in "
+        "`GSE::GSE` / `GSE::TSGS`, those are reproduced in "
         "`notebooks/external_demo.ipynb`.)"
     ),
     new_code_cell(
@@ -408,11 +408,11 @@ ch6 = [
 ]
 
 # =====================================================================
-# Ch 7 — robust GLM / logistic regression (skin Ex7.2, leukemia Ex7.1)
+# Ch 7 - robust GLM / logistic regression (skin Ex7.2, leukemia Ex7.1)
 # =====================================================================
 ch7 = [
     new_markdown_cell(
-        "## leukemia — weighted Bianco–Yohai logistic regression (Example 7.1)\n"
+        "## leukemia, weighted Bianco–Yohai logistic regression (Example 7.1)\n"
         "\n"
         "`leukemia.R` fits `logregWBY` (weighted BY M-estimator) to the leukemia "
         "survival data and compares deviance residuals with the ML fit. (The "
@@ -437,7 +437,7 @@ ch7 = [
         "print('coefficients bit-equal to R:', np.array_equal(wby.coefficients, r_coef))"
     ),
     new_markdown_cell(
-        "## skin — robust logistic regression family (Example 7.2)\n"
+        "## skin, robust logistic regression family (Example 7.2)\n"
         "\n"
         "`skin.R` fits the weighted-M (`logregWBY`), plain BY (`logregBY`) and "
         "weighted-ML (`logregWML`) estimators to the vaso-constriction data. We "
@@ -461,14 +461,14 @@ ch7 = [
         "fig, ax = plt.subplots(figsize=(6, 4))\n"
         "ax.plot(pp, dev, 'o-', ms=4)\n"
         "ax.set_xlabel('quantiles'); ax.set_ylabel('|deviance residuals|')\n"
-        "ax.set_title('skin — weighted-M deviance residuals (Fig 7.5 analogue)')\n"
+        "ax.set_title('skin, weighted-M deviance residuals (Fig 7.5 analogue)')\n"
         "fig.savefig(FIG_DIR / 'ch7_skin.png', dpi=110, bbox_inches='tight'); plt.close(fig)\n"
         "print('done')"
     ),
 ]
 
 # =====================================================================
-# Vignette — end-to-end (fitmodelsRobStatTM, VignetteRobStatTM)
+# Vignette - end-to-end (fitmodelsRobStatTM, VignetteRobStatTM)
 # =====================================================================
 vignette = [
     new_markdown_cell(
@@ -477,8 +477,8 @@ vignette = [
         "These scripts walk through RobStatTM via the **fit.models** comparison "
         "framework (`fit.models`, `plot.lmfm`, `plot.covfm`). `fit.models` is a "
         "separate package outside this project's scope, so here we reproduce the "
-        "**robust estimator core** the vignette is built on — `lmrobdetMM` with "
-        "the `mopt`/0.95 default control, and `covClassic` vs `covRob` on wine — "
+        "**robust estimator core** the vignette is built on, `lmrobdetMM` with "
+        "the `mopt`/0.95 default control, and `covClassic` vs `covRob` on wine, "
         "and compare them using our own dataclass summaries instead of "
         "`fit.models`."
     ),
@@ -521,7 +521,7 @@ vignette = [
     ),
     new_markdown_cell(
         "The robust eigen-spectrum differs from the classical one because a few "
-        "high-leverage wines inflate the classical covariance — exactly the "
+        "high-leverage wines inflate the classical covariance, exactly the "
         "comparison the vignette's `fit.models` plots illustrate. Every number "
         "above matches the underlying R call bit-for-bit."
     ),
@@ -530,27 +530,27 @@ vignette = [
 
 if __name__ == "__main__":
     write("ch2_location_scale.ipynb", ch2,
-          "# Chapter 2 gallery — location & scale\n\n"
+          "# Chapter 2 gallery, location & scale\n\n"
           "Reproduces `flour.R` (Table 2.4) from the RobStatTM example scripts. "
           "Every numeric result is cross-checked bit-for-bit against direct R.")
     write("ch4_regression.ipynb", ch4,
-          "# Chapter 4 gallery — robust M regression\n\n"
+          "# Chapter 4 gallery, robust M regression\n\n"
           "Reproduces `shock.R` (Ex 4.1) and `oats.R` (Ex 4.2). Robust fits via "
           "`lmrob_m`; robust nested-model testing via `rob_linear_test`.")
     write("ch5_regression.ipynb", ch5,
-          "# Chapter 5 gallery — MM regression\n\n"
+          "# Chapter 5 gallery, MM regression\n\n"
           "Reproduces `algae.R` (Ex 5.4), `ExactFit.R` (Ex 5.5), `wood.R` "
           "(Ex 5.2) and `step.R` (Ex 5.3) via `lmrobdet_mm` + `step_lmrobdet`.")
     write("ch6_multivariate.ipynb", ch6,
-          "# Chapter 6 gallery — robust multivariate analysis\n\n"
+          "# Chapter 6 gallery, robust multivariate analysis\n\n"
           "Reproduces `biochem.R` (Ex 6.1), `vehicle.R` (Ex 6.3), `bus.R` "
           "(Ex 6.4) and the `covRobMM` part of `wine1.R` (Ex 6.5–6.6).")
     write("ch7_glm.ipynb", ch7,
-          "# Chapter 7 gallery — robust logistic regression\n\n"
+          "# Chapter 7 gallery, robust logistic regression\n\n"
           "Reproduces `leukemia.R` (Ex 7.1) and `skin.R` (Ex 7.2) via the "
           "`by_logreg` / `wby_logreg` / `wml_logreg` family.")
     write("vignette.ipynb", vignette,
-          "# Vignette gallery — end-to-end tour\n\n"
+          "# Vignette gallery, end-to-end tour\n\n"
           "Reproduces the robust-estimator core of `fitmodelsRobStatTM.R` and "
           "`VignetteRobStatTM.R` (the `fit.models` framework itself is out of "
           "scope).")

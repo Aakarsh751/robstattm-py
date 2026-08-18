@@ -12,13 +12,13 @@ example's state reach another; and a script that hangs or segfaults takes only
 itself down.
 
 Exit status 77 means the script announced a missing optional R package and
-stopped — reported as a skip naming the package, not as a pass. See
+stopped, reported as a skip naming the package, not as a pass. See
 ``examples/_common.py``.
 
 ``require_working_child_interpreter`` comes from ``tests/conftest.py``. GitHub's
 hostedtoolcache build of Python 3.12.13 ships a ``_ctypes`` compiled against a
 different interpreter, so *any* child process on that image fails to import
-pandas — and numpy with it. The parent is unaffected, which is why the rest of
+pandas, and numpy with it. The parent is unaffected, which is why the rest of
 the suite passes there. Eleven other subprocess tests already skip on it; these
 25 failed instead, with a `ModuleNotFoundError` that read like a packaging bug
 and was not.
@@ -26,7 +26,7 @@ and was not.
 The child **inherits the parent environment**, deliberately. Scrubbing it with
 ``conftest.child_env`` was tried and reverted: that helper strips ``R_*``, which
 on CI includes the ``R_LIBS_USER`` naming the library the R packages were just
-installed into — so R was found and then had nothing in it, and every example
+installed into, so R was found and then had nothing in it, and every example
 died on "R package 'RobStatTM' is not installed". ``child_env`` exists for the
 discovery tests in ``tests/renv/``, which are *about* the environment. This
 module is about whether the examples run; R discovery has its own tests.
@@ -53,7 +53,7 @@ EXAMPLE_SCRIPTS = sorted(
 
 EXIT_SKIPPED = 77
 
-#: Chapter 6/8 fits are genuinely slow — the autism variance-components fit and
+#: Chapter 6/8 fits are genuinely slow - the autism variance-components fit and
 #: the arima.rob searches run for minutes, not seconds.
 TIMEOUT_SECONDS = 900
 

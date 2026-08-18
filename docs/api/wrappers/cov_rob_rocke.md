@@ -27,7 +27,7 @@ def cov_rob_rocke(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | a data matrix with observations in rows. |
+| `X` | n/a | *required* | a data matrix with observations in rows. |
 | `initial` | Literal['K', 'mve'] | `"K"` | A character indicating the initial estimator. Valid options are 'K' (default) for the Pena-Prieto 'KSD' estimate, and 'mve' for the Minimum Volume Ellipsoid. |
 | `maxsteps` | int | `5` | Maximum number of steps for the line search section of the algorithm. |
 | `propmin` | float | `2` | Regulates the proportion of weights computed from the initial estimator that will be different from zero. The number of observations with initial non-zero weights will be at least p (the number of columns of X) times propmin. |
@@ -54,11 +54,11 @@ A `CovRobRockeResult` object. Its attributes mirror the fields of the R
 | `v` | V | The scatter (or correlation) matrix estimate, scaled for consistency at the normal distribution.  Same as `cov` above. |
 | `sig` | sig | sig |
 | `gamma` | gamma | Final value of the constant gamma that regulates the efficiency. |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
-| `classical` | — | Always False. |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `classical` | n/a | Always False. |
 
 
-> **R fields not surfaced in Python** — the R `covRobRocke` list also contains
+> **R fields not surfaced in Python.** The R `covRobRocke` list also contains
 > `call`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -84,7 +84,7 @@ import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 
-# Rocke's S-estimator of multivariate location and scatter — designed to stay
+# Rocke's S-estimator of multivariate location and scatter  -  designed to stay
 # efficient in higher dimensions where other robust estimators lose power.
 rpm.set_seed(42)
 fit = rpm.cov_rob_rocke(wine)
@@ -101,7 +101,7 @@ print("largest distances:", fit.dist.round(1)[fit.dist.argsort()[-5:]])
 ```r
 data(wine)
 
-# Rocke's S-estimator of multivariate location and scatter — designed to stay
+# Rocke's S-estimator of multivariate location and scatter  -  designed to stay
 # efficient in higher dimensions where other robust estimators lose power.
 set.seed(42)
 fit <- covRobRocke(wine)
@@ -127,5 +127,5 @@ R implementation by Ricardo Maronna, <rmaronna@retina.ar>. Python wrapper: RobSt
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `covRobRocke`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

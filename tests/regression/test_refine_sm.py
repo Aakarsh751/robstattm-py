@@ -1,4 +1,4 @@
-"""Tests for ``refine_sm`` — strict-tier vs R."""
+"""Tests for ``refine_sm``, strict-tier vs R."""
 from __future__ import annotations
 
 import numpy as np

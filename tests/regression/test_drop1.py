@@ -49,7 +49,7 @@ class TestValidation:
 
 
 # ---------------------------------------------------------------------------
-# Case 1 — mineral, single term, full model
+# Case 1 - mineral, single term, full model
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -90,7 +90,7 @@ class TestMineralSingleTerm:
 
 
 # ---------------------------------------------------------------------------
-# Case 2 — stackloss, multiple terms, full model
+# Case 2 - stackloss, multiple terms, full model
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -131,7 +131,7 @@ class TestStacklossAllTerms:
 
 
 # ---------------------------------------------------------------------------
-# Case 3 — stackloss, scoped (subset of terms)
+# Case 3 - stackloss, scoped (subset of terms)
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -168,7 +168,7 @@ class TestStacklossScoped:
 
 
 # ---------------------------------------------------------------------------
-# Case 4 — explicit scale argument
+# Case 4 - explicit scale argument
 # ---------------------------------------------------------------------------
 
 @needs_r

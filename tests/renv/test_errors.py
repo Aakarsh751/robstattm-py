@@ -1,7 +1,7 @@
 """The error contract.
 
 These are reflection tests. They exist so that adding a new failure mode cannot
-silently produce a bare traceback or an undocumented exit status — the classic
+silently produce a bare traceback or an undocumented exit status, the classic
 way a CLI's error handling rots as features are added.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ def _renv_error_subclasses() -> list[type[errors.RenvError]]:
 
 
 def test_there_are_error_classes_to_check():
-    assert _renv_error_subclasses(), "reflection found nothing — did the module move?"
+    assert _renv_error_subclasses(), "reflection found nothing, did the module move?"
 
 
 @pytest.mark.parametrize("cls", _renv_error_subclasses(), ids=lambda c: c.__name__)

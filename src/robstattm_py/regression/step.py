@@ -82,7 +82,7 @@ def step_lmrobdet(
     _ = r_pkg("RobStatTM")  # ensure attached
     # Re-fit and step in a single R script so model.frame is built correctly.
     # Reuse the input fit's *own* control (the converted _r_fit has no S3
-    # class, so we must rebuild it) — otherwise the stepwise search would run
+    # class, so we must rebuild it) - otherwise the stepwise search would run
     # on a default-control model instead of the user's.
     ro.globalenv["rpm_step_data"] = df_with_r_names(fit._data)
     formula_str = fit.formula

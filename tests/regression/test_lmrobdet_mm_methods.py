@@ -1,6 +1,6 @@
 """Strict-tier tests for the S3-as-dataclass methods on LmrobdetMMResult.
 
-Covers ``.summary()``, ``.predict()``, ``.hatvalues()`` — each against R's
+Covers ``.summary()``, ``.predict()``, ``.hatvalues()``, each against R's
 own S3 dispatch (``summary.lmrobdetMM``, ``predict.lmrob``, ``hatvalues.lmrob``).
 All assertions use exact equality.
 """
@@ -132,7 +132,7 @@ class TestCustomControlS3Methods:
     model with *default* control, so a fit built with a non-default control
     silently reported numbers for the wrong (default) model. These tests fit
     with ``family="opt", efficiency=0.80`` and assert the S3 methods match
-    R's own dispatch on a fit built with the *same* control — strict tier.
+    R's own dispatch on a fit built with the *same* control, strict tier.
     """
 
     @pytest.fixture(scope="class")

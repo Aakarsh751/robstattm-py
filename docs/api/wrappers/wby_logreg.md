@@ -29,15 +29,15 @@ def wby_logreg(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | *required* | vector of binomial responses (0 or 1); |
+| `X` | n/a | *required* | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | *required* | vector of binomial responses (0 or 1); |
 | `intercept` | bool | `True` | 1 or 0 indicating if an intercept is included or or not |
 | `const` | float | `0.5` | tuning constant used in the computation of the estimator (default=0.5); |
 | `kmax` | int | `1000` | maximum number of iterations before convergence (default=1000); |
 | `maxhalf` | int | `10` | max number of step-halving (default=10). |
 
 
-> **Note** — handled internally, not exposed in Python: `x0`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `x0`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -51,14 +51,14 @@ A `LogregResult` object. Its attributes mirror the fields of the R
 | `standard_deviation` | standard.deviation | standard deviations of the coefficients |
 | `fitted_values` | fitted.values | fitted values |
 | `residual_deviances` | residual.deviances | residual deviances |
-| `method` | — | Which estimator produced this (e.g. `"BYlogreg"`). |
+| `method` | n/a | Which estimator produced this (e.g. `"BYlogreg"`). |
 | `objective` | objective | value of the objective function at the minimum |
-| `converged` | — | Convergence flag. `None` for `WMLlogreg`. |
-| `xweights` | — | Subsample weights used by WML. `None` for BY/WBY. |
-| `cov` | — | Coefficient covariance matrix returned by WML. `None` for BY/WBY. |
+| `converged` | n/a | Convergence flag. `None` for `WMLlogreg`. |
+| `xweights` | n/a | Subsample weights used by WML. `None` for BY/WBY. |
+| `cov` | n/a | Coefficient covariance matrix returned by WML. `None` for BY/WBY. |
 
 
-> **R fields not surfaced in Python** — the R `logregWBY` list also contains
+> **R fields not surfaced in Python.** The R `logregWBY` list also contains
 > `components`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -72,8 +72,10 @@ The `LogregResult` object also provides these methods:
 | Method | Description |
 |---|---|
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
+| `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
 | `to_r()` | Return the underlying rpy2 R object. |
+| `vcov()` | Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``). |
 
 
 
@@ -123,5 +125,5 @@ R implementation by Christophe Croux, Gentiane Haesbroeck, Victor Yohai. Python 
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `logregWBY`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

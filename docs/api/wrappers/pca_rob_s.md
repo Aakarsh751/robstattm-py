@@ -23,7 +23,7 @@ def pca_rob_s(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | a data matrix with observations in rows. |
+| `X` | n/a | *required* | a data matrix with observations in rows. |
 | `ncomp` | int \| None | `None` | desired (maximum) number of components |
 | `desprop` | float | `0.9` | desired (minimum) proportion of explained variability (default = 0.9) |
 | `deltasca` | float | `0.5` | "delta" parameter of the scale M-estimator (default=0.5) |
@@ -42,13 +42,13 @@ A `PcaRobSResult` object. Its attributes mirror the fields of the R
 | `fit` | fit | an `n x p` matrix with the rank-q approximation to `X` |
 | `repre` | repre | An `n x q` matrix with representation of data in R^q (scores) |
 | `propex` | propex | The actual proportion of unexplained variability |
-| `prop_spc` | — | Per-direction proportions of robust scale (R: `propSPC`). |
-| `mu` | — | Robust center. |
+| `prop_spc` | n/a | Per-direction proportions of robust scale (R: `propSPC`). |
+| `mu` | n/a | Robust center. |
 | `q` | q | The actual number of principal components |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
-> **R fields not surfaced in Python** — the R `pcaRobS` list also contains
+> **R fields not surfaced in Python.** The R `pcaRobS` list also contains
 > `propSPC`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -73,7 +73,7 @@ import robstattm_py as rpm
 
 bus = rpm.datasets.bus()         # 218 buses, 18 shape features
 
-# Robust principal components via spherical/S-estimation — resistant to the
+# Robust principal components via spherical/S-estimation  -  resistant to the
 # outlying vehicles that would distort a classical PCA.
 rpm.set_seed(42)
 res = rpm.pca_rob_s(bus, ncomp=3)   # extract the first 3 robust components
@@ -113,5 +113,5 @@ by D. Pen~a and J. Prieto. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `pcaRobS`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

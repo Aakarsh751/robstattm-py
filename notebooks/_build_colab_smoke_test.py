@@ -1,7 +1,7 @@
 """Generate ``notebooks/colab_smoke_test.ipynb``.
 
 The notebook is a *test*, not a demo. It exists because two failures were
-reported from real machines that CI does not resemble — a Windows DLL conflict
+reported from real machines that CI does not resemble, a Windows DLL conflict
 and, on Google Colab, rpy2 refusing to load a provisioned R while `doctor`
 simultaneously reported rpy2's version. Colab is the environment I cannot
 reproduce locally, so the notebook has to do the reporting for me: every cell
@@ -29,7 +29,7 @@ def code(text: str) -> None:
 
 
 md(f"""
-# RobStatTM-Py — Colab smoke test
+# RobStatTM-Py - Colab smoke test
 
 Runs the package end to end on Google Colab and reports what happened. Takes
 about **6–10 minutes**, most of it downloading R.
@@ -43,14 +43,14 @@ This notebook exists to check two fixes that could not be verified locally:
 1. rpy2 refusing to load a provisioned R, previously misreported as
    *"rpy2 is not installed"* while the same report showed rpy2's version.
 2. The automatic fallback to rpy2's ABI binding when its compiled binding was
-   built against a different R — which is the normal situation on Colab,
+   built against a different R, which is the normal situation on Colab,
    where rpy2 comes preinstalled.
 
 > Source: {REPO}
 """)
 
 md("""
-## 0 — What we start with
+## 0 - What we start with
 
 Colab ships its own Python, and usually its own R and rpy2. Worth recording
 before we change anything, because the interesting failures come from the
@@ -85,7 +85,7 @@ except Exception as exc:
 ''')
 
 md("""
-## 1 — Install
+## 1 - Install
 
 Not on PyPI yet, so this installs from the repository. `-q` keeps the output
 short; drop it if the install itself is what fails.
@@ -100,7 +100,7 @@ record("robstattm-py", version("robstattm-py"))
 ''')
 
 md("""
-## 2 — Import without R
+## 2 - Import without R
 
 Importing the package must **not** start R. If this is slow or fails, the
 problem is packaging, not R.
@@ -115,11 +115,11 @@ for mod in [m for m in list(sys.modules) if m.startswith(("robstattm_py", "rpy2"
 import robstattm_py as rpm
 record("import ok", rpm.__version__)
 record("R started by import", "rpy2.rinterface_lib.openrlib" in sys.modules)
-print("\\nExpected: 'R started by import' is False — R is loaded lazily.")
+print("\\nExpected: 'R started by import' is False, R is loaded lazily.")
 ''')
 
 md("""
-## 3 — Provision R
+## 3 - Provision R
 
 Downloads R plus RobStatTM into a directory the package owns. **This is the
 step that failed before**, so its full output is kept.
@@ -145,7 +145,7 @@ REPORT["setup tail"] = (setup.stdout + setup.stderr)[-1500:]
 ''')
 
 md("""
-## 4 — Diagnose
+## 4 - Diagnose
 
 `doctor` must end with **`Result: READY`**.
 
@@ -178,11 +178,11 @@ assert not contradiction, (
 ''')
 
 md("""
-## 5 — Load R and fit something real
+## 5 - Load R and fit something real
 
 The first call that actually starts R. If rpy2's compiled binding cannot load
 the provisioned R, the package should fall back to the ABI binding *with a
-warning* rather than failing — that warning appearing here is a success, not a
+warning* rather than failing, that warning appearing here is a success, not a
 problem.
 
 The coefficients are checked against the values R produces. They should match to
@@ -214,7 +214,7 @@ assert close, f"expected {EXPECTED}, got {got}"
 ''')
 
 md("""
-## 6 — Exercise the rest of the surface
+## 6 - Exercise the rest of the surface
 
 One estimator per family, so a failure points at a specific area rather than
 "something broke".
@@ -249,10 +249,10 @@ record("surface failures", sum(1 for v in results.values() if v.startswith("FAIL
 ''')
 
 md("""
-## 7 — Column names, both spellings
+## 7 - Column names, both spellings
 
 `datasets.shock()` shows a column called `n_shocks`; the book calls it
-`n.shocks`. Both must work and agree — the underscored spelling used to fail
+`n.shocks`. Both must work and agree, the underscored spelling used to fail
 with R's `object 'n_shocks' not found`.
 """)
 
@@ -269,7 +269,7 @@ assert same
 ''')
 
 md("""
-## 8 — Run one of the book's example scripts
+## 8 - Run one of the book's example scripts
 
 The clone includes a Python port of every RobStatTM example script. Running one
 end to end exercises far more than the calls above.
@@ -288,7 +288,7 @@ record("example exit code", example.returncode)
 ''')
 
 md("""
-## 9 — Report
+## 9 - Report
 
 Everything above, in one block. **If anything failed, paste this into an issue.**
 """)
@@ -304,7 +304,7 @@ failures = [
 ]
 
 print("=" * 68)
-print("PASSED — everything worked" if not failures else f"FAILED: {failures}")
+print("PASSED, everything worked" if not failures else f"FAILED: {failures}")
 print("=" * 68)
 print(json.dumps(
     {k: v for k, v in REPORT.items() if k not in {"doctor", "setup tail", "surface"}},

@@ -1,4 +1,4 @@
-"""Chapter 8, Example 8.6 — seasonal ARIMA on real data (Figs 8.12-8.13, Table 8.5).
+"""Chapter 8, Example 8.6, seasonal ARIMA on real data (Figs 8.12-8.13, Table 8.5).
 
 Python port of ``resex.R``.
 
@@ -27,7 +27,7 @@ ORDER = 2
 
 
 def main() -> None:
-    section("Chapter 8, Example 8.6 — residential extensions")
+    section("Chapter 8, Example 8.6, residential extensions")
 
     require_r_packages("robustarima")
 
@@ -47,7 +47,7 @@ def main() -> None:
     differenced = y[SEASON:] - y[: n - SEASON]
     ar_ls, intercept_ls, ls_resid = _ar_least_squares(differenced, order=ORDER)
 
-    section("Table 8.5 — AR(2) coefficients of the differenced series")
+    section("Table 8.5, AR(2) coefficients of the differenced series")
     print(f"\n  {'estimator':<18}{'AR(1)':>12}{'AR(2)':>12}{'intercept':>14}")
     print(
         f"  {'filtered tau':<18}{ar_tau[0]:>12.4f}{ar_tau[1]:>12.4f}"
@@ -59,7 +59,7 @@ def main() -> None:
     )
     table("mean of the differenced series (tau)", {"mean": mean_tau})
 
-    section("Figure 8.13 — sorted absolute innovations")
+    section("Figure 8.13, sorted absolute innovations")
     tau_innov = np.sort(np.abs(np.asarray(fit.innov, dtype=float)[14:89]))
     ls_innov = np.sort(np.abs(ls_resid))
     k = min(len(tau_innov), len(ls_innov), 72)
@@ -78,7 +78,7 @@ def main() -> None:
         "  fit on two months that will not recur."
     )
 
-    section("Figure 8.12 — which observations did the filter clean?")
+    section("Figure 8.12, which observations did the filter clean?")
     robust_series = np.asarray(fit.y_robust, dtype=float)
     change = np.abs(y - robust_series)
     worst = np.argsort(change)[::-1][:5]
@@ -91,7 +91,7 @@ def main() -> None:
     rpm.plot.location_scale(
         rpm.loc_scale_m(np.diff(y, n=1)),
         np.diff(y, n=1),
-        title="Resex — first differences (Figure 8.12)",
+        title="Resex, first differences (Figure 8.12)",
         save=figure("ch08_resex_differences"),
     )
 
@@ -99,7 +99,7 @@ def main() -> None:
 def _ar_least_squares(
     x: np.ndarray, *, order: int
 ) -> tuple[np.ndarray, float, np.ndarray]:
-    """Least-squares AR(``order``) fit — ``resex.R``'s ``lm`` on lagged columns."""
+    """Least-squares AR(``order``) fit, ``resex.R``'s ``lm`` on lagged columns."""
     y = x[order:]
     design = np.column_stack(
         [np.ones(len(y))] + [x[order - k : len(x) - k] for k in range(1, order + 1)]

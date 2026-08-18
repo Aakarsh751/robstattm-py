@@ -1,4 +1,4 @@
-"""Chapter 8, Example 8.5 — robust MA(1) estimation (Figure 8.11, Table 8.4).
+"""Chapter 8, Example 8.5, robust MA(1) estimation (Figure 8.11, Table 8.4).
 
 Python port of ``MA1-AO.R``.
 
@@ -11,7 +11,7 @@ shows what it does to estimation.
 The R script also fits ``arima(order = c(0, 0, 1), method = "CSS")`` as the
 non-robust comparator. Conditional sum of squares for an MA model is an
 iterative innovations recursion rather than a closed form, and reimplementing it
-here would be writing an estimator rather than demonstrating one — so the
+here would be writing an estimator rather than demonstrating one, so the
 comparison below is against the *clean-series* tau fit, which answers the same
 question: how far does contamination move the estimate?
 
@@ -35,7 +35,7 @@ EVERY = 20
 
 
 def main() -> None:
-    section("Chapter 8, Example 8.5 — MA(1) with additive outliers")
+    section("Chapter 8, Example 8.5, MA(1) with additive outliers")
 
     require_r_packages("robustarima")
 
@@ -51,7 +51,7 @@ def main() -> None:
     clean_theta = float(np.asarray(clean_fit.ma, dtype=float)[0])
     dirty_theta = float(np.asarray(dirty_fit.ma, dtype=float)[0])
 
-    section("Table 8.4 — the estimate barely moves")
+    section("Table 8.4, the estimate barely moves")
     table(
         "theta",
         {
@@ -71,7 +71,7 @@ def main() -> None:
         {"|delta theta|": abs(dirty_theta - clean_theta)},
     )
 
-    section("Figure 8.11 — how much of each spike did the filter remove?")
+    section("Figure 8.11, how much of each spike did the filter remove?")
     filtered = np.asarray(dirty_fit.y_robust, dtype=float)
     spike_positions = np.arange(EVERY - 1, N, EVERY)
     removed = contaminated[spike_positions] - filtered[spike_positions]

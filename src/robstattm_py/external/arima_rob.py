@@ -1,4 +1,4 @@
-"""Robust ARIMA estimation — wraps the external ``robustarima`` package.
+"""Robust ARIMA estimation, wraps the external ``robustarima`` package.
 
 Maronna et al. (2019) Chapter 8. The *filtered tau-estimate* fits a
 regression-ARIMA model resistant to additive outliers and returns a robustly
@@ -131,9 +131,9 @@ def arima_rob(
 
     Two calling styles:
 
-    * **Vector** — ``arima_rob(y=series, p=2, sd=1, sfreq=12)`` fits ``y ~ 1``.
+    * **Vector** - ``arima_rob(y=series, p=2, sd=1, sfreq=12)`` fits ``y ~ 1``.
       This matches every Chapter-8 example script.
-    * **Formula + data** — ``arima_rob("col ~ 1", df, p=3)`` pushes ``df`` to R
+    * **Formula + data** - ``arima_rob("col ~ 1", df, p=3)`` pushes ``df`` to R
       and builds the formula there.
 
     Parameters

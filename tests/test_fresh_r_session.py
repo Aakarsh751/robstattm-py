@@ -8,7 +8,7 @@ unguarded read (``R/KurtSDNew.R:42``)::
 R does not create ``.Random.seed`` until the RNG is first used, so in a pristine
 session that call raises. ``covRob`` and ``covRobRocke`` both route through it
 (``R/Multirobu.R:123,359``), which made ``rpm.cov_rob(...)`` fail whenever it was
-the first thing a user ran — including the example in our own README.
+the first thing a user ran, including the example in our own README.
 
 Interactive R users seldom notice, because something has usually drawn a random
 number already. An embedded rpy2 session is pristine, so *every* user hit it.
@@ -66,7 +66,7 @@ def test_random_seed_exists_once_r_starts():
     ],
 )
 def test_stochastic_estimator_works_as_the_very_first_call(call, label):
-    """No `set_seed` first — exactly how a new user follows the quickstart."""
+    """No `set_seed` first, exactly how a new user follows the quickstart."""
     proc = _fresh(
         f"""
         import robstattm_py as rpm
@@ -83,7 +83,7 @@ def test_startup_seeding_does_not_fix_the_rng():
     """`set.seed(NULL)` must leave results random, not pin them.
 
     If startup pinned a constant seed, two fresh processes would return
-    identical draws — which would silently make every stochastic estimator
+    identical draws, which would silently make every stochastic estimator
     deterministic and mask genuine reproducibility bugs.
     """
     code = """
@@ -94,7 +94,7 @@ def test_startup_seeding_does_not_fix_the_rng():
     second = _fresh(code)
     assert first.returncode == 0 and second.returncode == 0
     assert first.stdout.strip() != second.stdout.strip(), (
-        "two fresh sessions produced the same random draw — startup is pinning the seed"
+        "two fresh sessions produced the same random draw, startup is pinning the seed"
     )
 
 

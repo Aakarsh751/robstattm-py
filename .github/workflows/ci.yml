@@ -54,7 +54,7 @@ jobs:
       # `robust` is here for its data, not its estimators: the glmrob strict-tier
       # tests fit the Breslow epilepsy data (`breslow.dat`), which ships in
       # `robust` rather than in `robustbase`. It is a core (fatal) dep because
-      # those tests are gated on `robustbase`, which is core — without `robust`
+      # those tests are gated on `robustbase`, which is core, without `robust`
       # they would skip rather than run, silently losing the R parity coverage.
       - name: Install core R dependencies
         run: |
@@ -64,7 +64,7 @@ jobs:
       # Backing packages for the external-wrapper tests, installed in a separate,
       # non-fatal step: each such test is gated on a needs_* guard in
       # tests/conftest.py and skips gracefully when its package is absent, so a
-      # build failure on these heavier packages must not fail CI — but when they
+      # build failure on these heavier packages must not fail CI, but when they
       # install, their strict-tier parity tests run.
       #
       #   pense, GSE     -> test_pense.py, test_gse.py
@@ -93,7 +93,7 @@ jobs:
           pip install -e ".[dev,examples]"
 
       # Lint was documented in CONTRIBUTING but never actually enforced, so it
-      # had accumulated ~790 findings across the repo — including an undefined
+      # had accumulated ~790 findings across the repo, including an undefined
       # name in src/. It is clean now; this keeps it that way. Deliberate
       # exceptions live in pyproject.toml's per-file-ignores with the reason
       # beside each, so a new violation cannot be waved through silently.
@@ -101,6 +101,13 @@ jobs:
       - name: Lint
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: python -m ruff check src tests exploration examples
+
+      # House style: no em dashes anywhere. The guard both detects and (with
+      # --fix) applies the common replacement; here we run the detect form, so a
+      # reintroduced em dash fails the build. OS-independent, so run once.
+      - name: Check house style (no em dashes)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: python dev/_check_no_emdash.py
 
       # `robstattm-py setup` is never run here, so discovery must land on the
       # system R installed above. Asserting the source keeps this job honest:
@@ -117,7 +124,7 @@ jobs:
       # This includes tests/test_examples.py, which executes all 25 scripts in
       # examples/ end to end on every runner (~2 minutes). Kept on every leg
       # rather than one, because the examples exercise real file paths, console
-      # encoding and figure output — the things that differ per OS. An example
+      # encoding and figure output, the things that differ per OS. An example
       # whose R backend is missing reports a skip naming the package, not a
       # pass, so a failed optional-R install above cannot hide as green.
       - name: Run test suite (notebooks skipped)

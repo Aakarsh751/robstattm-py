@@ -1,5 +1,5 @@
 """Strict-tier tests for ``CovRobResult.summary()`` and
-``CovClassicResult.summary()`` — ports of R's ``summary.covRob`` and
+``CovClassicResult.summary()``, ports of R's ``summary.covRob`` and
 ``summary.covClassic``."""
 from __future__ import annotations
 

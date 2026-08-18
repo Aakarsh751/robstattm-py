@@ -17,12 +17,12 @@ def wml_logreg(X, y, intercept: 'bool' = True):
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | Design matrix of predictors with shape `(n, p)` — the array-input alternative to the `formula` + `data` form. |
-| `y` | — | *required* | response vector |
+| `X` | n/a | *required* | Design matrix of predictors with shape `(n, p)`, the array-input alternative to the `formula` + `data` form. |
+| `y` | n/a | *required* | response vector |
 | `intercept` | bool | `True` | 1 or 0 indicating if an intercept is included or or not |
 
 
-> **Note** — handled internally, not exposed in Python: `x0`. These are constructed for you from the inputs above.
+> **Note:** handled internally, not exposed in Python: `x0`. These are constructed for you from the inputs above.
 
 
 ## Returns
@@ -36,9 +36,9 @@ A `LogregResult` object. Its attributes mirror the fields of the R
 | `standard_deviation` | standard.deviation | standard deviations of the regression coefficient estimators |
 | `fitted_values` | fitted.values | vector with the probabilities of success |
 | `residual_deviances` | residual.deviances | residual deviances |
-| `method` | — | Which estimator produced this (e.g. `"BYlogreg"`). |
+| `method` | n/a | Which estimator produced this (e.g. `"BYlogreg"`). |
 | `objective` | objective | value of the objective function at the minimum |
-| `converged` | — | Convergence flag. `None` for `WMLlogreg`. |
+| `converged` | n/a | Convergence flag. `None` for `WMLlogreg`. |
 | `xweights` | xweights | vector of zeros and ones used to compute the weighted maimum likelihood estimator |
 | `cov` | cov | covariance matrix of the regression estimates |
 
@@ -52,8 +52,10 @@ The `LogregResult` object also provides these methods:
 | Method | Description |
 |---|---|
 | `coef_df()` | Return ``coefficients`` as a pandas Series, indexed by coef name. |
+| `fitted()` | Fitted values as a pandas Series (R's ``fitted()``). |
 | `to_dict()` | Return a plain-Python ``dict`` view of ``self``. |
 | `to_r()` | Return the underlying rpy2 R object. |
+| `vcov()` | Coefficient covariance matrix as a labeled DataFrame (R's ``vcov()``). |
 
 
 
@@ -67,7 +69,7 @@ skin = rpm.datasets.load("RobStatTM", "skin")
 X = skin.iloc[:, :2].to_numpy()
 y = skin["vasoconst"].to_numpy().astype(float)
 
-# Weighted maximum-likelihood logistic regression — a robust ML variant that
+# Weighted maximum-likelihood logistic regression  -  a robust ML variant that
 # also reports a coefficient covariance matrix.
 fit = rpm.wml_logreg(X, y, intercept=True)
 print("coefficients      :", fit.coefficients.round(4))
@@ -103,5 +105,5 @@ R implementation by Victor Yohai. Python wrapper: RobStatTM-Py.
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `logregWML`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

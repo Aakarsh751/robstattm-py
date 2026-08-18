@@ -255,13 +255,13 @@ def parse_rd(path: Path) -> RdRecord:
         rec.sections[name_inside.strip()] = _to_text(body_inside)
         pos = body_end
 
-    # \seealso{...} — pull every \link{...} reference
+    # \seealso{...}, pull every \link{...} reference
     if (m := _find_macro(text, "seealso")):
         rec.seealso = [
             inside for inside, _, _ in _find_all_macros(m[0], "link")
         ]
 
-    # \keyword{...} — flat occurrences
+    # \keyword{...}, flat occurrences
     rec.keywords = [
         inside for inside, _, _ in _find_all_macros(text, "keyword")
     ]

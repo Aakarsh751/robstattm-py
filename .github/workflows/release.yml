@@ -56,7 +56,7 @@ jobs:
       # fields are asserted rather than assumed. `twine check` validates that
       # the README renders; it does not check that the licence is declared the
       # modern way (PEP 639 `License-Expression`), nor that LICENSE and
-      # NOTICE.md actually travel inside the wheel — and NOTICE.md is the file
+      # NOTICE.md actually travel inside the wheel, and NOTICE.md is the file
       # that explains the GPL R software this package downloads but never ships.
       - name: Verify the licence metadata
         run: python dev/_check_metadata.py dist --assert

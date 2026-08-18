@@ -44,7 +44,7 @@ def _use_headless_backend() -> None:
 
     The env var is the cheap path and works as long as nothing has imported
     pyplot yet. Importing this module first is what normally guarantees that,
-    but import order is the kind of invariant a later edit quietly breaks — so
+    but import order is the kind of invariant a later edit quietly breaks, so
     if matplotlib is already loaded, switch it explicitly instead.
     """
     os.environ.setdefault("MPLBACKEND", "Agg")
@@ -59,7 +59,7 @@ _use_headless_backend()
 
 FIGURE_DIR = Path(__file__).resolve().parent / "_figures"
 
-#: Exit status meaning "skipped, not failed" — the convention automake uses and
+#: Exit status meaning "skipped, not failed" - the convention automake uses and
 #: what ``tests/test_examples.py`` looks for.
 EXIT_SKIPPED = 77
 
@@ -68,7 +68,7 @@ class Skipped(Exception):  # noqa: N818 - not an error; see below
     """Raised when an example cannot run because an optional R package is absent.
 
     Deliberately not named ``SkippedError``. Nothing has gone wrong when this is
-    raised — it is control flow, the same role ``pytest.skip`` plays, and giving
+    raised, it is control flow, the same role ``pytest.skip`` plays, and giving
     it an ``Error`` suffix would tell the reader the opposite of what happened.
     """
 
@@ -81,8 +81,8 @@ def section(title: str) -> None:
 def table(title: str, rows: dict[str, object], *, fmt: str = "{:.4f}") -> None:
     """Print a labelled name/value table.
 
-    Formats floats to a fixed width so successive runs — and a run against the
-    book's printed tables — line up column-wise.
+    Formats floats to a fixed width so successive runs, and a run against the
+    book's printed tables, line up column-wise.
     """
     print(f"\n{title}")
     width = max((len(k) for k in rows), default=0)
@@ -111,8 +111,8 @@ def require_python_packages(*names: str) -> None:
 
     A few examples reach for ``scipy`` or ``matplotlib`` to draw the non-robust
     comparator the R script plots alongside the robust fit. Those are example
-    dependencies, not package dependencies — ``pip install "robstattm-py[examples]"``
-    — so their absence is a skip, not a failure.
+    dependencies, not package dependencies, ``pip install "robstattm-py[examples]"``
+   , so their absence is a skip, not a failure.
     """
     import importlib.util
 
@@ -128,7 +128,7 @@ def require_r_packages(*names: str) -> None:
     """Raise :class:`Skipped` unless every named R package can be loaded.
 
     Checks the packages the *example* needs, which is not always the set the
-    wrapper needs — and does it up front, so a script that is going to be
+    wrapper needs, and does it up front, so a script that is going to be
     unrunnable says so before printing half a chapter of output.
     """
     from robstattm_py import RobStatTMSetupError
@@ -151,7 +151,7 @@ def require_r_dataset(package: str, name: str) -> None:
     """Raise :class:`Skipped` unless a dataset from another R package is present.
 
     A dataset can be missing even when its package is installed, so guarding
-    the package alone is not enough — that gap is what made an earlier CI run
+    the package alone is not enough, that gap is what made an earlier CI run
     fail while every local run passed.
     """
     require_r_packages(package)
@@ -168,7 +168,7 @@ def require_r_dataset(package: str, name: str) -> None:
 
 
 def chisq_quantile(level: float, df: int) -> float:
-    """Chi-squared quantile — R's ``qchisq(level, df)``.
+    """Chi-squared quantile, R's ``qchisq(level, df)``.
 
     Chapter 6 compares Mahalanobis distances against a chi-squared cutoff in
     every example, so this needs to work with nothing but the package
@@ -204,7 +204,7 @@ def chisq_quantile(level: float, df: int) -> float:
 
 
 def ols(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
-    """Return ``(intercept, slope)`` of the least-squares line — R's ``lm(y ~ x)``."""
+    """Return ``(intercept, slope)`` of the least-squares line, R's ``lm(y ~ x)``."""
     design = np.column_stack([np.ones_like(x), x])
     coef, *_ = np.linalg.lstsq(design, y, rcond=None)
     return float(coef[0]), float(coef[1])
@@ -215,7 +215,7 @@ def l1_line(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
 
     Stands in for ``quantreg::rq(y ~ x)``. With one predictor the L1 optimum
     passes through two of the data points, so scoring every pair gives an exact
-    answer — 120 pairs for the shock data, 1378 for mineral. Direct, and it
+    answer, 120 pairs for the shock data, 1378 for mineral. Direct, and it
     avoids taking on a dependency for what is only a comparison line.
     """
     n = len(x)
@@ -233,7 +233,7 @@ def l1_line(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
 
 
 def ml_logistic(x: np.ndarray, y: np.ndarray, *, tol: float = 1e-10) -> np.ndarray:
-    """Maximum-likelihood logistic regression by IRLS — R's ``glm(binomial)``.
+    """Maximum-likelihood logistic regression by IRLS, R's ``glm(binomial)``.
 
     The non-robust baseline for Chapter 7. Returns ``[intercept, *slopes]``.
     """
@@ -256,7 +256,7 @@ def ml_logistic(x: np.ndarray, y: np.ndarray, *, tol: float = 1e-10) -> np.ndarr
 def ml_deviance_residuals(
     x: np.ndarray, y: np.ndarray, beta: np.ndarray
 ) -> np.ndarray:
-    """Signed deviance residuals — R's ``resid(fit, type = "deviance")``."""
+    """Signed deviance residuals, R's ``resid(fit, type = "deviance")``."""
     design = np.column_stack([np.ones(len(y)), x])
     mu = np.clip(1.0 / (1.0 + np.exp(-(design @ beta))), 1e-12, 1 - 1e-12)
     deviance = -2.0 * (y * np.log(mu) + (1 - y) * np.log(1 - mu))

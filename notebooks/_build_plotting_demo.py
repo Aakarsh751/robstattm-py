@@ -22,7 +22,7 @@ def code(text: str) -> None:
 
 
 md(r"""
-# Native plotting suite — demo (`robstattm_py.plot`)
+# Native plotting suite - demo (`robstattm_py.plot`)
 
 This notebook tours the **native Python plotting suite** added in decision D-023
 and compares it with the original **Path A** (R graphics through `rpy2`).
@@ -55,7 +55,7 @@ print("robstattm_py", rpm.__version__)
 """)
 
 md("""
-## 1. Regression diagnostics — native vs Path A
+## 1. Regression diagnostics - native vs Path A
 
 The native renderer reproduces the textbook diagnostics and adds robust-weight
 colouring + automatic outlier labels. `backend="r"` returns the exact R PNG.
@@ -85,7 +85,7 @@ fig
 md("""
 ## 2. Scatter with the robust fit (Figs 5.1 / 5.4)
 
-Observed data with the robust fitted line, plus an OLS line for contrast — note
+Observed data with the robust fitted line, plus an OLS line for contrast, note
 how the high-leverage point drags OLS but not the robust fit.
 """)
 
@@ -94,7 +94,7 @@ plot.scatter_with_fit(fit, show_ols=True, labels=labels).figure
 """)
 
 md("""
-## 3. Customization — themes & per-call overrides
+## 3. Customization - themes & per-call overrides
 
 `set_theme` sets a global look; any `PlotStyle` field can be overridden per call.
 """)
@@ -114,7 +114,7 @@ plot.residuals(fit, style=style, labels=labels).figure
 """)
 
 md("""
-## 4. Multivariate — robust covariance & PCA (wine)
+## 4. Multivariate - robust covariance & PCA (wine)
 
 The **distance–distance** plot unmasks the multivariate outliers that the
 classical covariance hides.
@@ -145,7 +145,7 @@ fig.tight_layout(); fig
 """)
 
 md("""
-## 5. Univariate — robust location & scale (flour)
+## 5. Univariate - robust location & scale (flour)
 
 Robust μ ± dispersion hugs the bulk of the data; the classical mean ± sd is
 inflated by the outlier.

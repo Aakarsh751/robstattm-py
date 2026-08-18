@@ -1,7 +1,7 @@
 # Coming from R
 
 If you already use RobStatTM in R, this page is the whole translation. The
-functions, the arguments and the returned numbers are the same — only the
+functions, the arguments and the returned numbers are the same, only the
 syntax around them changes.
 
 Every result is computed by the same R code you would run yourself, through
@@ -54,7 +54,7 @@ from robstattm_py.compat_r import lmrobdetMM, covRobMM, BYlogreg
 fit = lmrobdetMM("zinc ~ copper", data=mineral)
 ```
 
-These are the same objects, not copies — `compat_r.lmrobdetMM is rpm.lmrobdet_mm`
+These are the same objects, not copies, `compat_r.lmrobdetMM is rpm.lmrobdet_mm`
 is `True`. Use whichever reads better to you.
 
 ---
@@ -116,7 +116,7 @@ R's `data(mineral)` becomes a function call returning a pandas DataFrame:
 mineral = rpm.datasets.mineral()   # a DataFrame, not a magic global
 ```
 
-All 20 textbook datasets are available this way — see [Datasets](datasets.md).
+All 20 textbook datasets are available this way, see [Datasets](datasets.md).
 For a dataset from any other R package, give the package first:
 
 ```python
@@ -246,7 +246,7 @@ Jupyter. `fit.summary()` renders as a formatted table in a notebook.
 ## What is not here
 
 `pense`, `GSE`, `TSGS`, `arima.rob`, `varComprob`, `glmrob` and `cubinf` come
-from other R packages and are wrapped separately — see
+from other R packages and are wrapped separately, see
 [External estimators](external.md). They need those R packages installed:
 
 ```bash
@@ -255,5 +255,5 @@ robstattm-py install-r-packages pense GSE
 
 ## See also
 
-- [Installation](installation.md) — setup, including letting the package install R.
-- [API reference](../api/index.md) — every wrapper, with its R man page.
+- [Installation](installation.md), setup, including letting the package install R.
+- [API reference](../api/index.md), every wrapper, with its R man page.

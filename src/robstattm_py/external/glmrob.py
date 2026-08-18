@@ -1,4 +1,4 @@
-"""Robust generalized linear models — wraps ``robustbase::glmrob``.
+"""Robust generalized linear models, wraps ``robustbase::glmrob``.
 
 Maronna et al. (2019) §7.x (epilepsy example). Robust GLM fitting for binomial
 and Poisson responses. ``robustbase`` is already a RobStatTM dependency (CORE),
@@ -9,7 +9,7 @@ Single entry point:
 * :func:`glmrob` → ``robustbase::glmrob``
 
 Methods used by the epilepsy example: ``"Mqle"`` (robust quasi-likelihood / RQL,
-the default) and ``"MT"``. Both are *deterministic* — no ``set_seed`` needed.
+the default) and ``"MT"``. Both are *deterministic*, no ``set_seed`` needed.
 We fit *inside* R-space (push the data frame, build the formula + family) so the
 result equals R exactly, then read the fields with ``rx2`` and ``residuals()``.
 """
@@ -47,7 +47,7 @@ class GlmrobResult:
     cov : ndarray, shape (p, p)
         Coefficient covariance.
     std_errors : ndarray, shape (p,)
-        ``sqrt(diag(cov))`` — convenience.
+        ``sqrt(diag(cov))``, convenience.
     residuals : ndarray, shape (n,)
         Deviance residuals (``residuals(fit)``) for ``method="Mqle"``; for
         ``method="MT"`` (where ``residuals()`` is undefined) the stored working

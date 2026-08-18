@@ -3,11 +3,11 @@
 These guard the *control surface* itself (not just the headline knobs):
 
 * the dataclass field set must not drift from R's formals;
-* every fixed default must equal R's default — this is the guard that catches a
+* every fixed default must equal R's default - this is the guard that catches a
   wrong dataclass default (it would have flagged ``refine_s_py = 0`` against
   R's ``refine.S.py = 1e-7``);
 * the non-headline keys (``psc_keep``, ``mscale_tol``, ``py_maxit``,
-  ``refine_s_py`` …) must round-trip into R under the correct argument names —
+  ``refine_s_py`` …) must round-trip into R under the correct argument names,
   previously these paths were never exercised by any test.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ def _public_fields():
 
 @needs_r
 def test_field_count_matches_r_formals(R):
-    """Dataclass field count must match ``formals(lmrobdet.control)`` — catches
+    """Dataclass field count must match ``formals(lmrobdet.control)``, catches
     upstream API drift (a key added/removed in RobStatTM)."""
     py_fields = _public_fields()
     r_formals = list(R("names(formals(RobStatTM::lmrobdet.control))"))

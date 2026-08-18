@@ -8,7 +8,7 @@
 #
 # Worth knowing: on Linux this is the smoothest route by some margin. rpy2
 # publishes no Linux wheels, so `pip install` has to compile it and its default
-# build mode requires R to already be present — a chicken-and-egg problem if you
+# build mode requires R to already be present, a chicken-and-egg problem if you
 # were relying on `robstattm-py setup` to install R. conda-forge ships prebuilt
 # rpy2 *and* R, so neither compilation nor `setup` is needed.
 #
@@ -55,7 +55,7 @@ dependencies:
       # wheel built against a different R.
       #
       # Installed from this checkout ("."), not from PyPI, because the package
-      # is not published yet — naming it would make `conda env create` fail at
+      # is not published yet, naming it would make `conda env create` fail at
       # the very last step with "No matching distribution found". Run this file
       # from a clone. Switch to `robstattm-py` once it is on PyPI.
       - --no-deps

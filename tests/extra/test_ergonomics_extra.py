@@ -2,7 +2,7 @@
 
 ``tests/test_ui_ergonomics.py`` exercises only ``LmrobdetMMResult``. Here we
 check ``to_dict`` / ``_repr_html_`` / ``to_r`` / ``coef_df`` on the covariance,
-PCA, GLM, univariate, and summary result types, plus pickle persistence — none
+PCA, GLM, univariate, and summary result types, plus pickle persistence, none
 of which is covered there.
 """
 from __future__ import annotations

@@ -1,6 +1,6 @@
 """Isolate why a provisioned R fails to start, by varying only the PATH.
 
-Run after `robstattm-py setup` has created an environment (even a failed one —
+Run after `robstattm-py setup` has created an environment (even a failed one,
 the environment exists; it is the *verify* step that failed).
 
     python dev/_diagnose_r_startup.py

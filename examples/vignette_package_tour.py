@@ -1,12 +1,12 @@
-"""Vignette — a tour of the package.
+"""Vignette, a tour of the package.
 
 Python port of ``VignetteRobStatTM.R``, which is the RobStatTM package
 vignette: where the data live, how to fit the main estimators, and what you get
 back.
 
 The R vignette is a knitr document whose chunks mostly write PNG files. What is
-reproduced here is its *content* — the same datasets, the same fits, the same
-comparisons — in the order it presents them, with the numbers printed rather
+reproduced here is its *content*, the same datasets, the same fits, the same
+comparisons, in the order it presents them, with the numbers printed rather
 than plotted.
 
 Anything in the R vignette that is about R itself (``install.packages``,
@@ -31,7 +31,7 @@ def main() -> None:
     print("  R's `system.file('scripts', package='RobStatTM')` lists the R")
     print("  scripts these examples are ported from.")
 
-    section("Datasets — head(shock, 2) and head(wood, 1)")
+    section("Datasets, head(shock, 2) and head(wood, 1)")
     shock = rpm.datasets.shock()
     print("\n  shock:")
     print(shock.head(2).to_string())
@@ -43,7 +43,7 @@ def main() -> None:
 
     print(f"\n  datasets.info('mineral'): {rpm.datasets.info('mineral')}")
 
-    section("Regression — LS, L1 and MM on the mineral data")
+    section("Regression, LS, L1 and MM on the mineral data")
     mineral = rpm.datasets.mineral()
     copper = mineral["copper"].to_numpy(dtype=float)
     zinc = mineral["zinc"].to_numpy(dtype=float)
@@ -62,7 +62,7 @@ def main() -> None:
     section("summary(fmLSrob)")
     print(rob.summary())
 
-    section("Result methods — what an lmrobdetMM fit gives you")
+    section("Result methods, what an lmrobdetMM fit gives you")
     table(
         "accessors",
         {
@@ -80,7 +80,7 @@ def main() -> None:
     newdata = pd.DataFrame({"copper": [10.0, 500.0]})
     print(f"    {np.asarray(rob.predict(newdata)).round(4)}")
 
-    section("Covariance — covClassic against covRob on wine[, 1:5]")
+    section("Covariance, covClassic against covRob on wine[, 1:5]")
     wine5 = rpm.datasets.wine().iloc[:, :5].to_numpy(dtype=float)
     classic = rpm.cov_classic(wine5)
     robust = rpm.cov_rob(wine5, type="auto")
@@ -98,7 +98,7 @@ def main() -> None:
     )
     print(
         "\n  This is the vignette's 'eigenvalues' plot as numbers. The leading\n"
-        "  classical eigenvalue is inflated by the outliers — which is the same\n"
+        "  classical eigenvalue is inflated by the outliers, which is the same\n"
         "  thing that masks them in the distance plot below."
     )
 
@@ -124,18 +124,18 @@ def main() -> None:
     )
 
     section("Where to read more")
-    print("  rpm.help('lmrobdet_mm')  — the R man page for any wrapper")
-    print("  rpm.list_names()         — every wrapper and its R name")
-    print("  rpm.check_setup()        — verify R and each R package")
+    print("  rpm.help('lmrobdet_mm') , the R man page for any wrapper")
+    print("  rpm.list_names()        , every wrapper and its R name")
+    print("  rpm.check_setup()       , verify R and each R package")
     print("  https://aakarsh751.github.io/robstattm-py/")
 
     rpm.plot.distance_distance(
         robust,
         classic,
-        title="Wine[, 1:5] — distance-distance (vignette)",
+        title="Wine[, 1:5], distance-distance (vignette)",
         save=figure("vignette_tour_distances"),
     )
-    rpm.plot.scree(pca, title="Wine[, 1:5] — robust PCA scree (vignette)",
+    rpm.plot.scree(pca, title="Wine[, 1:5], robust PCA scree (vignette)",
                    save=figure("vignette_tour_scree"))
 
 

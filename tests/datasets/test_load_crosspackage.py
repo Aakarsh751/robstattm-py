@@ -1,4 +1,4 @@
-"""Tests for ``rpm.datasets.load(package, name)`` — cross-package loader."""
+"""Tests for ``rpm.datasets.load(package, name)``, cross-package loader."""
 from __future__ import annotations
 
 import pandas as pd
@@ -26,7 +26,7 @@ def test_load_preserves_r_metadata():
 def test_load_dot_renaming_to_underscore():
     """R columns with dots should become Python-safe with underscores.
 
-    ``datasets::airquality`` has ``Solar.R`` and ``Temp`` columns —
+    ``datasets::airquality`` has ``Solar.R`` and ``Temp`` columns,
     perfect for verifying the dot → underscore rename.  Uses base R's
     ``datasets`` package which is always available and never needs to
     be attached.

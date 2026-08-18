@@ -1,4 +1,4 @@
-"""``robstattm-py info`` — show paths and settings, touching nothing.
+"""``robstattm-py info``, show paths and settings, touching nothing.
 
 Never starts R, never creates a directory, always exits 0. That makes it safe to
 run first when something looks wrong, and safe to paste into a bug report.

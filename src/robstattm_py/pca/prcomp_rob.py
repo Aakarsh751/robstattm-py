@@ -28,7 +28,7 @@ class PrcompRobResult:
     center : ndarray, shape (p,)
         Robust center.
     scores : ndarray, shape (n, q)
-        Component scores (R: ``x`` — renamed for clarity).
+        Component scores (R: ``x``, renamed for clarity).
     column_names : tuple[str, ...] | None
     """
 
@@ -89,7 +89,7 @@ def prcomp_rob(
 
     rotation = rx2(rfit, "rotation")
     rot_arr = np.asarray(rotation, dtype=float)
-    # Component names from R's colnames(rotation) — used by summary().
+    # Component names from R's colnames(rotation) - used by summary().
     try:
         from robstattm_py._r import r as _r
         comp_names_raw = _r().r("colnames")(rotation)

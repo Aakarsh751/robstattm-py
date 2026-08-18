@@ -2,7 +2,7 @@
 
 matplotlib / plotnine live behind the ``[plots]`` extra (see ``pyproject.toml``
 and decisions D-008/D-023). Nothing in :mod:`robstattm_py.plot` imports them at
-module load — only when a native/plotnine figure is actually drawn — so
+module load, only when a native/plotnine figure is actually drawn, so
 ``import robstattm_py`` stays cheap and the package installs without them.
 """
 from __future__ import annotations

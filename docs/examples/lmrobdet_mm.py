@@ -1,6 +1,6 @@
 import robstattm_py as rpm
 
-# Load Coleman's school data — 20 obs of school outcomes vs predictors.
+# Load Coleman's school data, 20 obs of school outcomes vs predictors.
 coleman = rpm.datasets.load("robustbase", "coleman")
 
 # Fit a robust MM-regression.  ``Y ~ .`` means "regress Y on every

@@ -1,4 +1,4 @@
-"""Robust R-squared inverse transform — ``RobStatTM::INVTR2``.
+"""Robust R-squared inverse transform, ``RobStatTM::INVTR2``.
 
 Pure-numeric helper used inside ``lmrobdetMM`` to convert the trimmed
 quasi-R² into the reported robust R² value. Exported in RobStatTM's
@@ -13,7 +13,7 @@ R signature: ``INVTR2(RR2, family, cc)`` returning a scalar numeric.
     ``robstattm_py.psi.mopt(0.95)`` for 95%-efficiency mopt).
   - ``"huber"``: internal code paths access ``cc[3]``, so scalar input
     produces NA limits inside ``integrate()``. Pass a 3-element tuning
-    vector if you need huber here (rare — the textbook usage is bisquare
+    vector if you need huber here (rare, the textbook usage is bisquare
     or opt/mopt).
 """
 from __future__ import annotations

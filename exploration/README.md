@@ -1,4 +1,4 @@
-# RobStatTM-Py — Exploration & Parameter Playground
+# RobStatTM-Py - Exploration & Parameter Playground
 
 This folder is **separate from the main `tests/` suite**. It holds exploratory
 workflows that go beyond the five hand-authored examples in `docs/examples/`:
@@ -66,7 +66,7 @@ See **[TESTING.md](TESTING.md)** for the complete playbook (499 tests total).
 
 ## Relation to `tests/` vs `docs/examples/`
 
-- `tests/` — strict regression gate (`atol=0, rtol=0` vs R); CI-oriented.
-- `docs/examples/` — five minimal runnable scripts for documentation.
-- `exploration/` — **playground** for parameter grids, textbook reproductions,
+- `tests/` - strict regression gate (`atol=0, rtol=0` vs R); CI-oriented.
+- `docs/examples/` - five minimal runnable scripts for documentation.
+- `exploration/` - **playground** for parameter grids, textbook reproductions,
   and discovering gaps before promoting cases into `tests/` or `docs/examples/`.

@@ -8,7 +8,7 @@ installed, so it exercises what a user actually receives::
     /tmp/check/bin/python dev/_verify_wheel_install.py
 
 Removes R from ``PATH`` and unsets ``R_HOME`` first, so the discovery chain has
-to find R the hard way — the situation a user with a default CRAN install on
+to find R the hard way, the situation a user with a default CRAN install on
 Windows is in.
 """
 from __future__ import annotations

@@ -1,4 +1,4 @@
-"""Host-environment probe — the seam that makes discovery testable.
+"""Host-environment probe, the seam that makes discovery testable.
 
 Every platform-dependent fact the discovery chain needs (OS, CPU, environment
 variables, ``PATH`` lookups, the user's home directory) is read through a
@@ -6,7 +6,7 @@ variables, ``PATH`` lookups, the user's home directory) is read through a
 
 Production code calls :meth:`Probe.current`. Tests construct a synthetic
 ``Probe`` describing, say, "32-bit Python on Windows with a broken R on PATH"
-and assert the resulting discovery order — with no monkeypatching of
+and assert the resulting discovery order, with no monkeypatching of
 ``sys.platform``, which is unreliable and leaks between tests.
 """
 from __future__ import annotations
@@ -92,7 +92,7 @@ class Probe:
     home : Path
         The user's home directory.
     sys_prefix : Path
-        ``sys.prefix`` — the active Python environment root, which may itself
+        ``sys.prefix``, the active Python environment root, which may itself
         be a conda prefix containing R.
     registry_installs : callable, optional
         Returns ``(install_path, label)`` for every R recorded in the Windows
@@ -139,7 +139,7 @@ class Probe:
         """Normalised host architecture.
 
         Falls back to ``i386`` when a 32-bit interpreter reports an x86_64
-        machine — a 32-bit Python can only load a 32-bit R, regardless of what
+        machine, a 32-bit Python can only load a 32-bit R, regardless of what
         the CPU is capable of.
         """
         arch = normalise_machine(self.machine)

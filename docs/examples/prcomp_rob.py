@@ -1,6 +1,6 @@
 import robstattm_py as rpm
 
-# Bus silhouettes — 218 obs, 18 image-shape features.
+# Bus silhouettes, 218 obs, 18 image-shape features.
 bus = rpm.datasets.bus()
 
 # Robust principal-components decomposition.

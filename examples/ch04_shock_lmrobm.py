@@ -1,4 +1,4 @@
-"""Chapter 4, Example 4.1 — M-regression on the shock data (Figures 4.1, 4.3).
+"""Chapter 4, Example 4.1, M-regression on the shock data (Figures 4.1, 4.3).
 
 Python port of ``shock.R``.
 
@@ -7,13 +7,13 @@ of them (1, 2 and 4) are outliers, and they are enough to tilt the least-squares
 line away from the other thirteen points. The example fits, on the same axes:
 
 * least squares on everything,
-* least squares with observations 1, 2 and 4 deleted — the answer you would get
+* least squares with observations 1, 2 and 4 deleted - the answer you would get
   if you already knew which points to distrust,
 * an M-estimator (``lmrobM``), which finds that answer without being told.
 
 The R script also draws an L1 (quantile-regression) line via ``quantreg::rq``.
 There is no robust-quantile wrapper in this package and adding one would be out
-of scope, so the L1 fit comes from ``_common.l1_line`` — it is a comparator in
+of scope, so the L1 fit comes from ``_common.l1_line``, it is a comparator in
 this figure, not one of the estimators under study.
 
 R packages required: RobStatTM only.
@@ -27,7 +27,7 @@ import robstattm_py as rpm
 
 
 def main() -> None:
-    section("Chapter 4, Example 4.1 — shock data")
+    section("Chapter 4, Example 4.1, shock data")
 
     shock = rpm.datasets.shock()
     x = shock["n_shocks"].to_numpy(dtype=float)
@@ -80,12 +80,12 @@ def main() -> None:
         {str(i + 1): float(w) for i, w in downweighted.items()},
     )
 
-    # Figure 4.3 — every line on one scatter plot.
+    # Figure 4.3 - every line on one scatter plot.
     rpm.plot.scatter_with_fit(
         rob,
         x="n_shocks",
         show_ols=True,
-        title="Shock data — M-estimate vs least squares (Figure 4.3)",
+        title="Shock data, M-estimate vs least squares (Figure 4.3)",
         save=figure("ch04_shock_fits"),
     )
 

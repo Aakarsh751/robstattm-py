@@ -6,7 +6,7 @@ on a machine that has neither R nor conda, without asking the user to install a
 package manager first.
 
 Everything about this module is written on the assumption that the download can
-and will go wrong — corporate TLS interception, captive portals, antivirus
+and will go wrong, corporate TLS interception, captive portals, antivirus
 quarantine, and half-written files on a full disk are all routine. Each failure
 mode gets a specific message rather than a stack trace.
 

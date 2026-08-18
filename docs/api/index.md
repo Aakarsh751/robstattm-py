@@ -20,7 +20,7 @@ parameters, return fields, result-object methods, and a runnable example.
 | Function | R original | What it does |
 |---|---|---|
 | [`lmrobdet_mm`](wrappers/lmrobdet_mm.md) | `lmrobdetMM` | **The main robust regression**: MM-estimator with deterministic starts. |
-| [`lmrobdet_dcml`](wrappers/lmrobdet_dcml.md) | `lmrobdetDCML` | DCML estimator — high efficiency, still robust. |
+| [`lmrobdet_dcml`](wrappers/lmrobdet_dcml.md) | `lmrobdetDCML` | DCML estimator, high efficiency, still robust. |
 | [`lmrob_m`](wrappers/lmrob_m.md) | `lmrobM` | Plain M-estimator of regression (a simpler, faster robust fit). |
 | [`step_lmrobdet`](wrappers/step_lmrobdet.md) | `step.lmrobdetMM` | Robust stepwise model selection by RFPE. |
 | [`rob_linear_test`](wrappers/rob_linear_test.md) | `rob.linear.test` | Robust analogue of the F-test for nested models. |
@@ -36,7 +36,7 @@ parameters, return fields, result-object methods, and a runnable example.
 |---|---|---|
 | [`cov_rob`](wrappers/cov_rob.md) | `covRob` | **Auto-dispatcher**: picks MM or Rocke by dimension. Start here. |
 | [`cov_rob_mm`](wrappers/cov_rob_mm.md) | `covRobMM` | MM-estimator of multivariate location & scatter. |
-| [`cov_rob_rocke`](wrappers/cov_rob_rocke.md) | `covRobRocke` | Rocke S-estimator — efficient in higher dimensions. |
+| [`cov_rob_rocke`](wrappers/cov_rob_rocke.md) | `covRobRocke` | Rocke S-estimator, efficient in higher dimensions. |
 | [`cov_classic`](wrappers/cov_classic.md) | `covClassic` | Classical mean & covariance (a non-robust baseline). |
 | [`kurt_sd_new`](wrappers/kurt_sd_new.md) | `KurtSDNew` | Kurtosis-based projection directions (estimator internals). |
 | [`fastmve`](wrappers/fastmve.md) | `fastmve` | Minimum Volume Ellipsoid estimator (fast resampling start). |
@@ -74,11 +74,11 @@ install them separately. See the [external estimators guide](../guides/external.
 
 ## See also
 
-- **Datasets** — [`robstattm_py.datasets`](../guides/datasets.md)
-- **ψ-loss families** — [`robstattm_py.psi`](../guides/psi-families.md)
-- **External estimators** — [`pense`, `gse`, `tsgs`](../guides/external.md)
-- **Setup & utilities** — [`check_setup`, `set_seed`, …](../guides/utilities.md)
-- **Result-object methods** — [`.summary()`, `.predict()`, …](../guides/result-methods.md)
+- **Datasets**, [`robstattm_py.datasets`](../guides/datasets.md)
+- **ψ-loss families**, [`robstattm_py.psi`](../guides/psi-families.md)
+- **External estimators**, [`pense`, `gse`, `tsgs`](../guides/external.md)
+- **Setup & utilities**, [`check_setup`, `set_seed`, …](../guides/utilities.md)
+- **Result-object methods**, [`.summary()`, `.predict()`, …](../guides/result-methods.md)
 
 ```{toctree}
 :hidden:

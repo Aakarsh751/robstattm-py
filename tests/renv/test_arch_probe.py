@@ -2,7 +2,7 @@
 
 These matter more than their size suggests: the arch check is the only thing
 standing between a mismatched R and a hard interpreter crash. rpy2 ``dlopen``s R
-at import time, so a wrong answer here is not an exception the user can catch —
+at import time, so a wrong answer here is not an exception the user can catch,
 it is a process that disappears.
 """
 from __future__ import annotations

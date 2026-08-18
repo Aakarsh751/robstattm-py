@@ -96,8 +96,8 @@ class RStartupError(ProvisionError):
 
     Kept distinct from :class:`ProvisionError` because the two need opposite
     advice. A provisioning failure means the files are wrong, and rebuilding
-    can help. This means the files are *fine* — everything downloaded and
-    linked — and something about the machine stops R loading. Rebuilding
+    can help. This means the files are *fine*, everything downloaded and
+    linked, and something about the machine stops R loading. Rebuilding
     downloads the same bytes and fails the same way, so telling the user to
     re-run with ``--force`` wastes several minutes and a gigabyte to arrive
     back where they started.
@@ -146,7 +146,7 @@ def _startup_failure(
             f"{output[-1500:]}\n\n"
             "This is a DLL conflict, not a bad download. Windows searches PATH "
             "left to right and loads the first matching DLL name, and R needs "
-            "names — R.dll, Rblas.dll, and a mingw runtime — that other software "
+            "names, R.dll, Rblas.dll, and a mingw runtime, that other software "
             "also ships. Loading a foreign copy into this R gives exactly the "
             "message above."
         ),
@@ -222,7 +222,7 @@ class LongPathError(RenvError):
 def package_spec(subdir: str) -> list[str]:
     """Return the conda package specification for a platform.
 
-    Three platforms are the odd ones out — ``osx-arm64``, ``linux-aarch64``
+    Three platforms are the odd ones out, ``osx-arm64``, ``linux-aarch64``
     and ``linux-ppc64le``. conda-forge has no ``r-robstattm`` or ``r-pyinit``
     build for any of them (verified 2026-08-11), so those two are compiled from
     CRAN source afterwards and a toolchain is requested instead.
@@ -449,7 +449,7 @@ def env_path_prefix(prefix: Path, probe: Probe | None = None) -> str:
 
     Windows resolves a DLL by searching PATH left to right and taking the first
     name match. The provisioned R needs `R.dll`, `Rblas.dll` and a mingw runtime
-    — and a machine that already does R work very often has *other* copies of
+   , and a machine that already does R work very often has *other* copies of
     those names on PATH, from a CRAN R installation, Rtools, MSYS2, Git's
     bundled mingw, or another conda environment. Loading a foreign one into
     conda's R gives either
@@ -490,8 +490,8 @@ def run_in_env(
     The environment's own directories are *also* placed at the front of ``PATH``
     ourselves rather than left entirely to that activation. Doing both is not
     redundancy for its own sake: if activation is incomplete for any reason, R
-    still starts, whereas otherwise it fails on a DLL it cannot find or — worse
-    — one it finds in the wrong place. See :func:`env_path_prefix`.
+    still starts, whereas otherwise it fails on a DLL it cannot find or, worse
+   , one it finds in the wrong place. See :func:`env_path_prefix`.
     """
     env = child_env(probe)
     env_dirs = env_path_prefix(prefix, probe)

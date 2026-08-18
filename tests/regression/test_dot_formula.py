@@ -7,7 +7,7 @@ a ``data=`` argument and crashed on dot formulas with::
 
 The fix moved coefficient-name extraction to
 ``coef_names_for(formula)`` which uses
-``colnames(model.matrix(formula, data=rpm_data))`` — works for every
+``colnames(model.matrix(formula, data=rpm_data))``, works for every
 formula form because the data is in R globalenv at extraction time.
 
 These tests guard against any future regression to the formula-only

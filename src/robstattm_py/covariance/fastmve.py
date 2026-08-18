@@ -58,7 +58,7 @@ def fastmve(
 ) -> FastMVEResult:
     """Fast minimum volume ellipsoid robust covariance.
 
-    Wraps ``RobStatTM::fastmve``. Random subsampling — use
+    Wraps ``RobStatTM::fastmve``. Random subsampling, use
     :func:`robstattm_py.set_seed` for reproducibility.
 
     Parameters

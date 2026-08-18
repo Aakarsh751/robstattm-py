@@ -1,17 +1,17 @@
-"""Chapter 6, Examples 6.5 and 6.6 — missing data and cellwise contamination.
+"""Chapter 6, Examples 6.5 and 6.6, missing data and cellwise contamination.
 
 Python port of ``wine1.R``.
 
 Two failures of the classical Chapter-6 machinery, and the estimators built for
 each:
 
-**Example 6.5 (Figure 6.11) — missing values.** 20% of the wine matrix is
+**Example 6.5 (Figure 6.11), missing values.** 20% of the wine matrix is
 blanked at random. ``covRobMM`` needs complete rows, so the usual answer is
 casewise deletion, which here would throw away nearly every row. ``GSE``
 (generalised S-estimator) handles the gaps directly, and ``CovEM`` gives the
-non-robust comparison — EM handles the missingness but not the outliers.
+non-robust comparison, EM handles the missingness but not the outliers.
 
-**Example 6.6 (Figure 6.12) — cellwise contamination.** Rowwise estimators
+**Example 6.6 (Figure 6.12), cellwise contamination.** Rowwise estimators
 assume a bad observation is bad in every coordinate. When contamination lands
 in individual *cells*, a small fraction of bad cells is enough to make almost
 every row partly bad, and rowwise methods run out of clean rows. ``TSGS``
@@ -32,7 +32,7 @@ LEVEL = 0.999
 
 
 def main() -> None:
-    section("Chapter 6, Examples 6.5 / 6.6 — wine data with gaps and bad cells")
+    section("Chapter 6, Examples 6.5 / 6.6, wine data with gaps and bad cells")
 
     require_r_packages("GSE")
 
@@ -43,19 +43,19 @@ def main() -> None:
     print(f"  {n} observations in {p} dimensions; cutoff {cutoff:.4f}")
 
     # -- Example 6.5 -------------------------------------------------------
-    section("Example 6.5 — 20% of cells missing at random (Figure 6.11)")
+    section("Example 6.5, 20% of cells missing at random (Figure 6.11)")
     x_missing = _blank_at_random(x, MISSING_RATE)
     print(
         f"  {np.isnan(x_missing).sum()} of {x.size} cells blanked; "
         f"{int((~np.isnan(x_missing).any(axis=1)).sum())} of {n} rows still complete"
     )
     print(
-        "  Casewise deletion is not an option at this rate — that is the point\n"
+        "  Casewise deletion is not an option at this rate, that is the point\n"
         "  of the example."
     )
 
     gse_fit = rpm.gse(x_missing)
-    # pmd_adj is GSE's adjusted partial Mahalanobis distance — the quantity
+    # pmd_adj is GSE's adjusted partial Mahalanobis distance - the quantity
     # wine1.R reads via getDistAdj(). The unadjusted `pmd` is not comparable
     # with a chi-squared cutoff when cells are missing, because each row's
     # distance is over a different number of observed coordinates.
@@ -71,7 +71,7 @@ def main() -> None:
     )
 
     # -- Example 6.6 -------------------------------------------------------
-    section("Example 6.6 — cellwise contamination (Figure 6.12)")
+    section("Example 6.6, cellwise contamination (Figure 6.12)")
     mm_fit = rpm.cov_rob_mm(x)
     mm_dist = np.asarray(mm_fit.dist, dtype=float)
     tsgs_fit = rpm.tsgs(x, method="bisquare", filter="UBF-DDC")
@@ -102,7 +102,7 @@ def main() -> None:
         f"  contradiction. TSGS's first step flagged and removed {filtered_cells}\n"
         f"  individual cells out of {x.size} before estimating anything. Once the\n"
         "  offending *cells* are gone, the rows that contained them are no longer\n"
-        "  outlying rows — so a rowwise distance computed afterwards has little\n"
+        "  outlying rows, so a rowwise distance computed afterwards has little\n"
         "  left to find. Rowwise and cellwise methods are answering two different\n"
         "  questions: 'which observations are bad?' and 'which measurements are\n"
         "  bad?'. Choose according to how your data actually goes wrong."
@@ -110,7 +110,7 @@ def main() -> None:
 
     rpm.plot.mahalanobis_panel(
         mm_fit,
-        title="Wine — rowwise robust distances (Figure 6.12)",
+        title="Wine, rowwise robust distances (Figure 6.12)",
         save=figure("ch06_wine1_rowwise"),
     )
 
@@ -118,7 +118,7 @@ def main() -> None:
         "\n  A note on reproducing the book's figures exactly: the missingness\n"
         "  pattern above comes from R's RNG under set.seed(2400), matching\n"
         "  wine1.R. wine1.R itself warns that its plots differ from the book's\n"
-        "  Figure 6.11 because the book used a different seed — so agreeing with\n"
+        "  Figure 6.11 because the book used a different seed, so agreeing with\n"
         "  the script, not the printed figure, is the achievable target."
     )
 

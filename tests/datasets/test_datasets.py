@@ -82,7 +82,7 @@ def test_values_match_r(py_name, r_name, expected_shape):
         # Determine if R column is numeric
         is_num = bool(ro.r(f'is.numeric({r_name}[["{r_col}"]])')[0])
         if not is_num:
-            # Skip factor/character columns at this tier — those need
+            # Skip factor/character columns at this tier - those need
             # categorical-aware comparison (TODO Phase 2)
             continue
         r_col_vals = np.asarray(ro.r(f'as.numeric({r_name}[["{r_col}"]])'), dtype=float)

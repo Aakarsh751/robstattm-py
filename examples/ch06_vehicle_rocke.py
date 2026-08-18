@@ -1,4 +1,4 @@
-"""Chapter 6, Example 6.3 — the Rocke estimator in higher dimensions (Figure 6.7).
+"""Chapter 6, Example 6.3, the Rocke estimator in higher dimensions (Figure 6.7).
 
 Python port of ``vehicle.R``.
 
@@ -7,8 +7,8 @@ between robust estimators starts to matter: a bisquare S-estimator's efficiency
 degrades as dimension grows, which is exactly the problem the Rocke
 estimator's ρ function is designed for.
 
-``vehicle.R`` compares four scatter estimates — classical, MCD, bisquare-S and
-Rocke — via chi-squared Q-Q plots of the Mahalanobis distances. MCD and
+``vehicle.R`` compares four scatter estimates, classical, MCD, bisquare-S and
+Rocke, via chi-squared Q-Q plots of the Mahalanobis distances. MCD and
 bisquare-S come from ``rrcov``, which this package does not wrap (they are
 comparators, not RobStatTM estimators), so the comparison here is classical vs
 ``covRobMM`` vs ``covRobRocke``.
@@ -26,7 +26,7 @@ LEVEL = 0.999
 
 
 def main() -> None:
-    section("Chapter 6, Example 6.3 — vehicle data")
+    section("Chapter 6, Example 6.3, vehicle data")
 
     vehicle = rpm.datasets.vehicle()
     x = vehicle.to_numpy(dtype=float)
@@ -38,7 +38,7 @@ def main() -> None:
     rocke = rpm.cov_rob_rocke(x)
 
     cutoff = chisq_quantile(LEVEL, p)
-    section(f"Figure 6.7 — distances against the {LEVEL:.1%} chi-squared cutoff")
+    section(f"Figure 6.7, distances against the {LEVEL:.1%} chi-squared cutoff")
     print(f"  cutoff (chi-squared, {p} df): {cutoff:.4f}\n")
 
     counts: dict[str, int] = {}
@@ -82,7 +82,7 @@ def main() -> None:
     rpm.plot.distance_distance(
         rocke,
         classical,
-        title="Vehicle — Rocke vs classical distances (Figure 6.7)",
+        title="Vehicle, Rocke vs classical distances (Figure 6.7)",
         save=figure("ch06_vehicle_distance_distance"),
     )
 

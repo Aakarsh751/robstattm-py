@@ -3,7 +3,7 @@
 The single most valuable test here is
 :func:`test_full_precedence_ladder`, which populates *every* rung at once and
 then removes them one at a time, asserting the exact winner at each step. A
-chain like this rots silently — a reordered tuple or an early ``return`` is
+chain like this rots silently, a reordered tuple or an early ``return`` is
 invisible in review but changes which R users get.
 """
 from __future__ import annotations

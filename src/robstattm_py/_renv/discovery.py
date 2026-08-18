@@ -8,7 +8,7 @@ Two design points are worth stating, because both come from real failures:
 
 **Every rejection is recorded, not swallowed.** ``discover`` returns a full
 trace alongside the winner. When no R is found, that trace *is* the error
-message — "searched 9 locations, here is what was wrong with each" is
+message, "searched 9 locations, here is what was wrong with each" is
 actionable, whereas "R not found" is not.
 
 **A broken R never stops the search.** rpy2 consults the Windows registry only
@@ -266,7 +266,7 @@ def _read_registry_installs(winreg, key) -> list[tuple[Path, str]]:
 def _version_key(name: str) -> tuple:
     """Sort key extracting a version from a directory or registry key name.
 
-    ``"R-4.5.2"`` sorts above ``"R-4.10"``? No — this uses real version
+    ``"R-4.5.2"`` sorts above ``"R-4.10"``? No, this uses real version
     ordering, so ``4.10`` correctly sorts above ``4.5``.
     """
     token = name.split("-")[-1] if "-" in name else name
@@ -412,7 +412,7 @@ def _from_subprocess(probe: Probe) -> list[Candidate]:
 #: ``(kind, generator name)`` in search order.
 #:
 #: Generators are named rather than referenced directly so they are resolved at
-#: call time. That keeps the table honest under monkeypatching — a tuple of
+#: call time. That keeps the table honest under monkeypatching - a tuple of
 #: function objects would capture the originals at import and silently ignore
 #: any later substitution, which makes the chain effectively untestable.
 _RUNGS: tuple[tuple[str, str], ...] = (
@@ -459,7 +459,7 @@ def discover(
     InvalidRHomeError, ArchMismatchError, RTooOldError
         Only when ``ROBSTATTM_R_HOME`` is set and does not validate. An
         explicit instruction that cannot be honoured is an error, never a
-        silent fallback — otherwise the user is left wondering why their
+        silent fallback, otherwise the user is left wondering why their
         setting had no effect.
     """
     probe = probe or Probe.current()

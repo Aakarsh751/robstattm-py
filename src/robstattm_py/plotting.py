@@ -1,4 +1,4 @@
-"""Plotting via R's own graphics device — "Path A" (decision D-008).
+"""Plotting via R's own graphics device, "Path A" (decision D-008).
 
 We open a PNG device, run the R plot expression, close the device, and return
 a path to the resulting file. The user can ``display`` it in Jupyter or embed
@@ -8,7 +8,7 @@ This is **not** the default any more: D-023 added the native matplotlib suite
 in :mod:`robstattm_py.plot`, and ``backend="auto"`` prefers it because it
 returns a live Axes/Figure the caller can keep composing. Path A is what
 ``backend="r"`` selects, and it is still the right choice when you want
-fidelity to the textbook's published figures — those are rendered by R, so
+fidelity to the textbook's published figures, those are rendered by R, so
 calling the same R plotting functions gives pixel parity (subject to OS-level
 font and DPI differences).
 
@@ -46,7 +46,7 @@ def r_plot(
     r_code : str
         R expression(s) that draw on the current graphics device. Anything
         ``plot()`` / ``abline()`` / ``text()`` etc. works. Do NOT call
-        ``dev.off()`` yourself — this function manages the device.
+        ``dev.off()`` yourself, this function manages the device.
     dpi : int, default 100
         Resolution in dots per inch.
     width, height : float, default 6.0, 5.0
@@ -97,7 +97,7 @@ def _refit_and_run(fit: object, plot_expr: str, **kw) -> pathlib.Path:
     if formula is None or data is None:
         raise RuntimeError(
             f"Cannot plot diagnostics for {type(fit).__name__}: missing "
-            "`formula` and `_data` (likely unpickled — plotting requires "
+            "`formula` and `_data` (likely unpickled, plotting requires "
             "the original DataFrame)."
         )
     ro = _rmod()

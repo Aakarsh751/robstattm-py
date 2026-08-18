@@ -1,4 +1,4 @@
-"""``robstattm-py setup`` — install a private R so the user never has to.
+"""``robstattm-py setup``, install a private R so the user never has to.
 
 This is the command that makes the package usable by someone who has never
 installed R and does not want to. It downloads R and RobStatTM from conda-forge

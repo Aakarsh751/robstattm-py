@@ -1,8 +1,8 @@
 """Verify that R discovery finds a usable R in every supported situation.
 
-Runs the same fit three ways — with ``R_HOME`` set, with only ``PATH``, and with
+Runs the same fit three ways, with ``R_HOME`` set, with only ``PATH``, and with
 R removed from ``PATH`` entirely so only the Windows registry or the per-OS
-install locations can find it — and asserts all three produce bit-identical
+install locations can find it, and asserts all three produce bit-identical
 coefficients.
 
 Each scenario runs in its own process, because rpy2 binds to an R when it is

@@ -11,7 +11,7 @@ robstattm-py doctor --json
 ```
 
 That single command captures your Python, rpy2, R, the full R-discovery trace
-and every installed R package version — usually enough to diagnose the issue
+and every installed R package version, usually enough to diagnose the issue
 without any back-and-forth.
 
 Open issues at <https://github.com/Aakarsh751/robstattm-py/issues>.
@@ -58,8 +58,8 @@ Consequences:
 
 ## Checking against R
 
-When you need to know what R actually does — a default, an argument name, a
-return field — read the R source, not our notes:
+When you need to know what R actually does, a default, an argument name, a
+return field, read the R source, not our notes:
 
 - Vendored source: `robstattm/RobStatTM-master/R/*.R`
 - Installed package: `Rscript -e "print(formals(RobStatTM::lmrobdetMM))"`
@@ -72,8 +72,8 @@ return field — read the R source, not our notes:
 By submitting a contribution you agree that it is licensed under the same
 [MIT License](LICENSE) as the rest of the project, with no additional terms.
 
-This is spelled out because MIT — unlike Apache-2.0, whose §5 says it in the
-licence text itself — contains no inbound-contribution rule. There is no CLA to
+This is spelled out because MIT, unlike Apache-2.0, whose §5 says it in the
+licence text itself, contains no inbound-contribution rule. There is no CLA to
 sign; this paragraph is the whole of it.
 
 If a contribution includes code you did not write, say so in the pull request
@@ -84,7 +84,7 @@ the package's entire licensing position rests on it *calling* R rather than
 ## Releasing
 
 Publishing to PyPI is documented step by step in
-[`docs/RELEASING.md`](docs/RELEASING.md) — including creating the trusted
+[`docs/RELEASING.md`](docs/RELEASING.md), including creating the trusted
 publisher, rehearsing on TestPyPI, and what cannot be undone afterwards.
 
 ## Documentation
@@ -97,7 +97,7 @@ python docs/scripts/validate_docs.py  # generated wrapper pages (needs R)
 ```
 
 Pages must render correctly **both** as plain GitHub Markdown and under Sphinx,
-so stick to standard Markdown — headings, tables, fenced code, `>` blockquotes.
+so stick to standard Markdown, headings, tables, fenced code, `>` blockquotes.
 No YAML frontmatter, no MyST-only directives in the body.
 
 A block that genuinely cannot run (needs an optional R package, say) must say so
@@ -130,12 +130,12 @@ nothing about CI.
 
 ## Style
 
-- `python -m ruff check src/robstattm_py/ tests/` — new and changed code must
+- `python -m ruff check src/robstattm_py/ tests/`, new and changed code must
   be clean. There is pre-existing debt elsewhere; please do not mix a
   repo-wide reformat into a feature change.
 - Type hints on public functions; numpydoc docstrings.
 - Explain *why* in comments, not *what*. The non-obvious constraint, the reason
-  for the ordering, the upstream bug being worked around — those are worth
+  for the ordering, the upstream bug being worked around, those are worth
   writing down. The code already says what it does.
 
 ## Pull requests
@@ -144,5 +144,5 @@ Keep the diff to one concern. Mechanical changes (renames, reformats) belong in
 their own commit, separate from behaviour changes, so that review and `git
 bisect` both stay useful.
 
-Describe what you verified, and mention anything you could not check — an
+Describe what you verified, and mention anything you could not check, an
 untested platform is fine to say out loud.

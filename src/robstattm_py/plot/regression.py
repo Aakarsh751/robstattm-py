@@ -10,9 +10,9 @@ All functions share a uniform signature::
   never calls ``plt.show()`` unless ``show=True``.
 * ``backend="plotnine"`` returns a ``ggplot``.
 * ``backend="r"`` calls the Path-A helpers in :mod:`robstattm_py.plotting` and
-  returns a ``pathlib.Path`` to a PNG (refits in R — the fidelity reference).
+  returns a ``pathlib.Path`` to a PNG (refits in R, the fidelity reference).
 
-Native renderers read only extracted arrays — they never re-fit (D-023). The one
+Native renderers read only extracted arrays, they never re-fit (D-023). The one
 exception is :func:`resid_vs_leverage`, which needs the hat matrix and calls
 ``fit.hatvalues()`` when ``leverage=`` is not supplied.
 """
@@ -390,7 +390,7 @@ def diagnostics(
 
 
 # ---------------------------------------------------------------------------
-# plotnine (secondary engine) — minimal grammar-of-graphics equivalents
+# plotnine (secondary engine) - minimal grammar-of-graphics equivalents
 # ---------------------------------------------------------------------------
 
 def _reg_df(fit):

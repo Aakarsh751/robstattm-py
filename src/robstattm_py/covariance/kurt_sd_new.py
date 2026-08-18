@@ -7,7 +7,7 @@ expose it separately for users who want to chain custom refinement steps.
 
 R return list: ``idx``, ``disma``, ``center``, ``cova``, ``t``.
 
-**Determinism:** randomly samples projection directions — call
+**Determinism:** randomly samples projection directions, call
 :func:`robstattm_py.set_seed` before for reproducibility.
 """
 from __future__ import annotations

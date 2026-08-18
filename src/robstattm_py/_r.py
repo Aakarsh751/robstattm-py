@@ -6,7 +6,7 @@ Per ``decisions.md`` D-004, D-009, D-010:
   pandas2ri); this survives Jupyter async cells.
 * ``importr("RobStatTM")`` is deferred until first wrapper call via the
   ``r_pkg("RobStatTM")`` accessor.
-* No threading — R is a singleton.
+* No threading - R is a singleton.
 
 Public surface kept small on purpose; wrappers should not import any other
 rpy2 names directly.
@@ -64,7 +64,7 @@ def _ensure_r_environment() -> Any:
 def r_started() -> bool:
     """Return ``True`` once the rpy2 conversion context is installed.
 
-    Used by ``rpm.r_started()`` (UI doc §11). Cheap and side-effect-free —
+    Used by ``rpm.r_started()`` (UI doc §11). Cheap and side-effect-free,
     does NOT trigger R startup.
     """
     return _r_started
@@ -73,7 +73,7 @@ def r_started() -> bool:
 def _install_conversion() -> None:
     """Install the default + numpy + pandas conversion context once.
 
-    Note: ``set_conversion`` is *process-global* — it changes the active rpy2
+    Note: ``set_conversion`` is *process-global*, it changes the active rpy2
     converter for the whole interpreter, not just this package. This is a
     deliberate trade-off (per decisions.md D-004/D-009/D-010) so the context
     survives Jupyter async cells; the cost is that another rpy2-using library in
@@ -126,8 +126,8 @@ def _select_cffi_mode(info: Any, modules: dict | None = None) -> None:
     resolves symbols at run time and does not care which R it gets. The compiled
     one is a little faster per call and fails outright against a different R.
 
-    ABI is forced in exactly one case: **the R is one we provisioned**, so rpy2 —
-    which arrived from a wheel or a base image — was almost certainly not built
+    ABI is forced in exactly one case: **the R is one we provisioned**, so rpy2,
+    which arrived from a wheel or a base image, was almost certainly not built
     against it. Choosing ABI before rpy2 is imported avoids a failure that cannot
     be recovered from afterwards (rpy2 embeds R as a process-global singleton;
     once an import has attempted to load R the attempt cannot be undone).
@@ -157,7 +157,7 @@ def _select_cffi_mode(info: Any, modules: dict | None = None) -> None:
     if _os.environ.get("RPY2_CFFI_MODE"):
         return  # the user has decided; do not override
     if "rpy2.rinterface_lib.openrlib" in loaded:
-        return  # too late — R is already bound
+        return  # too late, R is already bound
     if getattr(info, "conda_prefix", None) is None:
         return  # a system R that rpy2 was plausibly built against
 
@@ -169,7 +169,7 @@ def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:
 
     ``from rpy2.robjects import ...`` both imports a package and starts R, and
     both raise ``ImportError``. This used to report every such failure as "rpy2
-    is not installed" — which, on a machine where rpy2 plainly is installed,
+    is not installed", which, on a machine where rpy2 plainly is installed,
     sends the reader to fix something that is not broken and discards the
     message that said what actually was. One Colab report showed ``doctor``
     printing rpy2's version and, a few lines below, advising its installation.
@@ -180,9 +180,9 @@ def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:
         )
 
     # rpy2 3.6 is split across three separately-versioned distributions (rpy2,
-    # rpy2-rinterface, rpy2-robjects). When their versions drift out of step —
+    # rpy2-rinterface, rpy2-robjects). When their versions drift out of step,
     # the state Google Colab and Kaggle sometimes ship, and which a partial pip
-    # upgrade reproduces — `rpy2.robjects` resolves to an empty namespace package
+    # upgrade reproduces - `rpy2.robjects` resolves to an empty namespace package
     # with no __file__, and the import fails with "(unknown location)". That is a
     # broken *install*, not a failure to load R; the remedy is entirely different,
     # so it is detected and reported on its own terms rather than as a binding
@@ -200,14 +200,14 @@ def _rpy2_import_error(original: ImportError) -> RobStatTMSetupError:
     except Exception:  # pragma: no cover - discovery succeeded to reach here
         where = "the R that was found"
 
-    mode = _os.environ.get("RPY2_CFFI_MODE", "(unset — rpy2's compiled default)")
+    mode = _os.environ.get("RPY2_CFFI_MODE", "(unset, rpy2's compiled default)")
     return RobStatTMSetupError(
         "rpy2 is installed, but it could not load R.\n"
         f"  R:                {where}\n"
         f"  RPY2_CFFI_MODE:   {mode}\n"
         f"  rpy2 reported:    {original}\n\n"
         "The usual cause is rpy2's compiled binding having been built against a "
-        "different R than the one above — common wherever rpy2 arrived prebuilt "
+        "different R than the one above, common wherever rpy2 arrived prebuilt "
         "(Colab, Kaggle, a distro package) and R came from `robstattm-py setup`.\n\n"
         "What to do:\n"
         "  1. Force rpy2's compiler-free binding. It must be set BEFORE Python "
@@ -245,8 +245,8 @@ def _rpy2_inconsistent_install_error(original: ImportError) -> RobStatTMSetupErr
     """Report rpy2's split distributions being at mismatched versions.
 
     This is the Colab/Kaggle "cannot import name 'default_converter' from
-    'rpy2.robjects' (unknown location)" failure. Its cause — mismatched rpy2 /
-    rpy2-rinterface / rpy2-robjects versions — and its fix are unrelated to which
+    'rpy2.robjects' (unknown location)" failure. Its cause, mismatched rpy2 /
+    rpy2-rinterface / rpy2-robjects versions, and its fix are unrelated to which
     R is loaded or which binding is used, so it gets a message of its own.
     """
     listed = "\n".join(f"    {dist:<16} {ver}" for dist, ver in _rpy2_components().items())
@@ -411,7 +411,7 @@ def _ensure_random_seed_exists() -> None:
     random number already; an embedded session started by rpy2 is pristine.
 
     ``set.seed(NULL)`` re-initialises the generator from the clock and process
-    ID, so ``.Random.seed`` exists without pinning a fixed value — results stay
+    ID, so ``.Random.seed`` exists without pinning a fixed value, results stay
     random, and a later :func:`robstattm_py.set_seed` still fully determines
     them.
     """
@@ -482,7 +482,7 @@ def require_r_pkg(name: str) -> None:
     """Ensure an R package is installed *without attaching it* to the search path.
 
     Unlike :func:`r_pkg` (which ``importr``-attaches the package and, with it, any
-    ``Depends:`` packages — e.g. loading ``robustvarComp``/``robcbi`` would attach
+    ``Depends:`` packages, e.g. loading ``robustvarComp``/``robcbi`` would attach
     ``robustbase``, whose ``BYlogreg``/``Mscale``/… then **mask** RobStatTM's own
     versions for unqualified R calls), this only loads the namespace. Callers must
     therefore use namespace-qualified ``pkg::fn`` calls (the external wrappers do).
@@ -512,7 +512,7 @@ def require_r_pkg(name: str) -> None:
 #
 # rpy2 routes all R console output (including warnings) through the module-level
 # callback ``rpy2.rinterface_lib.callbacks.consolewrite_warnerror``. By default
-# that callback just forwards the text to a Python ``logger.warning`` — and,
+# that callback just forwards the text to a Python ``logger.warning`` - and,
 # worse, R *defers* warnings under the default ``options(warn = 0)`` so all the
 # user ever sees is R's opaque summary line ("There were 50 or more warnings").
 #
@@ -523,7 +523,7 @@ def require_r_pkg(name: str) -> None:
 #      fragments, which we then parse into individual messages.
 #
 # The callback layer is below rpy2's Python API, so this covers *every* R call
-# path uniformly — both the :func:`rcall` chokepoint and the many direct
+# path uniformly - both the :func:`rcall` chokepoint and the many direct
 # ``ro.r("...")`` string-evals in ``_s3_methods`` and the external wrappers.
 
 # One warning record may reach the console as several fragments, e.g.
@@ -628,7 +628,7 @@ def r_guard(*, hint: str | None = None, emit_warnings: bool = True):
       * warnings are collected/emitted via :func:`capture_r_warnings`, and
       * any rpy2 ``RRuntimeError`` is converted to :class:`RobStatTMRError`
         (with R's ``geterrmessage()`` attached), matching the behaviour that
-        :func:`rcall` has always provided for fits — now available to the
+        :func:`rcall` has always provided for fits, now available to the
         direct-``ro.r()`` code paths too.
     """
     from rpy2.rinterface_lib.embedded import RRuntimeError
@@ -672,7 +672,7 @@ def rx2(robj: Any, name: str) -> Any:
     rx2 = getattr(robj, "rx2", None)
     if callable(rx2):
         return rx2(name)
-    # NamedList (rpy2.rlike.container) — has .getbyname()
+    # NamedList (rpy2.rlike.container) - has .getbyname()
     getbyname = getattr(robj, "getbyname", None)
     if callable(getbyname):
         return getbyname(name)

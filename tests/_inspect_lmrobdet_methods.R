@@ -12,7 +12,7 @@ print(s$coefficients)
 cat("\n--- summary print output ---\n")
 print(s)
 
-cat("\n===== predict() — type='response' default =====\n")
+cat("\n===== predict(), type='response' default =====\n")
 p_default <- predict(fit)
 cat("length:", length(p_default), "head:\n"); print(head(p_default))
 

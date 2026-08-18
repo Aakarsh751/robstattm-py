@@ -31,14 +31,14 @@ class PrcompRobSummary:
         Robust standard deviations of each principal component
         (echoed from the fit for convenience).
     proportion_of_variance : ndarray, shape (p,)
-        ``round(sdev^2 / sum(sdev^2), 5)`` — rounded by R.
+        ``round(sdev^2 / sum(sdev^2), 5)``, rounded by R.
     cumulative_proportion : ndarray, shape (p,)
         ``round(cumsum(proportion_of_variance), 5)``.
     importance : pandas.DataFrame, shape (3, p)
         Three rows ``"Standard deviation"`` / ``"Proportion of
         Variance"`` / ``"Cumulative Proportion"`` keyed by component
         names. Matches R's ``summary(prcompRob_fit)$importance``
-        verbatim — including the rounding to 5 digits.
+        verbatim, including the rounding to 5 digits.
     component_names : tuple[str, ...]
         Column labels (``"PC 1"`` … ``"PC p"`` in R's convention).
     """
@@ -75,7 +75,7 @@ def summary_of_prcomp(
                             `Cumulative Proportion`  = round(cumsum(vars), 5))
 
     We push ``sdev`` into R, run the same expressions, and read the
-    rounded vectors back — strict-tier identical to R's
+    rounded vectors back, strict-tier identical to R's
     ``summary(prcompRob_fit)$importance`` (including the rounding to 5).
     """
     import pandas as pd

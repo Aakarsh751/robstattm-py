@@ -2,7 +2,7 @@
 
 Exists so the CI workflow can make a real claim about *which* R was used, in a
 way that works identically on all three runner OSes (an inline heredoc does
-not — the Windows runner defaults to PowerShell).
+not, the Windows runner defaults to PowerShell).
 
 The ``--expect-source`` check is the important part. The CI job installs a
 system R and never runs ``robstattm-py setup``, so discovery must land on that

@@ -1,4 +1,4 @@
-"""Chapter 5, Example 5.1 — MM-regression on the mineral data (Figures 5.1-5.7).
+"""Chapter 5, Example 5.1, MM-regression on the mineral data (Figures 5.1-5.7).
 
 Python port of ``mineral.R``. This is the book's flagship regression example.
 
@@ -33,7 +33,7 @@ OUTLIER = 15
 
 
 def main() -> None:
-    section("Chapter 5, Example 5.1 — mineral data")
+    section("Chapter 5, Example 5.1, mineral data")
 
     mineral = rpm.datasets.mineral()
     copper = mineral["copper"].to_numpy(dtype=float)
@@ -52,7 +52,7 @@ def main() -> None:
     # Today's recommended defaults.
     mm_now = rpm.lmrobdet_mm("zinc ~ copper", data=mineral)
 
-    section("Figure 5.1 / 5.4 — the fitted lines")
+    section("Figure 5.1 / 5.4, the fitted lines")
     table(
         "intercept, slope",
         {
@@ -69,7 +69,7 @@ def main() -> None:
         f"  which point to drop."
     )
 
-    section("Table 5.1 — coefficient table for the MM fit")
+    section("Table 5.1, coefficient table for the MM fit")
     print(mm_book.summary())
 
     section("Robust scale and R²")
@@ -82,7 +82,7 @@ def main() -> None:
         {"scale": mm_now.sigma(), "R²": float(mm_now.r_squared)},
     )
 
-    section(f"Figure 5.5 — is observation {OUTLIER} downweighted?")
+    section(f"Figure 5.5, is observation {OUTLIER} downweighted?")
     weights = mm_book.weights()
     table(
         "robustness weight < 0.5 (1-based index)",
@@ -94,13 +94,13 @@ def main() -> None:
         mm_book,
         x="copper",
         show_ols=True,
-        title="Mineral data — MM vs least squares (Figures 5.1, 5.4)",
+        title="Mineral data, MM vs least squares (Figures 5.1, 5.4)",
         save=figure("ch05_mineral_scatter"),
     )
     # Figures 5.2, 5.3, 5.6: residual diagnostics for the robust fit.
     rpm.plot.diagnostics(
         mm_book,
-        title="Mineral data — MM diagnostics (Figures 5.2, 5.3, 5.6)",
+        title="Mineral data, MM diagnostics (Figures 5.2, 5.3, 5.6)",
         save=figure("ch05_mineral_diagnostics"),
     )
 
@@ -108,7 +108,7 @@ def main() -> None:
     # the outlier removed from both so the axes are readable.
     ls_resid = np.abs(zinc - (ls_all[0] + ls_all[1] * copper))
     mm_resid = np.abs(mm_book.resid().to_numpy())
-    section("Figure 5.7 — sorted absolute residuals, LS vs robust")
+    section("Figure 5.7, sorted absolute residuals, LS vs robust")
     table(
         "largest 5 (outlier excluded)",
         {

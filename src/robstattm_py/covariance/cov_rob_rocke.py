@@ -120,7 +120,7 @@ def cov_rob_rocke(
 
     Notes
     -----
-    Use :func:`robstattm_py.set_seed` before calling for reproducibility — the
+    Use :func:`robstattm_py.set_seed` before calling for reproducibility, the
     initial estimator samples random projection directions.
     """
     arr, col_names = validate_2d_numeric(X, name="X")

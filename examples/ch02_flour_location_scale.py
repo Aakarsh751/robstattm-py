@@ -1,4 +1,4 @@
-"""Chapter 2, Table 2.4 — robust location on the flour data.
+"""Chapter 2, Table 2.4, robust location on the flour data.
 
 Python port of ``flour.R`` from RobStatTM's ``inst/scripts/``.
 
@@ -13,7 +13,7 @@ both stay with the bulk of the data.
 
 A note on which psi function: ``flour.R`` calls ``locScaleM(x, eff = 0.95)``
 and then labels the result "bisquare M-estimator", but ``locScaleM``'s default
-psi is ``"mopt"``, not bisquare — the label predates the change of default. Both
+psi is ``"mopt"``, not bisquare, the label predates the change of default. Both
 are printed below so the numbers can be matched against either the script's
 actual output or the book's Table 2.4.
 
@@ -32,7 +32,7 @@ def trimmed_mean(x: np.ndarray, alpha: float) -> tuple[float, float]:
 
     Direct transcription of the ``trimean`` helper defined inside ``flour.R``.
     It is written out in the R script rather than taken from a package, so it
-    is written out here too — the variance formula below is the one the book
+    is written out here too, the variance formula below is the one the book
     uses, not ``scipy.stats.trim_mean``'s.
     """
     n = len(x)
@@ -47,7 +47,7 @@ def trimmed_mean(x: np.ndarray, alpha: float) -> tuple[float, float]:
 
 
 def main() -> None:
-    section("Chapter 2 — flour data: mean vs M-estimator vs trimmed mean")
+    section("Chapter 2, flour data: mean vs M-estimator vs trimmed mean")
 
     flour = rpm.datasets.flour()
     x = flour.iloc[:, 0].to_numpy(dtype=float)
@@ -110,7 +110,7 @@ def main() -> None:
     )
 
     # A picture of why: the M-estimate sits on the mode, the mean does not.
-    rpm.plot.location_scale(res, x, title="Flour data — robust vs classical location",
+    rpm.plot.location_scale(res, x, title="Flour data, robust vs classical location",
                             save=figure("ch02_flour_location"))
 
 

@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for reporting. The single most useful thing you can include is
-        the output of `robstattm-py doctor --json` — it captures your Python,
+        the output of `robstattm-py doctor --json`, it captures your Python,
         rpy2, R, the full R-discovery trace, and every installed R package
         version in one go.
 
@@ -49,7 +49,7 @@ body:
       label: Smallest example that reproduces it
       description: >
         If you can reproduce it with one of the built-in datasets
-        (`rpm.datasets.mineral()` and friends), that is ideal — it means we can
+        (`rpm.datasets.mineral()` and friends), that is ideal, it means we can
         run it too. Otherwise describe the shape of your data.
       render: python
 

@@ -57,7 +57,7 @@ def _restore_integer_na(df: pd.DataFrame) -> pd.DataFrame:
 
     Without this, an integer column containing ``NA`` silently arrives as
     ``-2147483648``. Nothing raises, nothing warns, and every downstream number
-    is wrong — ``mean()``, ``dropna()``, ``min()`` and any fit that touches the
+    is wrong, ``mean()``, ``dropna()``, ``min()`` and any fit that touches the
     column. It was found via ``WWGbook::autism``, where two missing ``vsae``
     scores made a 41-child subset come out as 42 and left the estimator
     complaining about mismatched lengths rather than about the data.
@@ -125,7 +125,7 @@ def _make_loader(r_name: str, py_name: str, chapter: int | None, desc: str) -> C
 
     loader.__name__ = py_name
     loader.__qualname__ = f"datasets.{py_name}"
-    chapter_str = f"Chapter {chapter}" if chapter else "—"
+    chapter_str = f"Chapter {chapter}" if chapter else "-"
     loader.__doc__ = (
         f"{desc}.\n\n"
         f"From RobStatTM (R name: ``{r_name}``). {chapter_str} of Maronna et al. (2019).\n\n"
@@ -156,7 +156,7 @@ def load(package: str, name: str) -> pd.DataFrame:
     ``data(<name>, package="<package>")`` and returns the result as a
     pandas DataFrame.  Use this for datasets the textbook references
     that live in *other* packages (``robustbase``, ``MASS``, ``boot``,
-    ...) — the 20 RobStatTM-native datasets have their own named
+    ...), the 20 RobStatTM-native datasets have their own named
     loaders (``datasets.mineral()``, etc.) and should be preferred
     when applicable because they cache and carry R-name metadata.
 
@@ -233,7 +233,7 @@ def info(name: str) -> str:
     """Return a one-line description of a dataset.
 
     Deliberately plain ASCII. This string's whole purpose is to be printed, and
-    a Windows console defaults to cp1252 when stdout is a pipe — the ``~=`` used
+    a Windows console defaults to cp1252 when stdout is a pipe, the ``~=`` used
     to be ``≈``, which is outside cp1252, so ``print(datasets.info("mineral"))``
     raised ``UnicodeEncodeError`` rather than telling anyone about the dataset.
     See ``tests/datasets/test_printable.py``.

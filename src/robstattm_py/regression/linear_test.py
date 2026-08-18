@@ -14,7 +14,7 @@ from robstattm_py.regression.lmrobdet_mm import LmrobdetMMResult
 
 #: R fitter to replay each result type with. ``rob.linear.test`` accepts both
 #: (``R/lmrobdet.R``: ``'lmrobdetMM' %in% class(.) | 'lmrobM' %in% class(.)``),
-#: and the R help page's own example for it uses ``lmrobM`` — as does the book's
+#: and the R help page's own example for it uses ``lmrobM`` - as does the book's
 #: Example 4.2. Refitting an M fit as MM would silently test a different pair of
 #: models, so the mapping is on the result class rather than assumed.
 _R_FITTER = {

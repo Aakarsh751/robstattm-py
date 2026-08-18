@@ -28,7 +28,7 @@ def cov_rob(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `X` | — | *required* | a data matrix with observations in rows. |
+| `X` | n/a | *required* | a data matrix with observations in rows. |
 | `type` | Literal['auto', 'MM', 'Rocke'] | `"auto"` | a string indicating which estimator to compute. Valid options are "Rocke" for Rocke's S-estimator, "MM" for an MM-estimator with a SHR rho function, or "auto" (default) which selects "Rocke" if the number of variables is greater than or equal to 10, and "MM" otherwise. |
 | `maxit` | int | `50` | Maximum number of iterations, defaults to 50. |
 | `tol` | float | `0.0001` | Tolerance for convergence, defaults to 1e-4. |
@@ -50,11 +50,11 @@ A `CovRobResult` object. Its attributes mirror the fields of the R
 | `wts` | wts | weights |
 | `mu` | mu | The location estimate. Same as `center` above. |
 | `v` | V | The scatter matrix estimate, scaled for consistency at the normal distribution. Same as `cov` above. |
-| `estimator_type` | — | `"MM"` or `"Rocke"` — which sub-estimator R chose / was forced. |
-| `column_names` | — | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
+| `estimator_type` | n/a | `"MM"` or `"Rocke"`  -  which sub-estimator R chose / was forced. |
+| `column_names` | n/a | Names of the input variables (columns of the input data), aligned with the rows/columns of the estimates. |
 
 
-> **R fields not surfaced in Python** — the R `covRob` list also contains
+> **R fields not surfaced in Python.** The R `covRob` list also contains
 > `call`.
 > These echo the inputs or are R-internal scaffolding; reach them via
 > `result._r_fit` for an `rpy2` round-trip if you need them.
@@ -110,8 +110,8 @@ print(round(fit$center, 2))
 
 ## See also
 
-- [`cov_rob_rocke`](cov_rob_rocke.md) — Python wrapper for R `covRobRocke`
-- [`cov_rob_mm`](cov_rob_mm.md) — Python wrapper for R `covRobMM`
+- [`cov_rob_rocke`](cov_rob_rocke.md), Python wrapper for R `covRobRocke`
+- [`cov_rob_mm`](cov_rob_mm.md), Python wrapper for R `covRobMM`
 
 
 
@@ -129,5 +129,5 @@ R implementation by Ricardo Maronna, <rmaronna@retina.ar>. Python wrapper: RobSt
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `covRob`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

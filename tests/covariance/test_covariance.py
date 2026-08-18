@@ -31,7 +31,7 @@ class TestValidation:
 
 
 # ---------------------------------------------------------------------------
-# cov_classic — fully deterministic, strict tier vs R
+# cov_classic - fully deterministic, strict tier vs R
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -115,7 +115,7 @@ class TestCovClassicNaActionAndArgs:
 
 
 # ---------------------------------------------------------------------------
-# cov_rob_mm — stochastic; needs set_seed for parity
+# cov_rob_mm - stochastic; needs set_seed for parity
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -166,7 +166,7 @@ class TestCovRobMM:
 
     def test_cov_symmetric(self, setup):
         # R's covRobMM/covRobRocke output is symmetric only to machine precision
-        # (not exactly), so this property check uses a loose tolerance — strict
+        # (not exactly), so this property check uses a loose tolerance - strict
         # R↔Python parity is still enforced by the test_cov tests above.
         py = setup
         np.testing.assert_allclose(py.cov, py.cov.T, atol=1e-12, rtol=0)
@@ -178,7 +178,7 @@ class TestCovRobMM:
 
 
 # ---------------------------------------------------------------------------
-# cov_rob_rocke — stochastic
+# cov_rob_rocke - stochastic
 # ---------------------------------------------------------------------------
 
 @needs_r
@@ -220,14 +220,14 @@ class TestCovRobRocke:
 
     def test_cov_symmetric(self, setup):
         # R's covRobMM/covRobRocke output is symmetric only to machine precision
-        # (not exactly), so this property check uses a loose tolerance — strict
+        # (not exactly), so this property check uses a loose tolerance - strict
         # R↔Python parity is still enforced by the test_cov tests above.
         py = setup
         np.testing.assert_allclose(py.cov, py.cov.T, atol=1e-12, rtol=0)
 
 
 # ---------------------------------------------------------------------------
-# Smaller synthetic dataset — pure deterministic input, low p
+# Smaller synthetic dataset - pure deterministic input, low p
 # ---------------------------------------------------------------------------
 
 @needs_r

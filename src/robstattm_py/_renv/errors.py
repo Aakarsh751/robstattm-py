@@ -11,7 +11,7 @@ class carrying three things:
     ``docs/guides/troubleshooting.md`` and asserted by
     ``tests/renv/test_errors.py``.
 ``remedy``
-    A concrete next action for the user. Never ``None`` — if we cannot suggest
+    A concrete next action for the user. Never ``None``, if we cannot suggest
     anything better than "report a bug", we say that explicitly.
 
 All of these subclass :class:`~robstattm_py.RobStatTMSetupError`, so existing
@@ -69,7 +69,7 @@ class RenvError(RobStatTMSetupError):
     remedy : str, optional
         What the user should do about it. Falls back to the class default.
     detail : str, optional
-        Supporting evidence — a discovery trace, the tail of a build log, the
+        Supporting evidence, a discovery trace, the tail of a build log, the
         offending path. Printed after the message, never inside it.
     """
 
@@ -151,7 +151,7 @@ class ArchMismatchError(RenvError):
     """R's architecture differs from the running Python's.
 
     This is fatal *by design*. Handing rpy2 an R shared library built for a
-    different architecture does not raise — it crashes the interpreter — so the
+    different architecture does not raise, it crashes the interpreter, so the
     candidate is rejected before rpy2 ever sees it.
     """
 

@@ -1,4 +1,4 @@
-"""Robust elastic-net S/MM estimator — wraps the external ``pense`` package.
+"""Robust elastic-net S/MM estimator, wraps the external ``pense`` package.
 
 Maronna et al. (2019) §5.1. Penalized S-estimator with an elastic-net penalty
 (MM-lasso is the ``alpha=1`` special case). Requires the CRAN package
@@ -6,8 +6,8 @@ Maronna et al. (2019) §5.1. Penalized S-estimator with an elastic-net penalty
 
 Two entry points, mirroring the R API (pense ≥ 2.x):
 
-* :func:`pense`     — fit the full regularization path (``pense::pense``)
-* :func:`pense_cv`  — fit with k-fold cross-validation (``pense::pense_cv``)
+* :func:`pense`     - fit the full regularization path (``pense::pense``)
+* :func:`pense_cv`  - fit with k-fold cross-validation (``pense::pense_cv``)
 
 Coefficients are extracted exactly as the R user would: via the package's
 ``coef()`` method at each lambda (path) or at ``lambda="min"`` (CV). This
@@ -161,7 +161,7 @@ def pense(
     r_pkg("pense")  # ensure installed/attached
     ro = r()
 
-    # Fit *inside* R so the S3 class survives for coef() dispatch — the
+    # Fit *inside* R so the S3 class survives for coef() dispatch - the
     # auto-conversion context strips class info when an R object is held in
     # Python and pushed back to globalenv (see discoveries.md).
     ro.globalenv["rpm_pense_x"] = arr

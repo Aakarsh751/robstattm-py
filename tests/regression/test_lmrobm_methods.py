@@ -1,7 +1,7 @@
 """Strict-tier tests for S3 methods on LmrobMResult (summary/predict/hatvalues).
 
 lmrobM dispatches to summary.lmrobdetMM / predict.lmrob / hatvalues.lmrob,
-so the schema and parity story is identical to LmrobdetMMResult — but the
+so the schema and parity story is identical to LmrobdetMMResult, but the
 underlying fit is different, so we verify here too.
 """
 from __future__ import annotations

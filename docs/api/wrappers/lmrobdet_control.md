@@ -110,7 +110,7 @@ coef(fit)
 
 ## See also
 
-- [`m_scale`](m_scale.md) — Python wrapper for R `scaleM`
+- [`m_scale`](m_scale.md), Python wrapper for R `scaleM`
 
 
 
@@ -124,5 +124,5 @@ R implementation by Matias Salibian-Barrera, <matias@stat.ubc.ca>. Python wrappe
 
 > **Bit-for-bit equivalence.** This wrapper calls the original R `lmrobdet.control`
 > through `rpy2`, so every returned value is validated against R at the strict
-> tier (`atol=0`, `rtol=0`) — byte-identical given the same inputs and seed.
+> tier (`atol=0`, `rtol=0`): byte-identical given the same inputs and seed.
 > See `tests/` for the strict-tier suite.

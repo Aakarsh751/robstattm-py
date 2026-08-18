@@ -2,9 +2,9 @@
 
 The expensive parts (an actual ``micromamba create``) are covered by the
 ``provision.yml`` CI workflow on genuinely clean machines. What is tested here
-is everything that can go wrong *before* the network is touched — the package
+is everything that can go wrong *before* the network is touched, the package
 specification, the command line, environment isolation, state transitions, and
-the locking — because those are the parts that silently drift.
+the locking, because those are the parts that silently drift.
 """
 from __future__ import annotations
 

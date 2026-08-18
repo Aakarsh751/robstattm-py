@@ -163,7 +163,7 @@ def _rpy2_facts() -> tuple[str | None, str | None, str | None]:
     """Return ``(version, cffi_mode, r_home)`` for the installed rpy2.
 
     Reads ``sys.modules`` for the binding details rather than importing
-    ``openrlib`` — importing it would itself load R, which is precisely what a
+    ``openrlib``, importing it would itself load R, which is precisely what a
     diagnostic must not do as a side effect. Call this *after* R has been
     started if you want the binding mode to be populated.
     """

@@ -9,22 +9,22 @@ package's example scripts, all built on `robstattm_py`.
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Aakarsh751/robstattm-py/blob/main/notebooks/colab_smoke_test.ipynb)
 
 `colab_smoke_test.ipynb` installs the package on a fresh Google Colab runtime,
-provisions R, and exercises the whole surface — then prints a
+provisions R, and exercises the whole surface, then prints a
 copy-pasteable report. It takes 6–10 minutes, most of it downloading R.
 
 It is a **test**, not a tutorial: every cell prints enough to diagnose a failure
 from the output alone, and several cells assert. It is deliberately excluded
 from `tests/test_notebooks.py` (see `_NOT_FOR_CI` there) because it clones the
-repository and downloads ~400 MB — the point of it is to check an environment CI
+repository and downloads ~400 MB, the point of it is to check an environment CI
 does not resemble.
 
 Regenerate it from `_build_colab_smoke_test.py` rather than editing the JSON.
 
 > **Notebooks or [`examples/`](../examples/)?** Both cover the same 25 R
-> scripts, differently. `examples/` is **one Python script per R script** — go
+> scripts, differently. `examples/` is **one Python script per R script**, go
 > there to port a specific R script, or to run one from a terminal. The
 > galleries here are **one notebook per book chapter**, consolidating several
-> scripts with figures rendered inline — go here to read a chapter's worth of
+> scripts with figures rendered inline, go here to read a chapter's worth of
 > material with the plots visible. Neither is a subset of the other, and both
 > are executed in CI.
 
@@ -47,9 +47,9 @@ figures are visual-only.
 
 | Notebook | Story |
 |---|---|
-| `01_quickstart.ipynb` | "Robust regression for tomorrow's analysis" — mineral data |
-| `02_outlier_detection.ipynb` | "Find multivariate outliers" — wine masking effect |
-| `03_from_R.ipynb` | "Port my R scripts" — side-by-side R↔Python cheatsheet |
+| `01_quickstart.ipynb` | "Robust regression for tomorrow's analysis", mineral data |
+| `02_outlier_detection.ipynb` | "Find multivariate outliers", wine masking effect |
+| `03_from_R.ipynb` | "Port my R scripts", side-by-side R↔Python cheatsheet |
 
 ## Flagship reproductions
 
@@ -57,8 +57,8 @@ figures are visual-only.
 |---|---|---|
 | `ch5_mineral.ipynb` | `mineral.R` (`lmrobdetMM`) | 5.1–5.7 |
 | `ch6_wine.ipynb` | `wine.R` (`covRobMM`, `pcaRobS`) | 6.3 + scree |
-| `external_demo.ipynb` | `pense` / `gse` / `tsgs` stretch wrappers | — |
-| `ui_demo.ipynb` | full user-facing API tour | — |
+| `external_demo.ipynb` | `pense` / `gse` / `tsgs` stretch wrappers |, |
+| `ui_demo.ipynb` | full user-facing API tour |, |
 
 ## Chapter galleries (`gallery/`)
 
@@ -91,15 +91,15 @@ epilepsy, ch8 time series).
 
 **None.** As of **D-024** (2026-06-21), all **26/26** `robstattm/examples-scripts/`
 scripts are reproduced from Python. The eight that previously blocked on external
-packages — `autism.R` (`robustvarComp`), `epilepsy.R` (`robustbase::glmrob` +
+packages, `autism.R` (`robustvarComp`), `epilepsy.R` (`robustbase::glmrob` +
 `robcbi::cubinf`), and the six Chapter-8 time-series scripts (`resex.R`, `ar3.R`,
-`identAR2.R`, `identMA1.R`, `MA1-AO.R`, `ar1.R`, all `robustarima`) — are now
+`identAR2.R`, `identMA1.R`, `MA1-AO.R`, `ar1.R`, all `robustarima`), are now
 covered by the optional `robstattm_py.external` wrappers and the galleries above.
-This **closes B-007** (the Chapter-8 "inline time-series code" worry was moot —
+This **closes B-007** (the Chapter-8 "inline time-series code" worry was moot,
 `arima.rob` is a real exported entry point in `robustarima`).
 
 Comparators that several scripts call only as a *non-robust baseline* (e.g.
 `quantreg::rq`, `robust::glmRob`, `rrcov::CovMcd`/`CovSest`, the `fit.models`
 framework, and the MATLAB-only `epiMP` estimator in `epilepsy.R`) are dropped,
-documented as constants, or reproduced via direct R in the notebook — not exposed
+documented as constants, or reproduced via direct R in the notebook, not exposed
 as new Python wrappers.

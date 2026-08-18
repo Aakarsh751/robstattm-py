@@ -10,14 +10,14 @@ exploration directory on ``sys.path``::
 
 Design notes
 ------------
-* Data synthesis uses ``numpy.random.default_rng(seed)`` — a stream that is
+* Data synthesis uses ``numpy.random.default_rng(seed)`` - a stream that is
   **independent of R's Mersenne-Twister**. So the synthetic data is fully
   determined by ``seed`` regardless of any ``rpm.set_seed`` call. Estimator
   stochasticity (subsampling, random projections) lives in *R's* RNG, which the
   tests seed separately on both sides via ``rpm.set_seed`` / ``set.seed``.
 * float64 numpy → R double and float64 pandas columns → R data.frame doubles are
   exact (IEEE-754), so pushing the *same* array to both sides gives bit-identical
-  inputs — a precondition for the strict (``atol=0, rtol=0``) comparisons.
+  inputs, a precondition for the strict (``atol=0, rtol=0``) comparisons.
 """
 from __future__ import annotations
 

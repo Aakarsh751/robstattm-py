@@ -2,7 +2,7 @@ import robstattm_py as rpm
 
 wine = rpm.datasets.wine()
 
-# The classical (non-robust) mean and covariance — handy as a baseline to
+# The classical (non-robust) mean and covariance, handy as a baseline to
 # compare against the robust estimators (cov_rob_mm, cov_rob_rocke).
 fit = rpm.cov_classic(wine)
 

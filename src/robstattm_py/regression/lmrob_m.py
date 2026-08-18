@@ -79,12 +79,12 @@ class LmrobMResult:
         return pd.Series(self.coefficients, index=list(self.coef_names), name="coef")
 
     # ----- S3 method ports (per project_memory/decisions.md D-012) -----
-    # lmrobM's class is ``c("lmrobM", "lmrobdetMM")`` — does NOT inherit
+    # lmrobM's class is ``c("lmrobM", "lmrobdetMM")`` - does NOT inherit
     # from ``lmrob``, so robustbase's ``predict.lmrob`` / ``hatvalues.lmrob``
     # refuse to dispatch. RobStatTM ships no replacements either.
     #
     # Workaround (preserves strict-tier bit-equality): we compute predict
-    # and hatvalues from the underlying R primitives — ``model.matrix() %*%
+    # and hatvalues from the underlying R primitives - ``model.matrix() %*%
     # coef`` and ``diag(Q Q')`` of ``qr(sqrt(rweights) * X)`` respectively.
     # Both verified ``identical()`` on lmrobdetMM fits where R does
     # provide the S3 dispatch.
@@ -104,7 +104,7 @@ class LmrobMResult:
         hierarchy. Bit-for-bit identical to ``predict.lmrob`` on the MM
         family (verified).
 
-        Note: ``se.fit`` is not supported — the lmrobM fit does not carry
+        Note: ``se.fit`` is not supported, the lmrobM fit does not carry
         the qr decomposition needed for prediction standard errors.
         """
         return predict_manual(
@@ -237,7 +237,7 @@ def lmrob_m(
         r_squared=extract_float(rx2(rfit, "r.squared")),
         formula=formula,
         _r_fit=rfit,
-        # Defensive copy — see LmrobdetMMResult: the refit-based S3 methods
+        # Defensive copy - see LmrobdetMMResult: the refit-based S3 methods
         # read this frame back, so snapshot it against later caller mutation.
         _data=data.copy(),
         _r_control=r_control,

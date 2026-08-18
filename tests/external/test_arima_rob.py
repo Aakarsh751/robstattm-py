@@ -16,7 +16,7 @@ from tests.conftest import needs_robustarima
 
 @needs_robustarima
 class TestResex:
-    """resex.R — robustarima::arima.rob(resex ~ 1, p=2, sd=1, sfreq=12)."""
+    """resex.R, robustarima::arima.rob(resex ~ 1, p=2, sd=1, sfreq=12)."""
 
     @pytest.fixture
     def setup(self, R):
@@ -66,7 +66,7 @@ class TestResex:
 
 @needs_robustarima
 class TestAR3:
-    """ar3.R — robustarima::arima.rob(ar3 ~ 1, p=3) on a seeded AR(3) simulation."""
+    """ar3.R, robustarima::arima.rob(ar3 ~ 1, p=3) on a seeded AR(3) simulation."""
 
     @pytest.fixture
     def setup(self, R):
@@ -96,7 +96,7 @@ class TestAR3:
 
 @needs_robustarima
 class TestMA1AO:
-    """MA1-AO.R — robustarima::arima.rob(mac ~ 1, q=1) on a seeded MA(1)+AO simulation."""
+    """MA1-AO.R, robustarima::arima.rob(mac ~ 1, q=1) on a seeded MA(1)+AO simulation."""
 
     @pytest.fixture
     def setup(self, R):
@@ -127,7 +127,7 @@ class TestMA1AO:
 
 @needs_robustarima
 class TestAutoAR:
-    """identAR2.R — robustarima::arima.rob(y ~ 1, auto.ar=TRUE) (may warn; numbers still match)."""
+    """identAR2.R, robustarima::arima.rob(y ~ 1, auto.ar=TRUE) (may warn; numbers still match)."""
 
     @pytest.fixture
     def setup(self, R):

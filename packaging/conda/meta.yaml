@@ -1,0 +1,74 @@
+{% set name = "robstattm-py" %}
+{% set version = "0.1.0" %}
+
+# conda-forge recipe for robstattm-py.
+#
+# This is a DRAFT, kept in the repo so the conda-forge submission is a copy
+# step rather than a from-scratch write. Two things must be filled in once the
+# first release is on PyPI (see packaging/conda/README.md):
+#   1. the `sha256` of the published sdist, and
+#   2. confirmation that every R run-dependency below has a conda-forge build
+#      on the target platforms (r-pyinit is the one to check).
+#
+# The package itself is pure Python (no compiled extensions), so it is
+# `noarch: python`; the platform-specific pieces come in through rpy2 and the
+# r-* dependencies, which conda-forge resolves per platform.
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/robstattm_py-{{ version }}.tar.gz
+  sha256: 0000000000000000000000000000000000000000000000000000000000000000  # TODO: fill from PyPI after first publish
+
+build:
+  noarch: python
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  entry_points:
+    - robstattm-py = robstattm_py.cli._main:main
+
+requirements:
+  host:
+    - python >=3.10
+    - pip
+    - setuptools >=77.0.3
+  run:
+    - python >=3.10
+    - rpy2 >=3.6
+    - numpy >=1.24
+    - pandas >=2.0
+    - packaging >=23
+    # R itself and the wrapped package. r-robstattm pulls r-base and the core
+    # R dependencies (robustbase, rrcov). pyinit is used by several estimators;
+    # add r-pyinit here once its conda-forge build covers the target platforms.
+    - r-robstattm
+    - r-robustbase
+    - r-rrcov
+
+test:
+  imports:
+    - robstattm_py
+  commands:
+    # Import-only smoke test: the CLI help works without provisioning R, so it
+    # runs on conda-forge CI. A real fit is exercised by the project's own suite.
+    - robstattm-py --help
+    - python -c "import robstattm_py"
+
+about:
+  home: https://github.com/Aakarsh751/robstattm-py
+  summary: Python wrappers for the RobStatTM robust-statistics R package
+  description: |
+    RobStatTM-Py gives Python users the robust estimators from the RobStatTM R
+    package (MM-regression, robust covariance, robust PCA, robust GLM, and
+    M-estimators of location and scale) through a Pythonic API. Every function
+    calls the original R routine through rpy2, so results are byte-identical to R.
+  license: MIT
+  license_file: LICENSE
+  doc_url: https://aakarsh751.github.io/robstattm-py/
+  dev_url: https://github.com/Aakarsh751/robstattm-py
+
+extra:
+  recipe-maintainers:
+    - Aakarsh751

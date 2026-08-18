@@ -46,3 +46,9 @@ MTesSpl*.rda
 
 # pytest logs written by `pytest ... | Tee-Object`
 dev/_*.txt
+
+# pytest logs written by `pytest ... | Tee-Object` (also .log)
+dev/_*.log
+
+# uv build output
+dist_uv/

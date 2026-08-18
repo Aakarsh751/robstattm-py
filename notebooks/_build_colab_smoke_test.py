@@ -87,11 +87,18 @@ except Exception as exc:
 md("""
 ## 1 - Install
 
-Not on PyPI yet, so this installs from the repository. `-q` keeps the output
-short; drop it if the install itself is what fails.
+First reinstall `rpy2` as a consistent set. Colab and Kaggle sometimes ship the
+three rpy2 3.6 distributions (`rpy2`, `rpy2-rinterface`, `rpy2-robjects`) at
+mismatched versions, which makes `import rpy2.robjects` fail with
+*cannot import name 'default_converter' ... (unknown location)*. A single
+force-reinstall pulls a matching set, compiled against Colab's own R.
+
+Then install the package. Not on PyPI yet, so this installs from the repository.
+`-q` keeps the output short; drop it if the install itself is what fails.
 """)
 
 code(f'''
+!pip install -q --force-reinstall --no-cache-dir rpy2 2>&1 | tail -3
 !git clone --depth 1 {REPO} /content/robstattm-py 2>&1 | tail -2
 !pip install -q /content/robstattm-py 2>&1 | tail -5
 

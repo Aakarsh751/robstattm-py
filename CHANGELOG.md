@@ -6,7 +6,7 @@ Notable changes to RobStatTM-Py. Format based on
 
 ## [0.1.0], 2026-08-18
 
-First release published to PyPI.
+First public release.
 
 ### Added
 

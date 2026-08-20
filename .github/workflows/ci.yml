@@ -82,6 +82,19 @@ jobs:
           ))
         shell: Rscript {0}
 
+      # The comparison stack, on one leg only. robstattm_py.compare() delegates
+      # to the sibling package fitmodels-py, which wraps the CRAN `fit.models`
+      # framework. Without both installed, the compare() tests skip (needs_
+      # fitmodels in tests/conftest.py) and the fit.models side-by-side path is
+      # never exercised in CI. Installing them here on ubuntu/py3.12 turns those
+      # skips into real runs; the model-wrapper parity tests run on every leg
+      # regardless. Non-fatal, so a hiccup fetching either cannot fail the build.
+      - name: Install comparison stack (fit.models, one leg)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+        continue-on-error: true
+        run: install.packages("fit.models")
+        shell: Rscript {0}
+
       # Deliberately NOT exporting R_HOME. This job's purpose is now twofold:
       # prove the wrappers work, and prove that R auto-detection finds a
       # system R unaided on each OS. Setting R_HOME would short-circuit the
@@ -91,6 +104,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,examples]"
+
+      # Sibling package for robstattm_py.compare(); installed on the same one
+      # leg as the R fit.models package above so the compare() tests run instead
+      # of skipping. Non-fatal for the same reason.
+      - name: Install fitmodels-py (comparison stack, one leg)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+        continue-on-error: true
+        run: pip install "fitmodels-py @ git+https://github.com/Aakarsh751/fitmodels-py.git"
 
       # Lint was documented in CONTRIBUTING but never actually enforced, so it
       # had accumulated ~790 findings across the repo, including an undefined

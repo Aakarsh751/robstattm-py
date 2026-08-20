@@ -3,14 +3,22 @@ from __future__ import annotations
 
 import importlib.util
 
+import numpy as np
+import pandas as pd
 import pytest
 
 import robstattm_py as rpm
-from tests.conftest import needs_r
+from tests.conftest import _r_pkg_available, needs_r
 
 needs_fitmodels = pytest.mark.skipif(
     importlib.util.find_spec("fitmodels_py") is None,
     reason="sibling package fitmodels-py not installed",
+)
+needs_fitmodels_r = pytest.mark.skipif(
+    not _r_pkg_available("fit.models"), reason="R package 'fit.models' unavailable"
+)
+needs_robustbase = pytest.mark.skipif(
+    not _r_pkg_available("robustbase"), reason="R package 'robustbase' unavailable"
 )
 
 
@@ -109,6 +117,38 @@ class TestCompareCovfm:
         center = cmp.center()
         assert list(center.index) == ["Classical", "Robust"]
         assert set(cmp.cov()) == {"Classical", "Robust"}
+
+    def test_summary_lines_up_both(self, cmp):
+        text = str(cmp.summary())
+        assert "Classical" in text and "Robust" in text
+
+
+@needs_r
+@needs_fitmodels
+@needs_fitmodels_r
+@needs_robustbase
+class TestCompareGlmfm:
+    """Classical glm vs robust glmrob -> a glmfm."""
+
+    @pytest.fixture(scope="class")
+    def cmp(self):
+        rpm.set_seed(0)
+        x = np.linspace(-1, 1, 60)
+        rng = np.random.default_rng(0)
+        y = rng.poisson(np.exp(0.5 + 0.8 * x)).astype(float)
+        y[5] = 40.0  # an outlier the robust fit should resist
+        df = pd.DataFrame({"y": y, "x": x})
+        classical = rpm.glm("y ~ x", data=df, family="poisson")
+        robust = rpm.glmrob("y ~ x", data=df, family="poisson")
+        return rpm.compare(Classical=classical, Robust=robust)
+
+    def test_is_glmfm(self, cmp):
+        assert cmp.fm_class == "glmfm"
+        assert list(cmp.models) == ["Classical", "Robust"]
+
+    def test_coef_surface(self, cmp):
+        coefs = cmp.coef()
+        assert list(coefs.index) == ["Classical", "Robust"]
 
     def test_summary_lines_up_both(self, cmp):
         text = str(cmp.summary())

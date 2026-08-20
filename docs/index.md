@@ -105,6 +105,7 @@ guides/datasets
 guides/psi-families
 guides/utilities
 guides/result-methods
+guides/comparison
 guides/plotting
 guides/external
 guides/book-examples

@@ -83,6 +83,24 @@ from robstattm_py.external.var_comprob import (
 )
 from robstattm_py.external.glmrob import GlmrobResult, glmrob
 from robstattm_py.external.cubinf import CubinfResult, cubinf
+# Comparison models (non-RobStatTM baselines: lm/glm/lts/rlm/lmrob) + fit.models facade
+from robstattm_py.comparison import (
+    Comparison,
+    ComparisonPrediction,
+    ComparisonSummary,
+    GlmResult,
+    LmResult,
+    LmrobResult,
+    LtsResult,
+    RlmResult,
+    compare,
+    glm,
+    lm,
+    lmrob,
+    lts_reg,
+    rlm,
+)
+from robstattm_py import comparison
 from robstattm_py import datasets, plot, plotting, psi, bench, external
 
 # Attach to_dict / to_r / _repr_html_ / coef_df to every result dataclass
@@ -179,6 +197,22 @@ __all__ = [
     "glmrob",
     "CubinfResult",
     "cubinf",
+    # comparison models (lm/glm/lts/rlm/lmrob + compare)
+    "lm",
+    "LmResult",
+    "glm",
+    "GlmResult",
+    "rlm",
+    "RlmResult",
+    "lts_reg",
+    "LtsResult",
+    "lmrob",
+    "LmrobResult",
+    "compare",
+    "Comparison",
+    "ComparisonSummary",
+    "ComparisonPrediction",
+    "comparison",
     # submodules
     "datasets",
     "plot",

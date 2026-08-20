@@ -51,6 +51,10 @@ robstattm-py = "robstattm_py.cli._main:main"
 [project.optional-dependencies]
 plots = ["matplotlib>=3.7", "plotnine>=0.13"]
 benchmarks = ["scikit-learn>=1.3", "statsmodels>=0.14"]
+# The fit.models side-by-side view (robstattm_py.compare) delegates to the
+# sibling package. The comparison *wrappers* (lm/glm/rlm/lts_reg/lmrob) and
+# every result's own .summary() work without it; only compare() needs it.
+compare = ["fitmodels-py>=0.1"]
 # Everything needed to execute the example notebooks end-to-end (tests/test_notebooks.py).
 # scipy/matplotlib/plotnine are used by the notebooks, not by the package itself,
 # so they are intentionally NOT runtime dependencies.

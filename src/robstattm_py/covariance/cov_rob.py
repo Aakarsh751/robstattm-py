@@ -68,6 +68,9 @@ class CovRobResult:
     estimator_type: str
     column_names: tuple[str, ...] | None = None
     _r_fit: Any = field(default=None, repr=False, compare=False)
+    # Original input, kept so robstattm_py.compare() can refit this as a live
+    # covfm member (the converted _r_fit has lost its S3 class).
+    _data: Any = field(default=None, repr=False, compare=False)
 
     def __repr__(self) -> str:
         p = self.center.shape[0]
@@ -191,4 +194,5 @@ def cov_rob(
         estimator_type=resolved_type,
         column_names=col_names,
         _r_fit=rfit,
+        _data=X,
     )

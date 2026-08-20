@@ -216,6 +216,11 @@ def install_result_mixins() -> None:
 
     # Lazy imports to avoid circular import (this module is imported by
     # __init__ which imports the wrapper modules below).
+    from robstattm_py.comparison.glm import GlmResult
+    from robstattm_py.comparison.lm import LmResult
+    from robstattm_py.comparison.lmrob import LmrobResult
+    from robstattm_py.comparison.lts import LtsResult
+    from robstattm_py.comparison.rlm import RlmResult
     from robstattm_py.covariance.cov_classic import CovClassicResult
     from robstattm_py.covariance.cov_rob import CovRobResult
     from robstattm_py.covariance.cov_rob_mm import CovRobMMResult
@@ -249,10 +254,11 @@ def install_result_mixins() -> None:
         LogregResult, LocScaleMResult,
         PenseResult, PenseCVResult, GSEResult, TSGSResult,
         ArimaRobResult, VarComprobResult, GlmrobResult, CubinfResult,
+        LmResult, GlmResult, RlmResult, LtsResult, LmrobResult,
     ]
     regression_results = {
         LmrobdetMMResult, LmrobdetDCMLResult, LmrobMResult, PyinitResult,
-        LogregResult,
+        LogregResult, LmResult, GlmResult, RlmResult, LtsResult, LmrobResult,
     }
     # Diagnostic plotting only works on lmrob* fits (need formula+data).
     diag_plot_results = {LmrobdetMMResult, LmrobdetDCMLResult, LmrobMResult}

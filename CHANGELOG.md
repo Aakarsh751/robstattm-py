@@ -4,6 +4,28 @@ Notable changes to RobStatTM-Py. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Comparison models (`robstattm_py.comparison`).** Native wrappers for the
+  non-RobStatTM estimators you want as a baseline for a robust fit:
+  `lm` (`stats::lm`), `glm` (`stats::glm`), `rlm` (`MASS::rlm`),
+  `lts_reg` (`robustbase::ltsReg`) and `lmrob` (`robustbase::lmrob`). Each
+  returns a native Python result whose `.summary()` ports the matching R
+  `summary.*` (keeping R's own column names), plus `.coef()`, `.predict()`,
+  `.vcov()`, `.confint()`, `.resid()`, `.fitted()` and `.to_r()`. This answers
+  the mentor request for `summary.lm` next to `summary.lmrobdetMM`, and gives
+  the robust logistic regressions a classical `glm` baseline.
+- **`compare()`, R's `fit.models` side by side.** `compare(LS=ls, Robust=rob)`
+  bundles two or more fits of the same data into R's `lmfm` (regression) or
+  `covfm` (covariance, e.g. `cov_classic` vs `cov_rob`) so their coefficient
+  tables and diagnostics line up column by column, with clean readable calls.
+  Delegates to the sibling package `fitmodels-py` (optional extra `[compare]`);
+  every model's own `.summary()` works without it.
+- New guide `docs/guides/comparison.md` and an updated
+  `examples/vignette_fit_models_comparison.py` that uses `compare()`.
+
 ## [0.1.0], 2026-08-18
 
 First public release.

@@ -41,6 +41,9 @@ class CovClassicResult:
     column_names: tuple[str, ...] | None = None
     classical: bool = True
     _r_fit: Any = field(default=None, repr=False, compare=False)
+    # Original input, kept so robstattm_py.compare() can refit this as a live
+    # covfm member (the converted _r_fit has lost its S3 class).
+    _data: Any = field(default=None, repr=False, compare=False)
 
     def __repr__(self) -> str:
         p = self.cov.shape[0]
@@ -151,4 +154,5 @@ def cov_classic(
         dist=_maybe_array(rx2(rfit, "dist")),
         column_names=col_names,
         _r_fit=rfit,
+        _data=X,
     )

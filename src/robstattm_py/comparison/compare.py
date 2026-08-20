@@ -30,6 +30,7 @@ from robstattm_py.regression._formula import df_with_r_names
 _ESTIMATOR_NAME: dict[str, str] = {
     "LmResult": "lm",
     "GlmResult": "glm",
+    "GlmrobResult": "glmrob",
     "RlmResult": "rlm",
     "LtsResult": "ltsReg",
     "LmrobResult": "lmrob",
@@ -38,11 +39,18 @@ _ESTIMATOR_NAME: dict[str, str] = {
     "LmrobdetDCMLResult": "lmrobdetDCML",
 }
 
+# Result classes that are GLM-family (need a `family=` shared across the fit).
+_GLM_FAMILY_CLASSES = ("GlmResult", "GlmrobResult")
+
 # Non-fit.models-default regression S3 *classes* to register with the ``lmfm``
 # comparison class. Note the class differs from the function name: ``ltsReg()``
 # returns an object of class ``lts``. fit.models already knows ``lm``/``rlm``;
 # register_robstattm() handles the RobStatTM ones.
 _EXTRA_LMFM_CLASSES = ("rlm", "lmrob", "lts")
+
+# Robust GLM S3 class to register with the ``glmfm`` comparison class so a
+# classical ``glm`` can be lined up against ``robustbase::glmrob``.
+_EXTRA_GLMFM_CLASSES = ("glmrob",)
 
 # Covariance result class name -> whether it is the classical or a robust
 # estimator. fit.models compares them in a ``covfm`` container.
@@ -125,6 +133,8 @@ def _register_all(fpm) -> None:
     if fmclass_add_class is not None:
         for cls in _EXTRA_LMFM_CLASSES:
             fmclass_add_class("lmfm", cls, warn=False)
+        for cls in _EXTRA_GLMFM_CLASSES:
+            fmclass_add_class("glmfm", cls, warn=False)
 
 
 def _combine_mode_fits(fpm, models: dict[str, Any]) -> dict[str, Any] | None:
@@ -236,7 +246,7 @@ def compare(**models: Any) -> Comparison:
         if cls not in _ESTIMATOR_NAME:
             raise NotImplementedError(
                 f"compare() does not support {cls}. Supported: regression "
-                "results (lm/glm/rlm/lts_reg/lmrob, lmrobdet_mm/lmrobM/"
+                "results (lm/glm/glmrob/rlm/lts_reg/lmrob, lmrobdet_mm/lmrobM/"
                 "lmrobdet_dcml) and covariance results (cov_classic/cov_rob). "
                 "For anything else, use each result's own .summary()."
             )
@@ -255,7 +265,7 @@ def compare(**models: Any) -> Comparison:
                 "all models must share the same formula to be compared; "
                 f"got {formula!r} and {f!r}"
             )
-        if cls == "GlmResult":
+        if cls in _GLM_FAMILY_CLASSES:
             family = res.family
 
     fpm = _import_fitmodels()
@@ -263,17 +273,23 @@ def compare(**models: Any) -> Comparison:
 
     # Preferred path: refit via estimators for clean, readable calls in the
     # summary. Falls back to fit-from-names for models fitmodels-py cannot fit
-    # (ltsReg / lmrob / lmrobdetDCML), which deparses the frame into the call.
+    # (glmrob / ltsReg / lmrob / lmrobdetDCML), which deparses the frame into
+    # the call.
     live = _combine_mode_fits(fpm, models)
     if live is not None:
         return Comparison(fpm.fit_models(**live))
 
     extra: dict[str, Any] = {}
     # fit-from-names passes the same extra args to every estimator, so a family
-    # is only meaningful when every model is a glm.
-    if family is not None and all(v == "glm" for v in mapping.values()):
-        from robstattm_py._r import r
-        extra["family"] = r().r(family)
+    # is only meaningful when every model is GLM-family (glm and/or glmrob).
+    glm_family_only = all(
+        type(res).__name__ in _GLM_FAMILY_CLASSES for res in models.values()
+    )
+    if family is not None and glm_family_only:
+        # Pass the family *name* (a string), not the generator function: both
+        # glm and glmrob accept "poisson"/"binomial", and it keeps the recorded
+        # call readable (family = "poisson") instead of deparsing the function.
+        extra["family"] = family
 
     fm = fpm.fit_models(mapping, formula, data=df_with_r_names(data), **extra)
     return Comparison(fm)

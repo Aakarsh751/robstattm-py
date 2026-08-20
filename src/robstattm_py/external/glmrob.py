@@ -83,7 +83,11 @@ class GlmrobResult:
     converged: bool
     method: str
     family: str
+    # Echo of inputs, kept so robstattm_py.compare() can refit this as a live
+    # glmfm member against a classical glm.
+    formula: str = ""
     _r_fit: Any = field(default=None, repr=False, compare=False)
+    _data: Any = field(default=None, repr=False, compare=False)
 
     def __repr__(self) -> str:
         return (
@@ -196,7 +200,9 @@ def glmrob(
             converged=bool(ro.r("rpm_glmrob_fit$converged")[0]),
             method=str(ro.r("rpm_glmrob_fit$method")[0]),
             family=family,
+            formula=formula,
             _r_fit=_fetch_raw("rpm_glmrob_fit"),
+            _data=data.copy(),
         )
     finally:
         if pushed:

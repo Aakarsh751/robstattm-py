@@ -92,7 +92,23 @@ The comparison exposes the full `fit.models` method set: `summary()`, `plot()`,
 `coef()`, `residuals()`, `fitted()`, iteration, indexing and `rename()`.
 
 Supported members are the regression results (`lm`, `glm`, `rlm`, `lts_reg`,
-`lmrob`, and RobStatTM's `lmrobdet_mm` / `lmrobM` / `lmrobdet_dcml`).
+`lmrob`, and RobStatTM's `lmrobdet_mm` / `lmrobM` / `lmrobdet_dcml`) and, for the
+GLM case, `glm` vs robust `glmrob`.
+
+### GLM comparison
+
+A classical `glm` against a robust `glmrob` is a `glmfm`:
+
+<!-- doc-check: skip - needs the optional fitmodels-py package -->
+```python
+import robstattm_py as rpm
+
+# df has a Poisson response y and a predictor x
+classical = rpm.glm("y ~ x", data=df, family="poisson")
+robust = rpm.glmrob("y ~ x", data=df, family="poisson")
+glm_fm = rpm.compare(Classical=classical, Robust=robust)
+print(glm_fm.summary())   # both coefficient tables, side by side
+```
 
 ### Covariance comparison
 

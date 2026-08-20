@@ -49,6 +49,13 @@ _R_TO_PY: dict[str, str] = {
     "varComprob": "var_comprob", "varComprob.control": "var_comprob_control",
     "glmrob": "glmrob",
     "cubinf": "cubinf", "cubinf.control": "cubinf",
+    # comparison models (non-RobStatTM baselines) + fit.models facade
+    "lm": "lm",
+    "glm": "glm",
+    "rlm": "rlm",
+    "ltsReg": "lts_reg", "lts": "lts_reg",
+    "lmrob": "lmrob",
+    "fit.models": "compare", "fitModels": "compare",
 }
 
 

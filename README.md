@@ -8,6 +8,9 @@ to Python users with no R knowledge required. It calls the original R routines
 through [`rpy2`](https://rpy2.github.io/), so every numeric result is
 **bit-identical to R** (the test suite compares at `atol=0, rtol=0`).
 
+> **GSoC 2026:** see the [final report](GSOC_FINAL_REPORT.md) for a summary of
+> what was built, the current state, and what remains.
+
 > Companion to the 2019 Wiley textbook *Robust Statistics: Theory and Methods
 > (with R)* by Maronna, Martin, Yohai & Salibian-Barrera.
 

@@ -1,20 +1,20 @@
 # RobStatTM-Py: Google Summer of Code 2026 Final Report
 
 **Project:** RobStatTM-Py, Python wrappers for modern robust statistical estimation
-**Contributor:** Aakarsh Gupta
-**Organization:** The R Project for Statistical Computing
-**Mentors:** Professor Doug Martin (University of Washington), Professor Matias Salibian-Barrera (University of British Columbia), Brian Peterson
-**Code:** https://github.com/Aakarsh751/robstattm-py
-**Documentation:** https://aakarsh751.github.io/robstattm-py/
-**Upstream R package:** https://github.com/msalibian/RobStatTM
+
+**Contributor:** Aakarsh Gupta \
+**Organization:** The R Project for Statistical Computing \
+**Mentors:** Professor Doug Martin (University of Washington), Professor Matias Salibian-Barrera (University of British Columbia), Brian Peterson \
+**Code:** https://github.com/Aakarsh751/robstattm-py \
+**Documentation:** https://aakarsh751.github.io/robstattm-py/  \
+**Upstream R package:** https://github.com/msalibian/RobStatTM  
 
 ---
 
-## 1. In one paragraph
+## 1. Introduction
 
 RobStatTM-Py makes the robust statistics estimators from the R package
-[RobStatTM](https://cran.r-project.org/package=RobStatTM) usable from Python by
-people who do not know R. It does this by calling the original, published R
+[RobStatTM](https://cran.r-project.org/package=RobStatTM) usable from Python. It does this by calling the original, published R
 routines underneath through [rpy2](https://rpy2.github.io/), rather than
 re-writing the math in Python. Because the same R code runs underneath, every
 number that comes back is identical to R, and the test suite proves it by
@@ -35,15 +35,15 @@ accompanies the 2019 Wiley textbook *Robust Statistics: Theory and Methods (with
 R)* by Maronna, Martin, Yohai, and Salibian-Barrera. It is the reference
 implementation of the estimators taught in that book.
 
-The catch is that a large part of the working data science world now lives in
+The catch is that a large part of the working data science world utilise
 Python, and those estimators were not available there in a clean, trustworthy
 form. A Python user who wanted MM-regression, robust covariance, robust PCA, or
 robust logistic regression either had to switch to R or hope that a scattered
 third-party reimplementation matched the textbook. The goal of this project was
-to remove that gap: bring RobStatTM to Python users with no R knowledge
-required, and with results you can trust because they are the R results.
+to remove that gap and bring RobStatTM to Python users with no R knowledge
+required.
 
-## 3. Project goals from the proposal
+## 3. Project goals
 
 The accepted proposal set out to deliver:
 
@@ -52,8 +52,7 @@ The accepted proposal set out to deliver:
    covariance, and robust PCA.
 2. A rigorous, automated evaluation that each wrapper is numerically identical
    to a direct R call, function by function and field by field.
-3. Ergonomic, Pythonic result objects (formula interface, pandas and numpy in
-   and out, summaries, prediction, diagnostics).
+3. Ergonomic, Pythonic result objects (formula interface, pandas and numpy implementation, summaries, prediction, diagnostics).
 4. Documentation modelled on the R manual pages, tutorial notebooks that
    reproduce textbook figures, and a cross-platform installation guide.
 5. Packaging and distribution so a Python user can install it and get a working
@@ -165,12 +164,10 @@ over time and across platforms, and it is currently green.
 
 ## 5. How the numbers come out identical to R
 
-This is the heart of the project, so it is worth stating plainly.
-
 The package does not reimplement the statistics. When you call
 `rpm.lmrobdet_mm(...)`, the actual fitting is done by the same
 `RobStatTM::lmrobdetMM` R function that the textbook uses. The Python layer's job
-is to hand the data across to R faithfully, run the R routine, and hand the
+is to hand the data across to R, run the R routine, and hand the
 results back, converting R vectors, matrices, and data frames to numpy arrays
 and pandas frames without losing precision. Because the computation is the
 published R computation, the output is the R output, not an approximation of it.
@@ -179,7 +176,7 @@ Three things make that trustworthy rather than merely plausible:
 
 1. **Strict-tier parity tests.** Every wrapper is checked field by field against
    a direct R call on the same data, at `atol=0, rtol=0`, meaning zero allowed
-   difference, not "close enough". Coefficients, scale, residuals, weights,
+   difference. Coefficients, scale, residuals, weights,
    fitted values, summary tables, and diagnostics all have to match exactly. The
    suite has grown to over 1,100 automated tests, combining these strict parity
    tests with data-pipeline, edge-case, example, and notebook-execution tests.
@@ -195,7 +192,7 @@ Three things make that trustworthy rather than merely plausible:
    scripts, one to one, exercises the exact code paths a real reader would take.
    That process alone surfaced four real defects that the unit tests had missed,
    because the unit tests were written by someone who already knew the intended
-   API, while the example scripts follow the paths the book actually walks. All
+   API, while the example scripts follow the book paths. All
    four were fixed and now have regression tests.
 
 The practical result: a Python user gets textbook-correct robust estimates, and
@@ -218,12 +215,12 @@ The repository history is the record of the work. The larger pieces landed as
 reviewed pull requests on top of the steady day to day commits, including:
 
 - **Production-readiness pass** (PR #9): repository restructure into
-  user-facing versus contributor-facing docs, a house-style guard, an
+  user-facing versus contributor-facing docs, an
   interactive setup that offers to use an existing R rather than always
   downloading one, and verification of the pip, uv, pipx, conda, and Docker
   install paths.
 - **Comparison models** (PR #10): native wrappers for the classical baselines
-  (`lm`, `glm`, `rlm`, `ltsReg`, `lmrob`) and the `compare()` facade.
+  (`lm`, `glm`, `rlm`, `ltsReg`, `lmrob`) and the `compare()`.
 - **Robust logistic regression test fidelity** (PR #11): made the parity tests
   for the stochastic robust logistic regressions order independent.
 - **Classical versus robust GLM comparison** (PR #12): extended `compare()` to
@@ -236,7 +233,7 @@ this report is on `main`.
 ## 8. What is left to do
 
 The library is complete and works today. The remaining items are about
-distribution and breadth, not about missing functionality.
+distribution, not about missing functionality.
 
 1. **Publish to the major installers.** The package is not yet on PyPI or
    conda-forge. Today it installs from source in one command straight from
@@ -299,13 +296,13 @@ for R users, are in the [documentation](https://aakarsh751.github.io/robstattm-p
   useful lesson. Porting the R package's own example scripts, one to one, found
   four real bugs that more than a thousand passing tests had not, because tests
   are written by someone who already knows the API and unconsciously avoids its
-  rough edges. Real user paths do not.
-- **Cross-platform R discovery is genuinely hard.** R can live in a dozen places,
+  rough edges.
+- **Cross-platform R discovery is hard.** R can live in a dozen places,
   can be built for the wrong CPU, and on Windows can hide behind the registry or
   a path with a space in it. A large part of the "just works" experience was
   detecting and handling these cases so the user never sees them.
 - **The bridge is where precision dies.** Marshalling values between Python and R
-  by formatting them into text is a silent accuracy bug waiting to happen.
+  by formatting them into text is a silent accuracy bug.
   Passing native objects across the bridge, and setting seeds on both sides for
   the stochastic estimators, is what made zero-tolerance agreement achievable.
 - **You cannot debug a platform you cannot reproduce.** Some issues only appeared
@@ -313,8 +310,7 @@ for R users, are in the [documentation](https://aakarsh751.github.io/robstattm-p
   to reproduce the user's exact environment rather than reason about it from a
   distance.
 - **Documentation that must read well in two places is worth the effort.** Pages
-  written to render cleanly both on the website and directly on GitHub reach far
-  more people than either format alone.
+  written to render cleanly both on the website and directly on GitHub is the better approach.
 
 ## 11. Links
 
